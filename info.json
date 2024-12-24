@@ -1,10 +1,19 @@
 {
+<<<<<<< Updated upstream
   "name": "[internal-mod-name]",
   "version": "0.0.0",
   "title": "[MOD DISPLAY NAME]",
   "author": "[YOUR MODS.FACTORIO.COM USERNAME]",
   "homepage": "[HOMEPAGE/REPO URL]",
   "description": "[SHORT DESCRIPTION]",
+=======
+  "name": "planet-muluna",
+  "version": "1.1.2",
+  "title": "Muluna, Moon of Nauvis",
+  "author": "MeteorSwarm",
+  "homepage": "https://discord.gg/8pD6A3JRtZ",
+  "description": "[In early development, expect frequent updates] Explore Nauvis' moon of Muluna, and take your first step into space. Revamps the Space Science pack to be crafted on Muluna. The surface is devoid of life, but who knows what lurks in the planet's many craters?",
+>>>>>>> Stashed changes
   "factorio_version": "2.0",
   "dependencies": [
     "base"
