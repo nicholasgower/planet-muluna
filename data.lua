@@ -14,7 +14,7 @@ require("prototypes.entity.oxidized-boiler")
 require("prototypes.subgroups")
 require("prototypes.lunar-science-pack")
 require("prototypes.technology.interstellar-technologies") --Also runs during data-updates
-
+require("prototypes.nav-beacon")
 
 require("compat.maraxsis")
 --if mods["MT-lib"] then require("compat.MT-lib") end

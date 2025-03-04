@@ -31,7 +31,26 @@ data:extend{
         max = 60,
         order = "ad",
       },
+      {
+        type = "double-setting",
+        name = "planet-power-consumption",
+        setting_type = "startup",
+        default_value = 300,
+        minimum_value = 1,
+        maximum_value = 1000,
+        order = "a"
+    },
+    {
+        type = "double-setting",
+        name = "platform-power-consumption",
+        setting_type = "startup",
+        default_value = 50,
+        minimum_value = 0.3,
+        maximum_value = 1000,
+        order = "a"
+    }
 }
+
 if mods["any-planet-start"] then
   APS.add_choice("muluna")
 end
