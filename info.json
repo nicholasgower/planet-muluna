@@ -20,7 +20,6 @@
     "? alien-biomes",
     "? maraxsis",
     "(?) Tiered-Solar-System >= 1.1.3",
-    "! MT-lib",
     "? modules-t4",
     "? any-planet-start",
     "? tenebris",
