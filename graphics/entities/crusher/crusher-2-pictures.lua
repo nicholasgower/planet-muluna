@@ -120,7 +120,7 @@ return {
     }
   },
   working_visualisations = {
-    layers = {
+    {
       fadeout = true,
       north_animation = crusher_working_visualisations_vertical(),
       east_animation = crusher_working_visualisations_horizontal(),
