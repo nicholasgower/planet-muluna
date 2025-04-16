@@ -1,5 +1,7 @@
 local rro = require("lib.remove-replace-object")
 
+
+require("prototypes.custom-inputs")
 require("wood-gasification.data")
 require("prototypes.technology.index")
 require("prototypes.planet.planet")
