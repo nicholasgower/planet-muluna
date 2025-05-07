@@ -656,6 +656,7 @@ else
     data.raw.planet["nauvis"].localised_description={"planetslib-templates.planet-description-two-moons",{"space-location-description.nauvis"},"[planet=muluna]","[planet=lignumis]"}
 end
 
+require("prototypes.item.cryolab")
 require("prototypes.entity.cryolab")
 
 for _,lab in pairs(data.raw["lab"]) do
