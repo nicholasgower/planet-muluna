@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.42.12
+Date: 2025-05-18
+  Changes:
+    - Added experimental new recipe for Interstellar science pack, enabled with a startup option disabled by default.
+---------------------------------------------------------------------------------------------------
 Version: 1.42.11
 Date: 2025-05-16
   Balancing:
