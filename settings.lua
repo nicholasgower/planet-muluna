@@ -5,14 +5,14 @@ data:extend{
         name = "override-space-connection",
         setting_type = "startup",
         default_value = false,
-        order = "za",
+        order = "ya",
       },
       {
         type = "bool-setting",
         name = "disable-muluna-music",
         setting_type = "startup",
         default_value = false,
-        order = "zb",
+        order = "yb",
       },
       {
         type = "bool-setting",
@@ -115,6 +115,13 @@ data:extend{
       setting_type = "runtime-per-user",
       default_value = true,
       order = "ba"
+    },
+    {
+      type = "bool-setting",
+      name = "muluna-new-interstellar-pack-recipe",
+      setting_type = "startup",
+      default_value = false,
+      order = "za"
     },
 
 }

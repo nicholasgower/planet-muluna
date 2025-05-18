@@ -31,7 +31,7 @@ if i_lunar_pack.pictures then --Compatibility with glowing science packs
 end
 
 r_lunar_pack.icon = "__muluna-graphics__/graphics/icons/space-science-pack.png"
-r_lunar_pack.energy_required = r_lunar_pack.energy_required * 4
+
 --data.raw["recipe"]["space-science-pack"].icon = "__muluna-graphics__/graphics/icons/space-science-pack.png" --Why was this here?
 t_lunar_pack.icon = "__muluna-graphics__/graphics/technology/space-science-pack.png"
 
@@ -49,15 +49,34 @@ if data.raw["tool"]["hydraulic-science-pack"] then
 end
 
 
-r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 12}}
+
 r_lunar_pack.main_product = "interstellar-science-pack"
 r_lunar_pack.category = "crafting-with-fluid"
-r_lunar_pack.ingredients = {
-    {type = "fluid", name = "helium", amount = 400},
-    {type = "item", name = "rocket-fuel", amount = 8},
-    {type = "item", name = "aluminum-plate", amount = 40},
-    {type = "item", name = "uranium-235", amount = 1}
-}
+
+
+if settings.startup["muluna-new-interstellar-pack-recipe"].value == true then
+    r_lunar_pack.category = "double-boiler"
+    r_lunar_pack.ingredients = {
+        {type = "fluid", name = "helium", amount = 100},
+        --{type = "item", name = "rocket-fuel", amount = 1},
+        {type = "item", name = "space-platform-foundation", amount = 2},
+        {type = "item", name = "uranium-fuel-cell", amount = 1}
+    }
+    r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 3}}
+    r_lunar_pack.energy_required = 63
+    local oxygen = 60*r_lunar_pack.energy_required
+    table.insert(r_lunar_pack.ingredients,{type = "fluid", name = "oxygen", amount = oxygen})
+    table.insert(r_lunar_pack.results,{type = "fluid", name = "carbon-dioxide", amount = oxygen, temperature = 500,ignored_by_productivity = oxygen})
+else
+    r_lunar_pack.ingredients = {
+        {type = "fluid", name = "helium", amount = 400},
+        {type = "item", name = "rocket-fuel", amount = 8},
+        {type = "item", name = "aluminum-plate", amount = 40},
+        {type = "item", name = "uranium-235", amount = 1}
+    }
+    r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 12}}
+    r_lunar_pack.energy_required = 28
+end
 
 
 t_lunar_pack.research_trigger = {
