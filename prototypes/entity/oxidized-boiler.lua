@@ -251,7 +251,7 @@ local space_boiler_new = {
           pipe_covers = pipecoverspictures(),
           pipe_connections =
           {
-            {flow_direction = "output", direction = defines.direction.north, position = {0, -1.0}},
+            {flow_direction = "input-output", direction = defines.direction.north, position = {0, -1.0}},
           },
           production_type = "output",
           --filter = "steam"
