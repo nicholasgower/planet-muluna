@@ -101,33 +101,33 @@ data:extend{
             }
         }
     },
-    {
-        type = "recipe",
-        name = "muluna-tree-growth-greenhouse-quick",
-        enabled = false,
-        category = "muluna-greenhouse",
-        icons = dual_icon("wood","express-transport-belt"),
-        ingredients = {
-            {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
-            {type = "fluid",name = "carbon-dioxide", amount=10000},
-            {type = "fluid",name = "water", amount=1000},
-        },
-        results = {
-            {type = "item",name = "wood", amount=40},
-            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
-        },
-        energy_required=3*60,
-        subgroup="muluna-forestry",
-        max_productivity = 3,
-        allow_productivity = true,
-        hide_from_signal_gui = false,
-        surface_conditions = {
-            {
-                property = "temperature",
-                max = 314
-            }
-        }
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "muluna-tree-growth-greenhouse-quick",
+    --     enabled = false,
+    --     category = "muluna-greenhouse",
+    --     icons = dual_icon("wood","express-transport-belt"),
+    --     ingredients = {
+    --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
+    --         {type = "fluid",name = "carbon-dioxide", amount=10000},
+    --         {type = "fluid",name = "water", amount=1000},
+    --     },
+    --     results = {
+    --         {type = "item",name = "wood", amount=40},
+    --         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
+    --     },
+    --     energy_required=3*60,
+    --     subgroup="muluna-forestry",
+    --     max_productivity = 3,
+    --     allow_productivity = true,
+    --     hide_from_signal_gui = false,
+    --     surface_conditions = {
+    --         {
+    --             property = "temperature",
+    --             max = 314
+    --         }
+    --     }
+    -- },
     {
         type = "recipe",
         name = "muluna-electrolysis",
