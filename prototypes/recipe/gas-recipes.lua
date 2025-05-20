@@ -1,5 +1,5 @@
 local dual_icon = require("lib.dual-item-icon").dual_icon
-
+local rro = require("lib.remove-replace-object")
 
 local function generate_void_icons(fluid_icons)
     local icons = fluid_icons
@@ -408,6 +408,8 @@ for i,recipe_name in ipairs(greenhouse_recipes) do
         recipe.name = recipe.name .. "-nutrients" 
         table.insert(recipe.ingredients,{type="item",name="nutrients",amount=20})
         recipe.results[1].amount=recipe.results[1].amount*1.5
+        rro.replace(recipe.results,{type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000},{type = "fluid",name = "oxygen", amount=15000,ignored_by_productivity=15000})
+        rro.replace(recipe.ingredients,{type = "fluid",name = "carbon-dioxide", amount=10000},{type = "fluid",name = "carbon-dioxide", amount=15000})
         --recipe.energy_required = recipe.energy_required*0.6
         recipe.icons = recipe_icons[i]
         data:extend{recipe}
