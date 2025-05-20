@@ -102,6 +102,7 @@ data:extend({
       {type="fluid", name="petroleum-gas", amount=30},
       {type="item", name="alumina-crushed", amount=1,probability = 0.9,ignored_by_productivity=1},
     },
+    auto_recycle = false,
     icon = "__muluna-graphics__/graphics/wood-gasification/icon/advanced-wood-gasification.png",
     icon_size = 64,
     subgroup = "muluna-forestry",
