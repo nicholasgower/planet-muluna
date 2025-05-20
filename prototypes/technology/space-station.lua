@@ -638,6 +638,30 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-fertilized-greenhouses",
+        localised_name = {"recipe-name.muluna-tree-growth-greenhouse-nutrients"},
+        unit = {
+            count = 1000,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
+                {"space-science-pack", 1},
+                --{"metallurgic-science-pack", 1},
+                {"agricultural-science-pack", 1},
+                --{"interstellar-science-pack",1}
+            }
+        },
+        prerequisites = {"agricultural-science-pack","muluna-greenhouses"},
+        effects = {
+
+        }
+    },
+    {
+        type = "technology",
         name = "cryolab",
         localised_name = {"entity-name.cryolab"},
         --localised_description = {"entity-description.asteroid-collector"},

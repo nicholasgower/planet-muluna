@@ -397,4 +397,24 @@ local oxygen_from_oxidizer = {
     }
 }
 
+-- Nutrient-using greenhouse recipes
+local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving"}
+local recipe_icons = {dual_icon("wood","nutrients","carbon-dioxide"),dual_icon("wood","nutrients","water"),dual_icon("muluna-sapling","nutrients")}
+
+for i,recipe_name in ipairs(greenhouse_recipes) do
+    local recipe
+    if data.raw["recipe"][recipe_name] then
+        recipe = table.deepcopy(data.raw["recipe"][recipe_name])
+        recipe.name = recipe.name .. "-nutrients" 
+        table.insert(recipe.ingredients,{type="item",name="nutrients",amount=20})
+        recipe.results[1].amount=recipe.results[1].amount*1.5
+        --recipe.energy_required = recipe.energy_required*0.6
+        recipe.icons = recipe_icons[i]
+        data:extend{recipe}
+        if data.raw["technology"]["muluna-fertilized-greenhouses"] then
+            table.insert(data.raw["technology"]["muluna-fertilized-greenhouses"].effects,{type = "unlock-recipe", recipe = recipe.name})
+        end
+    end
+end 
+
 data:extend{oxygen_from_oxidizer}
