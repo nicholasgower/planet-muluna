@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.43.0
+Date: 2025-05-20
+  Features:
+    - Added new nutrient-boosted variants of existing greenhouse wood recipes.
+    - Removed "Greenhouse tree growth(Quick)" recipe.
+  Bugfixes:
+    - Fixed incorrect recycling recipe for crushed alumina.
+  Graphics:
+    - Adjusted graphics for "Greenhouse tree growth (Water-saving)" recipe.
+  Changes:
+    - (Experimental) When new interstellar science pack recipe is enabled, the advanced boiler is given module slots and the ability to receive effects from beacons.
+---------------------------------------------------------------------------------------------------
 Version: 1.42.14
 Date: 2025-05-19
   Bugfixes:
