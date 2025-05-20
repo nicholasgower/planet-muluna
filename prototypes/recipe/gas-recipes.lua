@@ -79,7 +79,7 @@ data:extend{
         name = "muluna-tree-growth-greenhouse-water-saving",
         enabled = false,
         category = "muluna-greenhouse",
-        icons = dual_icon("wood","transport-belt"),
+        icons = dual_icon("wood","water"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
             {type = "fluid",name = "carbon-dioxide", amount=10000},
