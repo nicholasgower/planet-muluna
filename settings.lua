@@ -51,6 +51,13 @@ data:extend{
       },
       {
         type = "bool-setting",
+        name = "muluna-easy-vanilla-rocket-part-costs",
+        setting_type = "startup",
+        default_value = false,
+        order = "ba",
+      },
+      {
+        type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",
         setting_type = "startup",
         default_value = true,
@@ -90,7 +97,7 @@ data:extend{
         default_value = 100,
         minimum_value = 0.3,
         maximum_value = 1000,
-        order = "bb"
+        order = "db"
     },
     {
       type = "bool-setting",
@@ -98,7 +105,7 @@ data:extend{
       localised_name = {"mod-setting-name.enable-muluna-satellite-radar"},
       setting_type = "startup",
       default_value = true,
-      order = "ba"
+      order = "da"
     },
     {
       type = "double-setting",

@@ -41,10 +41,12 @@ require("prototypes.technology.interstellar-technologies")
 local new_prereqs={}
 
 
-for _,silo in pairs(data.raw["rocket-silo"]) do
-    silo.crafting_speed = silo.crafting_speed/2
-    if silo.module_slots then 
-        silo.module_slots = silo.module_slots * 2
+if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
+    for _,silo in pairs(data.raw["rocket-silo"]) do
+        silo.crafting_speed = silo.crafting_speed/2
+        if silo.module_slots then 
+            silo.module_slots = silo.module_slots * 2
+        end
     end
 end
 
@@ -62,22 +64,23 @@ end
 data.raw["technology"]["space-platform-thruster"].prerequisites = new_prereqs
 
 
-
---Doubles the change associated with infinite rocket part productivity technology.
---Also adds support in case Hardcore is installed.
-if data.raw["technology"]["rocket-part-productivity-aquilo"] then
-    for _,effect in pairs(data.raw["technology"]["rocket-part-productivity-aquilo"].effects) do 
-        effect.change = effect.change * 2
-    end
-    --game.print("Error: Technology \"rocket-part-productivity-aquilo\" deleted by another mod. Please report this error to MeteorSwarm.")
-end
-
-for i = 1,10,1 do 
-    if data.raw["technology"]["rocket-part-productivity-aquilo-"..tostring(i)] then
-        for _,effect in pairs(data.raw["technology"]["rocket-part-productivity-aquilo-"..tostring(i)].effects) do 
+if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
+    --Doubles the change associated with infinite rocket part productivity technology.
+    --Also adds support in case Hardcore is installed.
+    if data.raw["technology"]["rocket-part-productivity-aquilo"] then
+        for _,effect in pairs(data.raw["technology"]["rocket-part-productivity-aquilo"].effects) do 
             effect.change = effect.change * 2
         end
         --game.print("Error: Technology \"rocket-part-productivity-aquilo\" deleted by another mod. Please report this error to MeteorSwarm.")
+    end
+
+    for i = 1,10,1 do 
+        if data.raw["technology"]["rocket-part-productivity-aquilo-"..tostring(i)] then
+            for _,effect in pairs(data.raw["technology"]["rocket-part-productivity-aquilo-"..tostring(i)].effects) do 
+                effect.change = effect.change * 2
+            end
+            --game.print("Error: Technology \"rocket-part-productivity-aquilo\" deleted by another mod. Please report this error to MeteorSwarm.")
+        end
     end
 end
 

@@ -50,92 +50,103 @@ if settings.startup["muluna-change-quality-science-pack-drain"].value == true th
     end
 
 end
-
-
 local rocket_prod_aquilo=table.deepcopy(rocket_prod)
+if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
+    
 
-rocket_prod.max_level=nil
-rro.replace(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1},{"space-science-pack",1})
-rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
-rocket_prod.unit.count=250
-rocket_prod.unit.count_formula=nil
---rocket_prod.localised_name={"technology-name.rocket-part-productivity-muluna"}
-rocket_prod.localised_name={"",{"technology-name.rocket-part-productivity-muluna"}," ",tostring(1)}
+    rocket_prod.max_level=nil
+    rro.replace(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1},{"space-science-pack",1})
+    rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
+    rocket_prod.unit.count=250
+    rocket_prod.unit.count_formula=nil
+    --rocket_prod.localised_name={"technology-name.rocket-part-productivity-muluna"}
+    rocket_prod.localised_name={"",{"technology-name.rocket-part-productivity-muluna"}," ",tostring(1)}
 
 
-local science_pack = {
-    "metallurgic-science-pack",
-    "agricultural-science-pack",
-    "electromagnetic-science-pack",
-}
-local planet_name = {
-    "vulcanus",
-    "gleba",
-    "fulgora"
-}
+    local science_pack = {
+        "metallurgic-science-pack",
+        "agricultural-science-pack",
+        "electromagnetic-science-pack",
+    }
+    local planet_name = {
+        "vulcanus",
+        "gleba",
+        "fulgora"
+    }
 
---Rocket productivity technologies
---Levels 1-2 available on Muluna
---After Level 2, rocket productivity technology becomes non-linear, 
---two more levels remain on muluna and the first three vanilla planets
---After 10 levels, remaining rocket prod comes from Aquilo, as normal.
+    --Rocket productivity technologies
+    --Levels 1-2 available on Muluna
+    --After Level 2, rocket productivity technology becomes non-linear, 
+    --two more levels remain on muluna and the first three vanilla planets
+    --After 10 levels, remaining rocket prod comes from Aquilo, as normal.
 
-for i = 2,4,1 do --Lunar rocket prod 2-4
-    local tech = table.deepcopy(rocket_prod)
-    tech.name=rocket_prod.name .. "-" .. tostring(i)
-    tech.unit.count=i*rocket_prod.unit.count
-    tech.localised_name={"",{"technology-name.rocket-part-productivity-muluna"}," ",tostring(i)}
-    if i ~=2 then
-        tech.prerequisites={rocket_prod.name .. "-" .. tostring(i-1)}
-    else 
-        tech.prerequisites={rocket_prod.name}
+    for i = 2,4,1 do --Lunar rocket prod 2-4
+        local tech = table.deepcopy(rocket_prod)
+        tech.name=rocket_prod.name .. "-" .. tostring(i)
+        tech.unit.count=i*rocket_prod.unit.count
+        tech.localised_name={"",{"technology-name.rocket-part-productivity-muluna"}," ",tostring(i)}
+        if i ~=2 then
+            tech.prerequisites={rocket_prod.name .. "-" .. tostring(i-1)}
+        else 
+            tech.prerequisites={rocket_prod.name}
+        end
+        if i==4 then
+            table.insert(rocket_prod_aquilo.prerequisites,tech.name)
+        end
+        data:extend{tech}
     end
-    if i==4 then
-        table.insert(rocket_prod_aquilo.prerequisites,tech.name)
+
+    --local t2_planet_rocket_prod={}
+
+    for i,pack in ipairs(science_pack) do --T1 Planet rocket prod 1-2
+        local tech= table.deepcopy(rocket_prod)
+        tech.name=rocket_prod.name .. "-".. planet_name[i]
+        tech.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(1)}
+        rro.replace(tech.prerequisites,"space-science-pack",science_pack[i])
+        --table.insert(tech.prerequisites,pack)
+        table.insert(tech.unit.ingredients,{science_pack[i],1})
+        tech.prerequisites={"rocket-part-productivity-4",science_pack[i]}
+        tech.unit.count=1000
+
+        local tech_2=table.deepcopy(tech)
+        tech_2.name=tech_2.name .. "-2"
+        tech_2.unit.count=1500
+        tech_2.prerequisites={tech.name}
+        tech_2.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(2)}
+        --table.insert(t2_planet_rocket_prod,tech_2.name)
+        table.insert(rocket_prod_aquilo.prerequisites,tech_2.name)
+        data:extend{tech,tech_2}
     end
-    data:extend{tech}
-end
 
---local t2_planet_rocket_prod={}
-
-for i,pack in ipairs(science_pack) do --T1 Planet rocket prod 1-2
-    local tech= table.deepcopy(rocket_prod)
-    tech.name=rocket_prod.name .. "-".. planet_name[i]
-    tech.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(1)}
-    rro.replace(tech.prerequisites,"space-science-pack",science_pack[i])
-    --table.insert(tech.prerequisites,pack)
-    table.insert(tech.unit.ingredients,{science_pack[i],1})
-    tech.prerequisites={"rocket-part-productivity-4",science_pack[i]}
-    tech.unit.count=1000
-
-    local tech_2=table.deepcopy(tech)
-    tech_2.name=tech_2.name .. "-2"
-    tech_2.unit.count=1500
-    tech_2.prerequisites={tech.name}
-    tech_2.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(2)}
-    --table.insert(t2_planet_rocket_prod,tech_2.name)
-    table.insert(rocket_prod_aquilo.prerequisites,tech_2.name)
-    data:extend{tech,tech_2}
+    
 end
 
 rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
-rro.replace(data.raw["cargo-landing-pad"]["cargo-landing-pad"].surface_conditions,
-{
-    property = "gravity",
-    min = 1,
-},
-{
-    property = "gravity",
-    min = 0.1,
-}
-)
+    
+    
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
-table.insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
+if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
+    table.insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
+end
 -- for entry in ipairs(t2_planet_rocket_prod) do
 --     table.insert(rocket_prod_aquilo.prerequisites,entry)
 -- end
 
 data:extend{rocket_prod_aquilo}
+if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == true then
+    data.raw["technology"]["rocket-part-productivity"] = nil
+end
+
+rro.replace(data.raw["cargo-landing-pad"]["cargo-landing-pad"].surface_conditions,
+    {
+        property = "gravity",
+        min = 1,
+    },
+    {
+        property = "gravity",
+        min = 0.1,
+    }
+)
 
 
 
