@@ -224,6 +224,7 @@ data:extend{
     { 
         type = "recipe",
         name = "controlled-combustion",
+        --icons = dual_icon("carbon-dioxide","oxygen"),
         enabled = false,
         icon = "__muluna-graphics__/graphics/icons/molecule-carbon-dioxide.png",
         icon_size = 64,
@@ -231,6 +232,25 @@ data:extend{
         ingredients = {
             --{type = "item",name = "carbon", amount=1},
             {type = "fluid",name = "oxygen", amount=10}
+        },
+        results = {
+            {type = "fluid",name = "carbon-dioxide", amount=10, temperature = 165}
+        },
+        energy_required=1/6,
+        subgroup="muluna-products"
+
+    },
+    { 
+        type = "recipe",
+        name = "controlled-combustion-atmosphere",
+        enabled = false,
+        icons = dual_icon("carbon-dioxide","maraxsis-atmosphere"),
+        --icon = "__muluna-graphics__/graphics/icons/molecule-carbon-dioxide.png",
+        --icon_size = 64,
+        category = "double-boiler",
+        ingredients = {
+            --{type = "item",name = "carbon", amount=1},
+            {type = "fluid",name = "maraxsis-atmosphere", amount=50}
         },
         results = {
             {type = "fluid",name = "carbon-dioxide", amount=10, temperature = 165}
