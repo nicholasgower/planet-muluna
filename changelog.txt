@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.43.4
+Date: 2025-05-23
+  Bugfixes:
+    - Fixed crash on creating Muluna surface without cargo pods when any-planet-start not installed. https://github.com/nicholasgower/planet-muluna/issues/190
+---------------------------------------------------------------------------------------------------
 Version: 1.43.3
 Date: 2025-05-22
   Changes:
