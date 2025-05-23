@@ -442,6 +442,11 @@ data:extend{
                 type = "unlock-recipe",
                 recipe="controlled-combustion"
             },
+            {
+                type = "unlock-recipe",
+                recipe="controlled-combustion-atmosphere"
+            },
+            
         }
     },
     {
