@@ -154,8 +154,10 @@ function Public.on_new_surface(muluna_index)
 -- end
 
     if game.planets["muluna"].surface and game.planets["muluna"].surface.index == muluna_index then
-        if settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == true and settings.startup["aps-planet"].value == "muluna" then
-            game.print({"console.muluna-incompatible-aps-setting"})
+        if settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == true then 
+            if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then
+                game.print({"console.muluna-incompatible-aps-setting"})
+            end
         end
         if settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == false then
             place_muluna_cargo_pods()  
