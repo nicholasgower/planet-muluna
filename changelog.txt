@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.43.5
+Date: 2025-05-23
+  Bugfixes:
+    - Properly added "Forced combustion from atmosphere" recipe to relevant technology.
+  Changes:
+    - Moved muluna-start's "Wood gasification productivity" technology to optional setting.
+---------------------------------------------------------------------------------------------------
 Version: 1.43.4
 Date: 2025-05-23
   Bugfixes:
