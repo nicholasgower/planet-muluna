@@ -58,6 +58,13 @@ data:extend{
       },
       {
         type = "bool-setting",
+        name = "muluna-easy-wood-gasification-productivity",
+        setting_type = "startup",
+        default_value = false,
+        order = "bb",
+      },
+      {
+        type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",
         setting_type = "startup",
         default_value = true,

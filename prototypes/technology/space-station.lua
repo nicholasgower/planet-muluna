@@ -1147,6 +1147,60 @@ data:extend{
     -- }
 
 }
+if settings.startup["muluna-easy-wood-gasification-productivity"].value == true then-- or  then
+    local gasification_prod = {
+        type = "technology",
+        name = "wood-gas-processing-productivity",
+        icons = technology_icon_constant_recipe_productivity(data.raw["technology"]["wood-gas-processing"].icon),
+        --icons = {
+            --{
+                --icon= data.raw["technology"]["space-platform-thruster"].icon,
+                --icon_size=data.raw["technology"]["space-platform-thruster"].icon_size,
+                --tint = {r=0.7,g=0.7,b=1}
+            --},
+        --},
+        max_level = "infinite",
+        prerequisites = {"wood-gas-processing","space-science-pack"},
+        upgrade = true,
+        unit = {
+            count_formula = "1500*1.5^(L-1)",
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"space-science-pack",1}
+            }
+        },
+        effects = {
+            {
+                type = "change-recipe-productivity",
+                recipe = "wood-gasification",
+                change = 0.1,
+            },
+            {
+                type = "change-recipe-productivity",
+                recipe = "advanced-wood-gasification",
+                change = 0.1,
+            },
+        },
+    }
+    if (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") then
+        gasification_prod.unit= {
+            count_formula = "100*1.5^(L-1)",
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"space-science-pack",1}
+            }
+        }
+        rro.remove(gasification_prod.prerequisites,"space-science-pack")
+    end
+    data:extend{gasification_prod}
+end
+
 
 if not data.raw["lab"]["biolab"] then
     data.raw["technology"]["cryolab"] = nil

@@ -121,42 +121,7 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     delete_tech("sulfur-processing","wood-gas-processing")
     delete_tech("engine","steam-power") 
 
-    data:extend{{
-        type = "technology",
-        name = "wood-gas-processing-productivity",
-        icons = technology_icon_constant_recipe_productivity(data.raw["technology"]["wood-gas-processing"].icon),
-        --icons = {
-            --{
-                --icon= data.raw["technology"]["space-platform-thruster"].icon,
-                --icon_size=data.raw["technology"]["space-platform-thruster"].icon_size,
-                --tint = {r=0.7,g=0.7,b=1}
-            --},
-        --},
-        max_level = "infinite",
-        prerequisites = {"wood-gas-processing"},
-        upgrade = true,
-        unit = {
-            count_formula = "100*1.5^(L-1)",
-            time = 60,
-            ingredients = {
-                {"automation-science-pack", 1},
-                {"logistic-science-pack", 1},
-                {"space-science-pack",1}
-            }
-        },
-        effects = {
-            {
-                type = "change-recipe-productivity",
-                recipe = "wood-gasification",
-                change = 0.1,
-            },
-            {
-                type = "change-recipe-productivity",
-                recipe = "advanced-wood-gasification",
-                change = 0.1,
-            },
-        },
-    }}
+    
     for _,tech in pairs(data.raw["technology"]) do
         if tech.unit then 
            if rro.contains(tech.unit.ingredients ,{"logistic-science-pack" , 1}) then
