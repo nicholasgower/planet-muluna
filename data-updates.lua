@@ -252,12 +252,14 @@ local function scalar_recipe_multiply(list,factor)
         item.amount=item.amount*factor
     end
 end
-
-scalar_recipe_multiply(data.raw.recipe["rocket-part"].ingredients,2)
-if mods["maraxsis"] then
-    scalar_recipe_multiply(data.raw.recipe["maraxsis-rocket-part"].ingredients,2)
-    data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
+if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
+    scalar_recipe_multiply(data.raw.recipe["rocket-part"].ingredients,2)
+    if mods["maraxsis"] then
+        scalar_recipe_multiply(data.raw.recipe["maraxsis-rocket-part"].ingredients,2)
+        data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
+    end
 end
+
 -- data.raw.recipe["rocket-part"].ingredients =
 -- {
 --   {type = "item", name = "processing-unit", amount = 2},
