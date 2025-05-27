@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.43.6
+Date: 2025-05-27
+  Bugfixes:
+    - Fixed "Vanilla rocket part costs" option not working. https://github.com/nicholasgower/planet-muluna/issues/191
+---------------------------------------------------------------------------------------------------
 Version: 1.43.5
 Date: 2025-05-23
   Bugfixes:
