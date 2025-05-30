@@ -37,6 +37,7 @@ data:extend{
         energy_required=5*60,
         subgroup="muluna-forestry",
         max_productivity = 3,
+        auto_recycle=false,
         allow_productivity = true,
         hide_from_signal_gui = false,
         surface_conditions = {
@@ -62,6 +63,7 @@ data:extend{
             {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
         },
         energy_required=5*60,
+        auto_recycle=false,
         subgroup="muluna-forestry",
         main_product = "muluna-sapling",
         max_productivity = 3,
@@ -90,6 +92,7 @@ data:extend{
             {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
         },
         energy_required=10*60,
+        auto_recycle=false,
         subgroup="muluna-forestry",
         max_productivity = 3,
         allow_productivity = true,
@@ -367,6 +370,7 @@ data:extend{
         results = {
             {type = "item",name = "cellulose", amount=40},
         },
+        auto_recycle=false,
         allow_productivity = true,
     },
     --local steam_condensing = 
