@@ -1,4 +1,5 @@
 require("prototypes.recipe.vanilla-alternate-recipes")
+require("prototypes.planet.planet-position-update")
 local rro = require("lib.remove-replace-object")
 local dual_icon = require("lib.dual-item-icon").dual_icon
 

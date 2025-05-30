@@ -268,14 +268,14 @@ end
 local parent_planet = "nauvis"
 
 
-if mods["any-planet-start"] then
-  parent_planet = settings.startup["aps-planet"].value
-  --assert(1==2,tostring(parent_planet))
-  local start_planet = settings.startup["aps-planet"].value
-  if parent_planet == "none" or parent_planet =="muluna" then
-    parent_planet = "nauvis"
-  end
-  end
+-- if mods["any-planet-start"] then
+--   parent_planet = settings.startup["aps-planet"].value
+--   --assert(1==2,tostring(parent_planet))
+--   local start_planet = settings.startup["aps-planet"].value
+--   if parent_planet == "none" or parent_planet =="muluna" then
+--     parent_planet = "nauvis"
+--   end
+--   end
 
 
 local o_parent_planet = data.raw["planet"][parent_planet]
@@ -410,6 +410,16 @@ if settings.startup["PlanetsLib-enable-oxygen"].value == true then
 end
 
 
+if mods["any-planet-start"] then
+  local nauvis = data.raw["planet"]["nauvis"]
+  
+  parent_planet = settings.startup["aps-planet"].value
+  --assert(1==2,tostring(parent_planet))
+  local start_planet = settings.startup["aps-planet"].value
+  if parent_planet == "none" or parent_planet =="muluna" then
+      parent_planet = "nauvis"
+  end
+end
 
 local muluna_connection = {
   type = "space-connection",
