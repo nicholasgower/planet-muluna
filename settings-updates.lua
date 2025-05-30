@@ -9,3 +9,4 @@ data.raw["bool-setting"]["PlanetsLib-enable-temperature"].forced_value = true
 data.raw["bool-setting"]["PlanetsLib-enable-carbon-dioxide"].forced_value = true
 --data.raw["bool-setting"]["PlanetsLib-enable-argon"].forced_value = true
 
+data.raw["bool-setting"]["PlanetsLib-enforce-gas-percentage"].forced_value = false
