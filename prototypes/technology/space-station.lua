@@ -400,6 +400,11 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "atmosphere-oxygen-separation"
             },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-carbon-dioxide"
+            },
+            
             
             
         }

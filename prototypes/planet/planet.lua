@@ -409,6 +409,10 @@ if settings.startup["PlanetsLib-enable-oxygen"].value == true then
   muluna.surface_properties["oxygen"] = 0
 end
 
+if settings.startup["PlanetsLib-enable-carbon-dioxide"].value == true then
+  muluna.surface_properties["carbon-dioxide"] = 0
+end
+
 
 if mods["any-planet-start"] then
   local nauvis = data.raw["planet"]["nauvis"]
