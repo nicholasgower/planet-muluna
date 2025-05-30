@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.0
+Date: 2025-05-30
+  Features:
+    - Added enhanced greenhouse recipes that use cold fluoroketone to further increase wood yields.
+    - Added Vulcanus-only recipe to extract carbon dioxide from the air.
+  Balancing:
+    - Adjusted weight of "Tree" item to make it possible to launch them in rockets.
+    - Increased cost of "Fertilized greenhouse tree growth" technology from 1000 to 2000.
+  Bugfixes:
+    - Set auto_recycle = false to all greenhouse recipes.
+  Changes:
+    - Enabled PlanetsLib's "Carbon dioxide" surface property.
+---------------------------------------------------------------------------------------------------
 Version: 1.43.7
 Date: 2025-05-30
   Bugfixes:
