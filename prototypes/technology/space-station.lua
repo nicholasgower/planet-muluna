@@ -651,7 +651,7 @@ data:extend{
         name = "muluna-fertilized-greenhouses",
         localised_name = {"recipe-name.muluna-tree-growth-greenhouse-nutrients"},
         unit = {
-            count = 1000,
+            count = 2000,
             time = 60,
             ingredients = {
                 {"automation-science-pack", 1},
