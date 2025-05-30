@@ -27,12 +27,12 @@ data:extend{
         icons = dual_icon("wood","carbon-dioxide"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
-            {type = "fluid",name = "carbon-dioxide", amount=10000},
-            {type = "fluid",name = "water", amount=500},
+            {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
+            {type = "fluid",name = "water", amount=500,fluidbox_index = 2},
         },
         results = {
             {type = "item",name = "wood", amount=40},
-            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
+            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000,fluidbox_index = 1}
         },
         energy_required=5*60,
         subgroup="muluna-forestry",
@@ -54,12 +54,12 @@ data:extend{
         --icons = dual_icon("muluna-sapling","carbon-dioxide"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
-            {type = "fluid",name = "carbon-dioxide", amount=10000},
-            {type = "fluid",name = "water", amount=500},
+            {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
+            {type = "fluid",name = "water", amount=500, fluidbox_index = 2},
         },
         results = {
             {type = "item",name = "muluna-sapling", amount=10},
-            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
+            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
         },
         energy_required=5*60,
         subgroup="muluna-forestry",
@@ -82,12 +82,12 @@ data:extend{
         icons = dual_icon("wood","water"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
-            {type = "fluid",name = "carbon-dioxide", amount=10000},
-            {type = "fluid",name = "water", amount=250},
+            {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
+            {type = "fluid",name = "water", amount=250, fluidbox_index = 2},
         },
         results = {
             {type = "item",name = "wood", amount=40},
-            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
+            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
         },
         energy_required=10*60,
         subgroup="muluna-forestry",
@@ -239,6 +239,26 @@ data:extend{
         energy_required=1/6,
         subgroup="muluna-products"
 
+    },
+    {
+        type = "recipe",
+        name = "muluna-carbon-dioxide",
+        localised_name={"fluid.carbon-dioxide"},
+        category = "chemistry",
+        energy_required = 10,
+        ingredients = {},
+        results = {
+            {type = "fluid", name = "carbon-dioxide", amount = 100, temperature = 25}
+        },
+        enabled = false,
+        main_product = "carbon-dioxide",
+        subgroup="fluid-recipes",
+        order=(data.raw["recipe"]["ice-melting"].order or "") .."b[carbon-dioxide]",
+        surface_conditions = {{
+            property = "carbon-dioxide",
+            min = 90,
+
+        }}
     },
     { 
         type = "recipe",
@@ -417,26 +437,94 @@ local oxygen_from_oxidizer = {
     }
 }
 
--- Nutrient-using greenhouse recipes
-local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving"}
-local recipe_icons = {dual_icon("wood","nutrients","carbon-dioxide"),dual_icon("wood","nutrients","water"),dual_icon("muluna-sapling","nutrients")}
-
-for i,recipe_name in ipairs(greenhouse_recipes) do
-    local recipe
-    if data.raw["recipe"][recipe_name] then
-        recipe = table.deepcopy(data.raw["recipe"][recipe_name])
-        recipe.name = recipe.name .. "-nutrients" 
-        table.insert(recipe.ingredients,{type="item",name="nutrients",amount=20})
-        recipe.results[1].amount=recipe.results[1].amount*1.5
-        rro.replace(recipe.results,{type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000},{type = "fluid",name = "oxygen", amount=15000,ignored_by_productivity=15000})
-        rro.replace(recipe.ingredients,{type = "fluid",name = "carbon-dioxide", amount=10000},{type = "fluid",name = "carbon-dioxide", amount=15000})
-        --recipe.energy_required = recipe.energy_required*0.6
-        recipe.icons = recipe_icons[i]
-        data:extend{recipe}
-        if data.raw["technology"]["muluna-fertilized-greenhouses"] then
-            table.insert(data.raw["technology"]["muluna-fertilized-greenhouses"].effects,{type = "unlock-recipe", recipe = recipe.name})
-        end
-    end
-end 
-
 data:extend{oxygen_from_oxidizer}
+
+local greenhouse_recipes_with_nutrients = {}
+local recipe_icons_vulcanus = {dual_icon("wood","fluoroketone-cold","carbon-dioxide"),dual_icon("wood","fluoroketone-cold","water"),dual_icon("muluna-sapling","fluoroketone-cold")}
+local recipe_icons_heated = {dual_icon("wood","fluoroketone-hot","carbon-dioxide"),dual_icon("wood","fluoroketone-hot","water"),dual_icon("muluna-sapling","fluoroketone-hot")}
+
+    -- Nutrient-using greenhouse recipes
+    local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving","muluna-sapling-growth-greenhouse"}
+    local recipe_icons = {dual_icon("wood","nutrients","carbon-dioxide"),dual_icon("wood","nutrients","water"),dual_icon("muluna-sapling","nutrients")}
+    greenhouse_recipes_with_nutrients = table.deepcopy(greenhouse_recipes)
+    for i,recipe_name in ipairs(greenhouse_recipes) do
+        local recipe
+        local recipe_vulcanus
+        local recipe_heated
+        if data.raw["recipe"][recipe_name] then
+            local original_recipe = data.raw["recipe"][recipe_name]
+            recipe = table.deepcopy(original_recipe)
+            recipe.name = original_recipe.name .. "-nutrients"
+            table.insert(greenhouse_recipes_with_nutrients,recipe.name)
+            table.insert(recipe.ingredients,{type="item",name="nutrients",amount=20})
+            recipe.results[1].amount=recipe.results[1].amount*1.5
+            rro.replace(recipe.results,{type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000,fluidbox_index = 1},{type = "fluid",name = "oxygen", amount=15000,ignored_by_productivity=15000,fluidbox_index = 1})
+            rro.replace(recipe.ingredients,{type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},{type = "fluid",name = "carbon-dioxide", amount=15000,fluidbox_index = 1})
+            --recipe.energy_required = recipe.energy_required*0.6
+            recipe.icons = recipe_icons[i]
+
+            recipe_vulcanus = table.deepcopy(recipe)
+            recipe_vulcanus.name = original_recipe.name .. "-vulcanus"
+            recipe_vulcanus.icons = recipe_icons_vulcanus[i]
+            for _,item in pairs(recipe_vulcanus.ingredients) do
+                if item.name == "carbon-dioxide" then
+                    item.amount = 20000
+                    item.ignored_by_productivity = 20000
+                end
+                if item.name == "water" then
+                    --item.amount = 20000
+                    --item.ignored_by_productivity = 20000
+                    table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500*(500/item.amount), fluidbox_index = 3})
+                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500*(500/item.amount),ignored_by_productivity=500*(500/item.amount),fluidbox_index = 2})
+                end
+            end
+            --table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500, fluidbox_index = 3})
+            --table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500,ignored_by_productivity=500,fluidbox_index = 2})
+            for _,item in pairs(recipe_vulcanus.results) do
+                if item.name == "wood" then
+                    item.amount = 80
+                end
+                if item.name == "muluna-sapling" then
+                    item.amount = 20
+                end
+                if item.name == "oxygen" then
+                    item.amount = 20000
+                    item.ignored_by_productivity = 20000
+                end
+            end
+            recipe_vulcanus.surface_conditions = nil
+            -- recipe_heated = table.deepcopy(recipe_vulcanus)
+            -- recipe_vulcanus.surface_conditions = {
+            --     {
+            --         property = "temperature",
+            --         min = 330
+            --     },
+            -- }
+            -- recipe_heated.surface_conditions = {
+            --     {
+            --         property = "temperature",
+            --         max = 275
+            --     },
+            -- }
+            -- recipe_heated.name = original_recipe.name .. "-heated"
+            -- for _,item in pairs(recipe_heated.results) do
+            --     if item.name == "fluoroketone-hot" then
+            --         item.name = "fluoroketone-cold"
+            --     end
+            -- end
+            -- for _,item in pairs(recipe_heated.ingredients) do
+            --     if item.name == "fluoroketone-cold" then
+            --         item.name = "fluoroketone-hot"
+            --     end
+            -- end
+            data:extend{recipe,recipe_vulcanus}
+            if data.raw["technology"]["muluna-fertilized-greenhouses"] then
+                table.insert(data.raw["technology"]["muluna-fertilized-greenhouses"].effects,{type = "unlock-recipe", recipe = recipe.name})
+            end
+            if data.raw["technology"]["muluna-fertilized-greenhouses-vulcanus"] then
+                table.insert(data.raw["technology"]["muluna-fertilized-greenhouses-vulcanus"].effects,{type = "unlock-recipe", recipe = recipe_vulcanus.name})
+            end
+        end
+    end 
+
+    

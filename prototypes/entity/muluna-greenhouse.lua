@@ -72,7 +72,7 @@ local greenhouse = {
           {flow_direction = "input-output", direction = defines.direction.north, position = {-3, -4}},
         },
         production_type = "input",
-        --filter = "water"
+        --filter = "carbon-dioxide"
       },
         {
           volume = 200,
@@ -101,7 +101,33 @@ local greenhouse = {
             {flow_direction = "input-output", direction = defines.direction.north, position = {3, -4}},
             },
             production_type = "output",
-            --filter = "steam"
+            --filter = "oxygen"
+        },
+        {
+          volume = 200,
+          pipe_covers = pipecoverspictures(),
+          pipe_connections =
+          {
+            --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
+            --{flow_direction = "input", direction = defines.direction.east, position = {5.0, 0}},
+            --{flow_direction = "input", direction = defines.direction.south, position = {-0.0, 5}},
+            {flow_direction = "input", direction = defines.direction.west, position = {-4, 0}},
+          },
+          production_type = "input",
+          --filter = "fluoroketone-cold",
+        },
+        {
+          volume = 200,
+          pipe_covers = pipecoverspictures(),
+          pipe_connections =
+          {
+            --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
+            --{flow_direction = "input", direction = defines.direction.east, position = {5.0, 0}},
+            --{flow_direction = "input", direction = defines.direction.south, position = {-0.0, 5}},
+            {flow_direction = "output", direction = defines.direction.east, position = {4, 0}},
+          },
+          production_type = "output",
+          --filter = "fluoroketone-hot",
         },
     },
     --fluid_boxes=data.raw["assembling-machine"]["chemical-plant"].fluid_boxes,
