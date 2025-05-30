@@ -111,7 +111,7 @@ data:extend{{
     order=data.raw.item["tree-seed"].order .. "a",
     subgroup=data.raw.item["tree-seed"].subgroup,
     group=data.raw.item["tree-seed"].group,
-    weight=10*10^12,
+    weight=iron_ore.weight*50,
     default_import_location = "nauvis",
     --plant_result = "tree-01",
     place_result = "muluna-placed-tree",
