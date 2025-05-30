@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.43.7
+Date: 2025-05-30
+  Bugfixes:
+    - Moved positional elements of Muluna to data-updates to improve compatibility with other planets when playing with any-planet-start. https://github.com/nicholasgower/planet-muluna/issues/192
+---------------------------------------------------------------------------------------------------
 Version: 1.43.6
 Date: 2025-05-27
   Bugfixes:
