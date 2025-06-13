@@ -318,6 +318,7 @@ local muluna=
         ["pressure"] = 50,
         ["magnetic-field"] = 0.01,
         ["day-night-cycle"] = nauvis.surface_properties["day-night-cycle"],
+        ["is-muluna"] = 1,
     },
     map_gen_settings = map_gen,
     parked_platforms_orientation=0.70,

@@ -182,3 +182,35 @@ end
 if data.raw["spider-vehicle"]["spidertron"] then
 	PlanetsLib.relax_surface_conditions(data.raw["spider-vehicle"]["spidertron"], gravity_condition)
 end
+
+
+--Recycling recipe fixes
+
+local cable_recycling = table.deepcopy(data.raw["recipe"]["copper-cable-recycling"])
+local cable_recycling_muluna = table.deepcopy(cable_recycling)
+cable_recycling_muluna.name = cable_recycling.name .. "-muluna"
+cable_recycling_muluna.results[1].name = "aluminum-plate"
+cable_recycling_muluna.surface_conditions = {
+    {
+        property = "is-muluna",
+        min = 1,
+        max = 1,
+    },
+    -- {
+    --     property = "oxygen",
+    --     min = 0,
+    --     max = 0,
+    -- }
+}
+
+cable_recycling.surface_conditions = {
+    {
+        property = "is-muluna",
+        min = 0,
+        max = 0,
+    },
+
+}
+
+data:extend{cable_recycling_muluna,cable_recycling}
+
