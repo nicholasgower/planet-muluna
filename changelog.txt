@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.5
+Date: 2025-06-13
+  Balancing:
+    - Recycling electrical cables on Muluna will produce aluminum plates instead of copper plates. Recycling electrical cables on other planets is unchanged. https://github.com/nicholasgower/planet-muluna/issues/197
+  Changes:
+    - Added hidden "is-muluna" surface property to allow arbitrarily restricting recipes on and off Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.4
 Date: 2025-06-13
   Compatibility:
