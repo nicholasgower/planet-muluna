@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.4
+Date: 2025-06-13
+  Compatibility:
+    - Fixed compatibility with fluid-nutrients, adding a fluidbox for nutrient solution to the greenhouse for advanced wood growth recipes.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.3
 Date: 2025-06-09
   Locale:
