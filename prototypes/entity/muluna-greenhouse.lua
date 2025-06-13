@@ -378,5 +378,24 @@ local greenhouse = {
     
   }
 
+if mods["fluid-nutrients"] then
+  table.insert(greenhouse.fluid_boxes, 
+    {
+          volume = 200,
+          pipe_covers = pipecoverspictures(),
+          pipe_connections =
+          {
+            --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
+            --{flow_direction = "input", direction = defines.direction.east, position = {5.0, 0}},
+            --{flow_direction = "input", direction = defines.direction.south, position = {-0.0, 5}},
+            {flow_direction = "input", direction = defines.direction.south, position = {0, 4}},
+          },
+          production_type = "input",
+          --filter = "water"
+        }
+      )
+
+end
+
 
 data:extend{greenhouse,greenhouse_category}

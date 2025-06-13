@@ -460,7 +460,11 @@ local recipe_icons_heated = {dual_icon("wood","fluoroketone-hot","carbon-dioxide
             recipe = table.deepcopy(original_recipe)
             recipe.name = original_recipe.name .. "-nutrients"
             table.insert(greenhouse_recipes_with_nutrients,recipe.name)
-            table.insert(recipe.ingredients,{type="item",name="nutrients",amount=20})
+            local nutrients = {type="item",name="nutrients",amount=20}
+            if mods["fluid-nutrients"] then
+                nutrients["fluidbox_index"] = 4
+            end
+            table.insert(recipe.ingredients,nutrients)
             recipe.results[1].amount=recipe.results[1].amount*1.5
             rro.replace(recipe.results,{type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000,fluidbox_index = 1},{type = "fluid",name = "oxygen", amount=15000,ignored_by_productivity=15000,fluidbox_index = 1})
             rro.replace(recipe.ingredients,{type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},{type = "fluid",name = "carbon-dioxide", amount=15000,fluidbox_index = 1})
