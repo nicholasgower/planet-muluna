@@ -6,7 +6,17 @@ local asteroid_util = require "__space-age__.prototypes.planet.asteroid-spawn-de
 local tau = 2*math.pi
 local meld = require("meld")
 local planet_catalogue_vulcanus = require("__space-age__.prototypes.planet.procession-catalogue-vulcanus")
-
+data:extend({
+		{
+			type = "surface-property",
+			name = "is-muluna",
+      hidden = true,
+			default_value = 0,
+      localised_name = {"surface-property-name.planet-str"},
+			localised_unit_key = "surface-property-unit.planet-str",
+			order = "z[is-muluna]z",
+		},
+	})
 data:extend{
   {
     type = "autoplace-control",
