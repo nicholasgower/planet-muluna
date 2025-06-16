@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.6
+Date: 2025-06-16
+  Compatibility:
+    - Added soft dependency on "Krastorio 2 Spaced Out."
+    - When Krastorio 2 Spaced Out is installed, an alternative recipe for automation cores using aluminum plates has been added.
+    - When Krastorio 2 Spaced Out is installed, Singularity lab recipe has been adjusted to require Cryolabs.
+    - When Krastorio 2 Spaced Out is installed, space science packs have been adjusted to make Muluna and Krastorio2 work better together.
+  Graphics:
+    - Added new graphics to Advanced greenhouse technology icons.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.5
 Date: 2025-06-13
   Balancing:
