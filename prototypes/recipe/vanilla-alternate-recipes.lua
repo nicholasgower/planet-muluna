@@ -161,6 +161,34 @@ if data.raw["technology"]["low-density-structure-productivity"] then
     }
 ) 
 end
+
+
+
+if mods["Krastorio2-spaced-out"] then
+    local recipes = {
+        "kr-automation-core",
+        --"kr-electrolysis-plant"
+    }
+    for i,recipe_name in ipairs(recipes) do
+        local recipe = data.raw["recipe"][recipe_name]
+        local new_recipe = table.deepcopy(recipe)
+        new_recipe.name = recipe.name .. "-from-aluminum"
+        new_recipe.icons = dual_icon(recipe.name,"aluminum-plate")
+        new_recipe.localised_name={"recipe-name.x-from-aluminum",{"item-name."..recipe.name}}
+        for _,ingredient in pairs(new_recipe.ingredients) do
+            if ingredient.name == "copper-plate" then
+                ingredient.name = "aluminum-plate"
+            end
+        end
+        rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects, 
+        {
+            type = "unlock-recipe",
+            recipe = new_recipe.name
+        }
+    )
+        data:extend{new_recipe}
+    end
+end
     
 
 
