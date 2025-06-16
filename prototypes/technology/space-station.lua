@@ -107,6 +107,25 @@ local function crushing_technology_icon(item_sprite,item_sprite_size)
     }
 end
 
+local function greenhouse_technology_icon(item_sprite,item_sprite_size)
+    if not item_sprite_size then item_sprite_size = 64 end
+
+    return  {
+        {
+            icon = "__muluna-graphics__/graphics/greenhouse/sprites/greenhouse-icon-big.png",
+            icon_size = 640,
+        },  
+        {
+            icon = item_sprite,
+            icon_size=item_sprite_size,
+            --scale=0.3,
+            shift = {45,45},
+            scale=0.75,
+        },
+        
+    }
+end
+
 data:extend{
     -- {
     --     type = "technology",
@@ -649,6 +668,7 @@ data:extend{
     {
         type = "technology",
         name = "muluna-fertilized-greenhouses",
+        icons = greenhouse_technology_icon(data.raw.item.nutrients.icon,64),
         localised_name = {"recipe-name.muluna-tree-growth-greenhouse-nutrients"},
         unit = {
             count = 2000,
@@ -673,6 +693,7 @@ data:extend{
     {
         type = "technology",
         name = "muluna-fertilized-greenhouses-vulcanus",
+        icons = greenhouse_technology_icon(data.raw.fluid["fluoroketone-cold"].icon,64),
         localised_name = {"recipe-name.muluna-tree-growth-greenhouse-vulcanus"},
         unit = {
             count = 3000,
