@@ -298,6 +298,12 @@ data.raw.recipe["space-science-pack"].surface_conditions = {
     },
     PlanetsLib.surface_conditions.restrict_to_surface("muluna")
 }
+
+if mods["Krastorio2-spaced-out"] then
+    data.raw.recipe["kr-space-research-data"].surface_conditions = data.raw.recipe["space-science-pack"].surface_conditions
+
+end
+
 data.raw.recipe["interstellar-science-pack"].surface_conditions = data.raw.recipe["space-science-pack"].surface_conditions
 
 -- rro.replace(data.raw["technology"]["planet-discovery-vulcanus"].prerequisites,"space-science-pack","asteroid-collector")
@@ -837,6 +843,33 @@ space_science_pack_advanced.name = "space-science-pack-advanced"
 --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
 data:extend{space_science_pack_advanced}
 
+if mods["Krastorio2-spaced-out"] then
+    local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["kr-space-research-data"])
+
+    space_science_pack_advanced.surface_conditions = {
+        {
+            property = "gravity",
+            min = 0,
+            max = 0,
+        },
+        -- {
+        --     property = "oxygen",
+        --     min = 0,
+        --     max = 0,
+        -- },
+    }
+    space_science_pack_advanced.name = "kr-space-research-data-advanced"
+    --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
+    data:extend{space_science_pack_advanced}
+    rro.soft_insert(data.raw["technology"]["advanced-space-science-pack"].effects ,  {
+        type = "unlock-recipe",
+        recipe = space_science_pack_advanced.name
+    })
+    
+end
+
+
+
 --data.raw["recipe"]["interstellar-science-pack-helium-4"].icons = dual_icon("interstellar-science-pack","asteroid-collector")
 
 -- data.raw["recipe"]["wood-greenhouse"].enabled = false
@@ -851,6 +884,7 @@ require("compat.orbital-transfer")
 require("compat.visible-planets")
 require("compat.dyson-sphere")
 require("compat.bzsilicon")
+require("compat.Krastorio2-spaced-out")
 require("prototypes.planet.planet-asteroids")
 
 if mods["cupric-asteroids"] then
