@@ -45,7 +45,8 @@
     "(?) modular-trains",
     "(?) solar-productivity",
     "(?) Krastorio2-Spaced-Out",
-    "(?) cupric-asteroids"
+    "(?) cupric-asteroids",
+    "? Krastorio2-spaced-out"
   ],
   "quality_required": true,
   "rail_bridges_required": true,

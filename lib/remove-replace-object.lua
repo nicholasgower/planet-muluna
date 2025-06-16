@@ -38,6 +38,15 @@ function rro.replace(list, objectToRemove, replacementObject) --Replaces object 
     end
 end
 
+function rro.replace_field(list,field,name,new_name) 
+    for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
+        if list[i][field] == name then
+                list[i][field] = new_name -- Replace the object
+                break
+        end
+    end
+end
+
 function rro.replace_name(list,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
         if list[i].name == name then
