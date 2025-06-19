@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.7
+Date: 2025-06-19
+  Balancing:
+    - (Factorio >= 2.0.57 only) Advanced boilers now have their efficiency locked to 150% at all quality levels. Energy usage and speed increase in tandem at higher qualities for all assembling machines with the quality_affects_energy_usage flag activated.
+  Bugfixes:
+    - (Krastorio2) "Automation core from Aluminum" recipe is no longer automatically crafted.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.6
 Date: 2025-06-16
   Compatibility:
