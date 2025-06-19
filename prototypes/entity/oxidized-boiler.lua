@@ -361,7 +361,9 @@ local space_boiler_new = {
 --space_boiler_new.pictures.east=space_boiler_new.pictures.north
 --space_boiler_new.pictures.west=space_boiler_new.pictures.north
 --space_boiler_new.pictures.south=space_boiler_new.pictures.north
-
+if data.raw["container"]["bottomless-chest"] then --Checking if game version >= 2.0.57
+  space_boiler_new.quality_affects_energy_usage = true
+end
 space_boiler_new.energy_source.light_flicker =
   {
     color = {0,0,0},

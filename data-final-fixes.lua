@@ -139,7 +139,12 @@ local boiler_description = {""}
         --electricity_description = maraxsis.shorten_localised_string(electricity_description)
 
 if data.raw["assembling-machine"]["muluna-advanced-boiler"] then
-    data.raw["assembling-machine"]["muluna-advanced-boiler"].factoriopedia_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",boiler_description}
+    
+    if not data.raw["assembling-machine"]["muluna-advanced-boiler"].quality_affects_energy_usage then
+        data.raw["assembling-machine"]["muluna-advanced-boiler"].factoriopedia_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",boiler_description}
+    else
+        data.raw["assembling-machine"]["muluna-advanced-boiler"].factoriopedia_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",{"recipe-description.global-advanced-boiler-efficiency-description","150"}}
+    end
 end
 
 if data.raw["accumulator"]["muluna-satellite-radar"] then
@@ -212,5 +217,13 @@ cable_recycling.surface_conditions = {
 
 }
 
+
+
 data:extend{cable_recycling_muluna,cable_recycling}
+
+if data.raw["container"]["bottomless-chest"] then --If version >= 2.0.57
+    for _,quality in pairs(data.raw["quality"]) do
+        quality.crafting_machine_energy_usage_multiplier = quality.default_multiplier or (1+ 0.3*quality.level)
+    end
+end
 

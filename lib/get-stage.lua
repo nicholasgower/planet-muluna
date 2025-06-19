@@ -15,4 +15,8 @@ function Public.get_stage()
 
 end
 
+function Public.has_new_quality_features()
+    return (helpers.compare_versions(helper.game_version, "2.0.56") >= 0) --Checks if version is >=2.0.56, when new quality options 
+end
+
 return Public
