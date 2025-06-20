@@ -76,7 +76,7 @@ data:extend {{
     category = "resource",
     name = "oxide-asteroid-chunk",
     localised_name = {"", "[item=oxide-asteroid-chunk]", " ",{"entity-name.oxide-asteroid-chunk"}},
-    order = u_ore_order.."0",
+    order = u_ore_order.."00",
     richness = true
 }}
 data:extend {{
@@ -84,7 +84,7 @@ data:extend {{
     category = "resource",
     name = "metallic-asteroid-chunk",
     localised_name = {"","[item=metallic-asteroid-chunk]" ," ",{"entity-name.metallic-asteroid-chunk"}},
-    order = u_ore_order.."1",
+    order = u_ore_order.."01",
     richness = true
 }}
 data:extend {{
@@ -92,7 +92,7 @@ data:extend {{
     category = "resource",
     name = "carbonic-asteroid-chunk",
     localised_name = {"", "[item=carbonic-asteroid-chunk]"," ", {"entity-name.carbonic-asteroid-chunk"}},
-    order = u_ore_order.."2",
+    order = u_ore_order.."02",
     richness = true
 }}
 data:extend {{
@@ -100,7 +100,7 @@ data:extend {{
   category = "resource",
   name = "anorthite-chunk",
   localised_name = {"", "[item=anorthite-chunk]"," ", {"item-name.anorthite-chunk"}},
-  order = u_ore_order.."3",
+  order = u_ore_order.."03",
   richness = true
 }}
 data:extend {{
@@ -108,7 +108,7 @@ data:extend {{
   category = "resource",
   name = "helium",
   localised_name = {"", "[fluid=helium]"," ", {"fluid-name.helium"}},
-  order = u_ore_order.."4",
+  order = u_ore_order.."04",
   richness = true
 }}
 if mods["cupric-asteroids"] then
@@ -117,7 +117,7 @@ if mods["cupric-asteroids"] then
     category = "resource",
     name = "cupric-asteroid-chunk",
     localised_name = {"", "[item=cupric-asteroid-chunk]"," ", {"entity-name.cupric-asteroid-chunk"}},
-    order = u_ore_order.."5",
+    order = u_ore_order.."05",
     richness = true
 }}
 end
