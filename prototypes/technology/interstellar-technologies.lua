@@ -8,7 +8,7 @@ local rro = require("lib.remove-replace-object")
 local techs_interstellar = {
     ["planet-discovery"] = 
         {
-            "planet-discovery-tenebris", "planet-discovery-naufulglebunusilo",
+            "planet-discovery-tenebris", "planet-discovery-naufulglebunusilo"
         },
     aquilo =
         {
@@ -26,10 +26,19 @@ local techs_interstellar = {
         {
             "planet-discovery-maraxsis","maraxsis-abyssal-diving-gear",
         },
+    secretas = 
+    {
+        "planet-discovery-secretas", "spaceship-scrap-recycling-productivity",
+        "spaceship-scrap-recycling-productivity"
+    },
     -- ["metal-and-stars"] = 
     --     {
     --         "planet-discovery-shipyard",
     --     },
+    paracelsin = 
+        {
+            "planet-discovery-paracelsin",
+        },
     ["orbital-ion-cannon"] =
         {
             "orbital-ion-cannon-mk2","orbital-ion-cannon-mk2-upgrade",
@@ -49,7 +58,7 @@ local techs_interstellar = {
     other = 
         {
             "promethium-science-pack",
-            "planet-discovery-secretas", "spaceship-scrap-recycling-productivity",
+            
             "shield-projector",
             "orbital-transfer",
             "starsystem-discovery-nexuz",
@@ -65,6 +74,8 @@ local techs_interstellar = {
     }
     
 }
+
+
 
 local techs_asteroid = {"trace-oxide-processing","trace-carbonic-processing","trace-metallic-processing",
     "promethium-advanced-processing"}
