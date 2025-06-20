@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.8
+Date: 2025-06-20
+  Balancing:
+    - Removed requirement for electrochemical science pack for "Thruster fuel productivity" when Corrundum is installed.
+  Compatibility:
+    - "Cerysian science pack" is now a valid path to unlocking the interstellar science pack.
+    - Added "Planet discovery Paracelsin" and "Spaceship scrap recycling productivity" to list of interstellar technologies that require the interstellar science pack.
+    - Adjusted rocket-part cost doubling code to automatically apply to all rocket part recipes.
+  Bugfixes:
+    - Fixed order of Muluna resource autoplace settings to avoid order conflict with Rubia.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.7
 Date: 2025-06-19
   Balancing:
