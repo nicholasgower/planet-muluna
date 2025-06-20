@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.10
+Date: 2025-06-20
+  Locale:
+    - Adjusted formatting of Advanced boiler's description to make efficiency label better blend in with official formatting.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.9
 Date: 2025-06-20
   Bugfixes:
