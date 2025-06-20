@@ -2,7 +2,7 @@ local rro = require("lib.remove-replace-object")
 if data.raw["tool"]["electrochemical-science-pack"] then
     local electrochemical_techs = {
         
-        infinite = {"thruster-fuel-productivity"}
+        --infinite = {"thruster-fuel-productivity"}
     }
 
     for _,group in pairs(electrochemical_techs) do
