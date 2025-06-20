@@ -56,7 +56,8 @@ local asteroid_processing = {
         game.simulation.camera_alt_info = true
         game.simulation.camera_zoom = 1
 
-        game.forces.player.technologies["crusher"].researched = true
+        game.forces.player.technologies["planet-discovery-muluna"].researched = true
+        game.forces.player.technologies["metallic-asteroid-crushing"].researched = true
         --game.forces.player.technologies["bioluminescent-crystal"].researched = true
 
         for x = -5, 4, 1 do
