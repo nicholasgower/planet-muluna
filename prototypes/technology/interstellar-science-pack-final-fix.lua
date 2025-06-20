@@ -69,15 +69,21 @@ local possible_science_packs =
     "agricultural-science-pack",
     "electromagnetic-science-pack",
     "electrochemical-science-pack",
+    "cerysian-science-pack",
     "janus-time-science-pack",
     "slp-sunpack",
     "nanite-science-pack",
     --"insulation-science-pack",
     "battlefield-science-pack",
+    --"igrys-mineral-science-pack",
+    --"biorecycling-science-pack"
+    --"craptonite-processing",
 }
 
 local special_cases = {
-    ["slp-sunpack"] = "slp-sun-science-pack"
+    ["slp-sunpack"] = "slp-sun-science-pack",
+    ["igrys-mineral-science"] = "igrys-mineral-science",
+    ["biorecycling-science-pack"] = "craptonite-processing"
 }
 
 
