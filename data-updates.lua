@@ -254,10 +254,19 @@ local function scalar_recipe_multiply(list,factor)
     end
 end
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
-    scalar_recipe_multiply(data.raw.recipe["rocket-part"].ingredients,2)
-    if mods["maraxsis"] then
-        scalar_recipe_multiply(data.raw.recipe["maraxsis-rocket-part"].ingredients,2)
-        data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
+    local function process_rocket_part(recipe) 
+        scalar_recipe_multiply(recipe.ingredients,2)
+        recipe.maximum_productivity = 7
+    end
+    --scalar_recipe_multiply(data.raw.recipe["rocket-part"].ingredients,2)
+    -- if mods["maraxsis"] then
+    --     scalar_recipe_multiply(data.raw.recipe["maraxsis-rocket-part"].ingredients,2)
+    --     data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
+    -- end
+    for _,recipe in pairs(data.raw["recipe"]) do
+        if recipe.results and recipe.results[1] and recipe.results[1].name == "rocket-part" then
+            process_rocket_part(recipe)
+        end
     end
 end
 
