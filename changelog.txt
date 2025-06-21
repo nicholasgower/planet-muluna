@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.11
+Date: 2025-06-21
+  Compatibility:
+    - Raised required muluna-graphics to 1.0.17.
+  Bugfixes:
+    - Corrected icon_size for crushed stone item to match new icon.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.10
 Date: 2025-06-20
   Locale:
