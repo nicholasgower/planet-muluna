@@ -62,7 +62,7 @@ data:extend{{
     type="item", --Intended to be compatible with Bio-industries, whenever it gets updated to 2.0
     name="stone-crushed",
     icon="__muluna-graphics__/graphics/icons/crushed-stone.png", --icon from bio-industries crushed stone
-    icon_size=32,
+    icon_size=64,
     -- icons ={
     --     {
             
