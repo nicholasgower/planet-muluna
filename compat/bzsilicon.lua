@@ -45,6 +45,8 @@ end
 if mods["bztitanium"] then
     data.raw["planet"]["muluna"].map_gen_settings.autoplace_controls["titanium-ore"] = {}
     data.raw["planet"]["muluna"].map_gen_settings.autoplace_settings["entity"]["settings"]["titanium-ore"] = {}
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"space-science-pack",1})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack",1})
 end
 if mods["bzzirconium"] then
     data.raw["planet"]["muluna"].map_gen_settings.autoplace_controls["zircon"] = {}
