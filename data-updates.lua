@@ -242,7 +242,8 @@ rocket_part_muluna.surface_conditions = {
 rocket_part_muluna.results = {{type = "item", name = "rocket-part", amount = 1}}
 rocket_part_muluna.localised_name = {"item-name.rocket-part"}
 
-
+PlanetsLib.assign_rocket_part_recipe("muluna",rocket_part_muluna.name)
+PlanetsLib.assign_rocket_part_recipe("cerys",rocket_part_muluna.name)
 -- data.raw["recipe"]["rocket-part"].surface_conditions = {
 --     {property = "gravity",
 --     min = 5.01,

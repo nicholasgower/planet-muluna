@@ -41,9 +41,9 @@ local sd = require("scripts.project-seadragon")
 --     end
 -- end) 
 
-script.on_event(defines.events.on_built_entity, function(event)
-    sd.on_built_rocket_silo(event)
-end)
+-- script.on_event(defines.events.on_built_entity, function(event)
+--     sd.on_built_rocket_silo(event)
+-- end)
 
 local new_surface = require("scripts.new-surface")
 
