@@ -64,6 +64,7 @@ end
 data.raw["technology"]["space-platform-thruster"].prerequisites = new_prereqs
 
 
+
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     --Doubles the change associated with infinite rocket part productivity technology.
     --Also adds support in case Hardcore is installed.
