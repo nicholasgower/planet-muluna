@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.16
+Date: 2025-06-25
+  Bugfixes:
+    - Changed code that adds space science pack to rocket part productivity technology to be theoretically safer.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.15
 Date: 2025-06-25
   Balancing:
