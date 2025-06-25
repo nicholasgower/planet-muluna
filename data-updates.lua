@@ -128,7 +128,7 @@ rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
     
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
-    table.insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
+    rro.soft_insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
 end
 -- for entry in ipairs(t2_planet_rocket_prod) do
 --     table.insert(rocket_prod_aquilo.prerequisites,entry)
