@@ -56,7 +56,8 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     
 
     rocket_prod.max_level=nil
-    rro.replace(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1},{"space-science-pack",1})
+    rro.remove(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1})
+    rro.soft_insert(rocket_prod.unit.ingredients,{"space-science-pack",1})
     rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
     rocket_prod.unit.count=250
     rocket_prod.unit.count_formula=nil
