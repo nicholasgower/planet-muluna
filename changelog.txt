@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.15
+Date: 2025-06-25
+  Balancing:
+    - Adjusted weight of advanced boiler item.
+    - Increased cost of advanced boiler from 1 boiler to 3.
+    - Removed uses_quality_drain_modifier from cryolab and reduced base science pack drain modifier to 45%.
+  Locale:
+    - Corrected incorrect locale file location
+---------------------------------------------------------------------------------------------------
 Version: 1.44.14
 Date: 2025-06-25
   Locale:
