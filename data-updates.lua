@@ -265,7 +265,7 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     --     data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
     -- end
     for _,recipe in pairs(data.raw["recipe"]) do
-        if recipe.results and recipe.results[1] and recipe.results[1].name == "rocket-part" then
+        if recipe.name == "rocket-part" or (recipe.results and recipe.results[1] and recipe.results[1].name == "rocket-part") then
             process_rocket_part(recipe)
         end
     end

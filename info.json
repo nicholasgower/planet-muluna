@@ -46,7 +46,8 @@
     "(?) solar-productivity",
     "(?) Krastorio2-Spaced-Out",
     "(?) cupric-asteroids",
-    "? Krastorio2-spaced-out"
+    "? Krastorio2-spaced-out",
+    "! quality-rocket-parts"
   ],
   "quality_required": true,
   "rail_bridges_required": true,
