@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.19
+Date: 2025-06-28
+  Bugfixes:
+    - Fixed impossible dependency when Lignumis is installed. https://github.com/nicholasgower/planet-muluna/issues/207
+---------------------------------------------------------------------------------------------------
 Version: 1.44.18
 Date: 2025-06-26
   Bugfixes:
