@@ -64,7 +64,7 @@ cryolab.energy_usage="1.5MW"
 
 
 cryolab.researching_speed=cryolab.researching_speed*3
-cryolab.science_pack_drain_rate_percent=50
+-- cryolab.science_pack_drain_rate_percent=45
 cryolab.uses_quality_drain_modifier = true
 cryolab.max_health=500
 cryolab.module_slots=6

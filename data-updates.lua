@@ -56,7 +56,8 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     
 
     rocket_prod.max_level=nil
-    rro.replace(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1},{"space-science-pack",1})
+    rro.remove(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1})
+    rro.soft_insert(rocket_prod.unit.ingredients,{"space-science-pack",1})
     rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
     rocket_prod.unit.count=250
     rocket_prod.unit.count_formula=nil
@@ -127,7 +128,7 @@ rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
     
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
-    table.insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
+    rro.soft_insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
 end
 -- for entry in ipairs(t2_planet_rocket_prod) do
 --     table.insert(rocket_prod_aquilo.prerequisites,entry)
@@ -265,7 +266,7 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     --     data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
     -- end
     for _,recipe in pairs(data.raw["recipe"]) do
-        if recipe.results and recipe.results[1] and recipe.results[1].name == "rocket-part" then
+        if recipe.name == "rocket-part" or (recipe.results and recipe.results[1] and recipe.results[1].name == "rocket-part") then
             process_rocket_part(recipe)
         end
     end
@@ -430,7 +431,7 @@ end
 -- end
 
 for _,planet in pairs(data.raw["planet"]) do
-    if planet.name ~= "muluna" and planet.name ~= "nauvis" then
+    if planet.name ~= "muluna" and planet.name ~= "nauvis" and planet.name ~="lignumis" then
         if data.raw["technology"]["planet-discovery-"..planet.name] then
             if data.raw["technology"]["planet-discovery-"..planet.name] then
                 if data.raw["technology"]["planet-discovery-"..planet.name]["prerequisites"] then
@@ -547,11 +548,11 @@ end
 if mods["maraxsis"] then
     for _,tech in pairs(data.raw["technology"]) do
         if string.find(tech.name,"rocket-part-productivity-",0,true) then
-            table.insert(tech.effects,{
+            rro.soft_insert(tech.effects,{
                 type = "change-recipe-productivity",
                 recipe = "maraxsis-rocket-part",
                 change = 0.1,
-                hidden = true
+                --hidden = true
             })
         end
     end 

@@ -8,6 +8,7 @@ space_boiler.place_result = "muluna-advanced-boiler"
 space_boiler.icon="__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon.png"
 space_boiler.localised_name = {"entity-name.muluna-advanced-boiler"}
 space_boiler.order = "b[steam-power]-aa[muluna-advanced-boiler]"
+space_boiler.weight = 4 * kg
 
 
 local crusher_2 = table.deepcopy(data.raw["item"]["crusher"])

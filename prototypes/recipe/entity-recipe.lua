@@ -6,7 +6,7 @@ space_boiler.name = "muluna-advanced-boiler"
 space_boiler.place_result = "muluna-advanced-boiler"
 
 space_boiler.ingredients = {
-    {type = "item", name = "boiler", amount = 1},
+    {type = "item", name = "boiler", amount = 3},
     {type = "item", name = "pipe", amount = 4},
     {type = "item", name = "steel-plate", amount = 8},
 }

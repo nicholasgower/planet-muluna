@@ -1,4 +1,58 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.22
+Date: 2025-06-28
+  Balancing:
+    - Reverted change to cryolab drain rate.
+---------------------------------------------------------------------------------------------------
+Version: 1.44.21
+Date: 2025-06-28
+  Locale:
+    - Updated cs locale.
+---------------------------------------------------------------------------------------------------
+Version: 1.44.20
+Date: 2025-06-28
+  Compatibility:
+    - Added incompatibility flag to quality-rocket-parts.
+---------------------------------------------------------------------------------------------------
+Version: 1.44.19
+Date: 2025-06-28
+  Bugfixes:
+    - Fixed impossible dependency when Lignumis is installed. https://github.com/nicholasgower/planet-muluna/issues/207
+---------------------------------------------------------------------------------------------------
+Version: 1.44.18
+Date: 2025-06-26
+  Bugfixes:
+    - Fixed issue with Maraxsis rocket part productivity being too high.
+---------------------------------------------------------------------------------------------------
+Version: 1.44.17
+Date: 2025-06-25
+  Bugfixes:
+    - Fixed rocket-part-productivity-aquilo to add science packs in a safer manner
+---------------------------------------------------------------------------------------------------
+Version: 1.44.16
+Date: 2025-06-25
+  Bugfixes:
+    - Changed code that adds space science pack to rocket part productivity technology to be theoretically safer.
+---------------------------------------------------------------------------------------------------
+Version: 1.44.15
+Date: 2025-06-25
+  Balancing:
+    - Adjusted weight of advanced boiler item.
+    - Increased cost of advanced boiler from 1 boiler to 3.
+    - Removed uses_quality_drain_modifier from cryolab and reduced base science pack drain modifier to 45%.
+  Locale:
+    - Corrected incorrect locale file location
+---------------------------------------------------------------------------------------------------
+Version: 1.44.14
+Date: 2025-06-25
+  Locale:
+    - Updated Russian locale(By Astorin)
+---------------------------------------------------------------------------------------------------
+Version: 1.44.13
+Date: 2025-06-24
+  Compatibility:
+    - Remove Space and Production Science for Diluted bitumen upgrading tech if BZ Titanium is installed
+---------------------------------------------------------------------------------------------------
 Version: 1.44.12
 Date: 2025-06-22
   Bugfixes:
