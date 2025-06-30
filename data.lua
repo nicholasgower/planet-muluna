@@ -21,7 +21,7 @@ require("prototypes.lunar-science-pack")
 require("prototypes.technology.interstellar-technologies") --Also runs during data-updates
 require("prototypes.nav-beacon")
 require("prototypes.decoratives.muluna-decoratives")
-
+require("prototypes.mod-data.interstellar-science-pack")
 
 require("compat.maraxsis")
 require("compat.solar-productivity")

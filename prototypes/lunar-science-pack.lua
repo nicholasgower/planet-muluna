@@ -34,13 +34,14 @@ r_lunar_pack.icon = "__muluna-graphics__/graphics/icons/space-science-pack.png"
 
 --data.raw["recipe"]["space-science-pack"].icon = "__muluna-graphics__/graphics/icons/space-science-pack.png" --Why was this here?
 t_lunar_pack.icon = "__muluna-graphics__/graphics/technology/space-science-pack.png"
-
+t_lunar_pack.localised_description = {"technology-description.interstellar-science-pack",tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)}
 t_lunar_pack.prerequisites = { --These prerequisites are overridden by interstellar-science-pack-final-fix.
     --"electromagnetic-science-pack",
     --"agricultural-science-pack",
     --"metallurgic-science-pack",
     "kovarex-enrichment-process",
     "muluna-anorthite-processing",
+    "asteroid-collector"
 
 }
 i_lunar_pack.order = "j[interstellar-science-pack]"
@@ -78,10 +79,15 @@ else
     r_lunar_pack.energy_required = 28
 end
 
-
-t_lunar_pack.research_trigger = {
-    type = "craft-item",
-    item = "iron-plate",
+t_lunar_pack.research_trigger = nil
+-- t_lunar_pack.research_trigger = {
+--     --type = "craft-item",
+--     --item = "iron-plate",
+-- }
+t_lunar_pack.unit = {
+    count = 1,
+    ingredients = {},
+    time = 1,
 }
 
 -- t_lunar_pack.unit = {}

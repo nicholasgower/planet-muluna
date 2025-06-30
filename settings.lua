@@ -88,6 +88,15 @@ data:extend{
         max = 60,
         order = "cb",
       },
+      {
+        type = "int-setting",
+        name = "muluna-interstellar-science-pack-packs-required",
+        setting_type = "startup",
+        default_value = 2,
+        min = 1,
+        --max = 10,
+        order = "cc",
+      },
     --   {
     --     type = "double-setting",
     --     name = "planet-power-consumption",

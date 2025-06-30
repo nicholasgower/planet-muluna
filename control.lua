@@ -1,3 +1,4 @@
+local rro = require("lib.remove-replace-object")
 -- script.on_configuration_changed(function()
 --     if debug_mode then
 --         log(DT .. "initialized storage")
@@ -26,7 +27,7 @@
 
 
 require("scripts.nav-beacon")
-local sd = require("scripts.project-seadragon")
+--local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
 
@@ -57,6 +58,16 @@ end
 
 )
 
+local interstellar_science_pack = require("scripts.interstellar-science-pack")
 
+
+script.on_event(defines.events.on_research_finished, function(event) interstellar_science_pack.update_interstellar_pack(event.research.force) end)
+script.on_configuration_changed(function()
+
+    for _,force in pairs(game.forces) do
+        interstellar_science_pack.update_interstellar_pack(force)
+    end
+end
+)
 
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
