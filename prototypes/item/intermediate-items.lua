@@ -115,6 +115,8 @@ data:extend{{
     default_import_location = "nauvis",
     --plant_result = "tree-01",
     place_result = "muluna-placed-tree",
+    pick_sound = item_sounds.wood_inventory_pickup,
+    drop_sound = item_sounds.wood_inventory_move,
 },
 -- {
 --     type="item",
@@ -156,6 +158,8 @@ data:extend{{
     order="b[cellulose]",
     subgroup="muluna-forestry",
     --recipe_group="intermediate-products",
+    pick_sound = item_sounds.wood_inventory_pickup,
+    drop_sound = item_sounds.wood_inventory_move,
     weight=iron_ore.weight*1/2,
     fuel_value = "1MJ",
     fuel_category=data.raw["item"]["wood"].fuel_category,
