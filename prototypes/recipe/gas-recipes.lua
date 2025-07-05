@@ -373,6 +373,22 @@ data:extend{
         auto_recycle=false,
         allow_productivity = true,
     },
+    {
+        type = "recipe",
+        name = "muluna-microcellular-plastic-curing",
+        enabled = false,
+        category = "chemistry-or-cryogenics",
+        ingredients = {
+            {type = "item",name = "muluna-diffused-plastic", amount = 1},
+            {type = "fluid",name = "steam", amount = 25}
+        },
+        results = {
+            {type = "item",name = "muluna-microcellular-plastic", amount = 1},
+        },
+        energy_required = 1,
+        allow_productivity = true,
+        auto_recycle = false,
+    },
     --local steam_condensing = 
     {   
         type = "recipe",
@@ -442,6 +458,32 @@ local oxygen_from_oxidizer = {
 }
 
 data:extend{oxygen_from_oxidizer}
+
+local diffusion = {
+        type = "recipe",
+        name = "muluna-microcellular-plastic-diffusion",
+        enabled = false,
+        category = "chemistry-or-cryogenics",
+        ingredients = {
+            {type = "item",name = "plastic-bar", amount = 1},
+            {type = "fluid",name = "carbon-dioxide", amount = 10}
+        },
+        results = {
+            --{type = "item",name = "muluna-diffused-plastic", amount = 1},
+            {type = "fluid",name = "carbon-dioxide", amount = 2.5} --Because I want to make finding the perfect combination of productivity vs speed more challenging
+        },
+        energy_required = 10,
+        main_product = "muluna-diffused-plastic",
+        --icons = data.raw["item"][].icons,
+        --allow_productivity = false,
+        auto_recycle = false,
+    }
+local steps = 10
+for i = 1,steps,1 do
+    table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 1/steps,percent_spoiled = (i-1)/10,ignored_by_productivity = 1})
+end
+
+data:extend{diffusion}
 
 local greenhouse_recipes_with_nutrients = {}
 local recipe_icons_vulcanus = {dual_icon("wood","fluoroketone-cold","carbon-dioxide"),dual_icon("wood","fluoroketone-cold","water"),dual_icon("muluna-sapling","fluoroketone-cold")}

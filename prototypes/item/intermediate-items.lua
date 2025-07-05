@@ -145,7 +145,7 @@ data:extend{{
             icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
             --scale=0.25,
             --shift={0.25,0}
-            tint = {1,0.8,0.4}
+            tint = {1,0.8,0.4},
         },
     },
     pictures =
@@ -192,6 +192,45 @@ data:extend{{
     drop_sound = item_sounds.wood_inventory_move,
     stack_size = 200,
     weight = 1*kg
+  },
+  {
+    type = "item",
+    name = "muluna-microcellular-plastic",
+    --icon = data.raw["item"]["plastic-bar"].icon,
+    --icon_size = 64,
+    stack_size = 100,
+    weight = 2 * kg,
+    subgroup = "muluna-products",
+    order = "c[muluna-microcellular-plastic]",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/plastic-bar-flipped.png",
+            icon_size = 64,
+            tint = {150,150,0,255},
+            draw_background = true,
+        }
+    }
+  },
+  {
+    type = "item",
+    name = "muluna-diffused-plastic",
+    icon = data.raw["item"]["plastic-bar"].icon,
+    icon_size = 64,
+    stack_size = 100,
+    weight = 2 * kg,
+    subgroup = "muluna-products",
+    order = "c[muluna-microfoamed-plastic]",
+    spoil_ticks = 7*60,
+    spoil_result = "plastic-bar",
+    icons = {
+        
+        {
+            icon = data.raw["item"]["plastic-bar"].icon,
+            icon_size = 64,
+            tint = {150,150,0,255},
+            draw_background = true,
+        }
+    }
   },
 -- {
 --     type="item",

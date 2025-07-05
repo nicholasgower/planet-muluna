@@ -110,7 +110,9 @@ t_lunar_pack.unit = {
 -- t_lunar_pack.unit.time= 60
 
 t_lunar_pack.effects = {
-    {type = "unlock-recipe", recipe = "interstellar-science-pack"}
+    {type = "unlock-recipe", recipe = "interstellar-science-pack"},
+    {type = "unlock-recipe", recipe = "muluna-microcellular-plastic-diffusion"},
+    {type = "unlock-recipe", recipe = "muluna-microcellular-plastic-curing"},
 }
 
 -- local r_lunar_pack_4 = table.deepcopy(r_lunar_pack)
