@@ -3,7 +3,7 @@ local Public = {}
 function Public.update_interstellar_pack(force)
     --local force = event.research.force
     local technologies = force.technologies
-    local interstellar_pack_name = "interstellar-science-pack"
+    local interstellar_pack_name = "muluna-nanofoamed-polymers"
     if technologies[interstellar_pack_name].researched == true then end
 
     local science_packs = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data.science_packs
@@ -29,7 +29,7 @@ function Public.update_interstellar_pack(force)
         else 
             local progress = technologies[interstellar_pack_name].saved_progress
             if progress < count / max_count then
-                force.print({"console.interstellar-science-pack-progress",tostring(count),tostring(max_count)})
+                force.print({"console.interstellar-science-pack-progress",tostring(count),tostring(max_count),"[technology=".. interstellar_pack_name .. "]"})
             end
             technologies[interstellar_pack_name].saved_progress = count / max_count
         end

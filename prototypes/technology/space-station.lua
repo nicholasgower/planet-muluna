@@ -1036,28 +1036,57 @@ data:extend{
         localised_name = {"item-name.low-density-space-platform-foundation"},
         icon = data.raw["technology"]["space-platform"].icon,
         icon_size = data.raw["technology"]["space-platform"].icon_size,
-        unit = {
-            count = 2000,
-            time = 60,
-            ingredients = {
-                {"automation-science-pack", 1},
-                {"logistic-science-pack", 1},
-                {"chemical-science-pack", 1},
-                --{"production-science-pack", 1},
-                {"utility-science-pack", 1},
-                {"space-science-pack", 1},
-                {"interstellar-science-pack",1},
-                {"agricultural-science-pack",1},
-            }
+        -- unit = {
+        --     count = 2000,
+        --     time = 60,
+        --     ingredients = {
+        --         {"automation-science-pack", 1},
+        --         {"logistic-science-pack", 1},
+        --         {"chemical-science-pack", 1},
+        --         --{"production-science-pack", 1},
+        --         {"utility-science-pack", 1},
+        --         {"space-science-pack", 1},
+        --         {"interstellar-science-pack",1},
+        --         {"agricultural-science-pack",1},
+        --     }
+        -- },
+        research_trigger = {
+            type = "craft-item",
+            item = "muluna-microcellular-plastic",
+            amount = 10,
         },
         prerequisites = {
-            "interstellar-science-pack","carbon-fiber"
+            "muluna-nanofoamed-polymers"
         },
         effects = {
             {
                 type = "unlock-recipe",
                 recipe="low-density-space-platform-foundation"
             },
+        }
+    },
+    {
+        type = "technology",
+        name = "muluna-nanofoamed-polymers",
+        --localised_name = {"item-name.muluna-microcellular-plastic"},
+        localised_description = {"technology-description.muluna-nanofoamed-polymers",tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
+        icon = "__muluna-graphics__/graphics/technology/polymers.png",
+        icon_size = 1024,
+        unit = {
+            count = 1,
+            time = 1,
+            ingredients = {
+
+            }
+        },
+        prerequisites = {
+            "kovarex-enrichment-process",
+            "muluna-anorthite-processing",
+            "asteroid-collector"
+        },
+        effects = {
+            {type = "unlock-recipe", recipe = "muluna-microcellular-plastic-diffusion"},
+            {type = "unlock-recipe", recipe = "muluna-microcellular-plastic-curing"},
         }
     },
     {
