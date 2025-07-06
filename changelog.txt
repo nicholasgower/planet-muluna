@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.25
+Date: 2025-07-06
+  Compatibility:
+    - Added oxidizer recipes from Space Age Galore and thruster fuel/oxidizer recipes from Dyson Sphere to "Thruster fuel productivity" technology. https://github.com/nicholasgower/planet-muluna/issues/209
+---------------------------------------------------------------------------------------------------
 Version: 1.44.24
 Date: 2025-07-05
   Compatibility:
