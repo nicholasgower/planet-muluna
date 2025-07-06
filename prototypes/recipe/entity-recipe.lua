@@ -169,16 +169,13 @@ local low_density_space_platform_foundation = util.merge{table.deepcopy(data.raw
             name = "aluminum-plate",
             amount = 2,
         },
-        {
-            type = "item",
-            name = "carbon-fiber",
-            amount = 2,
-        },
+        {type = "item", name = "muluna-microcellular-plastic", amount = 5},
         {
             type = "item",
             name = "low-density-structure",
             amount = 5,
         },
+        
     }
 }
 }
