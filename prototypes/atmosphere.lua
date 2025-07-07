@@ -38,7 +38,7 @@ if data.raw["fluid"]["maraxsis-atmosphere"] == nil then
     }}
 end
 
-data.raw["fluid"]["maraxsis-atmosphere"].heat_capacity = "100J"
+--data.raw["fluid"]["maraxsis-atmosphere"].heat_capacity = "100J"
 data.raw["fluid"]["maraxsis-atmosphere"].localised_description = {"fluid-description.maraxsis-atmosphere"}
 
 data.raw["recipe"]["maraxsis-atmosphere"].results[1].amount=1000
