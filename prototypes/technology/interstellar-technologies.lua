@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 -- Runs once during data and once during data-updates
 -- This is done in each step to:
 -- Data stage: To allow other mods to propogate changes from this code to their mod's technologies.

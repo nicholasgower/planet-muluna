@@ -1,5 +1,5 @@
 if mods["modules-t4"] then
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
     -- table.insert(data.raw["technology"]["productivity-module-4"].prerequisites,
     -- "hydraulic-science-pack"
     -- )

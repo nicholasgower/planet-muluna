@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 local function technology_icon_constant_recipe_productivity(technology_icon,new_icon_size)
     local icon_size = new_icon_size or 256

@@ -1,4 +1,5 @@
-local rro = require("lib.remove-replace-object")
+require("api")
+local rro = Muluna.rro
 -- script.on_configuration_changed(function()
 --     if debug_mode then
 --         log(DT .. "initialized storage")

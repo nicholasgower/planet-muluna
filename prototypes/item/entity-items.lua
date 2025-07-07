@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local all = {}
 
 local space_boiler = table.deepcopy(data.raw["item"]["boiler"])

@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local turbine =data.raw["generator"]["steam-turbine"]
 local fusion_generator = data.raw["fusion-generator"]["fusion-generator"]

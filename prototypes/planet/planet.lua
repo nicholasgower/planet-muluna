@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local planet_lib = require("__PlanetsLib__.lib.planet")
 local nauvis = data.raw["planet"]["nauvis"]
 local nauvis_gen = nauvis.map_gen_settings

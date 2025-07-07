@@ -1,7 +1,7 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local dual_icon = require("lib.dual-item-icon").dual_icon
---local  = require("lib.remove-replace-object")
+--local  = Muluna.rro
 local i_lunar_pack = table.deepcopy(data.raw["tool"]["space-science-pack"])
 
 local r_lunar_pack = table.deepcopy(data.raw["recipe"]["space-science-pack"])

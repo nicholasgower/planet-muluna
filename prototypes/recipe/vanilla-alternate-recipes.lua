@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 --Muluna-specific alternative recipes for vanilla items
 
 local dual_icon = require("lib.dual-item-icon").dual_icon

@@ -1,4 +1,5 @@
-local rro = require("lib.remove-replace-object")
+require("api")
+local rro = Muluna.rro
 
 require("wood-gasification.data")
 require("prototypes.tips-and-tricks")

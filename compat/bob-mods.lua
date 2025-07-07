@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local advanced_boiler_tiers = 5
 
 if false and mods["bobpower"] then

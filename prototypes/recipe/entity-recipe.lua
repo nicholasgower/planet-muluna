@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local space_boiler = table.deepcopy(data.raw["recipe"]["boiler"])
 space_boiler.icon = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon.png"

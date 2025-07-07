@@ -1,4 +1,4 @@
-local rro=require("lib.remove-replace-object")
+local rro=Muluna.rro
 
 
 for _,tech in pairs(data.raw["technology"]) do

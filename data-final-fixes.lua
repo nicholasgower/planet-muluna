@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local function delete_tech(deleted_tech,new_tech)
     for _,effect in pairs(data.raw["technology"][deleted_tech].effects) do

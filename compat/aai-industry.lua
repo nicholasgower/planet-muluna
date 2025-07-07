@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 
 local one_oxygen_condition = {

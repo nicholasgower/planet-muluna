@@ -1,4 +1,4 @@
-local rro=require("lib.remove-replace-object")
+local rro=Muluna.rro
 
 local radiation={
     type="airborne-pollutant",
