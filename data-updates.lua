@@ -337,10 +337,11 @@ for _,pack in pairs(data.raw["tool"]) do
         end
     end
 end
-
+local img = Muluna.img
 local function copy_icons(to,from)
     to.icon = from.icon
-    to.icons = from.icons
+    to.icons = table.deepcopy(from.icons)
+    if to.icons then to.icons = img.blur_technology_icon(to.icons,16) end
     to.icon_size = from.icon_size
 end
 

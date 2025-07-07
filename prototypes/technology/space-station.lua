@@ -594,8 +594,7 @@ data:extend{
         type = "technology",
         name = "thruster-oxidizer",
         localised_name = {"fluid-name.thruster-oxidizer"},
-        icon = data.raw["fluid"]["thruster-oxidizer"].icon,
-        icon_size = 64,
+        icons = Muluna.img.blur_technology_icon({{icon = data.raw["fluid"]["thruster-oxidizer"].icon, icon_size = 64}},16),
         prerequisites = {"space-platform-thruster"},
         research_trigger = {
             type = "build-entity",
