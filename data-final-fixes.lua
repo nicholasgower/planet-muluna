@@ -144,7 +144,8 @@ if data.raw["assembling-machine"]["muluna-advanced-boiler"] then
     if not data.raw["assembling-machine"]["muluna-advanced-boiler"].quality_affects_energy_usage then
         data.raw["assembling-machine"]["muluna-advanced-boiler"].factoriopedia_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",boiler_description}
     else
-        data.raw["assembling-machine"]["muluna-advanced-boiler"].localised_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",{"recipe-description.global-advanced-boiler-efficiency-description","150"}}
+        
+        --data.raw["assembling-machine"]["muluna-advanced-boiler"].localised_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",{"recipe-description.global-advanced-boiler-efficiency-description","150"}}
     end
 end
 

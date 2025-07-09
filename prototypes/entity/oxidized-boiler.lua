@@ -363,6 +363,12 @@ local space_boiler_new = {
 --space_boiler_new.pictures.south=space_boiler_new.pictures.north
 if data.raw["container"]["bottomless-chest"] then --Checking if game version >= 2.0.57
   space_boiler_new.quality_affects_energy_usage = true
+  space_boiler_new.custom_tooltip_fields = {
+    {
+      name = {"description.effectivity"},
+      value = "150%"
+    }
+  }
 end
 space_boiler_new.energy_source.light_flicker =
   {
