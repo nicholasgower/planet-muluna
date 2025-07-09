@@ -206,7 +206,7 @@ local space_boiler_new = {
   working_sound = base_boiler.working_sound,
   open_sound = base_boiler.open_sound,
   close_sound = base_boiler.close_sound,
-  energy_source=util.merge{base_boiler.energy_source,{emissions_per_minute = {pollution = 0}}},
+  energy_source=table.deepcopy(base_boiler.energy_source),
   collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
   selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
   burning_cooldown = 20,
@@ -389,7 +389,7 @@ space_boiler_new.energy_source.smoke =
     starting_frame_deviation = 60
   }
 }
-
+space_boiler_new.energy_source.emissions_per_minute = { pollution = 90 }
 space_boiler_new.graphics_set.animation = { north = {
   layers =
           {
