@@ -1,6 +1,6 @@
 if settings.startup["enable-nav-beacon"].value == true then
     
-
+    
     require("__core__/lualib/util.lua")
     local flib_bounding_box = require("__flib__/bounding-box")
 
@@ -81,10 +81,30 @@ if settings.startup["enable-nav-beacon"].value == true then
                 buffer_capacity = 3*settings.startup["platform-power-consumption"].value .. "MJ",
                 output_flow_limit = "0MW",
                 input_flow_limit = 3*settings.startup["platform-power-consumption"].value .. "MW",
+            },
+            custom_tooltip_fields = {
+                {},
+                {},
             }
 
         }
     })
+    local navBeaconData = {
+        type = "mod-data",
+        name = "muluna-satellite-radar",
+        data = {
+            entities = {}, --List of satellite radar entities and associated stats
+            energy_per_scan_expression = "base / (1 + 0.3 * quality_level)", --Formula evaluating energy usage per scan.
+            scan_size_expression = "base * (1 + 0.3 * quality_level)", -- Formula evaluating tiles scanned per scan.
+        }
+    }
+    navBeaconData.data.entities[navBeaconEntity.name] =
+    {
+        name = navBeaconEntity.name,
+        energy_per_scan = settings.startup["platform-power-consumption"].value,
+        scan_area = 100
+    }
+
     navBeaconEntity.graphics_set = nil
     navBeaconEntity.circuit_connector = nil
     navBeaconEntity.next_upgrade = nil
@@ -186,6 +206,7 @@ if settings.startup["enable-nav-beacon"].value == true then
         navBeaconEntity,
         navBeaconItem,
         navBeaconRecipe,
-        navBeaconTech
+        navBeaconTech,
+        navBeaconData,
     })
 end

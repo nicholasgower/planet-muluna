@@ -1,5 +1,6 @@
 local debug_mode = false
 local DT = "[NavBeacon] "
+local radar_data = prototypes.mod_data["muluna-satellite-radar"].data
 
 require("__core__/lualib/util.lua")
 
@@ -223,15 +224,17 @@ script.on_event(defines.events.on_tick, function(event)
                 end
 
                 if navSat ~= nil then
-                    local multiplier = 1/(1+0.3*navSat.quality.level)
-                    if navSat.energy >= (util.parse_energy((settings.startup["platform-power-consumption"].value *multiplier) .. "MJ") * 1) then
+                    --local multiplier = 1/(1+0.3*navSat.quality.level)
+                    local energy_cost = util.parse_energy(tostring(helpers.evaluate_expression(radar_data.energy_per_scan_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})) .. "MJ")
+                    if navSat.energy >= energy_cost then
                         local pos = player.position
                         --if player.force.is_chunk_visible(player.surface,{pos.x/32,pos.y/32}) == false then
                             --local multiplier = (1-0.1667*navSat.quality.level)
                             
-                            navSat.energy = navSat.energy - util.parse_energy((settings.startup["platform-power-consumption"].value *multiplier) .. "MJ")
+                            navSat.energy = navSat.energy - energy_cost
                             --game.print(navSat.quality.level)
-                            local offset = 100 * (1+0.3*navSat.quality.level)
+                            --local offset = 100 * (1+0.3*navSat.quality.level)
+                            local offset = helpers.evaluate_expression(radar_data.scan_size_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})
                             local chartBounds = {
                                 left_top = { pos.x - offset/2, pos.y - offset/2},
                                 right_bottom = { pos.x + offset/2, pos.y + offset/2}

@@ -149,18 +149,22 @@ if data.raw["assembling-machine"]["muluna-advanced-boiler"] then
     end
 end
 
-if data.raw["accumulator"]["muluna-satellite-radar"] then
+if helpers.compare_versions(helpers.game_version,"2.0.59") == -1 then
+  if data.raw["accumulator"]["muluna-satellite-radar"] then
     data.raw["accumulator"]["muluna-satellite-radar"].factoriopedia_description = {"",{"entity-description.muluna-satellite-radar"},"\n",electricity_description}
+    end
+    if data.raw["item"]["muluna-satellite-radar"] then
+        data.raw["item"]["muluna-satellite-radar"].factoriopedia_description = {"",{"item-description.muluna-satellite-radar"},"\n",electricity_description}
+    end
 end
-if data.raw["item"]["muluna-satellite-radar"] then
-    data.raw["item"]["muluna-satellite-radar"].factoriopedia_description = {"",{"item-description.muluna-satellite-radar"},"\n",electricity_description}
-end
+
 
 -- navBeaconItem.localised_description = {"",{"item-description.nav-beacon"},"\n",electricity_description}
 data.raw["recipe"]["copper-cable"].localised_name={"recipe-name.copper-cable"}
 
 require("compat.aai-industry")
 --require("prototypes.technology.interstellar-science-pack-final-fix")
+require("prototypes.final-fixes.nav-beacon-final-fix")
 --require("prototypes.entity.vanilla-entity-shadows")
 if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then --Removed vanilla/wood-gasification recipes from tree seeding, then deletes the tech if no other mods add recipes to the tech.
 --Technologies that have this tech as a prerequisite are moved to having agricultural science pack as the prerequisite.
