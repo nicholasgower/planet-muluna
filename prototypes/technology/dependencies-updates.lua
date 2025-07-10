@@ -17,6 +17,11 @@ data.raw["item"]["crusher"].order = "ca[crusher]"
 --replace_object(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform-thruster","space-platform")
 rro.replace(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform","muluna-alice-propellant")
 table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"wood-gas-processing")
+for _,result in pairs(data.raw["technology"]["space-science-pack"].effects) do
+    if result.recipe == "space-science-pack" then
+        result.recipe = "space-science-pack-muluna"
+    end
+end
 --table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"muluna-oxide-asteroid-processing")
 -- table.insert(data.raw["technology"]["space-platform-thruster"].effects,{
 --     type="unlock-space-location",

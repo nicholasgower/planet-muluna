@@ -899,7 +899,7 @@ data:extend{
         effects = {
             {
                 type = "unlock-recipe",
-                recipe = "space-science-pack-advanced"
+                recipe = "space-science-pack"
             }
         }
     },

@@ -839,8 +839,8 @@ require("prototypes.technology.interstellar-technologies")
 
 
 local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["space-science-pack"])
-
-space_science_pack_advanced.surface_conditions = {
+data.raw["recipe"]["space-science-pack"].order = data.raw["tool"]["space-science-pack"].order .. "-2"
+data.raw["recipe"]["space-science-pack"].surface_conditions = {
     {
         property = "gravity",
         min = 0,
@@ -852,7 +852,8 @@ space_science_pack_advanced.surface_conditions = {
     --     max = 0,
     -- },
 }
-space_science_pack_advanced.name = "space-science-pack-advanced"
+space_science_pack_advanced.name = "space-science-pack-muluna"
+space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
 --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
 data:extend{space_science_pack_advanced}
 
