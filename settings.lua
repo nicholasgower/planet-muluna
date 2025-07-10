@@ -126,7 +126,7 @@ data:extend{
     {
       type = "double-setting",
       name = "nav-beacon-update-ticks",
-      setting_type="runtime-global",
+      setting_type="startup",
       default_value = 60,
       minimum_value = 1,
       maximum_value = 360,
