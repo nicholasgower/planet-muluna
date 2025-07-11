@@ -56,6 +56,7 @@ if true then
                 { flow_direction = "input-output", direction = defines.direction.north, position = {0.59, -1}},
                 { flow_direction = "input-output", direction = defines.direction.south, position = {0.59, 1}}
             }
+            steam_furnace.next_upgrade = "crusher"
             steam_furnace.module_slots = 0
             --steam_furnace.energy_source.fluid_box.pipe_picture = images.pipe_picture
             --steam_furnace.energy_source.fluid_box.pipe_covers = images.pipe_covers
