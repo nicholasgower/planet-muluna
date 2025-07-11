@@ -40,7 +40,7 @@ local function place_muluna_cargo_pods()
         random_place(muluna,"engine-unit",math.random(5,10)+math.random(5,10))
     end
     for i = 1,math.random(3,5) do
-        random_place(muluna,"steel-bar",math.random(5,10)+math.random(5,10))
+        random_place(muluna,"steel-plate",math.random(5,10)+math.random(5,10))
     end
     for i = 1,math.random(3,5) do
         random_place(muluna,"plastic-bar",math.random(20,40))
