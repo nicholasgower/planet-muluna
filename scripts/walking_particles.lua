@@ -1,5 +1,5 @@
 local m = 0.01
-local r = 0.001
+local r = 0.005
 local direction_vectors = {
     North = {0,m},	
     NorthNorthEast = {-m,m},	
@@ -45,8 +45,9 @@ script.on_nth_tick(30, function(event)
                 frame_speed = 1
             }
             local direction = helpers.direction_to_string(walking_state.direction)
-            local movement = direction_vectors[direction] --{0.01,0}
-
+            local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
+            movement[1] = movement[1] + r*(math.random()-0.5)
+            movement[2] = movement[2] + r*(math.random()-0.5)
             surface.create_particle{
                 name = "stone-particle",
                 position = player_position,
