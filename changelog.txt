@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.44.29
+Date: 2025-07-11
+  Graphics:
+    - Switched lunar rock graphics to use graphics of Alien Biomes' "Big rock" entity and removed yellow tint. Adjusted map color to match.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.28
 Date: 2025-07-09
   Balancing:
