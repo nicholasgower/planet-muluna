@@ -169,6 +169,29 @@ data:extend{
         icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
         icon_size=256,
     },
+    {
+        type = "technology",
+        name = "crusher",
+        localised_name = {"entity-name.crusher"},
+        localised_description = {"entity-description.crusher"},
+        essential = true,
+        unit= {
+            count = 500,
+            time = 60,
+            ingredients = data.raw["technology"]["planet-discovery-vulcanus"].unit.ingredients
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "crusher"
+            }
+        },
+        prerequisites = {
+            "space-science-pack", "muluna-anorthite-processing"
+        },
+        icon = data.raw["item"]["crusher"].icon,
+        icon_size=64,
+    },
     -- {
     --     type = "technology",
     --     name = "cargo-bay",
@@ -644,10 +667,6 @@ data:extend{
                 space_location = "muluna"
             },
             {
-                type = "unlock-recipe",
-                recipe = "crusher",
-            },
-            {
                 type="unlock-recipe",
                 recipe="rocket-part-muluna"
             }
@@ -904,7 +923,6 @@ data:extend{
             }
         }
     },
-
     {
         type = "technology",
         name = "crusher-2",
@@ -979,6 +997,7 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "thruster-fuel"
             },
+            
             
             -- {
             --     type = "unlock-recipe",
