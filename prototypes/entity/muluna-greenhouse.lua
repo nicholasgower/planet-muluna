@@ -18,7 +18,7 @@ local greenhouse = {
     minable = {mining_time = 0.5, result = "muluna-greenhouse-wood"},
     fast_replaceable_group = "",
     max_health = 1000,
-    corpse = "boiler-remnants",
+    corpse = "medium-small-remnants",
     --effect_receiver = { base_effect = { productivity = 0.5 }},
     allowed_effects = {"consumption", "speed", "productivity", "pollution", "quality"},
     module_slots = 4,
