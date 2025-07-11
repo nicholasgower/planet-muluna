@@ -1253,6 +1253,18 @@ if settings.startup["muluna-easy-wood-gasification-productivity"].value == true 
     data:extend{gasification_prod}
 end
 
+if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
+    local boiler = data.raw["technology"]["muluna-advanced-boiler"]
+    table.insert(boiler.effects,{
+                type = "unlock-recipe",
+                recipe = "muluna-steam-stone-furnace"
+            })
+      table.insert(boiler.effects,{
+                type = "unlock-recipe",
+                recipe = "muluna-steam-steel-furnace"
+            })      
+            
+end
 
 if not data.raw["lab"]["biolab"] then
     data.raw["technology"]["cryolab"] = nil
