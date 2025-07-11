@@ -1,5 +1,5 @@
 local m = 0.01
-local r = 0.005
+local r = 0.01
 local direction_vectors = {
     North = {0,m},	
     NorthNorthEast = {-m,m},	

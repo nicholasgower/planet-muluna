@@ -184,7 +184,47 @@ wood_crushing.energy_required = 0.5
 wood_crushing.icons=crushing_icon(data.raw.item["wood"].icon,data.raw.item["wood"].icon_size)
 wood_crushing.order="b-aa-b"
 
-local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing}
+
+local regolith_sorting = {
+    type = "recipe",
+    name = "muluna-regolith-sorting",
+    category = "crushing",
+    ingredients = {
+        {
+            type = "item",
+            name = "muluna-lunar-regolith",
+            amount = 1,
+        }
+    },
+    energy_required = 1,
+    results = {
+        {
+            type = "item",
+            name = "stone",
+            amount = 1,
+            probability = 0.50,
+        },
+        {
+            type = "item",
+            name = "stone-crushed",
+            amount = 1,
+            probability = 0.50,
+        }
+
+    },
+    icons = crushing_icon(data.raw.item["muluna-lunar-regolith"].icon,data.raw.item["muluna-lunar-regolith"].icon_size)
+}
+
+
+local regolith_recycling = table.deepcopy(regolith_sorting)
+
+regolith_recycling.name = "muluna-regolith-recycling"
+regolith_recycling.category = "recycling"
+regolith_recycling.energy_required = regolith_sorting.energy_required / 4
+
+
+
+local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,regolith_sorting,regolith_recycling}
 
 for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  
