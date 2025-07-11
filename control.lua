@@ -28,6 +28,7 @@ local rro = Muluna.rro
 
 
 require("scripts.nav-beacon")
+require("scripts.walking_particles")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
