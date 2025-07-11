@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.0
+Date: 2025-07-11
+  Features:
+    - Added "Steam crusher," an early, cheaper version of the crusher that is less energy efficient than the vanilla crusher.
+  Balancing:
+    - Increased cost of "Asteroid collector" technology to 500 and made "Crusher" a prerequisite.
+    - Moved unlock for crusher to own technology unlocked after space science pack.
+    - Removed crushers from Muluna's initial cargo drops and added engine units and steel bars.
+    - Steam furnaces are now unlocked with the advanced boiler.
+  Changes:
+    - Changed research trigger of "Space science pack" from "Build crusher" to "Build steam crusher."
+---------------------------------------------------------------------------------------------------
 Version: 1.44.29
 Date: 2025-07-11
   Graphics:
