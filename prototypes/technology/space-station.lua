@@ -153,7 +153,7 @@ data:extend{
         localised_description = {"entity-description.asteroid-collector"},
         essential = true,
         unit= {
-            count = 300,
+            count = 500,
             time = 60,
             ingredients = data.raw["technology"]["planet-discovery-vulcanus"].unit.ingredients
         },
@@ -164,7 +164,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "space-science-pack", "muluna-anorthite-processing"
+            "crusher"
         },
         icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
         icon_size=256,
@@ -493,6 +493,11 @@ data:extend{
                 type = "unlock-recipe",
                 recipe="controlled-combustion-atmosphere"
             },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-steam-crusher",
+            },
+            
             
         }
     },
