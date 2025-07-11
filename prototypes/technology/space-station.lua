@@ -153,7 +153,7 @@ data:extend{
         localised_description = {"entity-description.asteroid-collector"},
         essential = true,
         unit= {
-            count = 300,
+            count = 500,
             time = 60,
             ingredients = data.raw["technology"]["planet-discovery-vulcanus"].unit.ingredients
         },
@@ -164,10 +164,33 @@ data:extend{
             }
         },
         prerequisites = {
-            "space-science-pack", "muluna-anorthite-processing"
+            "crusher"
         },
         icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
         icon_size=256,
+    },
+    {
+        type = "technology",
+        name = "crusher",
+        localised_name = {"entity-name.crusher"},
+        localised_description = {"entity-description.crusher"},
+        essential = true,
+        unit= {
+            count = 500,
+            time = 60,
+            ingredients = data.raw["technology"]["planet-discovery-vulcanus"].unit.ingredients
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "crusher"
+            }
+        },
+        prerequisites = {
+            "space-science-pack", "muluna-anorthite-processing"
+        },
+        icon = data.raw["item"]["crusher"].icon,
+        icon_size=64,
     },
     -- {
     --     type = "technology",
@@ -470,6 +493,11 @@ data:extend{
                 type = "unlock-recipe",
                 recipe="controlled-combustion-atmosphere"
             },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-steam-crusher",
+            },
+            
             
         }
     },
@@ -641,10 +669,6 @@ data:extend{
             {
                 type = "unlock-space-location",
                 space_location = "muluna"
-            },
-            {
-                type = "unlock-recipe",
-                recipe = "crusher",
             },
             {
                 type="unlock-recipe",
@@ -903,7 +927,6 @@ data:extend{
             }
         }
     },
-
     {
         type = "technology",
         name = "crusher-2",
@@ -978,6 +1001,7 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "thruster-fuel"
             },
+            
             
             -- {
             --     type = "unlock-recipe",
@@ -1281,6 +1305,18 @@ if settings.startup["muluna-easy-wood-gasification-productivity"].value == true 
     data:extend{gasification_prod}
 end
 
+if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
+    local boiler = data.raw["technology"]["muluna-advanced-boiler"]
+    table.insert(boiler.effects,{
+                type = "unlock-recipe",
+                recipe = "muluna-steam-stone-furnace"
+            })
+      table.insert(boiler.effects,{
+                type = "unlock-recipe",
+                recipe = "muluna-steam-steel-furnace"
+            })      
+            
+end
 
 if not data.raw["lab"]["biolab"] then
     data.raw["technology"]["cryolab"] = nil
