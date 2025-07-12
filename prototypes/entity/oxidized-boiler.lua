@@ -463,13 +463,7 @@ space_boiler_new.graphics_set.working_visualisations = {
   }
 }
 
-if settings.startup["muluna-new-interstellar-pack-recipe"].value == true then 
-  space_boiler_new.module_slots = 2
-  space_boiler_new.crafting_speed=2
-  space_boiler_new.allowed_module_categories = data.raw["assembling-machine"]["assembling-machine-3"].allowed_module_categories
-  space_boiler_new.allowed_effects = data.raw["assembling-machine"]["assembling-machine-3"].allowed_effects
-end
-  
+
 
 
 

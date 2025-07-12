@@ -55,7 +55,7 @@ r_lunar_pack.main_product = "interstellar-science-pack"
 r_lunar_pack.category = "crafting-with-fluid"
 
 
-if settings.startup["muluna-new-interstellar-pack-recipe"].value == true then
+if settings.startup["muluna-old-interstellar-pack-recipe"].value == false then
     --r_lunar_pack.category = "double-boiler"
     r_lunar_pack.ingredients = {
         {type = "fluid", name = "helium", amount = 100},

@@ -206,7 +206,7 @@ local map_gen = {
       },
     autoplace_controls = 
     {
-        ["stone"] = {},
+        --["stone"] = {},
         ["lunar_rocks"] = {},
         ["muluna_cliff"] = {},
         ["oxide-asteroid-chunk"] = {},
@@ -214,7 +214,7 @@ local map_gen = {
         ["carbonic-asteroid-chunk"] = {},
         ["anorthite-chunk"] = {},
         ["helium"] = {},
-        ["uranium-ore"] = {},
+        --["uranium-ore"] = {},
       },
     autoplace_settings = {
         ["tile"] =
@@ -247,7 +247,7 @@ local map_gen = {
       {
         settings =
         {
-          ["stone"] = {},
+          --["stone"] = {},
           ["lunar-rock"] = {},
           --["big-sand-rock"] = {},
           --["huge-rock"] = {},
@@ -257,7 +257,7 @@ local map_gen = {
           ["carbonic-asteroid-chunk"] = {},
           ["anorthite-chunk"] = {},
           ["helium"] = {},
-          ["uranium-ore"] = {},
+          --["uranium-ore"] = {},
         }
       }
     }
