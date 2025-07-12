@@ -182,7 +182,16 @@ wood_crushing.ingredients = {{type = "item",name = "wood",amount = 1}}
 wood_crushing.energy_required = 0.5
 
 wood_crushing.icons=crushing_icon(data.raw.item["wood"].icon,data.raw.item["wood"].icon_size)
-wood_crushing.order="b-aa-b"
+wood_crushing.order="b-aa-c"
+
+local tree_crushing = table.deepcopy(wood_crushing)
+
+tree_crushing.name = "muluna-tree-crushing"
+
+tree_crushing.results = {{type = "item", name = "muluna-sapling", amount = 1,ignored_by_productivity=1, probability = 1/20 },{type = "item",name = "wood",amount = 4}}
+tree_crushing.ingredients = {{type = "item",name = "muluna-sapling",amount = 1}}
+tree_crushing.icons=crushing_icon(data.raw.item["muluna-sapling"].icon,data.raw.item["muluna-sapling"].icon_size)
+tree_crushing.order="b-aa-b"
 
 
 local regolith_sorting = {
@@ -233,7 +242,7 @@ regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02
 
 
-local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,regolith_sorting,regolith_recycling}
+local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,tree_crushing,regolith_sorting,regolith_recycling}
 
 for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  

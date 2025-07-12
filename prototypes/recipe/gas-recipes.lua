@@ -24,14 +24,14 @@ data:extend{
         name = "muluna-tree-growth-greenhouse",
         enabled = false,
         category = "muluna-greenhouse",
-        icons = dual_icon("wood","carbon-dioxide"),
+        icons = dual_icon("muluna-sapling","carbon-dioxide"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
             {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
             {type = "fluid",name = "water", amount=500,fluidbox_index = 2},
         },
         results = {
-            {type = "item",name = "wood", amount=40},
+            {type = "item",name = "muluna-sapling", amount=10},
             {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000,fluidbox_index = 1}
         },
         energy_required=5*60,
@@ -47,48 +47,48 @@ data:extend{
             }
         }
     },
-    {
-        type = "recipe",
-        name = "muluna-sapling-growth-greenhouse",
-        enabled = false,
-        category = "muluna-greenhouse",
-        --icons = dual_icon("muluna-sapling","carbon-dioxide"),
-        ingredients = {
-            {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
-            {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
-            {type = "fluid",name = "water", amount=500, fluidbox_index = 2},
-        },
-        results = {
-            {type = "item",name = "muluna-sapling", amount=10},
-            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
-        },
-        energy_required=5*60,
-        auto_recycle=false,
-        subgroup="muluna-forestry",
-        main_product = "muluna-sapling",
-        max_productivity = 3,
-        allow_productivity = true,
-        hide_from_signal_gui = false,
-        surface_conditions = {
-            {
-                property = "temperature",
-                max = 314
-            }
-        }
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "muluna-sapling-growth-greenhouse",
+    --     enabled = false,
+    --     category = "muluna-greenhouse",
+    --     --icons = dual_icon("muluna-sapling","carbon-dioxide"),
+    --     ingredients = {
+    --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
+    --         {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
+    --         {type = "fluid",name = "water", amount=500, fluidbox_index = 2},
+    --     },
+    --     results = {
+    --         {type = "item",name = "muluna-sapling", amount=10},
+    --         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
+    --     },
+    --     energy_required=5*60,
+    --     auto_recycle=false,
+    --     subgroup="muluna-forestry",
+    --     main_product = "muluna-sapling",
+    --     max_productivity = 3,
+    --     allow_productivity = true,
+    --     hide_from_signal_gui = false,
+    --     surface_conditions = {
+    --         {
+    --             property = "temperature",
+    --             max = 314
+    --         }
+    --     }
+    -- },
     {
         type = "recipe",
         name = "muluna-tree-growth-greenhouse-water-saving",
         enabled = false,
         category = "muluna-greenhouse",
-        icons = dual_icon("wood","water"),
+        icons = dual_icon("muluna-sapling","water"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
             {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
             {type = "fluid",name = "water", amount=250, fluidbox_index = 2},
         },
         results = {
-            {type = "item",name = "wood", amount=40},
+            {type = "item",name = "muluna-sapling", amount=10},
             {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
         },
         energy_required=10*60,
@@ -104,6 +104,7 @@ data:extend{
             }
         }
     },
+    
     -- {
     --     type = "recipe",
     --     name = "muluna-tree-growth-greenhouse-quick",
@@ -116,7 +117,7 @@ data:extend{
     --         {type = "fluid",name = "water", amount=1000},
     --     },
     --     results = {
-    --         {type = "item",name = "wood", amount=40},
+    --         {type = "item",name = "muluna-sapling", amount=10},
     --         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
     --     },
     --     energy_required=3*60,
@@ -486,12 +487,12 @@ end
 data:extend{diffusion}
 
 local greenhouse_recipes_with_nutrients = {}
-local recipe_icons_vulcanus = {dual_icon("wood","fluoroketone-cold","carbon-dioxide"),dual_icon("wood","fluoroketone-cold","water"),dual_icon("muluna-sapling","fluoroketone-cold")}
-local recipe_icons_heated = {dual_icon("wood","fluoroketone-hot","carbon-dioxide"),dual_icon("wood","fluoroketone-hot","water"),dual_icon("muluna-sapling","fluoroketone-hot")}
+local recipe_icons_vulcanus = {dual_icon("muluna-sapling","fluoroketone-cold","carbon-dioxide"),dual_icon("muluna-sapling","fluoroketone-cold","water")}
+local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carbon-dioxide"),dual_icon("muluna-sapling","fluoroketone-hot","water")}
 
     -- Nutrient-using greenhouse recipes
-    local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving","muluna-sapling-growth-greenhouse"}
-    local recipe_icons = {dual_icon("wood","nutrients","carbon-dioxide"),dual_icon("wood","nutrients","water"),dual_icon("muluna-sapling","nutrients")}
+    local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving"}
+    local recipe_icons = {dual_icon("muluna-sapling","nutrients","carbon-dioxide"),dual_icon("muluna-sapling","nutrients","water")}
     greenhouse_recipes_with_nutrients = table.deepcopy(greenhouse_recipes)
     for i,recipe_name in ipairs(greenhouse_recipes) do
         local recipe
@@ -525,7 +526,7 @@ local recipe_icons_heated = {dual_icon("wood","fluoroketone-hot","carbon-dioxide
                     --item.amount = 20000
                     --item.ignored_by_productivity = 20000
                     table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500*(500/item.amount), fluidbox_index = 3})
-                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500*(500/item.amount),ignored_by_productivity=500*(500/item.amount),fluidbox_index = 2})
+                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=495*(500/item.amount),ignored_by_productivity=495*(500/item.amount),fluidbox_index = 2})
                 end
             end
             --table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500, fluidbox_index = 3})

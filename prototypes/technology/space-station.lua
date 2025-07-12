@@ -527,8 +527,13 @@ data:extend{
             -- },
             {
                 type = "unlock-recipe",
+                recipe="muluna-tree-crushing"
+            },
+            {
+                type = "unlock-recipe",
                 recipe="wood-processing"
             },
+            
             
         }
     },
@@ -548,10 +553,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "muluna-greenhouse",
             },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-sapling-growth-greenhouse",
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "muluna-sapling-growth-greenhouse",
+            -- },
             {
                 type = "unlock-recipe",
                 recipe = "muluna-greenhouse-wood",
