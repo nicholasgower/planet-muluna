@@ -230,7 +230,7 @@ local regolith_recycling = table.deepcopy(regolith_sorting)
 regolith_recycling.name = "muluna-lunar-regolith-recycling"
 regolith_recycling.category = "recycling"
 regolith_recycling.energy_required = regolith_sorting.energy_required / 4
-
+regolith_recycling.results[3].probability = 0.02
 
 
 local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,regolith_sorting,regolith_recycling}

@@ -9,10 +9,10 @@ data:extend {{
     type = "recipe",
     name = "muluna-regolith-digging",
     category = "ground-digging",
-    energy_required = 5,
+    energy_required = 10,
     ingredients = {},
     results = {
-        {type = "item", name = "muluna-lunar-regolith", amount = 1,probability = 0.1},
+        {type = "item", name = "muluna-lunar-regolith", amount = 1,probability = 0.25},
         {type = "item", name = "stone-crushed", amount = 1}
     },
     enabled = false,
@@ -21,6 +21,7 @@ data:extend {{
     allow_productivity = true,
     maximum_productivity = 9999999,
     main_product = "muluna-lunar-regolith",
+    auto_recycle = false,
     --localised_name = {"item-name.sand"},
     --localised_description = {"item-description.sand"},
 }}
