@@ -142,17 +142,17 @@ data:extend{{
     name="cellulose",
     icons={
         {
-            icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
+            icon="__muluna-graphics__/graphics/icons/material-fiber-cellulose-1.png",
             --scale=0.25,
             --shift={0.25,0}
-            tint = {1,0.8,0.4},
+            --tint = {1,0.8,0.4},
         },
     },
     pictures =
     {
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",scale = 0.5, mipmap_count = 4,tint = {1,0.8,0.4}},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",scale = 0.5, mipmap_count = 4,tint = {1,0.8,0.4}},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-3.png",scale = 0.5, mipmap_count = 4,tint = {1,0.8,0.4}},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/material-fiber-cellulose-1.png", scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/material-fiber-cellulose-2.png", scale = 0.5,mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/material-fiber-cellulose-3.png", scale = 0.5,mipmap_count = 4},
     },
     stack_size=iron_ore.stack_size*4,
     order="b[cellulose]",
