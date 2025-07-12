@@ -2,10 +2,12 @@ local rro = Muluna.rro
 
 local Public = {}
 
+local spawn_distance = 128
+
 local function random_place(surface,item_name,item_count)
     --if item_count == nil then item_count = 1 end
-    local x = math.random(-128,128)+math.random(-128,128)
-    local y = math.random(-128,128)+math.random(-128,128)
+    local x = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
+    local y = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
     local entity = {name = "fulgoran-cargo-pod-container", position = {x,y}, force = "player"}
     if surface.can_place_entity(entity) == false then
         entity.position[1] = entity.position[1] + math.random(-8,8)
@@ -17,8 +19,8 @@ end
 
 local function random_place_entity(surface,entity_name)
 
-    local x = math.random(-128,128)+math.random(-128,128)
-    local y = math.random(-128,128)+math.random(-128,128)
+    local x = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
+    local y = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
     local entity = {name = entity_name, position = {x,y}, force = "player"}
     if surface.can_place_entity(entity) == false then
         entity.position[1] = entity.position[1] + math.random(-8,8)
