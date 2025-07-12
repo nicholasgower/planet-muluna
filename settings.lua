@@ -139,9 +139,16 @@ data:extend{
       default_value = true,
       order = "ba"
     },
+    -- {
+    --   type = "bool-setting",
+    --   name = "muluna-new-interstellar-pack-recipe",
+    --   setting_type = "startup",
+    --   default_value = false,
+    --   order = "za"
+    -- },
     {
       type = "bool-setting",
-      name = "muluna-new-interstellar-pack-recipe",
+      name = "muluna-old-interstellar-pack-recipe",
       setting_type = "startup",
       default_value = false,
       order = "za"

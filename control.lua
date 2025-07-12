@@ -26,7 +26,7 @@ local rro = Muluna.rro
 --muluna={}
 --require("lib.control-stage")
 
-
+local ground_digger = require("scripts.sand-extractor")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
 --local sd = require("scripts.project-seadragon")
@@ -45,8 +45,10 @@ require("scripts.walking_particles")
 -- end) 
 
 -- script.on_event(defines.events.on_built_entity, function(event)
---     sd.on_built_rocket_silo(event)
+--     ground_digger.construct_sand_extractor(event)
 -- end)
+
+Muluna.events.finalize_events()
 
 local new_surface = require("scripts.new-surface")
 

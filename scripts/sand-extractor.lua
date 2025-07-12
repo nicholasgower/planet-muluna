@@ -3,6 +3,20 @@ local Public = {}
 -- Forked from Maraxsis
 -- "build" and "build-ghost" and "super-forced-build" are custom keybind inputs
 
+-- function update_cursor_stack(event) 
+
+--     if not storage.cursor_stack then 
+--         storage.cursor_stack = {} --Player-id -> cursor_stack data
+--     end
+
+--     if not storage.cursor_stack[event.player_index] then
+--         storage.cursor_stack[event.player_index] = {}
+--     end 
+--     storage.cursor_stack[event.player_index].direction = event.
+
+
+-- end
+
 function Public.construct_sand_extractor(event)
     local player = game.get_player(event.player_index)
     if not player or not player.valid then return end
@@ -22,33 +36,63 @@ function Public.construct_sand_extractor(event)
         quality = cursor_ghost.quality
     end
 
-    if not maraxsis.MARAXSIS_SAND_EXTRACTORS[name] then return end
-    name = name .. "-sand-extractor"
+    if not Muluna.constants.regolith_drills[name] then return end
+    local drill_name = name .. "-ground-digger"
 
     local surface = player.surface
-    if surface.name ~= maraxsis.MARAXSIS_SURFACE_NAME then return end
+    if surface.name ~= "muluna" then return end
     local position = event.cursor_position
 
-    if surface.entity_prototype_collides(name, position, false) then return end
+    if surface.entity_prototype_collides(drill_name, position, false) then return end
+    if surface.get_tile(position).hidden_tile then return end --If tile is unnatural, like concrete, then don't place mine. Muluna addition.
     local is_ghost = (not cursor_stack_valid) or event.input_name == "build-ghost" or event.input_name == "super-forced-build"
+    --game.print(serpent.block(position))
+    local direction = defines.direction.north
+    -- local width = Muluna.constants.regolith_drills[name].size -- To keep things simple, assume only square mining drills
+    -- local height = width
+    local offset_width = Muluna.constants.regolith_drills[name].offset_width
+    local offset_height = Muluna.constants.regolith_drills[name].offset_height
+    local neighboring_belts = surface.find_entities_filtered{area={{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, type = {"transport-belt","underground-belt","container"}}
+    if neighboring_belts then --If adjacent belts exist, change direction of drill such that it feeds one of those belts. Muluna addition.
+        for _,neighbor in pairs(neighboring_belts) do
+            local delta_pos = {x = neighbor.position.x- position.x, y = neighbor.position.y- position.y}
+            --game.print(serpent.block(neighbor))
+            --game.print(serpent.block(delta_pos))
+            if (delta_pos.x <=0.5 and delta_pos.x >= -0.5) then
+                if delta_pos.y > 0 then
+                    direction = defines.direction.south
+                else
+                    direction = defines.direction.north
+                end
+            elseif (delta_pos.y <=0.5 and delta_pos.y >= -0.5) then
+                if delta_pos.x > 0 then
+                    direction = defines.direction.east
+                else
+                    direction = defines.direction.west
+                end
+            end
+        end
+    end
+    
 
     surface.create_entity {
-        name = is_ghost and "entity-ghost" or name,
+        name = is_ghost and "entity-ghost" or drill_name,
         inner_name = is_ghost and name or nil,
         position = position,
         force = player.force,
         player = player,
         quality = quality,
+        direction = direction
     }
 
     if not is_ghost then
         cursor_stack.count = cursor_stack.count - 1
     end
 end
--- maraxsis.register_delayed_function("construct_sand_extractor", construct_sand_extractor)
 
--- maraxsis.on_event({"build", "build-ghost", "super-forced-build"}, function(event)
---     maraxsis.execute_later("construct_sand_extractor", 1, event)
--- end)
 
-return {}
+Muluna.events.register_delayed_function("construct_sand_extractor", Public.construct_sand_extractor)
+
+Muluna.events.on_event({"build", "build-ghost", "super-forced-build"}, function(event)
+    Muluna.events.execute_later("construct_sand_extractor", 1, event)
+end)

@@ -23,6 +23,7 @@ require("prototypes.technology.interstellar-technologies") --Also runs during da
 require("prototypes.nav-beacon")
 require("prototypes.decoratives.muluna-decoratives")
 require("prototypes.mod-data.interstellar-science-pack")
+require("prototypes.mod-data.ground-diggers")
 
 require("compat.maraxsis")
 require("compat.solar-productivity")

@@ -22,14 +22,14 @@ local direction_vectors = {
 
 
 local character_running_speed = 0.15
-local half_character_running_speed = 0.07875
-script.on_nth_tick(30, function(event)
+local half_character_running_speed = 0.14
+Muluna.events.on_nth_tick(30, function(event)
 
     for _,player in pairs(game.players) do
         local character = player.character
         local surface = player.surface
-
-        if surface.name ~= "muluna" then end
+        --game.print(surface.name)
+        if surface.name ~= "muluna" then break end
         
         local walking_state = player.walking_state
         --game.print(player.character_running_speed)

@@ -189,6 +189,8 @@ local regolith_sorting = {
     type = "recipe",
     name = "muluna-regolith-sorting",
     category = "crushing",
+    --additional_categories = {"recycling"},
+    auto_recycle = false,
     ingredients = {
         {
             type = "item",
@@ -209,7 +211,14 @@ local regolith_sorting = {
             name = "stone-crushed",
             amount = 1,
             probability = 0.50,
+        },
+        {
+            type = "item",
+            name = "uranium-ore",
+            amount = 1,
+            probability = 0.01,
         }
+
 
     },
     icons = crushing_icon(data.raw.item["muluna-lunar-regolith"].icon,data.raw.item["muluna-lunar-regolith"].icon_size)
@@ -218,7 +227,7 @@ local regolith_sorting = {
 
 local regolith_recycling = table.deepcopy(regolith_sorting)
 
-regolith_recycling.name = "muluna-regolith-recycling"
+regolith_recycling.name = "muluna-lunar-regolith-recycling"
 regolith_recycling.category = "recycling"
 regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 
