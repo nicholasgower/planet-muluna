@@ -224,6 +224,37 @@ ice_ore_particle.pictures = {
   anorthite_chunk_particle.name="anorthite-chunk-particle"
 
 
+  anorthite_chunk_particle.pictures = {
+    {
+      filename = "__muluna-graphics__/graphics/particle/grayscale-particle/grayscale-particle-1.png",
+      priority = "extra-high",
+      width = 32,
+      height = 32,
+      scale = 0.5
+    },
+    {
+      filename = "__muluna-graphics__/graphics/particle/grayscale-particle/grayscale-particle-2.png",
+      priority = "extra-high",
+      width = 32,
+      height = 32,
+      scale = 0.5
+    },
+    {
+      filename = "__muluna-graphics__/graphics/particle/grayscale-particle/grayscale-particle-3.png",
+      priority = "extra-high",
+      width = 32,
+      height = 32,
+      scale = 0.5
+    },
+    {
+      filename = "__muluna-graphics__/graphics/particle/grayscale-particle/grayscale-particle-4.png",
+      priority = "extra-high",
+      width = 32,
+      height = 32,
+      scale = 0.5
+    }
+  }
+
 -- local ice_ore = resource(
 --     {
 --       name = "ice",
