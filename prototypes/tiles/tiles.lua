@@ -10,12 +10,12 @@ muluna_dirt_base.absorptions_per_second={
     radiation = 0.01/60
   }
 local color={
-    {55,55,55},
-    {50,50,50},
-    {45,45,45},
-    {60,60,60},
-    {70,70,70},
-    {80,80,80},
+    {55,55,65},
+    {50,50,60},
+    {45,45,55},
+    {60,60,70},
+    {70,70,80},
+    {80,80,90},
 }
 
 for i = 1,6,1 do
@@ -46,9 +46,9 @@ end
 local muluna_sand_base=table.deepcopy(data.raw["tile"]["dry-dirt"])
 
 local color_sand={
-    {85,85,85},
-    {90,90,90},
-    {87,87,87},
+    {85,85,95},
+    {90,90,100},
+    {87,87,97},
 }
 
 for i = 1,3,1 do
