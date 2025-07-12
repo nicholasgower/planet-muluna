@@ -7,6 +7,16 @@ muluna_dirt_base.walking_speed_modifier = 0.5
 muluna_dirt_base.vehicle_friction_modifier = concrete.vehicle_friction_modifier
 muluna_dirt_base.walking_sound = "__space-age__/sound/walking/soft-sand-1.ogg"
 muluna_dirt_base.destroys_dropped_items = true
+muluna_dirt_base.custom_tooltip_fields = {
+  {
+    name = {"tooltip.digging-result"},
+    value = {"tooltip-value.digging-result","muluna-regolith-digging",{"recipe-name.muluna-regolith-digging"}}
+  },
+  {
+    name = {"tooltip.destroys-dropped-items"},
+    value = {"gui.yes"}
+  }
+}
 muluna_dirt_base.absorptions_per_second={
     radiation = 0.01/60
   }
@@ -60,6 +70,7 @@ for i = 1,3,1 do
     muluna_dirt.walking_speed_modifier = 0.5
     muluna_dirt.vehicle_friction_modifier = refined_concrete.vehicle_friction_modifier
     muluna_dirt.walking_sound = "__space-age__/sound/walking/soft-sand-1.ogg"
+    muluna_dirt.custom_tooltip_fields = muluna_dirt_base.custom_tooltip_fields
     muluna_dirt.destroys_dropped_items = true
     muluna_dirt.variants = tile_variations_template(
     "__alien-biomes-graphics__/graphics/terrain/mineral-grey-sand-"..tostring(i)..".png", "__base__/graphics/terrain/masks/transition-3.png",
