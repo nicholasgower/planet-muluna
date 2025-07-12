@@ -1,7 +1,7 @@
 local lunar_rock = table.deepcopy(data.raw["simple-entity"]["big-rock"])
 local tint = {1,1,0.5}
 for i,sprite in pairs(lunar_rock.pictures) do
-    sprite.filename = "__alien-biomes-graphics__/graphics/decorative/big-rock/big-rock-" .. string.format("%02d",i) .. ".png"
+    sprite.filename = "__muluna-graphics__/graphics/entities/lunar-rock/big-rock-" .. string.format("%02d",i) .. ".png"
     --sprite.tint = tint
 end
 
