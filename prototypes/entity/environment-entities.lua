@@ -62,6 +62,7 @@ local ancient_container = table.deepcopy(data.raw["temporary-container"]["cargo-
 
 ancient_container.picture.layers[1].filename = "__muluna-graphics__/graphics/entities/cargo-pod/pod-landing.png"
 ancient_container.name = "fulgoran-cargo-pod-container"
+ancient_container.alert_after_time = 0
 data:extend{ancient_container}
 
 
