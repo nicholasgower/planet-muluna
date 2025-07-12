@@ -44,7 +44,16 @@ function Public.construct_sand_extractor(event)
     local position = event.cursor_position
 
     if surface.entity_prototype_collides(drill_name, position, false) then return end
-    if surface.get_tile(position).hidden_tile then return end --If tile is unnatural, like concrete, then don't place mine. Muluna addition.
+    if surface.get_tile(position).hidden_tile then 
+        player.create_local_flying_text{
+            text = {"console.can-not-place-here-unnatural-tile"},
+            --position = position,
+            surface = surface,
+            create_at_cursor = true,
+            speed = 0.01,
+        }
+        
+        return end --If tile is unnatural, like concrete, then don't place mine. Muluna addition.
     local is_ghost = (not cursor_stack_valid) or event.input_name == "build-ghost" or event.input_name == "super-forced-build"
     --game.print(serpent.block(position))
     local direction = defines.direction.north
