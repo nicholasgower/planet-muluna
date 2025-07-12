@@ -189,8 +189,10 @@ data:extend{
         prerequisites = {
             "space-science-pack", "muluna-anorthite-processing"
         },
+        icons = Muluna.img.blur_technology_icon({{
         icon = data.raw["item"]["crusher"].icon,
         icon_size=64,
+        }},16)
     },
     -- {
     --     type = "technology",
