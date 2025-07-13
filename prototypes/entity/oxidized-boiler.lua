@@ -304,6 +304,15 @@ local space_boiler_new = {
           layers =
           {
             {
+              filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-shadow.png",
+              priority = "extra-high",
+              width = 900,
+              height = 500,
+              scale = 0.35,
+              shift = util.by_pixel(0, -20.5),
+              draw_as_shadow = true
+            },
+            {
               filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-animation-1.png",
               priority = "extra-high",
               width = 1300,
@@ -316,15 +325,7 @@ local space_boiler_new = {
               shift = util.by_pixel(0, -20),
               scale = 0.35,
             },
-            -- {
-            --   filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-shadow.png",
-            --   priority = "extra-high",
-            --   width = 900,
-            --   height = 500,
-            --   scale = 0.125,
-            --   shift = util.by_pixel(20.5, 9),
-            --   draw_as_shadow = true
-            -- }
+            
           }
         },
         fire_glow =
@@ -406,6 +407,16 @@ space_boiler_new.graphics_set.animation = { north = {
               shift = util.by_pixel(0, -20),
               scale = 0.35,
               run_mode="forward-then-backward",
+            },
+            {
+              filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-shadow.png",
+              priority = "extra-high",
+              width = 900,
+              height = 500,
+              scale = 0.35,
+              repeat_count = 126,
+              shift = util.by_pixel(0, -20),
+              draw_as_shadow = true
             },
             
             -- {
