@@ -1,6 +1,8 @@
 local debug_mode = false
 local DT = "[NavBeacon] "
-local radar_data = prototypes.mod_data["muluna-satellite-radar"].data
+if settings.startup["enable-nav-beacon"].value == true then
+    local radar_data = prototypes.mod_data["muluna-satellite-radar"].data
+end
 
 require("__core__/lualib/util.lua")
 
