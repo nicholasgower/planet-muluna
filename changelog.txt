@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.2
+Date: 2025-07-13
+  Bugfixes:
+    - Fixed duplicate rocket part productivity entries concerning Maraxsis rocket parts.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.1
 Date: 2025-07-11
   Bugfixes:
