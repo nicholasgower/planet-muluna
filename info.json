@@ -7,7 +7,7 @@
   "version": "1.45.2",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.28",
+    "base >= 2.0.55",
     "space-age",
     "PlanetsLib >= 1.2.18",
     "muluna-graphics >= 1.0.17",
