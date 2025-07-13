@@ -675,7 +675,7 @@ data.raw["elevated-curved-rail-a"]["elevated-curved-rail-a"].surface_conditions 
 data.raw["elevated-curved-rail-b"]["elevated-curved-rail-b"].surface_conditions = one_gravity_condition
 data.raw["rail-support"]["rail-support"].surface_conditions = one_gravity_condition
 
-
+require("prototypes.mod-data.interstellar-science-pack")
 
 if data.raw["tool"]["alien-science-pack"] then
     data.raw["tool"]["alien-science-pack"].order="fa[alien-science-pack]"
