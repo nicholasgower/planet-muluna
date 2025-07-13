@@ -9,7 +9,7 @@ local possible_science_packs = --Science pack technologies
     "janus-time-science-pack",
     "slp-sunpack",
     "nanite-science-pack",
-    --"insulation-science-pack",
+    "insulation-science-pack",
     "battlefield-science-pack",
     --"igrys-mineral-science-pack",
     --"biorecycling-science-pack"
@@ -21,6 +21,7 @@ local possible_science_packs = --Science pack technologies
     "anomaly-science-pack",
     "thermodynamic-science-pack",
     "aerospace-science-pack",
+    "tiberium-mechanical-research"
 }
 
 -- local special_cases = {

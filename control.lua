@@ -69,7 +69,10 @@ script.on_event(defines.events.on_research_finished, function(event) interstella
 script.on_configuration_changed(function()
 
     for _,force in pairs(game.forces) do
-        interstellar_science_pack.update_interstellar_pack(force)
+        local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
+        local interstellar_pack_name = data.gated_technology
+        force.technologies[interstellar_pack_name].researched = false
+        interstellar_science_pack.update_interstellar_pack(force,false)
     end
 end
 )
