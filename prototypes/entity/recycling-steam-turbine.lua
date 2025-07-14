@@ -87,6 +87,12 @@ local cooled_steam = util.merge{table.deepcopy(data.raw["fluid"]["steam"]),
 
 }
 
+--recycling_turbine.output_fluid_box.pipe_picture = assembler2pipepictures()
+recycling_turbine.output_fluid_box.pipe_covers = pipecoverspictures()
+
+--recycling_turbine.input_fluid_box.pipe_picture = assembler2pipepictures()
+recycling_turbine.input_fluid_box.pipe_covers = pipecoverspictures()
+
 recycling_turbine.factoriopedia_description = nil
 
 
