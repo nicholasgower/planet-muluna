@@ -479,9 +479,9 @@ local diffusion = {
         --allow_productivity = false,
         auto_recycle = false,
     }
-local steps = 10
+local steps = 20
 for i = 1,steps,1 do
-    table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 1/steps,percent_spoiled = (i-1)/10,ignored_by_productivity = 1})
+    table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 1/steps,percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
 end
 
 data:extend{diffusion}
