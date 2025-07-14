@@ -1,8 +1,11 @@
 local should_notify = false
 local rro = Muluna.rro
 for _,force in pairs(game.forces) do
-    if force.technologies["planet-discovery-muluna"].enabled == true then
+    if force.technologies["planet-discovery-muluna"].researched == true then
         should_notify = true
+    end
+    if force.technologies["low-density-space-platform-foundation"].researched == true then
+        force.technologies["interstellar-science-pack"].researched = true
     end
 end
 if should_notify then
