@@ -23,7 +23,7 @@ function Public.construct_sand_extractor(event)
 
     local cursor_stack = player.cursor_stack
     local cursor_stack_valid = cursor_stack and cursor_stack.valid_for_read and cursor_stack.count > 0
-
+    local force = player.force
     local quality
     local name
     if cursor_stack_valid then
@@ -93,9 +93,11 @@ function Public.construct_sand_extractor(event)
         quality = quality,
         direction = direction
     }
+    
 
     if not is_ghost then
         cursor_stack.count = cursor_stack.count - 1
+        force.get_entity_build_count_statistics(surface).on_flow(name,1)
     end
 end
 
