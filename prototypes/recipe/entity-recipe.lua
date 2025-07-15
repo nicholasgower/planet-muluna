@@ -173,7 +173,7 @@ local low_density_space_platform_foundation = util.merge{table.deepcopy(data.raw
         {
             type = "item",
             name = "low-density-structure",
-            amount = 5,
+            amount = 2,
         },
         
     }
