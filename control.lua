@@ -64,6 +64,17 @@ end
 
 local interstellar_science_pack = require("scripts.interstellar-science-pack")
 
+local function init_storage() 
+    storage.players_on_muluna = {}
+
+end
+
+Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
+
+    init_storage() 
+
+
+end)
 
 script.on_event(defines.events.on_research_finished, function(event) interstellar_science_pack.update_interstellar_pack(event.research.force) end)
 script.on_configuration_changed(function()

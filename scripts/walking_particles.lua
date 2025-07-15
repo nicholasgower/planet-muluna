@@ -1,6 +1,5 @@
 if settings.startup["muluna-graphics-enable-footstep-animations"].value == true then
-    local m = 0.01
-    local r = 0.01
+    local m = 0.01 local r = 0.01
     local direction_vectors = { --Velocity vector used to set velocity of kicked up particles.
         North = {0,m},	
         NorthNorthEast = {-m,m},	
@@ -43,6 +42,10 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     Muluna.events.on_nth_tick(60, update_step_tick_rates)
     Muluna.events.on_event({defines.events.on_player_armor_inventory_changed}, update_step_tick_rates)
 
+    Muluna.events.on_event(Muluna.events.events.on_init(),function()
+        storage.players_on_muluna = {}
+    end
+    )
     Muluna.events.on_event({defines.events.on_player_changed_surface}, function(event)
         local id = event.player_index
         local player = game.players[event.player_index]

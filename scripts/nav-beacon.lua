@@ -68,7 +68,7 @@ local function reset_storage_nav_beacons()
         --Register those beacons using existing functions.
 end
 
-script.on_init(function()
+Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
 
     init_storage_nav_beacons()
 

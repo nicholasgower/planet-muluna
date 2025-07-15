@@ -19,6 +19,11 @@ if Muluna.stage == "data" then
         }
     }}
     Muluna.constants = data.raw["mod-data"]["muluna-constants"].data
+
+    -- Resource generation libraries forked from vanilla 
+    Muluna.resource = require("lib.resources").resource
+    Muluna.resource_autoplace = require("lib.resource-autoplace")
+
 elseif Muluna.stage == "control" then
     Muluna.constants = prototypes.mod_data["muluna-constants"].data
     Muluna.events = require("lib.events")
