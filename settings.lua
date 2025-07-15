@@ -124,6 +124,13 @@ data:extend{
       order = "da"
     },
     {
+      type = "bool-setting",
+      name = "muluna-graphics-enable-footstep-animations",
+      setting_type = "startup",
+      default_value = true,
+      order = "ea"
+    },
+    {
       type = "double-setting",
       name = "nav-beacon-update-ticks",
       setting_type="startup",
