@@ -107,7 +107,7 @@ data:extend{{
         
     -- },
     
-    stack_size=1,
+    stack_size=10,
     order=data.raw.item["tree-seed"].order .. "a",
     subgroup=data.raw.item["tree-seed"].subgroup,
     group=data.raw.item["tree-seed"].group,
