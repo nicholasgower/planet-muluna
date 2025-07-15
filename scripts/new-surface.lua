@@ -33,8 +33,14 @@ local function place_muluna_cargo_pods()
     -- game.print("Muluna created")
     local muluna = game.planets["muluna"].surface
         
+    -- for i = 1,math.random(3,5) do
+    --     random_place(muluna,"steam-crusher",math.random(3,5))
+    -- end
     for i = 1,math.random(3,5) do
-        random_place(muluna,"crusher",math.random(3,5))
+        random_place(muluna,"engine-unit",math.random(5,10)+math.random(5,10))
+    end
+    for i = 1,math.random(3,5) do
+        random_place(muluna,"steel-plate",math.random(5,10)+math.random(5,10))
     end
     for i = 1,math.random(3,5) do
         random_place(muluna,"plastic-bar",math.random(20,40))

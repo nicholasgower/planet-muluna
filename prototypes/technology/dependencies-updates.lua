@@ -80,7 +80,7 @@ local space_platform=data.raw["technology"]["space-platform"]
 
 data.raw["technology"]["space-science-pack"].research_trigger = {
     type="build-entity",
-    entity="crusher"
+    entity="muluna-steam-crusher"
 }
 
 data.raw["technology"]["space-science-pack"].localised_description={"technology-description.space-science-pack"}

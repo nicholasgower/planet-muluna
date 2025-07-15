@@ -1,7 +1,8 @@
 local lunar_rock = table.deepcopy(data.raw["simple-entity"]["big-rock"])
 local tint = {1,1,0.5}
-for _,sprite in pairs(lunar_rock.pictures) do
-    sprite.tint = tint
+for i,sprite in pairs(lunar_rock.pictures) do
+    sprite.filename = "__alien-biomes-graphics__/graphics/decorative/big-rock/big-rock-" .. string.format("%02d",i) .. ".png"
+    --sprite.tint = tint
 end
 
 lunar_rock.icons = {{icon = lunar_rock.icon, icon_size = lunar_rock.icon_size, tint = tint}}
@@ -13,7 +14,7 @@ lunar_rock.minable.results = {
     {type = "item", name = "stone", amount = 20},
 }
 
-lunar_rock.map_color = {184, 150, 0}
+lunar_rock.map_color = {174, 174, 174}
 
 
 

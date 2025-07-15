@@ -1,4 +1,36 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.3
+Date: 2025-07-13
+  Bugfixes:
+    - Issued patch to stop Secretas from crashing on startup.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.2
+Date: 2025-07-13
+  Bugfixes:
+    - Fixed duplicate rocket part productivity entries concerning Maraxsis rocket parts.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.1
+Date: 2025-07-11
+  Bugfixes:
+    - Fixed incorrect internal name for steel in new surface script.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.0
+Date: 2025-07-11
+  Features:
+    - Added "Steam crusher," an early, cheaper version of the crusher that is less energy efficient than the vanilla crusher.
+  Balancing:
+    - Increased cost of "Asteroid collector" technology to 500 and made "Crusher" a prerequisite.
+    - Moved unlock for crusher to own technology unlocked after space science pack.
+    - Removed crushers from Muluna's initial cargo drops and added engine units and steel bars.
+    - Steam furnaces are now unlocked with the advanced boiler.
+  Changes:
+    - Changed research trigger of "Space science pack" from "Build crusher" to "Build steam crusher."
+---------------------------------------------------------------------------------------------------
+Version: 1.44.29
+Date: 2025-07-11
+  Graphics:
+    - Switched lunar rock graphics to use graphics of Alien Biomes' "Big rock" entity and removed yellow tint. Adjusted map color to match.
+---------------------------------------------------------------------------------------------------
 Version: 1.44.28
 Date: 2025-07-09
   Balancing:
