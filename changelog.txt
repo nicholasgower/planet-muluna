@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.4
+Date: 2025-07-15
+  Compatibility:
+    - Raised required PlanetsLib version to 1.7.0.
+  Bugfixes:
+    - Reduced visual clutter of interstellar science pack technology, replacing prerequisites with script-based solution. Added option to change number of planetary science packs required to unlock interstellar science pack. https://github.com/nicholasgower/planet-muluna/issues/202
+  Changes:
+    - Replaced rocket silo recipe assignment system with library from PlanetsLib.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.3
 Date: 2025-07-13
   Bugfixes:
