@@ -129,7 +129,10 @@ if true then
     end
 
     if mods["crushing-industry"] then
-        data.raw["assembling-machine"]["muluna-steam-crusher"].effect_receiver.base_effect = nil
+        if data.raw["assembling-machine"]["muluna-steam-crusher"].effect_receiver then
+            data.raw["assembling-machine"]["muluna-steam-crusher"].effect_receiver.base_effect = nil
+        end
+        
         data.raw["assembling-machine"]["muluna-steam-crusher"].localised_name = nil
     end
 
