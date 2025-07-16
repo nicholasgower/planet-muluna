@@ -127,6 +127,12 @@ if true then
     end
     end
 
+    if mods["crushing-industry"] then
+        data.raw["assembling-machine"]["muluna-steam-crusher"].effect_receiver.base_effect = nil
+        data.raw["assembling-machine"]["muluna-steam-crusher"].localised_name = nil
+    end
+
+
     -- data:extend{
     --     util.merge{),
     --     {
