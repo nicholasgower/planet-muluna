@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.6
+Date: 2025-07-16
+  Balancing:
+    - Increased efficiency of steam crusher to 50%.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.5
+Date: 2025-07-16
+  Compatibility:
+    - When Crushing Industry is installed. Steam Crusher no longer has any base quality bonuses. https://github.com/nicholasgower/planet-muluna/issues/221
+---------------------------------------------------------------------------------------------------
+Version: 1.45.4
+Date: 2025-07-15
+  Compatibility:
+    - Raised required PlanetsLib version to 1.7.0.
+  Bugfixes:
+    - Reduced visual clutter of interstellar science pack technology, replacing prerequisites with script-based solution. Added option to change number of planetary science packs required to unlock interstellar science pack. https://github.com/nicholasgower/planet-muluna/issues/202
+  Changes:
+    - Replaced rocket silo recipe assignment system with library from PlanetsLib.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.3
 Date: 2025-07-13
   Bugfixes:

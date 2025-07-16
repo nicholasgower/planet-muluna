@@ -52,6 +52,7 @@ if true then
             }
         }
         if name == "crusher" then
+            steam_furnace.energy_source.effectivity = 0.50
             steam_furnace.energy_source.fluid_box.pipe_connections = {
                 { flow_direction = "input-output", direction = defines.direction.north, position = {0.59, -1}},
                 { flow_direction = "input-output", direction = defines.direction.south, position = {0.59, 1}}
@@ -126,6 +127,12 @@ if true then
 
     end
     end
+
+    if mods["crushing-industry"] then
+        data.raw["assembling-machine"]["muluna-steam-crusher"].effect_receiver.base_effect = nil
+        data.raw["assembling-machine"]["muluna-steam-crusher"].localised_name = nil
+    end
+
 
     -- data:extend{
     --     util.merge{),
