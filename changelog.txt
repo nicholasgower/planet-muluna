@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.5
+Date: 2025-07-16
+  Compatibility:
+    - When Crushing Industry is installed. Steam Crusher no longer has any base quality bonuses. https://github.com/nicholasgower/planet-muluna/issues/221
+---------------------------------------------------------------------------------------------------
 Version: 1.45.4
 Date: 2025-07-15
   Compatibility:
