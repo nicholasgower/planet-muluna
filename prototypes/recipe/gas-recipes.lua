@@ -132,24 +132,24 @@ data:extend{
     --         }
     --     }
     -- },
-    {
-        type = "recipe",
-        name = "muluna-electrolysis",
-        enabled = false,
-        icons = dual_icon("oxygen","hydrogen"),
-        --icon = "__muluna-graphics__/graphics/icons/maraxsis-water.png",
-        --icon_size = 64,
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "water", amount=30},
-        },
-        results = {
-            {type = "fluid",name = "oxygen", amount=100},
-            {type = "fluid",name = "hydrogen", amount=200}
-        },
-        energy_required=2,
-        subgroup="muluna-products"
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "muluna-electrolysis",
+    --     enabled = false,
+    --     icons = dual_icon("oxygen","hydrogen"),
+    --     --icon = "__muluna-graphics__/graphics/icons/maraxsis-water.png",
+    --     --icon_size = 64,
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "water", amount=30},
+    --     },
+    --     results = {
+    --         {type = "fluid",name = "oxygen", amount=100},
+    --         {type = "fluid",name = "hydrogen", amount=200}
+    --     },
+    --     energy_required=2,
+    --     subgroup="muluna-products"
+    -- },
     {
         type = "recipe",
         name = "oxygen-venting",
@@ -190,26 +190,26 @@ data:extend{
         energy_required=0.1,
         subgroup="muluna-products"
     },
-    {
-        type = "recipe",
-        name = "hydrogen-venting",
-        enabled = false,
-        hidden_in_factoriopedia = true,
-        icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "hydrogen", amount=54},
-        },
-        results = {},
-        -- surface_conditions = {
-        --     {
-        --         property = "pressure",
-        --         max = 50,
-        --     }
-        -- },
-        energy_required=0.1,
-        subgroup="muluna-products"
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "hydrogen-venting",
+    --     enabled = false,
+    --     hidden_in_factoriopedia = true,
+    --     icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "hydrogen", amount=54},
+    --     },
+    --     results = {},
+    --     -- surface_conditions = {
+    --     --     {
+    --     --         property = "pressure",
+    --     --         max = 50,
+    --     --     }
+    --     -- },
+    --     energy_required=0.1,
+    --     subgroup="muluna-products"
+    -- },
     -- {
     --     type = "recipe",
     --     name = "muluna-atmosphere-separation",

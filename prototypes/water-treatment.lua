@@ -21,23 +21,23 @@ if not mods["maraxsis"] then
     }}
     
 
-    data:extend {{
-        type = "fluid",
-        name = "hydrogen",
-        icon = "__muluna-graphics__/graphics/icons/hydrogen.png",
-        --group = "fluids",
-        subgroup="fluid",
-        icon_size = 64,
-        base_flow_rate = data.raw.fluid.steam.base_flow_rate,
-        default_temperature = data.raw.fluid["water"].default_temperature,
-        heat_capacity = data.raw.fluid["water"].heat_capacity,
-        base_color = {0.50, 0.50, 0.50},
-        flow_color = {1, 1, 1},
-        max_temperature = data.raw.fluid["water"].max_temperature,
-        pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
-        flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
-        localised_name={"fluid-name.hydrogen"}
-    }}
+    -- data:extend {{
+    --     type = "fluid",
+    --     name = "hydrogen",
+    --     icon = "__muluna-graphics__/graphics/icons/hydrogen.png",
+    --     --group = "fluids",
+    --     subgroup="fluid",
+    --     icon_size = 64,
+    --     base_flow_rate = data.raw.fluid.steam.base_flow_rate,
+    --     default_temperature = data.raw.fluid["water"].default_temperature,
+    --     heat_capacity = data.raw.fluid["water"].heat_capacity,
+    --     base_color = {0.50, 0.50, 0.50},
+    --     flow_color = {1, 1, 1},
+    --     max_temperature = data.raw.fluid["water"].max_temperature,
+    --     pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
+    --     flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
+    --     localised_name={"fluid-name.hydrogen"}
+    -- }}
 
 
 end

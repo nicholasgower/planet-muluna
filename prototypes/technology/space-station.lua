@@ -519,10 +519,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "muluna-oxygen-from-oxidizer"
             },
-            {
-                type = "unlock-recipe",
-                recipe="muluna-electrolysis"
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe="muluna-electrolysis"
+            -- },
             {
                 type = "unlock-recipe",
                 recipe = "maraxsis-atmosphere"
@@ -668,10 +668,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "oxygen-venting"
             },
-            {
-                type = "unlock-recipe",
-                recipe = "hydrogen-venting"
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "hydrogen-venting"
+            -- },
         }
     },
     {
