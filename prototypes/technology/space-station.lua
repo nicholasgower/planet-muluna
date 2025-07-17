@@ -251,6 +251,46 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-regolith-digging",
+        localised_name = {"recipe-name.muluna-regolith-digging"},
+        localised_description = {"recipe-description.muluna-regolith-digging"},
+        research_trigger = {
+            type = "build-entity",
+            entity = "electric-mining-drill-ground-digger"
+        },
+        --localised_name = {"item-name.crusher"},
+        --localised_description = {"entity-description.crusher"},
+        effects = {
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "crusher"
+            -- },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-regolith-digging"
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-regolith-sorting"
+            },
+            
+            
+            
+            
+        },
+        prerequisites = {
+             "planet-discovery-muluna"
+        },
+        -- icons = {
+        --     {
+        --         icon = "__muluna-graphics__/graphics/technology/comminution.png",
+        --         icon_size = 968,
+        --     },  
+        -- }
+        icons = crushing_technology_icon(data.raw["item"]["metallic-asteroid-chunk"].icon,data.raw["item"]["metallic-asteroid-chunk"].icon_size)
+    },
+    {
+        type = "technology",
         name = "muluna-advanced-stone-processing",
         unit= {
             count = 500,

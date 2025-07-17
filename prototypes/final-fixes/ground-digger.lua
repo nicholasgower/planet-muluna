@@ -26,8 +26,9 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     extractor.type = "assembling-machine"
     extractor.crafting_categories = {"ground-digging"}
     extractor.placeable_by = {item = extractor.name, count = 1}
-    extractor.localised_name = extractor.localised_name or {"entity-name." .. extractor.name}
-    extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
+    extractor.localised_name = {"entity-name.x-ground-digger",extractor.localised_name or {"entity-name." .. extractor.name}}
+    extractor.localised_description = {"recipe-description.muluna-regolith-digging"}
+    --extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
     extractor.hidden_in_factoriopedia = false
     extractor.fixed_recipe = "muluna-regolith-digging"
     extractor.fixed_quality = "normal"

@@ -9,7 +9,7 @@ data:extend {{
     type = "recipe",
     name = "muluna-regolith-digging",
     category = "ground-digging",
-    energy_required = 10,
+    energy_required = 2.5,
     ingredients = {},
     results = {
         {type = "item", name = "muluna-lunar-regolith", amount = 1,probability = 0.25},

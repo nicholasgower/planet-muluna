@@ -200,6 +200,7 @@ local regolith_sorting = {
     category = "crushing",
     --additional_categories = {"recycling"},
     auto_recycle = false,
+    enabled = false,
     ingredients = {
         {
             type = "item",
@@ -212,14 +213,14 @@ local regolith_sorting = {
         {
             type = "item",
             name = "stone",
-            amount = 1,
-            probability = 0.50,
+            amount = 2,
+            --probability = 0.50,
         },
         {
             type = "item",
             name = "stone-crushed",
             amount = 1,
-            probability = 0.50,
+            --probability = 0.50,
         },
         {
             type = "item",
@@ -236,7 +237,7 @@ local regolith_sorting = {
 
 local regolith_recycling = table.deepcopy(regolith_sorting)
 
-regolith_recycling.name = "muluna-lunar-regolith-recycling"
+regolith_recycling.name = "muluna-regolith-recycling"
 regolith_recycling.category = "recycling"
 regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02

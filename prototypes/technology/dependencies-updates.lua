@@ -12,7 +12,13 @@ data.raw["recipe"]["crusher"].subgroup = "smelting-machine"
 data.raw["item"]["crusher"].subgroup = "smelting-machine"
 data.raw["assembling-machine"]["crusher"].subgroup = "smelting-machine"
 data.raw["item"]["crusher"].order = "ca[crusher]"
+table.insert(data.raw["technology"]["recycling"].effects,
+    {
+                type = "unlock-recipe",
+                recipe = "muluna-regolith-recycling"
+    }
 
+)
 
 --replace_object(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform-thruster","space-platform")
 rro.replace(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform","muluna-alice-propellant")
