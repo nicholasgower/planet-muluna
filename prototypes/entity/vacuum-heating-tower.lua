@@ -17,21 +17,21 @@ heating_boiler = util.merge{heating_boiler,
             connections =
             {
                 {
-                position = {0, -1},
+                position = {0, -1.5},
                 direction = defines.direction.north
                 },
-                {
-                position = {1, 0},
-                direction = defines.direction.east
-                },
-                {
-                position = {0, 1},
-                direction = defines.direction.south
-                },
-                {
-                position = {-1, 0},
-                direction = defines.direction.west
-                },
+                -- {
+                -- position = {1.5, 0},
+                -- direction = defines.direction.east
+                -- },
+                -- {
+                -- position = {0, 1.5},
+                -- direction = defines.direction.south
+                -- },
+                -- {
+                -- position = {-1.5, 0},
+                -- direction = defines.direction.west
+                -- },
             },
 
             heat_picture = apply_heat_pipe_glow(
@@ -74,6 +74,51 @@ heating_boiler = util.merge{heating_boiler,
                 variation_count = 4
             }))
         },
+        fluid_boxes = {
+            {
+                volume = 200,
+                pipe_covers = pipecoverspictures(),
+                pipe_connections =
+                {
+                {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 0}},
+                {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, 0}},
+                },
+                production_type = "input",
+                --filter = "water"
+            },
+            {
+                volume = 200,
+                pipe_covers = pipecoverspictures(),
+                pipe_connections =
+                {
+                {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 1}},
+                {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, 1}}
+                },
+                production_type = "input",
+                --filter = "water"
+            },
+            {
+                volume = 200,
+                --pipe_covers = pipecoverspictures(),
+                pipe_connections =
+                {
+                    {flow_direction = "output", direction = defines.direction.north, position = {0, 0.0}},
+                },
+                production_type = "heat-output",
+                --filter = "steam"
+                },
+            {
+                volume = 200,
+                pipe_covers = pipecoverspictures(),
+                pipe_connections =
+                {
+                    {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
+                    {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, -1}}
+                },
+                production_type = "output",
+                --filter = "steam"
+            },
+    },
     }
 }
 
