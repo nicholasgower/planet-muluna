@@ -20,7 +20,7 @@ local transferred_fields = {
 }
 
 local copied_fields = {
-    --"collision_box",
+    "collision_box",
     "selection_box",
 }
 
