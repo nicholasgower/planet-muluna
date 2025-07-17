@@ -68,68 +68,68 @@ end
 data.raw["fluid"]["carbon-dioxide"].heat_capacity=multiply_energy(data.raw["fluid"]["carbon-dioxide"].heat_capacity,1/10)
 
 
-data:extend {{
-    type = "fluid",
-    name = "helium",
-    icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-    --group = "fluids",
-    subgroup="fluid",
-    icon_size = 64,
-    base_flow_rate = data.raw.fluid.steam.base_flow_rate,
-    default_temperature = data.raw.fluid["water"].default_temperature,
-    heat_capacity = data.raw.fluid["water"].heat_capacity,
-    base_color = {0.75, 0.40, 0.40},
-    flow_color = {0.80, 0.60, 0.60},
-    max_temperature = data.raw.fluid["water"].max_temperature,
-    pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
-    flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
-    localised_name={"fluid-name.helium"}
-}}
+-- data:extend {{
+--     type = "fluid",
+--     name = "helium",
+--     icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+--     --group = "fluids",
+--     subgroup="fluid",
+--     icon_size = 64,
+--     base_flow_rate = data.raw.fluid.steam.base_flow_rate,
+--     default_temperature = data.raw.fluid["water"].default_temperature,
+--     heat_capacity = data.raw.fluid["water"].heat_capacity,
+--     base_color = {0.75, 0.40, 0.40},
+--     flow_color = {0.80, 0.60, 0.60},
+--     max_temperature = data.raw.fluid["water"].max_temperature,
+--     pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
+--     flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
+--     localised_name={"fluid-name.helium"}
+-- }}
 
-data:extend {{
-    type = "fluid",
-    name = "helium-4",
-    icons = {
-        {
-            icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-            icon_size = 64,
-            tint = {1,0.8,1}
-        },
+-- data:extend {{
+--     type = "fluid",
+--     name = "helium-4",
+--     icons = {
+--         {
+--             icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+--             icon_size = 64,
+--             tint = {1,0.8,1}
+--         },
         
-    },
-    --group = "fluids",
-    subgroup="fluid",
-    base_flow_rate = data.raw.fluid.steam.base_flow_rate,
-    default_temperature = data.raw.fluid["water"].default_temperature,
-    heat_capacity = data.raw.fluid["water"].heat_capacity,
-    base_color = {0.75, 0.40, 0.40},
-    flow_color = {0.80, 0.60, 0.60},
-    max_temperature = data.raw.fluid["water"].max_temperature,
-    pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
-    flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
-    localised_name={"fluid-name.helium-n","4"}
-}}
+--     },
+--     --group = "fluids",
+--     subgroup="fluid",
+--     base_flow_rate = data.raw.fluid.steam.base_flow_rate,
+--     default_temperature = data.raw.fluid["water"].default_temperature,
+--     heat_capacity = data.raw.fluid["water"].heat_capacity,
+--     base_color = {0.75, 0.40, 0.40},
+--     flow_color = {0.80, 0.60, 0.60},
+--     max_temperature = data.raw.fluid["water"].max_temperature,
+--     pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
+--     flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
+--     localised_name={"fluid-name.helium-n","4"}
+-- }}
 
-data:extend {{
-    type = "fluid",
-    name = "helium-3",
-    icons = {
-        {
-            icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-            icon_size = 64,
-            tint = {1,0.6,1}
-        },
+-- data:extend {{
+--     type = "fluid",
+--     name = "helium-3",
+--     icons = {
+--         {
+--             icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+--             icon_size = 64,
+--             tint = {1,0.6,1}
+--         },
         
-    },
-    --group = "fluids",
-    subgroup="fluid",
-    base_flow_rate = data.raw.fluid.steam.base_flow_rate,
-    default_temperature = data.raw.fluid["water"].default_temperature,
-    heat_capacity = data.raw.fluid["water"].heat_capacity,
-    base_color = {0.75, 0.40, 0.40},
-    flow_color = {0.80, 0.60, 0.60},
-    max_temperature = data.raw.fluid["water"].max_temperature,
-    pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
-    flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
-    localised_name={"fluid-name.helium-n","3"}
-}}
+--     },
+--     --group = "fluids",
+--     subgroup="fluid",
+--     base_flow_rate = data.raw.fluid.steam.base_flow_rate,
+--     default_temperature = data.raw.fluid["water"].default_temperature,
+--     heat_capacity = data.raw.fluid["water"].heat_capacity,
+--     base_color = {0.75, 0.40, 0.40},
+--     flow_color = {0.80, 0.60, 0.60},
+--     max_temperature = data.raw.fluid["water"].max_temperature,
+--     pressure_to_speed_ratio = data.raw.fluid["water"].pressure_to_speed_ratio,
+--     flow_to_energy_ratio = data.raw.fluid["water"].flow_to_energy_ratio,
+--     localised_name={"fluid-name.helium-n","3"}
+-- }}

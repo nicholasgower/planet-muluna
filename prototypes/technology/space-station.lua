@@ -864,7 +864,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "biolab","quantum-processor","muluna-helium-enrichment"
+            "biolab","quantum-processor",--"muluna-helium-enrichment"
         },
         icons = {
             {
@@ -878,57 +878,57 @@ data:extend{
         --icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
         --icon_size=256,
     },
-    {
-        type = "technology",
-        name = "muluna-helium-enrichment",
-        --localised_name = {"entity-name.cryolab"},
-        --localised_description = {"entity-description.asteroid-collector"},
-        unit= {
-            count = 500,
-            time = 60,
-            ingredients = --Normally, I would base these costs on vanilla technologies to increase tolerance of other mods, but since this tech is intended to 
-                {
-                    {"automation-science-pack", 1},
-                    {"logistic-science-pack", 1},
-                    {"chemical-science-pack", 1},
-                    {"production-science-pack", 1},
-                    {"utility-science-pack", 1},
-                    {"space-science-pack", 1},
-                    {"metallurgic-science-pack", 1},
-                    {"agricultural-science-pack", 1},
-                    {"electromagnetic-science-pack", 1},
-                    {"cryogenic-science-pack", 1},
-                    {"interstellar-science-pack",1}
-              },
-        },
-        effects = {
-            -- {
-            --     type = "unlock-recipe",
-            --     recipe = "interstellar-science-pack-helium-4"
-            -- },
-            {
-                type = "unlock-recipe",
-                recipe = "helium-separation"
-            },
-            {
-                type = "unlock-recipe",
-                recipe = "kovarex-helium-enrichment"
-            },
-        },
-        prerequisites = {
-            "interstellar-science-pack",
-            "cryogenic-science-pack"
-        },
-        icons = {
-            {
-                icon="__muluna-graphics__/graphics/technology/molecule-noble-gas.png",
-                icon_size=644,
-                tint = {r=0.7,g=0.7,b=1}
-            },
-        }
-        --icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
-        --icon_size=256,
-    },
+    -- {
+    --     type = "technology",
+    --     name = "muluna-helium-enrichment",
+    --     --localised_name = {"entity-name.cryolab"},
+    --     --localised_description = {"entity-description.asteroid-collector"},
+    --     unit= {
+    --         count = 500,
+    --         time = 60,
+    --         ingredients = --Normally, I would base these costs on vanilla technologies to increase tolerance of other mods, but since this tech is intended to 
+    --             {
+    --                 {"automation-science-pack", 1},
+    --                 {"logistic-science-pack", 1},
+    --                 {"chemical-science-pack", 1},
+    --                 {"production-science-pack", 1},
+    --                 {"utility-science-pack", 1},
+    --                 {"space-science-pack", 1},
+    --                 {"metallurgic-science-pack", 1},
+    --                 {"agricultural-science-pack", 1},
+    --                 {"electromagnetic-science-pack", 1},
+    --                 {"cryogenic-science-pack", 1},
+    --                 {"interstellar-science-pack",1}
+    --           },
+    --     },
+    --     effects = {
+    --         -- {
+    --         --     type = "unlock-recipe",
+    --         --     recipe = "interstellar-science-pack-helium-4"
+    --         -- },
+    --         {
+    --             type = "unlock-recipe",
+    --             recipe = "helium-separation"
+    --         },
+    --         {
+    --             type = "unlock-recipe",
+    --             recipe = "kovarex-helium-enrichment"
+    --         },
+    --     },
+    --     prerequisites = {
+    --         "interstellar-science-pack",
+    --         "cryogenic-science-pack"
+    --     },
+    --     icons = {
+    --         {
+    --             icon="__muluna-graphics__/graphics/technology/molecule-noble-gas.png",
+    --             icon_size=644,
+    --             tint = {r=0.7,g=0.7,b=1}
+    --         },
+    --     }
+    --     --icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
+    --     --icon_size=256,
+    -- },
     {
         type = "technology",
         name = "thruster-fuel-productivity",

@@ -696,7 +696,7 @@ for _,lab in pairs(data.raw["lab"]) do
     end
 end
 
-local gases = {"oxygen","hydrogen","carbon-dioxide","helium","helium-4","helium-3","maraxsis-atmosphere"}
+local gases = {"oxygen","hydrogen","carbon-dioxide","maraxsis-atmosphere"}
 
 --Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
 if mods["maraxsis"] then
@@ -830,10 +830,10 @@ PlanetsLib:update
 
 
 
-if settings.startup["muluna-hardcore-require-helium-3-in-fusion-cell"].value == true then
-    table.insert(data.raw["recipe"]["fusion-power-cell"].ingredients, {type = "item", name = "helium-3-barrel", amount = 1})
-    table.insert(data.raw["technology"]["fusion-reactor"].prerequisites, "muluna-helium-enrichment")
-end
+-- if settings.startup["muluna-hardcore-require-helium-3-in-fusion-cell"].value == true then
+--     table.insert(data.raw["recipe"]["fusion-power-cell"].ingredients, {type = "item", name = "helium-3-barrel", amount = 1})
+--     table.insert(data.raw["technology"]["fusion-reactor"].prerequisites, "muluna-helium-enrichment")
+-- end
 
 require("prototypes.technology.interstellar-technologies")
 

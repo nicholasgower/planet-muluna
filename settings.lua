@@ -28,13 +28,13 @@ data:extend{
         default_value = false,
         order = "ac",
       },
-      {
-        type = "bool-setting",
-        name = "muluna-hardcore-require-helium-3-in-fusion-cell",
-        setting_type = "startup",
-        default_value = false,
-        order = "ad",
-      },
+      -- {
+      --   type = "bool-setting",
+      --   name = "muluna-hardcore-require-helium-3-in-fusion-cell",
+      --   setting_type = "startup",
+      --   default_value = false,
+      --   order = "ad",
+      -- },
       {
         type = "bool-setting",
         name = "muluna-hardcore-remove-steam-furnaces",
