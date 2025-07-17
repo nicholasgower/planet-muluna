@@ -13,6 +13,8 @@ buggy.rotation_speed = buggy.rotation_speed * 0.9
 
 buggy.equipment_grid = data.raw["car"]["tank"].equipment_grid
 buggy.allow_remote_driving = true
+buggy.collision_box = {{-0.7*buggy_scale, -1*buggy_scale}, {0.7*buggy_scale, 1*buggy_scale}}
+buggy.selection_box = {{-0.7*buggy_scale, -1*buggy_scale}, {0.7*buggy_scale, 1*buggy_scale}}
 buggy.resistances =
     {
       {
