@@ -1,6 +1,6 @@
 require("api")
 local rro = Muluna.rro
-
+require("prototypes.custom-prototypes.heat-assembling-machine")
 require("wood-gasification.data")
 require("prototypes.tips-and-tricks")
 require("prototypes.planet.planet")
@@ -16,6 +16,7 @@ require("prototypes.tiles.tiles")
 require("prototypes.tiles.artificial-tiles")
 require("prototypes.radiation")
 require("prototypes.entity.oxidized-boiler")
+require("prototypes.entity.vacuum-heating-tower")
 --null change
 require("prototypes.subgroups")
 require("prototypes.lunar-science-pack")

@@ -29,6 +29,7 @@ local rro = Muluna.rro
 local ground_digger = require("scripts.sand-extractor")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
+require("scripts.heat-assembling-machine")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()

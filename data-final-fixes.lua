@@ -243,3 +243,5 @@ if mods["secretas"] then
     hero_sound.sound = "__space-age__/sound/ambient/aquilo/aquilo-3-hero.ogg"
     end
 end
+
+require("prototypes.custom-prototypes.final-fixes.heat-assembling-machine-final-fix")
