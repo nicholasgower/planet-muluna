@@ -193,6 +193,9 @@ end
 if data.raw["spider-vehicle"]["spidertron"] then
 	PlanetsLib.relax_surface_conditions(data.raw["spider-vehicle"]["spidertron"], gravity_condition)
 end
+if data.raw["car"]["muluna-rocket-buggy"] then
+	PlanetsLib.relax_surface_conditions(data.raw["car"]["muluna-rocket-buggy"], gravity_condition)
+end
 
 
 --Recycling recipe fixes

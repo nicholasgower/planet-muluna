@@ -219,6 +219,11 @@ recycling_turbine.category = "crafting"
 recycling_turbine.surface_conditions = nil
 recycling_turbine.factoriopedia_description = nil
 
+local buggy = table.deepcopy(data.raw["recipe"]["car"])
+
+buggy.name = "muluna-rocket-buggy"
+
+buggy.results[1].name = "muluna-rocket-buggy"
 
 
-data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine}
+data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}

@@ -131,5 +131,13 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["item"]["fusion-gen
 
 }
 
+local buggy = util.merge{table.deepcopy(data.raw["item-with-entity-data"]["car"]),
+{
+    name = "muluna-rocket-buggy",
+    place_result = "muluna-rocket-buggy",
+}
 
-data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine}
+}
+
+
+data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
