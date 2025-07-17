@@ -23,6 +23,7 @@ data:extend{{
     type = "item", --Processed either in crusher or in recycler
     name = "muluna-lunar-regolith",
     icon="__muluna-graphics__/graphics/icons/anorthite-chunk.png",
+    icon_size = 64,
     subgroup = "space-material",
     order = "a[metallic]-g[chunk]",
     inventory_move_sound = space_age_item_sounds.rock_inventory_move,
