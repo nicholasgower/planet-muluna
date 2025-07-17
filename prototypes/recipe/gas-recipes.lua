@@ -376,7 +376,7 @@ data:extend{
     },
     {
         type = "recipe",
-        name = "muluna-microcellular-plastic-curing",
+        name = "muluna-microcellular-plastic",
         enabled = false,
         category = "chemistry-or-cryogenics",
         ingredients = {
@@ -462,7 +462,7 @@ data:extend{oxygen_from_oxidizer}
 
 local diffusion = {
         type = "recipe",
-        name = "muluna-microcellular-plastic-diffusion",
+        name = "muluna-diffused-plastic",
         enabled = false,
         category = "chemistry-or-cryogenics",
         ingredients = {
