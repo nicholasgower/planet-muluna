@@ -428,7 +428,7 @@ data:extend{
             -- },
         },
         prerequisites = {
-            "metallic-asteroid-crushing"
+            "planet-discovery-muluna"
         },
         icons = {
             {
@@ -1198,12 +1198,12 @@ data:extend{
         },
         prerequisites = {
             "kovarex-enrichment-process",
-            "muluna-anorthite-processing",
+            --"muluna-anorthite-processing",
             "asteroid-collector"
         },
         effects = {
-            {type = "unlock-recipe", recipe = "muluna-microcellular-plastic-diffusion"},
-            {type = "unlock-recipe", recipe = "muluna-microcellular-plastic-curing"},
+            {type = "unlock-recipe", recipe = "muluna-diffused-plastic"},
+            {type = "unlock-recipe", recipe = "muluna-microcellular-plastic"},
         }
     },
     {
