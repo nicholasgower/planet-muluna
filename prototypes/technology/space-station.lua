@@ -107,6 +107,25 @@ local function crushing_technology_icon(item_sprite,item_sprite_size)
     }
 end
 
+local function digging_technology_icon(item_sprite,item_sprite_size)
+    if not item_sprite_size then item_sprite_size = 64 end
+
+    return  {
+        {
+            icon = data.raw["technology"]["electric-mining-drill"].icon,
+            icon_size = data.raw["technology"]["electric-mining-drill"].icon_size,
+        },  
+        {
+            icon = item_sprite,
+            icon_size=item_sprite_size,
+            --scale=0.3,
+            shift = {45,45},
+            scale=0.75,
+        },
+        
+    }
+end
+
 local function greenhouse_technology_icon(item_sprite,item_sprite_size)
     if not item_sprite_size then item_sprite_size = 64 end
 
@@ -193,6 +212,34 @@ data:extend{
         icon = data.raw["item"]["crusher"].icon,
         icon_size=64,
         }},16)
+    },
+    {
+        type = "technology",
+        name = "muluna-rocket-buggy",
+        localised_name = {"entity-name.muluna-rocket-buggy"},
+        localised_description = {"entity-description.muluna-rocket-buggy"},
+        unit= {
+            count = 250,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"military-science-pack", 1},
+                {"space-science-pack", 1},
+            }
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-rocket-buggy"
+            }
+        },
+        prerequisites = {
+            "space-science-pack", "automobilism", "rocketry"
+        },
+        icon = data.raw["technology"]["automobilism"].icon,
+        icon_size = data.raw["technology"]["automobilism"].icon_size
     },
     -- {
     --     type = "technology",
@@ -287,7 +334,7 @@ data:extend{
         --         icon_size = 968,
         --     },  
         -- }
-        icons = crushing_technology_icon(data.raw["item"]["metallic-asteroid-chunk"].icon,data.raw["item"]["metallic-asteroid-chunk"].icon_size)
+        icons = digging_technology_icon(data.raw["item"]["muluna-lunar-regolith"].icon,data.raw["item"]["muluna-lunar-regolith"].icon_size)
     },
     {
         type = "technology",
