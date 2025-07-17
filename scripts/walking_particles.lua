@@ -22,8 +22,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
 
 
 
-    local character_running_speed = 0.15
-    local half_character_running_speed = 0.14
+ 
 
 
     local step_process_tick_rate = 6
@@ -73,12 +72,12 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
             armor_inventory = player.get_inventory(defines.inventory.character_armor)
         end
         --if not armor_inventory or armor_inventory.is_empty() then return end
-        return armor_inventory[1]
+        return (armor_inventory or {{valid_for_read = false}})[1] 
     end
 
     Muluna.events.on_nth_tick(step_process_tick_rate, function(event)
         --local update_tick_rate = event.tick % 180 == true
-        if game.surfaces.muluna then
+        if game.surfaces.muluna then --If Muluna exists
             for i,player in pairs(storage.players_on_muluna) do
                 local character = player.character
                 local surface = player.surface
@@ -92,11 +91,11 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                     
                     local player_armor = get_armor(player)
                     local provides_flight = false
-                    if player_armor then 
+                    if player_armor.valid_for_read then 
                         provides_flight=prototypes.get_item_filtered({{filter = "name", name = player_armor.name}})[player_armor.name].provides_flight
                     end
-                    game.print(player_armor.name)
-                    game.print(provides_flight)
+                    --game.print(player_armor.name)
+                    --game.print(provides_flight)
                    
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
