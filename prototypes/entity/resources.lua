@@ -290,6 +290,7 @@ carbon_ore.autoplace.control = "carbonic-asteroid-chunk"
 ice_ore.autoplace.control = "oxide-asteroid-chunk"
 helium.autoplace.control = "helium"
 
+carbon_ore.map_color = {15,15,15}
 --Autoplace settings
 
 metal_ore.autoplace = resource_autoplace.resource_autoplace_settings
@@ -301,7 +302,7 @@ metal_ore.autoplace = resource_autoplace.resource_autoplace_settings
       regular_rq_factor_multiplier = 1*1.10,
       starting_rq_factor_multiplier = 1.5,
       candidate_spot_count = 22, -- To match 0.17.50 placement
-      richness_distance_factor = 0, --Added to eliminate influence of distance on richness
+      --richness_distance_factor = 0, --Added to eliminate influence of distance on richness
       --distance_add = 400,
       richness_post_multiplier = 0.1,
     }
@@ -315,7 +316,7 @@ carbon_ore.autoplace = resource_autoplace.resource_autoplace_settings
       --size_multiplier = 4,
       regular_rq_factor_multiplier = 1*1.0,
       starting_rq_factor_multiplier = 1.1,
-      richness_distance_factor = 0,
+      --richness_distance_factor = 0,
       --distance_add = 400,
       richness_post_multiplier = 0.1,
     }
@@ -329,7 +330,7 @@ ice_ore.autoplace = resource_autoplace.resource_autoplace_settings
       regular_rq_factor_multiplier = 1*1.10,
       starting_rq_factor_multiplier = 1.2,
       candidate_spot_count = 22, -- To match 0.17.50 placement
-      richness_distance_factor = 0,
+      --richness_distance_factor = 0,
       --distance_add = 400,
       richness_post_multiplier = 0.1,
     }
@@ -346,7 +347,7 @@ helium.autoplace = resource_autoplace.resource_autoplace_settings
       additional_richness = 220000, -- this increases the total everywhere, so base_density needs to be decreased to compensate
       has_starting_area_placement = false,
       regular_rq_factor_multiplier = 1,
-      richness_distance_factor = 0,
+      --richness_distance_factor = 0,
     }
 
 --local anorthite=table.deepcopy(data.raw["resource"]["calcite"])
@@ -363,12 +364,12 @@ local anorthite=resource(
     --factoriopedia_simulation = simulations.factoriopedia_iron_ore,
   },
   {
-    base_density = 1,
+    base_density = 10,
     regular_rq_factor_multiplier = 1.10,
     starting_rq_factor_multiplier = 1.5,
     candidate_spot_count = 52, -- To match 0.17.50 placement
-    richness_distance_factor = 0,
-    distance_add = 1000,
+    --richness_distance_factor = 0,
+    --distance_add = 1000,
   }
 )
 
