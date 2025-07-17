@@ -228,10 +228,10 @@ if data.raw["container"]["bottomless-chest"] then --If version >= 2.0.57
     end
 end
 
-if mods["secretas"] then
-    local hero_sound = data.raw["ambient-sound"]["frozeta-4-hero"]
+-- if mods["secretas"] then
+--     local hero_sound = data.raw["ambient-sound"]["frozeta-4-hero"]
 
-    if helpers.compare_versions(helpers.game_version,"2.0.59") > -1 then
-    hero_sound.sound = "__space-age__/sound/ambient/aquilo/aquilo-3-hero.ogg"
-    end
-end
+--     if helpers.compare_versions(helpers.game_version,"2.0.59") > -1 then
+--     hero_sound.sound = "__space-age__/sound/ambient/aquilo/aquilo-3-hero.ogg"
+--     end
+-- end
