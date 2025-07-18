@@ -10,6 +10,11 @@ space_boiler.localised_name = {"entity-name.muluna-advanced-boiler"}
 space_boiler.order = "b[steam-power]-aa[muluna-advanced-boiler]"
 space_boiler.weight = 40 * kg
 
+local vacuum_heating_tower = table.deepcopy(space_boiler)
+vacuum_heating_tower.name = "muluna-vacuum-heating-tower"
+vacuum_heating_tower.place_result = "muluna-vacuum-heating-tower"
+space_boiler.localised_name = {"entity-name.muluna-vacuum-heating-tower"}
+vacuum_heating_tower.weight = 100 * kg
 
 local crusher_2 = table.deepcopy(data.raw["item"]["crusher"])
 
@@ -140,4 +145,4 @@ local buggy = util.merge{table.deepcopy(data.raw["item-with-entity-data"]["car"]
 }
 
 
-data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
+data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
