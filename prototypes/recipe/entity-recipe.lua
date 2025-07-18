@@ -10,7 +10,7 @@ space_boiler.ingredients = {
     {type = "item", name = "pipe", amount = 4},
     {type = "item", name = "steel-plate", amount = 8},
 }
-space_boiler.energy_required = 10
+space_boiler.energy_required = 5
 
 
 space_boiler.results = {{type = "item",name = "muluna-advanced-boiler",amount = 1}}
