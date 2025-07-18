@@ -2,6 +2,11 @@ local rro = Muluna.rro
 
 local heat_assembling_machines = Muluna.constants.heat_assembling_machines
 
+local function move_entity_to_bottom_layer(entity)
+
+    entity.rotate{reverse=false}
+    entity.rotate{reverse=true}
+end
 
 Muluna.events.on_event(defines.events.on_built_entity, function(event)
     
@@ -29,7 +34,9 @@ Muluna.events.on_event(defines.events.on_built_entity, function(event)
             cause = entity,
             --snap_to_grid = true,
         }
-        rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
+        move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
+        reactor.fluidbox.add_linked_connection(1,entity,1) 
+        --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.heat_assembling_machines then storage.heat_assembling_machines = {} end
         table.insert(storage.heat_assembling_machines,{["assembling-machine"]=entity,["reactor"] = reactor})
     end

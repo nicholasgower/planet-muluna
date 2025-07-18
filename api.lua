@@ -5,7 +5,7 @@ Muluna.stage = Muluna.get_stage()
 Muluna.rro = require("lib.remove-replace-object")
 Muluna.img = require("lib.images")
 Muluna.vectors=require("lib.vectors")
-
+Muluna.multiply_energy = require("lib.energy-multiply").multiply_energy
 
 
 

@@ -4,10 +4,7 @@ local Public = {}
 
 function Public.multiply_energy(value,factor) 
     local val,suffix=get_energy_value(value)
-    return val*factor .. suffix
-
-
-    
+    return val*factor .. suffix  
 end
 
 

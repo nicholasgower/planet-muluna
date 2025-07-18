@@ -16,7 +16,7 @@ local transferred_fields = {
     "heat_connection_patches_disconnected",
     "meltdown_action",
     "neighbour_bonus",
-    "consumption",
+    --"consumption",
 }
 
 local copied_fields = {
@@ -34,6 +34,7 @@ if data.raw["heat-assembling-machine"] then
             type = "reactor",
             name = "heat-assembling-machine-" .. machine.name .. "-reactor",
         }
+    
 
         for _,field in pairs(transferred_fields) do
             move_field(assembler,reactor,field)
@@ -43,8 +44,8 @@ if data.raw["heat-assembling-machine"] then
             reactor[field] = assembler[field]
 
         end
-        reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,-1)
-            
+        reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,0.1)
+        assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.1)
         reactor.energy_source = {
             type = "void",
             -- fluid_box = {
@@ -62,13 +63,17 @@ if data.raw["heat-assembling-machine"] then
                     render_no_power_icon = false,
                     render_no_network_icon = false,
                 }
-                reactor.energy_source.fluid_box.production_type = "input"
-                reactor.energy_source.fluid_box.pipe_connections[1].flow_direction = "input"
-                reactor.energy_source.fluid_box.pipe_connections[1].position[2] = reactor.energy_source.fluid_box.pipe_connections[1].position[2] - 1
-                reactor.energy_source.fluid_box.pipe_connections[1].direction = defines.direction.south
+                new_fluid_box =  reactor.energy_source.fluid_box
+                new_fluid_box.production_type = "input"
+                --new_fluid_box.linked_connection_id = 1
+                new_fluid_box.pipe_connections[1].flow_direction = "input"
+                new_fluid_box.pipe_connections[1].position[2] = reactor.energy_source.fluid_box.pipe_connections[1].position[2] - 1
+                new_fluid_box.pipe_connections[1].direction = defines.direction.south
                 
             end
         end
+        reactor.consumption = Muluna.multiply_energy(machine.energy_usage,machine.effectivity)
+        
         data:extend{assembler,reactor}
         table.insert(Muluna.constants.heat_assembling_machines,
             {

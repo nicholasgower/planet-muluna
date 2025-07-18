@@ -1,13 +1,90 @@
+local recipe_category = "muluna-vacuum-heating-tower"
+
+data:extend{
+    {
+        type="recipe-category",
+        name=recipe_category,
+    },
+}
+
+local steam_proxy = table.deepcopy(data.raw["fluid"]["steam"])
+
+steam_proxy.name = "muluna-heat"
+steam_proxy.icons = {
+    {
+        icon = steam_proxy.icon,
+        icon_size = steam_proxy.icon_size,
+        tint = {255,120,120},
+       
+    }
+}
+steam_proxy.heat_capacity = "0.2kJ"
+steam_proxy.custom_tooltip_fields = {
+    {
+      name = {"description.steam-equivalent"},
+      value = tostring(util.parse_energy(steam_proxy.heat_capacity)/200)
+    }
+  }
+
+local temperature = 500
+local temperature_delta = temperature - steam_proxy.default_temperature --15
+local temperature_delta_cold = 150
+local energy_required = 4
+local recipe_heat_content = 4e6 --1 MJ
+local heat_capacity = util.parse_energy(steam_proxy.heat_capacity) --200
+local heat_amount = recipe_heat_content / (temperature_delta*heat_capacity)
+local oxygen_consumed = (1.5/2.5)*(recipe_heat_content / (temperature_delta_cold*heat_capacity))
+local recipe = {
+        type = "recipe",
+        name = "muluna-vacuum-heating",
+        category = recipe_category,
+        energy_required = energy_required,
+        ingredients = {
+            {
+                type = "fluid",
+                name = "oxygen",
+                amount = oxygen_consumed,
+            }
+        },
+        results = {
+            {
+                type = "fluid",
+                name = "muluna-heat",
+                amount = heat_amount,
+                temperature = temperature,
+            },
+            {
+                type = "fluid",
+                name = "carbon-dioxide",
+                amount = oxygen_consumed,
+                temperature = temperature,
+            }
+        },
+        main_product = "muluna-heat",
+    }
+
+data:extend{steam_proxy,recipe}
+
+
 local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-advanced-boiler"])
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
 heating_boiler.name = "muluna-vacuum-heating-tower"
-
+heating_boiler.minable.result = "muluna-vacuum-heating-tower"
 heating_boiler = util.merge{heating_boiler,
     {
         type = "heat-assembling-machine",
-        heat_buffer = heating_tower.heat_buffer,
-        consumption = "40MW",
+        --heat_buffer = heating_tower.heat_buffer,
+        crafting_categories = {recipe_category},
+        energy_usage = "16MW",
+        effectivity = 2.5, --Increase to 300% efficiency to incentivise using these on other planets? A small reward for a more complex power plant.
+        crafting_speed = 40,
+        custom_tooltip_fields = {
+            {
+            name = {"description.effectivity"},
+            value = "250%"
+            }
+        },
         heat_buffer =
         {
             max_temperature = 1000,
@@ -17,21 +94,21 @@ heating_boiler = util.merge{heating_boiler,
             connections =
             {
                 {
-                position = {0, -1.5},
+                position = {0, -1},
                 direction = defines.direction.north
                 },
-                -- {
-                -- position = {1.5, 0},
-                -- direction = defines.direction.east
-                -- },
-                -- {
-                -- position = {0, 1.5},
-                -- direction = defines.direction.south
-                -- },
-                -- {
-                -- position = {-1.5, 0},
-                -- direction = defines.direction.west
-                -- },
+                {
+                position = {1, 0},
+                direction = defines.direction.east
+                },
+                {
+                position = {0, 1},
+                direction = defines.direction.south
+                },
+                {
+                position = {-1, 0},
+                direction = defines.direction.west
+                },
             },
 
             heat_picture = apply_heat_pipe_glow(
@@ -102,7 +179,7 @@ heating_boiler = util.merge{heating_boiler,
                 --pipe_covers = pipecoverspictures(),
                 pipe_connections =
                 {
-                    {flow_direction = "output", direction = defines.direction.north, position = {0, 0.0}},
+                    {flow_direction = "output", direction = defines.direction.north, position = {0, 0.0},connection_type = "linked",linked_connection_id=1},
                 },
                 production_type = "heat-output",
                 --filter = "steam"
