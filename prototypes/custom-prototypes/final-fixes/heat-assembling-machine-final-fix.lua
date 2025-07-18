@@ -16,6 +16,8 @@ local transferred_fields = {
     "heat_connection_patches_disconnected",
     "meltdown_action",
     "neighbour_bonus",
+    "picture",
+    "working-light-picture",
     --"consumption",
 }
 

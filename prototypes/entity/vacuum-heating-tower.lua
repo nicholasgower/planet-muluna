@@ -1,3 +1,46 @@
+local function vacuumheatingtowerpipepictures()
+  return
+  {
+    north =
+    {
+      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
+      priority = "extra-high",
+      width = 71,
+      height = 38,
+      shift = util.by_pixel(2.25, 13.5),
+      scale = 0.000000000001
+    },
+    east =
+    {
+      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
+      priority = "extra-high",
+      width = 42,
+      height = 76,
+      shift = util.by_pixel(-24.5, 1),
+      scale = 0.5
+    },
+    south =
+    {
+      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
+      priority = "extra-high",
+      width = 88,
+      height = 61,
+      shift = util.by_pixel(0, -31.25),
+      scale = 0.5
+    },
+    west =
+    {
+      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
+      priority = "extra-high",
+      width = 39,
+      height = 73,
+      shift = util.by_pixel(25.75, 1.25),
+      scale = 0.5
+    }
+  }
+end
+
+
 local recipe_category = "muluna-vacuum-heating-tower"
 
 data:extend{
@@ -69,6 +112,7 @@ data:extend{steam_proxy,recipe}
 local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-advanced-boiler"])
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
+heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"
 heating_boiler.minable.result = "muluna-vacuum-heating-tower"
 heating_boiler = util.merge{heating_boiler,
@@ -113,9 +157,42 @@ heating_boiler = util.merge{heating_boiler,
 
             heat_picture = apply_heat_pipe_glow(
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-glow", {
-                scale = 0.5,
+                scale = 0.65,
                 blend_mode = "additive"
             }))
+        },
+        picture =
+        {
+        layers =
+        {
+            util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-main", {
+            scale = 0.65
+            }),
+            util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-shadow", {
+            scale = 0.65,
+            draw_as_shadow = true
+            })
+        }
+        },
+
+        working_light_picture =
+        {
+        layers = {
+            util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-working-fire", {
+            frame_count = 24,
+            scale = 0.65,
+            blend_mode = "additive",
+            draw_as_glow = true,
+            animation_speed = 0.333
+            }),
+            util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-working-light", {
+            frame_count = 1,
+            repeat_count = 24,
+            scale = 0.65,
+            blend_mode = "additive",
+            draw_as_glow = true
+            })
+        }
         },
 
         connection_patches_connected =
@@ -151,25 +228,18 @@ heating_boiler = util.merge{heating_boiler,
                 variation_count = 4
             }))
         },
-        fluid_boxes = {
+        
+    }
+}
+heating_boiler.fluid_boxes = {
             {
                 volume = 200,
                 pipe_covers = pipecoverspictures(),
-                pipe_connections =
-                {
-                {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 0}},
-                {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, 0}},
-                },
-                production_type = "input",
-                --filter = "water"
-            },
-            {
-                volume = 200,
-                pipe_covers = pipecoverspictures(),
+                pipe_picture = vacuumheatingtowerpipepictures(),
                 pipe_connections =
                 {
                 {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 1}},
-                {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, 1}}
+                {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, 1}},
                 },
                 production_type = "input",
                 --filter = "water"
@@ -187,17 +257,28 @@ heating_boiler = util.merge{heating_boiler,
             {
                 volume = 200,
                 pipe_covers = pipecoverspictures(),
+                pipe_picture = vacuumheatingtowerpipepictures(),
                 pipe_connections =
                 {
-                    {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
-                    {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, -1}}
+                {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
+                {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, -1}}
                 },
                 production_type = "output",
-                --filter = "steam"
+                --filter = "water"
             },
-    },
+            -- {
+            --     volume = 200,
+            --     pipe_covers = pipecoverspictures(),
+            --     pipe_picture = vacuumheatingtowerpipepictures(),
+            --     pipe_connections =
+            --     {
+            --         {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
+            --         {flow_direction = "input-output", direction = defines.direction.east, position = {1.0, -1}}
+            --     },
+            --     production_type = "output",
+            --     --filter = "steam"
+            -- },
     }
-}
 
 -- heating_boiler.type = "heat-assembling-machine"
 data:extend{heating_boiler}

@@ -19,7 +19,7 @@ local vacuum_heating_tower = table.deepcopy(space_boiler)
 vacuum_heating_tower.name = "muluna-vacuum-heating-tower"
 vacuum_heating_tower.results[1].name = "muluna-vacuum-heating-tower"
 vacuum_heating_tower.ingredients = {
-    {
+    
         {
             type = "item",
             name = "heating-tower",
@@ -35,10 +35,10 @@ vacuum_heating_tower.ingredients = {
             name = "refined-concrete",
             amount = 30,
         }
-    }
+    
 }
 vacuum_heating_tower.energy_required = 10
-vacuum_heating_tower.enabled = true
+--vacuum_heating_tower.enabled = true
 
 local crusher_2 = table.deepcopy(data.raw["recipe"]["crusher"])
 
@@ -251,4 +251,4 @@ buggy.name = "muluna-rocket-buggy"
 buggy.results[1].name = "muluna-rocket-buggy"
 
 
-data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
+data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
