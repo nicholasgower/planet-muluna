@@ -112,6 +112,9 @@ data:extend{steam_proxy,recipe}
 local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-advanced-boiler"])
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
+local energy_usage_MW = 80/3
+local effectivity = 3
+
 heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"
 heating_boiler.minable.result = "muluna-vacuum-heating-tower"
@@ -120,13 +123,13 @@ heating_boiler = util.merge{heating_boiler,
         type = "heat-assembling-machine",
         --heat_buffer = heating_tower.heat_buffer,
         crafting_categories = {recipe_category},
-        energy_usage = "16MW",
-        effectivity = 2.5, --Increase to 300% efficiency to incentivise using these on other planets? A small reward for a more complex power plant.
-        crafting_speed = 40,
+        energy_usage = tostring(energy_usage_MW) .. "MW",
+        effectivity = effectivity, --Increase to 300% efficiency to incentivise using these on other planets? A small reward for a more complex power plant.
+        crafting_speed = energy_usage_MW*effectivity,
         custom_tooltip_fields = {
             {
             name = {"description.effectivity"},
-            value = "250%"
+            value = tostring(effectivity*100) .."%"
             }
         },
         heat_buffer =
