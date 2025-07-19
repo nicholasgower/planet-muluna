@@ -114,6 +114,12 @@ function Public.dual_icon(item_1,item_2,item_3)
                 }
         end
     end
+    for _,sub_icon in pairs(icon) do
+        sub_icon.scale = sub_icon.scale / 1
+        if not sub_icon.shift then sub_icon.shift = {0,0} end
+        sub_icon.shift[1] = (sub_icon.shift[1]-5) / 1 
+        sub_icon.shift[2] = (sub_icon.shift[2]+5) / 1 
+    end
     
     
     
