@@ -56,7 +56,8 @@ if settings.startup["enable-nav-beacon"].value == true then
             --max_distance_of_sector_revealed = 1,
             --max_distance_of_nearby_sector_revealed = 15,
             energy_per_nearby_scan = "1kJ",
-            localised_description = { "entity-description.muluna-satellite-radar"},
+            --localised_description = { "entity-description.muluna-satellite-radar"},
+            localised_description = { "item-description.muluna-satellite-radar"},
             energy_source =
             {
                 type = "electric",
@@ -170,7 +171,8 @@ if settings.startup["enable-nav-beacon"].value == true then
         {
             name = "muluna-satellite-radar",
             localised_name = {"entity-name.muluna-satellite-radar"},
-            localised_description={"entity-description.muluna-satellite-radar"},
+            localised_description = { "item-description.muluna-satellite-radar"},
+            --localised_description={"entity-description.muluna-satellite-radar"},
             effects =
             {
                 {
