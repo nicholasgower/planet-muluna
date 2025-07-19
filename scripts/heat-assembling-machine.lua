@@ -38,12 +38,13 @@ Muluna.events.on_event(defines.events.on_built_entity, function(event)
         reactor.fluidbox.add_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.heat_assembling_machines then storage.heat_assembling_machines = {} end
-        table.insert(storage.heat_assembling_machines,{["assembling-machine"]=entity,["reactor"] = reactor})
+        storage.heat_assembling_machines[entity.unit_number] = {["assembling-machine"]=entity,["reactor"] = reactor}
     end
 
 
 end
 )
+
 
 Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_entity_died}, function(event)
 
@@ -63,6 +64,10 @@ Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_
     if is_heat_assembling_machine then
         local reactor = nil
         if storage.heat_assembling_machines then
+            if storage.heat_assembling_machines[entity.unit_number] then
+                reactor = storage.heat_assembling_machines[entity.unit_number]["reactor"]
+                storage.heat_assembling_machines[entity.unit_number] = nil
+            end
             for i,registered_machine in pairs(storage.heat_assembling_machines) do
                 if registered_machine["assembling-machine"] == entity then
                     reactor = registered_machine["reactor"]

@@ -69,6 +69,8 @@ steam_proxy.custom_tooltip_fields = {
     }
   }
 
+local effectivity = 3
+local energy_usage_MW = 72/effectivity   
 local temperature = 500
 local temperature_delta = temperature - steam_proxy.default_temperature --15
 local temperature_delta_cold = 150
@@ -76,7 +78,7 @@ local energy_required = 4
 local recipe_heat_content = 4e6 --1 MJ
 local heat_capacity = util.parse_energy(steam_proxy.heat_capacity) --200
 local heat_amount = recipe_heat_content / (temperature_delta*heat_capacity)
-local oxygen_consumed = (1.5/2.5)*(recipe_heat_content / (temperature_delta_cold*heat_capacity))
+local oxygen_consumed = (1.5/3.0)*(recipe_heat_content / (temperature_delta_cold*heat_capacity))
 local recipe = {
         type = "recipe",
         name = "muluna-vacuum-heating",
@@ -113,8 +115,7 @@ local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-adv
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
 
-local effectivity = 3
-local energy_usage_MW = 72/effectivity 
+
 
 heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"
