@@ -46,8 +46,9 @@ if data.raw["heat-assembling-machine"] then
             reactor[field] = assembler[field]
 
         end
-        reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,0.1)
-        assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.1)
+        reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,0.0)
+        assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.2)
+        assembler.quality_indicator_shift = {-0.2,0.2}
         reactor.energy_source = {
             type = "void",
             -- fluid_box = {

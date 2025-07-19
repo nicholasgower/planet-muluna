@@ -8,7 +8,7 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=true}
 end
 
-Muluna.events.on_event(defines.events.on_built_entity, function(event)
+Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity}, function(event)
     
     local entity = event.entity
 
@@ -46,7 +46,7 @@ end
 )
 
 
-Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_entity_died}, function(event)
+Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_entity_died,defines.events.on_robot_mined_entity}, function(event)
 
     local entity = event.entity
     --game.print(entity.name)
@@ -98,6 +98,38 @@ Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_
     end
 
 end)
+
+local function register_for_deconstruction_events(entity_name,entity_storage) --Assumes that upgrades are done to upgrade quality, not entity type
+
+    Muluna.events.on_event({defines.events.on_marked_for_deconstruction,defines.events.on_cancelled_deconstruction}, function(event)
+        local entity = event.entity
+        game.print(entity)
+        local player = game.players[event.player_index]
+        local force = game.players[event.player_index].force
+        if entity.name == entity_name then
+            if entity_storage then
+                game.print(entity_storage)
+                local entity_group = entity_storage[entity.unit_number]
+                for _,sub_entity in pairs(entity_group) do
+                    game.print(sub_entity)
+                    if sub_entity ~= entity then
+                        if event.name == defines.events.on_marked_for_deconstruction then
+                            sub_entity.order_deconstruction(force,player,1)
+                        elseif event.name == defines.events.on_cancelled_deconstruction then
+                            sub_entity.cancel_deconstruction(force,player)
+                        end
+
+                    end
+                end
+            end
+        end
+    end)
+
+end
+-- for _,entity in pairs(heat_assembling_machines) do
+--     register_for_deconstruction_events(entity["assembling-machine"],storage.heat_assembling_machines)
+-- end
+
 
 -- Muluna.events.on_event(defines.events.on_player_toggled_alt_mode, function()
 --     if storage.heat_assembling_machines then

@@ -23,7 +23,7 @@ vacuum_heating_tower.ingredients = {
         {
             type = "item",
             name = "heating-tower",
-            amount = 2,
+            amount = 3,
         },
         {
             type = "item",
@@ -34,6 +34,11 @@ vacuum_heating_tower.ingredients = {
             type = "item",
             name = "refined-concrete",
             amount = 30,
+        },
+        {
+            type = "item",
+            name = "heat-pipe",
+            amount = 10
         }
     
 }
