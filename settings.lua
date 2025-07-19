@@ -58,11 +58,19 @@ data:extend{
       },
       {
         type = "bool-setting",
-        name = "muluna-easy-wood-gasification-productivity",
+        name = "muluna-easy-vanilla-advanced-thruster-fuel-costs",
         setting_type = "startup",
         default_value = false,
         order = "bb",
       },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-wood-gasification-productivity",
+        setting_type = "startup",
+        default_value = false,
+        order = "bc",
+      },
+      
       {
         type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",

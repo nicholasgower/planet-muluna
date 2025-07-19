@@ -889,8 +889,10 @@ end
 
 -- data.raw["recipe"]["wood-greenhouse"].enabled = false
 
-data.raw["recipe"]["advanced-thruster-fuel"].results[1].amount = 1000
-data.raw["recipe"]["advanced-thruster-oxidizer"].results[1].amount = 1000
+if settings.startup["muluna-easy-vanilla-advanced-thruster-fuel-costs"].value == false then
+    data.raw["recipe"]["advanced-thruster-fuel"].results[1].amount = 1000
+    data.raw["recipe"]["advanced-thruster-oxidizer"].results[1].amount = 1000
+end
 
 data.raw["recipe"]["wood-processing"].surface_conditions = nil
 data.raw["recipe"]["wood-processing"].category = "crafting"
