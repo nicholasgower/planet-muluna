@@ -39,6 +39,19 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     extractor.allowed_effects = {"productivity", "consumption", "speed", "pollution", "quality"}
     extractor.resource_drain_rate_percent = nil
     extractor.name = extractor.name .. "-ground-digger"
+    extractor.icons = {
+        {
+            icon = extractor.icon,
+            icon_size = extractor.icon_size,
+        },
+        {
+                icon = data.raw["item"]["muluna-lunar-regolith"].icon,
+                icon_size = data.raw["item"]["muluna-lunar-regolith"].icon_size,
+                scale = 0.25,
+                shift = {10,-10},
+                draw_background = true,
+        }
+    }
     data:extend {extractor}
 
     digger.width = digger.size -- To keep things simple, assume only square mining drills
