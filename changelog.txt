@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.9
+Date: 2025-07-18
+  Locale:
+    - Increased clarity of description of greenhouse item to indicate that seeding the greenhouse must be done in an assembling machine.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.8
 Date: 2025-07-17
   Bugfixes:
