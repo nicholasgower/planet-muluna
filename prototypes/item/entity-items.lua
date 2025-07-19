@@ -13,7 +13,22 @@ space_boiler.weight = 40 * kg
 local vacuum_heating_tower = table.deepcopy(space_boiler)
 vacuum_heating_tower.name = "muluna-vacuum-heating-tower"
 vacuum_heating_tower.place_result = "muluna-vacuum-heating-tower"
-space_boiler.localised_name = {"entity-name.muluna-vacuum-heating-tower"}
+vacuum_heating_tower.subgroup = "environmental-protection"
+vacuum_heating_tower.icons = {
+            {
+                icon = data.raw["item"]["heating-tower"].icon,
+                icon_size = 64,
+            },
+            {
+                icon = data.raw["fluid"]["oxygen"].icon,
+                icon_size = data.raw["fluid"]["oxygen"].icon_size,
+                scale = 0.25,
+                shift = {10,-10},
+                draw_background = true,
+            }
+        }
+vacuum_heating_tower.localised_name = {"entity-name.muluna-vacuum-heating-tower"}
+vacuum_heating_tower.order = "d[muluna-vacuum-heating-tower]"
 vacuum_heating_tower.weight = 100 * kg
 
 local crusher_2 = table.deepcopy(data.raw["item"]["crusher"])

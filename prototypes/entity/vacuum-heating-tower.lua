@@ -112,8 +112,9 @@ data:extend{steam_proxy,recipe}
 local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-advanced-boiler"])
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
-local energy_usage_MW = 80/3
+
 local effectivity = 3
+local energy_usage_MW = 72/effectivity 
 
 heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"

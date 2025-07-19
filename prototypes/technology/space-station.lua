@@ -1243,6 +1243,42 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-vacuum-heating-tower",
+        icon = data.raw["technology"]["heating-tower"].icon,
+        icon_size = data.raw["technology"]["heating-tower"].icon_size,
+        localised_name = {"entity-name.muluna-vacuum-heating-tower"},
+        unit = {
+            count = 2000,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                --{"utility-science-pack", 1},
+                {"space-science-pack", 1},
+                {"interstellar-science-pack",1},
+                {"agricultural-science-pack",1},
+                {"metallurgic-science-pack",1},
+            }
+        },
+        prerequisites = {
+            "interstellar-science-pack","agricultural-science-pack","heating-tower","metallurgic-science-pack"
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe= "muluna-vacuum-heating-tower"
+            },
+            {
+                type = "unlock-recipe",
+                recipe= "muluna-vacuum-heating"
+            },
+           
+        }
+    },
+    {
+        type = "technology",
         name = "water-recycling-productivity",
         icons = technology_icon_constant_recipe_productivity("__muluna-graphics__/graphics/technology/filtration.png",1024),
         icon = data.raw["technology"]["space-platform"].icon,
