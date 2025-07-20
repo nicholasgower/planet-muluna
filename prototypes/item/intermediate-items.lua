@@ -6,12 +6,12 @@ local iron_ore=data.raw["item"]["iron-ore"]
 data:extend{{
     type="item",
     name="alumina",
-    icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
+    icon = "__muluna-graphics__/graphics/icons/crushed-alumina.png",
     pictures =
     {
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",scale = 0.5, mipmap_count = 4},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",scale = 0.5, mipmap_count = 4},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-3.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina-1.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina-2.png",scale = 0.5, mipmap_count = 4},
     },
     stack_size=iron_ore.stack_size,
     order="a[alumina]",
@@ -22,7 +22,7 @@ data:extend{{
 {
     type="item",
     name="alumina-crushed",
-    icon = "__muluna-graphics__/graphics/icons/crushed-alumina.png",
+    icon = "__muluna-graphics__/graphics/icons/alumina-new.png",
     pictures =
     {
         {size = 64, filename = "__muluna-graphics__/graphics/icons/alumina-new.png",scale = 0.5, mipmap_count = 4},
