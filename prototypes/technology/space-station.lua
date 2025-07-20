@@ -509,6 +509,19 @@ data:extend{
         type = "technology",
         name = "muluna-oxygen",
         prerequisites = {"metallic-asteroid-crushing","oxide-asteroid-crushing"},
+        icons = {
+            {
+            icon = "__muluna-graphics__/graphics/technology/molecule-oxygen.png",
+            icon_size = 256,
+            },  
+            {
+                icon = data.raw["fluid"]["thruster-oxidizer"].icon,
+                icon_size=data.raw["fluid"]["thruster-oxidizer"].icon_size,
+                --scale=0.3,
+                shift = {45,-45},
+                scale=0.75,
+            },
+        },
         research_trigger = {
             type = "craft-item",
             item = "ice",
@@ -653,6 +666,19 @@ data:extend{
     {
         type = "technology",
         name = "muluna-gas-venting",
+        icons = {
+            {
+            icon = "__muluna-graphics__/graphics/technology/molecule-carbon-dioxide.png",
+            icon_size = 256,
+            },  
+            -- {
+            --     icon = data.raw["fluid"]["thruster-oxidizer"].icon,
+            --     icon_size=data.raw["fluid"]["thruster-oxidizer"].icon_size,
+            --     --scale=0.3,
+            --     shift = {45,-45},
+            --     scale=0.75,
+            -- },
+        },
         prerequisites = {"muluna-wood-cultivation"},
         research_trigger = {
             type = "craft-item",
