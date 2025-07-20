@@ -464,7 +464,9 @@ if settings.startup["muluna-new-interstellar-pack-recipe"].value == true then
   space_boiler_new.allowed_effects = data.raw["assembling-machine"]["assembling-machine-3"].allowed_effects
 end
   
-
+if mods["QualityEffectsFixed"] then
+  space_boiler_new.qef_ignore = true
+end
 
 
 data:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}
