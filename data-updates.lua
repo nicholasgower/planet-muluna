@@ -775,6 +775,7 @@ local recipe_blacklist = {
 local category_blacklist = {
     "double-boiler",
     "muluna-greenhouse",
+    "kr-fuel-burning"
 }
 
 local subgroup_blacklist = {
