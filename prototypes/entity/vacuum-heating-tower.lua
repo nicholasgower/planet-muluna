@@ -81,6 +81,7 @@ local heat_amount = recipe_heat_content / (temperature_delta*heat_capacity)
 local oxygen_consumed = (1.5/3.0)*(recipe_heat_content / (temperature_delta_cold*heat_capacity))
 local recipe = {
         type = "recipe",
+        enabled = false,
         name = "muluna-vacuum-heating",
         category = recipe_category,
         energy_required = energy_required,
