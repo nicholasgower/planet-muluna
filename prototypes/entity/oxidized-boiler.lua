@@ -474,7 +474,10 @@ space_boiler_new.graphics_set.working_visualisations = {
   }
 }
 
-
+  
+if mods["QualityEffectsFixed"] then
+  space_boiler_new.qef_ignore = true
+end
 
 
 

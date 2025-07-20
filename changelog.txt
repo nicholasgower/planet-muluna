@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.10
+Date: 2025-07-20
+  Compatibility:
+    - Fixed crash on load with QualityEffectsFixed. https://github.com/nicholasgower/planet-muluna/issues/226
+---------------------------------------------------------------------------------------------------
 Version: 1.45.9
 Date: 2025-07-18
   Locale:
