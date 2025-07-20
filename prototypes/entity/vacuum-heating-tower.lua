@@ -236,6 +236,7 @@ heating_boiler = util.merge{heating_boiler,
                 variation_count = 4
             }))
         },
+        neighbour_bonus = 0
         
     }
 }

@@ -46,6 +46,7 @@ if data.raw["heat-assembling-machine"] then
             reactor[field] = assembler[field]
 
         end
+        reactor.neighbour_bonus = 0 or reactor.neighbour_bonus
         reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,0.0)
         assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.2)
         assembler.quality_indicator_shift = {-0.2,0.2}
