@@ -6,7 +6,7 @@ Muluna.rro = require("lib.remove-replace-object")
 Muluna.img = require("lib.images")
 Muluna.vectors=require("lib.vectors")
 Muluna.multiply_energy = require("lib.energy-multiply").multiply_energy
-
+Muluna.pipe_pictures = require("lib.pipe-pictures")
 
 
 
