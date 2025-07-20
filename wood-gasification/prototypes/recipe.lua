@@ -8,10 +8,12 @@ data:extend({
     energy_required = 5,
     ingredients = {
       {type="item", name="cellulose", amount=15},
+      {type="item", name="alumina-crushed", amount=1},
     },
     results = {
       {type="fluid", name="petroleum-gas", amount=20},
       {type="fluid", name="tar", amount=8},
+      {type="item", name="alumina-crushed", amount=1,probability = 0.9,ignored_by_productivity=1},
     },
     icon = "__muluna-graphics__/graphics/wood-gasification/icon/wood-gasification.png",
     icon_size = 64,
