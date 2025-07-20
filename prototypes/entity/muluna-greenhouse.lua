@@ -64,6 +64,7 @@ local greenhouse = {
       {
         volume = 200,
         pipe_covers = pipecoverspictures(),
+        pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
         pipe_connections =
         {
           {flow_direction = "input-output", direction = defines.direction.west, position = {-4.0, 3}},
@@ -77,6 +78,7 @@ local greenhouse = {
         {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
           pipe_connections =
           {
             --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
@@ -91,6 +93,7 @@ local greenhouse = {
         {
             volume = 200,
             pipe_covers = pipecoverspictures(),
+            pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
             --pipe_picture =  require("__space-age__.prototypes.entity.cryogenic-plant-pictures").pipe_picture,
             --always_draw_covers = true, -- fighting against FluidBoxPrototype::always_draw_covers crazy default
             pipe_connections =
@@ -106,6 +109,7 @@ local greenhouse = {
         {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
           pipe_connections =
           {
             --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
@@ -119,6 +123,7 @@ local greenhouse = {
         {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
           pipe_connections =
           {
             --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
