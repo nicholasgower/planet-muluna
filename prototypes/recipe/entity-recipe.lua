@@ -1,7 +1,7 @@
 local rro = Muluna.rro
 
 local space_boiler = table.deepcopy(data.raw["recipe"]["boiler"])
-space_boiler.icon = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon.png"
+--space_boiler.icon = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon.png"
 space_boiler.name = "muluna-advanced-boiler"
 space_boiler.place_result = "muluna-advanced-boiler"
 
