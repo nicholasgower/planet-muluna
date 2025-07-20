@@ -227,6 +227,7 @@ local space_boiler_new = {
       {
         volume = 200,
         pipe_covers = pipecoverspictures(),
+        pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
         pipe_connections =
         {
           {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 0}},
@@ -238,6 +239,7 @@ local space_boiler_new = {
       {
         volume = 200,
         pipe_covers = pipecoverspictures(),
+        pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
         pipe_connections =
         {
           {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 1}},
@@ -249,6 +251,7 @@ local space_boiler_new = {
       {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
           pipe_connections =
           {
             {flow_direction = "input-output", direction = defines.direction.north, position = {0, -1.0}},
@@ -259,6 +262,7 @@ local space_boiler_new = {
       {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
           pipe_connections =
           {
             {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
