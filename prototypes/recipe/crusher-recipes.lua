@@ -130,12 +130,21 @@ data:extend{advanced_anorthite_crushing}
 
 
 local alumina_crushing=table.deepcopy(anorthite_crushing)
-alumina_crushing.icons = crushing_icon("__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",64)
+alumina_crushing.icons = crushing_icon(data.raw["item"]["alumina"].icon,64)
 alumina_crushing.name="alumina-crushing"
 alumina_crushing.results = {{type = "item", name = "alumina", amount = 1,ignored_by_productivity=1, probability = 1/20 },{type = "item",name = "alumina-crushed",amount = 2}}
 alumina_crushing.ingredients = {{type = "item",name = "alumina",amount = 1}}
 alumina_crushing.energy_required = 1
 alumina_crushing.order="b-aa-a"
+
+local aluminum_crushing=table.deepcopy(anorthite_crushing)
+aluminum_crushing.icons = crushing_icon("__muluna-graphics__/graphics/icons/metal-plate-aluminium.png",64)
+aluminum_crushing.name="aluminum-crushing"
+aluminum_crushing.results = {{type = "item", name = "aluminum-plate", amount = 1,ignored_by_productivity=1, probability = 1/20 },{type = "item",name = "aluminum-crushed",amount = 2}}
+aluminum_crushing.ingredients = {{type = "item",name = "aluminum-plate",amount = 1}}
+aluminum_crushing.energy_required = 1
+aluminum_crushing.order="b-aa-b"
+
 local stone_crushing=table.deepcopy(anorthite_crushing)
 
 stone_crushing.results = {{type = "item", name = "stone", amount = 1,ignored_by_productivity=1, probability = 1/10},{type = "item",name = "stone-crushed",amount = 3}}
@@ -243,7 +252,7 @@ regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02
 
 
-local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,tree_crushing,regolith_sorting,regolith_recycling}
+local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,tree_crushing,regolith_sorting,regolith_recycling}
 
 for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  
