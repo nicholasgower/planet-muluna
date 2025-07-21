@@ -63,6 +63,19 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     
     )
 
+
+    -- local profiler_exp = helpers.create_profiler()
+    --     game.print(helpers.evaluate_expression("L^12+36*L+500",{L = 64}))
+    --     game.print({"",profiler_exp,"expression"})
+    --     profiler_exp.reset()
+    --     local L = 64
+    --     game.print(L^12+36*L+500)
+    --     game.print({"",profiler_exp,"Lua"})
+    --     profiler_exp.reset()
+    --     game.print(saved_value)
+    --     game.print({"",profiler_exp,"saved"})
+    -- profiler_exp.reset()
+
     local function get_armor(player)
 
         local armor_inventory = nil
@@ -77,10 +90,12 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     --local profiler = helpers.create_profiler()
     Muluna.events.on_nth_tick(step_process_tick_rate, function(event)
         --local update_tick_rate = event.tick % 180 == true
+        
+        
         if game.surfaces.muluna then --If Muluna exists
             for i,player_info in pairs(storage.players_on_muluna) do
                 --profiler.reset()
-                local player = player_info.player
+                local player = player_info.player or player_info
                 local character = player.character
                 local surface = player.surface
                 if not storage.walking_tick_rates then update_step_tick_rates(event) end
