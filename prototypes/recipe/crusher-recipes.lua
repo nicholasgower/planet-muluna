@@ -206,6 +206,8 @@ tree_crushing.order="b-aa-b"
 local regolith_sorting = {
     type = "recipe",
     name = "muluna-regolith-sorting",
+    group = "intermediate-products",
+    subgroup = "muluna-products",
     category = "crushing",
     --additional_categories = {"recycling"},
     auto_recycle = false,
@@ -245,12 +247,13 @@ local regolith_sorting = {
 
 
 local regolith_recycling = table.deepcopy(regolith_sorting)
+local recycling_lib = require("__quality__.prototypes.recycling")
 
 regolith_recycling.name = "muluna-regolith-recycling"
 regolith_recycling.category = "recycling"
 regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02
-
+regolith_recycling.icons = generate_recycling_recipe_icons_from_item(data.raw.item["muluna-lunar-regolith"])
 
 local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,tree_crushing,regolith_sorting,regolith_recycling}
 
