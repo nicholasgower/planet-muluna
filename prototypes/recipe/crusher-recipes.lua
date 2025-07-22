@@ -224,7 +224,7 @@ local regolith_sorting = {
         {
             type = "item",
             name = "stone",
-            amount = 2,
+            amount = 1,
             --probability = 0.50,
         },
         {

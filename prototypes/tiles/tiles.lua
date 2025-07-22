@@ -2,8 +2,10 @@
 local concrete = table.deepcopy(data.raw["tile"]["concrete"])
 local refined_concrete = table.deepcopy(data.raw["tile"]["refined-concrete"])
 
+local speed_modifier = 2/3
+
 local muluna_dirt_base=table.deepcopy(data.raw["tile"]["dry-dirt"])
-muluna_dirt_base.walking_speed_modifier = 0.5
+muluna_dirt_base.walking_speed_modifier = speed_modifier
 muluna_dirt_base.vehicle_friction_modifier = concrete.vehicle_friction_modifier
 muluna_dirt_base.walking_sound = "__space-age__/sound/walking/soft-sand-1.ogg"
 muluna_dirt_base.destroys_dropped_items = true
@@ -67,7 +69,7 @@ for i = 1,3,1 do
     muluna_dirt.name="muluna-dirt-"..tostring(i+6)
     muluna_dirt.autoplace = {probability_expression = 'expression_in_range_base(0.45, -10, 0.55, 0.35) + 0.25*noise_layer_noise('..tostring(i+6)..')'}
     muluna_dirt.localised_name={"tile-name.muluna-dirt",tostring(i+6)}
-    muluna_dirt.walking_speed_modifier = 0.5
+    muluna_dirt.walking_speed_modifier = speed_modifier
     muluna_dirt.vehicle_friction_modifier = refined_concrete.vehicle_friction_modifier
     muluna_dirt.walking_sound = "__space-age__/sound/walking/soft-sand-1.ogg"
     muluna_dirt.custom_tooltip_fields = muluna_dirt_base.custom_tooltip_fields

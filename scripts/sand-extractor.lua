@@ -91,8 +91,13 @@ function Public.construct_sand_extractor(event)
         force = player.force,
         player = player,
         quality = quality,
-        direction = direction
+        direction = direction,
+        raise_built = true,
     }
+    if player.force.technologies["muluna-regolith-digging"].researched == false then --Because This script unexpectedly 
+        player.force.technologies["muluna-regolith-digging"].researched = true
+        player.force.print({"technology-researched","[technology=muluna-regolith-digging]"}, {sound_path = "utility/research_completed"})  
+    end
     
 
     if not is_ghost then

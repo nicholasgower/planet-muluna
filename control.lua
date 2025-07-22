@@ -89,7 +89,7 @@ script.on_configuration_changed(function()
     storage.players_on_muluna = {}
     for i,player in pairs(game.players) do
         if player.surface.name == "muluna" then
-            storage.players_on_muluna[i] = player
+            storage.players_on_muluna[i] = {player=player}
         end
     end
 end
