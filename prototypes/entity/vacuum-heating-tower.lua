@@ -53,14 +53,16 @@ data:extend{
 local steam_proxy = table.deepcopy(data.raw["fluid"]["steam"])
 
 steam_proxy.name = "muluna-heat"
-steam_proxy.icons = {
-    {
-        icon = steam_proxy.icon,
-        icon_size = steam_proxy.icon_size,
-        tint = {255,120,120},
+steam_proxy.icon = "__core__/graphics/arrows/heat-exchange-indication.png"
+steam_proxy.icon_size = 48
+-- steam_proxy.icons = {
+--     {
+--         icon = steam_proxy.icon,
+--         icon_size = 48,
+--         --tint = {255,120,120},
        
-    }
-}
+--     }
+-- }
 steam_proxy.heat_capacity = "0.2kJ"
 steam_proxy.custom_tooltip_fields = {
     {
