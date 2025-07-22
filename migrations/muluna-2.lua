@@ -92,8 +92,8 @@ end
 
 correct_surface_space_science_packs(game.surfaces.muluna,"space-science-pack-muluna")
 
-for _,force in pairs(game.forces) do
-    for _,platform in pairs(force.platforms) do
-        correct_surface_space_science_packs(platform.surface,"space-science-pack")
-    end
-end
+-- for _,force in pairs(game.forces) do
+--     for _,platform in pairs(force.platforms) do
+--         correct_surface_space_science_packs(platform.surface,"space-science-pack")
+--     end
+-- end
