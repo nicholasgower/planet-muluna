@@ -105,14 +105,14 @@ data:extend {{
   order = u_ore_order.."03",
   richness = true
 }}
-data:extend {{
-  type = "autoplace-control",
-  category = "resource",
-  name = "helium",
-  localised_name = {"", "[fluid=helium]"," ", {"fluid-name.helium"}},
-  order = u_ore_order.."04",
-  richness = true
-}}
+-- data:extend {{
+--   type = "autoplace-control",
+--   category = "resource",
+--   name = "helium",
+--   localised_name = {"", "[fluid=helium]"," ", {"fluid-name.helium"}},
+--   order = u_ore_order.."04",
+--   richness = true
+-- }}
 if mods["cupric-asteroids"] then
   data:extend {{
     type = "autoplace-control",
@@ -437,4 +437,4 @@ end
 --     richness_expression = [[var("control:maraxsis-coral:richness") * random_penalty(x, y, 9232 + (sqrt(x*x + y*y) / 10), 99, 1000)]],
 -- }
 
-data:extend{metal_ore,carbon_ore,ice_ore,ice_ore_particle,anorthite,anorthite_chunk_particle,helium}
+data:extend{metal_ore,carbon_ore,ice_ore,ice_ore_particle,anorthite,anorthite_chunk_particle}

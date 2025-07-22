@@ -283,81 +283,81 @@ data:extend{
         subgroup="muluna-products"
 
     },
-    { 
-        type = "recipe",
-        name = "helium-separation",
-        enabled = false,
-        icons = {   
-                {
-                    icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                    icon_size = 64,
-                    tint = {1,0.8,1},
-                    scale = 0.5,
-                    shift = {16,0}
-                },
-                {
-                    icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                    icon_size = 64,
-                    tint = {1,0.6,1},
-                    scale = 0.5,
-                    shift = {-16,0}
-                },   
-        },
-        --icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-        --icon_size = 64,
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "helium", amount=1000}
-        },
-        results = {
-            {type = "fluid",name = "helium-4", amount=993},
-            {type = "fluid",name = "helium-3", amount=7}
-        },
-        energy_required=2,
-        subgroup="muluna-products",
-        allow_productivity = false,
+    -- { 
+    --     type = "recipe",
+    --     name = "helium-separation",
+    --     enabled = false,
+    --     icons = {   
+    --             {
+    --                 icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --                 icon_size = 64,
+    --                 tint = {1,0.8,1},
+    --                 scale = 0.5,
+    --                 shift = {16,0}
+    --             },
+    --             {
+    --                 icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --                 icon_size = 64,
+    --                 tint = {1,0.6,1},
+    --                 scale = 0.5,
+    --                 shift = {-16,0}
+    --             },   
+    --     },
+    --     --icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --     --icon_size = 64,
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "helium", amount=1000}
+    --     },
+    --     results = {
+    --         {type = "fluid",name = "helium-4", amount=993},
+    --         {type = "fluid",name = "helium-3", amount=7}
+    --     },
+    --     energy_required=2,
+    --     subgroup="muluna-products",
+    --     allow_productivity = false,
 
-    },
-    { 
-        type = "recipe",
-        name = "kovarex-helium-enrichment",
-        localised_name = {"recipe-name.kovarex-muluna-helium-enrichment"},
-        enabled = false,
-        icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-        allow_productivity = true,
-        --icon_size = 64,
-        icons = {   
-            {
-                icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                icon_size = 64,
-                tint = {1,0.6,1},
-                scale = 0.5,
-                shift = {16,0},
-                draw_background = true,
-            },
-            {
-                icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                icon_size = 64,
-                tint = {1,0.6,1},
-                scale = 0.5,
-                shift = {-16,0},
-                draw_background = true,
-            },
+    -- },
+    -- { 
+    --     type = "recipe",
+    --     name = "kovarex-helium-enrichment",
+    --     localised_name = {"recipe-name.kovarex-muluna-helium-enrichment"},
+    --     enabled = false,
+    --     icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --     allow_productivity = true,
+    --     --icon_size = 64,
+    --     icons = {   
+    --         {
+    --             icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --             icon_size = 64,
+    --             tint = {1,0.6,1},
+    --             scale = 0.5,
+    --             shift = {16,0},
+    --             draw_background = true,
+    --         },
+    --         {
+    --             icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --             icon_size = 64,
+    --             tint = {1,0.6,1},
+    --             scale = 0.5,
+    --             shift = {-16,0},
+    --             draw_background = true,
+    --         },
            
-    },
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "helium-4", amount=60},
-            {type = "fluid",name = "helium-3", amount=400}
-        },
-        results = {
-            {type = "fluid",name = "helium-4", amount=10},
-            {type = "fluid",name = "helium-3", amount=402, ignored_by_productivity=400}
-        },
-        energy_required=0.2,
-        subgroup="muluna-products"
+    -- },
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "helium-4", amount=60},
+    --         {type = "fluid",name = "helium-3", amount=400}
+    --     },
+    --     results = {
+    --         {type = "fluid",name = "helium-4", amount=10},
+    --         {type = "fluid",name = "helium-3", amount=402, ignored_by_productivity=400}
+    --     },
+    --     energy_required=0.2,
+    --     subgroup="muluna-products"
 
-    },
+    -- },
     {
         type = "recipe",
         category = "chemistry",

@@ -213,7 +213,7 @@ local map_gen = {
         ["metallic-asteroid-chunk"] = {},
         ["carbonic-asteroid-chunk"] = {},
         ["anorthite-chunk"] = {},
-        ["helium"] = {},
+        --["helium"] = {},
         --["uranium-ore"] = {},
       },
     autoplace_settings = {
@@ -257,7 +257,7 @@ local map_gen = {
           ["metallic-asteroid-chunk"] = {},
           ["carbonic-asteroid-chunk"] = {},
           ["anorthite-chunk"] = {},
-          ["helium"] = {},
+          --["helium"] = {},
           --["uranium-ore"] = {},
         }
       }

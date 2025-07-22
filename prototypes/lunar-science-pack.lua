@@ -77,7 +77,7 @@ if settings.startup["muluna-old-interstellar-pack-recipe"].value == false then
     }
 else
     r_lunar_pack.ingredients = {
-        {type = "fluid", name = "helium", amount = 400},
+        --{type = "fluid", name = "helium", amount = 400},
         {type = "item", name = "rocket-fuel", amount = 8},
         {type = "item", name = "aluminum-plate", amount = 40},
         {type = "item", name = "uranium-235", amount = 1}
