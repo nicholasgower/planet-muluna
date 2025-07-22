@@ -40,7 +40,8 @@ function Public.resource(resource_parameters, autoplace_parameters)
       starting_rq_factor_multiplier = autoplace_parameters.starting_rq_factor_multiplier,
       candidate_spot_count = autoplace_parameters.candidate_spot_count,
       tile_restriction = autoplace_parameters.tile_restriction,
-
+      richness_post_multiplier = autoplace_parameters.richness_post_multiplier,
+      
       richness_distance_factor = autoplace_parameters.richness_distance_factor,
       size_multiplier = autoplace_parameters.size_multiplier,
       

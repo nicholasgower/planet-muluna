@@ -281,9 +281,9 @@ carbon_ore.minable.result = "carbonic-asteroid-chunk"
 ice_ore.minable.result = "oxide-asteroid-chunk"
 helium.minable.results[1].name = "helium"
 
-metal_ore.minable.mining_time = 20
+metal_ore.minable.mining_time = 10
 carbon_ore.minable.mining_time = 10
-ice_ore.minable.mining_time = 5
+ice_ore.minable.mining_time = 10
 
 metal_ore.autoplace.control = "metallic-asteroid-chunk"
 carbon_ore.autoplace.control = "carbonic-asteroid-chunk"
@@ -305,6 +305,7 @@ metal_ore.autoplace = resource_autoplace.resource_autoplace_settings
       --richness_distance_factor = 0, --Added to eliminate influence of distance on richness
       --distance_add = 400,
       richness_post_multiplier = 0.1,
+      has_starting_area_placement = true,
     }
 
 carbon_ore.autoplace = resource_autoplace.resource_autoplace_settings
@@ -319,6 +320,8 @@ carbon_ore.autoplace = resource_autoplace.resource_autoplace_settings
       --richness_distance_factor = 0,
       --distance_add = 400,
       richness_post_multiplier = 0.1,
+      has_starting_area_placement = true,
+      frequency_multiplier = 2
     }
 
 ice_ore.autoplace = resource_autoplace.resource_autoplace_settings
@@ -333,6 +336,8 @@ ice_ore.autoplace = resource_autoplace.resource_autoplace_settings
       --richness_distance_factor = 0,
       --distance_add = 400,
       richness_post_multiplier = 0.1,
+      has_starting_area_placement = true,
+      frequency_multiplier = 4
     }
 
 helium.autoplace = resource_autoplace.resource_autoplace_settings
@@ -368,13 +373,15 @@ local anorthite=resource(
     regular_rq_factor_multiplier = 1.10,
     starting_rq_factor_multiplier = 1.5,
     candidate_spot_count = 52, -- To match 0.17.50 placement
+    richness_post_multiplier = 0.1,
+    has_starting_area_placement = true,
     --richness_distance_factor = 0,
     --distance_add = 1000,
   }
 )
 
 anorthite.minable.result= "anorthite-chunk"
-anorthite.minable.mining_time = 20
+anorthite.minable.mining_time = 10
 anorthite.autoplace.control="anorthite-chunk"
 anorthite.icons=nil
 anorthite.icon="__muluna-graphics__/graphics/icons/anorthite-chunk.png"

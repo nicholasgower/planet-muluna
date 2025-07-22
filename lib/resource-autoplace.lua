@@ -19,16 +19,26 @@ end
 
 for name,expression in pairs(resource_autoplace_all_patches.local_expressions) do
     if not string.find(name,"starting") then
-        expression = sub_distance(expression)
+        --expression = sub_distance(expression)
     end
         
     
 end
 
+
+-- resource_autoplace_all_patches.local_functions.regular_density_at.expression = 
+--                       "base_density * frequency_multiplier * size_multiplier"
+
+resource_autoplace_all_patches.local_expressions.double_density_distance = 1e12 --default is 1300
+-- resource_autoplace_all_patches.local_expressions.regular_blob_amplitude_maximum_distance = "if(has_starting_area_placement == -1,\z
+--                                                     double_density_distance,\z
+--                                                     double_density_distance + regular_patch_fade_in_distance)",
+
 -- for name,local_function in pairs(resource_autoplace_all_patches.local_functions) do
 --     rro.soft_insert(local_function.parameters,distance_factor_variable_name)
 --     local_function.expression = sub_distance(local_function.expression)
 -- end
+
 
 resource_autoplace_all_patches.name = "muluna_resource_autoplace_all_patches"
 
@@ -110,6 +120,7 @@ local function resource_autoplace_settings(params)
   local distance_add = params.distance_add or 0
   local autoplace_set = get_autoplace_set(autoplace_set_name)
   local all_patches_name = autoplace_set_name .. "-" .. patch_set_name .. "-patches" 
+
   data:extend
   {
     {
@@ -118,7 +129,7 @@ local function resource_autoplace_settings(params)
       expression = "muluna_resource_autoplace_all_patches{base_density = " .. params.base_density .. ",\z
                                                    base_spots_per_km2 = " .. (params.base_spots_per_km2 or 2.5) .. ",\z
                                                    candidate_spot_count = " .. (params.candidate_spot_count or 21) .. ",\z
-                                                   frequency_multiplier = var('control:" .. autoplace_control_name .. ":frequency'),\z
+                                                   frequency_multiplier = ".. (params.frequency_multiplier or 1) .." * var('control:" .. autoplace_control_name .. ":frequency'),\z
                                                    has_starting_area_placement = " .. (params.has_starting_area_placement == nil and -1 or
                                                                                        params.has_starting_area_placement and 1 or 0) .. ",\z
                                                    random_spot_size_minimum = " .. (params.random_spot_size_minimum or 0.25) .. ",\z

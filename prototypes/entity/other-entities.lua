@@ -113,6 +113,7 @@ if true then
                 steam_icon
             }
         end
+        steam_furnace.icons = item.icons
         recipe.enabled = false
         item.name = "muluna-steam-".. name
         item.place_result = "muluna-steam-".. name
