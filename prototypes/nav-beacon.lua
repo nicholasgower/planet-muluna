@@ -150,12 +150,12 @@ if settings.startup["enable-nav-beacon"].value == true then
             energy_required = 20,
             ingredients =
             {
-                { type = "item", name = "processing-unit", amount = 50 },
-                { type = "item", name = "radar",           amount = 25 },
-                { type = "item", name = "beacon",          amount = 10 },
-                { type = "item", name = "superconductor",          amount = 100 },
-                { type = "item", name = "tungsten-plate",          amount = 100 },
-                { type = "item", name = "aluminum-plate",          amount = 100 },
+                { type = "item", name = "processing-unit", amount = 500 },
+                { type = "item", name = "radar",           amount = 250 },
+                { type = "item", name = "beacon",          amount = 100 },
+                { type = "item", name = "superconductor",          amount = 500 },
+                { type = "item", name = "tungsten-plate",          amount = 500 },
+                { type = "item", name = "aluminum-plate",          amount = 500 },
             },
             results = { { type = "item", name = "muluna-satellite-radar", amount = 1 } },
         }
