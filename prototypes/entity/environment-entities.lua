@@ -5,11 +5,10 @@ local function extend_lunar_rock(copied_entity,results)
   else
     lunar_rock = table.deepcopy(data.raw["optimized-decorative"][copied_entity])
   end
-  local tint = {1,1,0.5}
+  local tint = nil
   for i,sprite in ipairs(lunar_rock.pictures) do
       sprite.filename = string.gsub(sprite.filename,"__base__/graphics/decorative","__muluna-graphics__/graphics/entities")
-      --sprite.filename = "__muluna-graphics__/graphics/entities/"..copied_entity.."/"..copied_entity.."-" .. string.format("%02d",i+shift) .. ".png"
-      --sprite.tint = tint
+      sprite.tint = tint
   end
 
   lunar_rock.icons = {{icon = lunar_rock.icon, icon_size = lunar_rock.icon_size, tint = tint}}

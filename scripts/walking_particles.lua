@@ -130,9 +130,10 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                                 frame_speed = 1
                             }
                             local direction = helpers.direction_to_string(walking_state.direction)
-                            local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
+                            
                             local speed = player.character_running_speed /0.075
                             for i = 1,4,1 do
+                                local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
                                 --local random = r*(math.random()-0.5)
                                 movement[1] = (speed)*(movement[1] + r*(math.random()-0.5))
                                 movement[2] = (speed)*(movement[2] + r*(math.random()-0.5))
