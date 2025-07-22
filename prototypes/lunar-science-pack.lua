@@ -61,7 +61,7 @@ if settings.startup["muluna-old-interstellar-pack-recipe"].value == false then
         --{type = "fluid", name = "helium", amount = 100},
         {type = "item", name = "rocket-fuel", amount = 1},
         {type = "item", name = "low-density-space-platform-foundation", amount = 2},
-        {type = "item", name = "uranium-fuel-cell", amount = 1},
+        {type = "item", name = "muluna-steam-crusher", amount = 1},
         
     }
     r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 3}}

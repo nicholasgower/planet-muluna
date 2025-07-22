@@ -168,7 +168,7 @@ require("prototypes.final-fixes.nav-beacon-final-fix")
 --require("prototypes.entity.vanilla-entity-shadows")
 if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then --Removed vanilla/wood-gasification recipes from tree seeding, then deletes the tech if no other mods add recipes to the tech.
 --Technologies that have this tech as a prerequisite are moved to having agricultural science pack as the prerequisite.
-    rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-processing"})
+    --rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-processing"})
     rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-seed-greenhouse"})
     -- if #data.raw["technology"]["tree-seeding"].effects == 0 then
     --     delete_tech("tree-seeding","agricultural-science-pack")
