@@ -236,9 +236,9 @@ local map_gen = {
       {
         settings =
         {
-          --["medium-rock"] = {},
-          --["small-rock"] = {},
-          --["tiny-rock"] = {},
+          ["lunar-medium-rock"] = {},
+          ["lunar-small-rock"] = {},
+          ["lunar-tiny-rock"] = {},
           --["medium-sand-rock"] = {},
           --["small-sand-rock"] = {}
         }
@@ -249,6 +249,7 @@ local map_gen = {
         {
           --["stone"] = {},
           ["lunar-rock"] = {},
+          ["lunar-huge-rock"] = {},
           --["big-sand-rock"] = {},
           --["huge-rock"] = {},
           --["big-rock"] = {},
