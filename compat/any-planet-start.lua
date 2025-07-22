@@ -67,10 +67,13 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     delete_tech("advanced-circuit","electronics")
     delete_tech("oil-processing","oil-gathering")
     delete_tech("fluid-handling","oxide-asteroid-crushing")
+    delete_tech("thruster-fuel","space-platform-thruster")
+    delete_tech("thruster-oxidizer","space-platform-thruster")
+    delete_tech("landfill","muluna-greenhouses")
     rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack",1})
     rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"chemical-science-pack",1})
     --rro.soft_insert(data.raw["technology"]["steam-power"].prerequisites,"metallic-asteroid-crushing")
-    
+    table.insert(data.raw["technology"]["muluna-greenhouses"].prerequisites,"lamp")
     if data.raw["technology"]["steam-power"].prerequisites == nil then
         data.raw["technology"]["steam-power"].prerequisites = {"metallic-asteroid-crushing"}
     end
