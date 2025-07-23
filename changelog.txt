@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.99.2
+Date: 2025-07-23
+  Bugfixes:
+    - Reworked interstellar science pack technology research process to eliminate issue with instantly unlocking the pack.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.11
 Date: 2025-07-20
   Bugfixes:
