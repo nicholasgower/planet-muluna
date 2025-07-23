@@ -19,3 +19,4 @@ graphics/generate_circles.py export-ignore
 *.gif export-ignore
 graphics/research-center export-ignore
 graphics/greenhouse/preview export-ignore
+*.sh export-ignore
