@@ -40,7 +40,7 @@ resource_autoplace_all_patches.local_expressions.double_density_distance = 1e12 
 -- end
 
 
-resource_autoplace_all_patches.name = "muluna_resource_autoplace_all_patches"
+resource_autoplace_all_patches.name = "muluna_resource_autoplace"
 
 data:extend{resource_autoplace_all_patches}
 
@@ -126,7 +126,7 @@ local function resource_autoplace_settings(params)
     {
       type = "noise-expression",
       name = all_patches_name,
-      expression = "muluna_resource_autoplace_all_patches{base_density = " .. params.base_density .. ",\z
+      expression = "muluna_resource_autoplace{base_density = " .. params.base_density .. ",\z
                                                    base_spots_per_km2 = " .. (params.base_spots_per_km2 or 2.5) .. ",\z
                                                    candidate_spot_count = " .. (params.candidate_spot_count or 21) .. ",\z
                                                    frequency_multiplier = ".. (params.frequency_multiplier or 1) .." * var('control:" .. autoplace_control_name .. ":frequency'),\z
@@ -163,7 +163,7 @@ local function resource_autoplace_settings(params)
     richness_expression = "max(" .. richness_expression .. "," .. params.minimum_richness .. ")"
   end
 
-  local local_expressions = data.raw["noise-function"]["muluna_resource_autoplace_all_patches"].local_expressions
+  local local_expressions = data.raw["noise-function"]["muluna_resource_autoplace"].local_expressions
   local richness_multiplier_exp = (params.richness_post_multiplier or 1) .. "*var('control:" .. autoplace_control_name .. ":richness')"
   -- max((double_density_distance + size_effective_distance_at(distance)) / (double_density_distance * 2), 1)
   local richness_distance_exp = "max((" .. (local_expressions.double_density_distance -

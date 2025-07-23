@@ -42,7 +42,8 @@ function Public.construct_sand_extractor(event)
     local surface = player.surface
     if surface.name ~= "muluna" then return end
     local position = event.cursor_position
-
+    local player_position = player.character.position
+    local distance = math.sqrt((position.x-player_position.x)^2+(position.y-player_position.y)^2)
     if surface.entity_prototype_collides(drill_name, position, false) then return end
     if surface.get_tile(position).hidden_tile then 
         player.create_local_flying_text{
@@ -54,7 +55,14 @@ function Public.construct_sand_extractor(event)
         }
         
         return end --If tile is unnatural, like concrete, then don't place mine. Muluna addition.
+    player.print(distance)
+    player.print(player.character.build_distance)
     local is_ghost = (not cursor_stack_valid) or event.input_name == "build-ghost" or event.input_name == "super-forced-build"
+    
+    if distance >= player.character.build_distance and not is_ghost then
+        -- If unreachable, then don't place
+        return end
+    
     --game.print(serpent.block(position))
     local direction = defines.direction.north
     -- local width = Muluna.constants.regolith_drills[name].size -- To keep things simple, assume only square mining drills
