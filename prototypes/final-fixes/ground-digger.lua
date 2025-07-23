@@ -1,4 +1,23 @@
+local rro = Muluna.rro
+
 --Forked from Maraxsis
+
+local function is_square(entity) 
+    if not entity.selection_box then return false end
+    local width = Muluna.flib_bounding_box.width(entity.selection_box)
+    local height = Muluna.flib_bounding_box.height(entity.selection_box)
+    return math.ceil(width) == math.ceil(height)
+end
+
+
+for name,drill in pairs(data.raw["mining-drill"]) do
+    if drill.energy_source.type == "electric" and drill.output_fluid_box == nil and is_square(drill) and not Muluna.constants.regolith_drills_blacklist[name] then
+        Muluna.constants.regolith_drills[name] = {name = name}
+    end
+
+end
+
+
 
 for i = 1, 50 do
     local mining_productivity = data.raw["technology"]["mining-productivity-" .. i]
@@ -54,8 +73,5 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     }
     data:extend {extractor}
 
-    digger.width = digger.size -- To keep things simple, assume only square mining drills
-    digger.height = digger.width
-    digger.offset_width = digger.width/2 + 0.5
-    digger.offset_height = digger.height/2 + 0.5
+    
 end

@@ -8,6 +8,8 @@ Muluna.vectors=require("lib.vectors")
 Muluna.multiply_energy = require("lib.energy-multiply").multiply_energy
 Muluna.pipe_pictures = require("lib.pipe-pictures")
 
+--flib imports
+Muluna.flib_bounding_box = require("__flib__.bounding-box")
 
 
 if Muluna.stage == "data" then
