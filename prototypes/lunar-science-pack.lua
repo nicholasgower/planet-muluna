@@ -44,6 +44,8 @@ t_lunar_pack.prerequisites = { --These prerequisites are overridden by interstel
     "asteroid-collector"
 
 }
+t_lunar_pack.enabled = false
+t_lunar_pack.visible_when_disabled = true
 i_lunar_pack.order = "j[interstellar-science-pack]"
 if data.raw["tool"]["hydraulic-science-pack"] then
     data.raw["tool"]["hydraulic-science-pack"].order = data.raw["tool"]["hydraulic-science-pack"].order .. "a"
@@ -85,9 +87,17 @@ t_lunar_pack.research_trigger = nil
 --     --item = "iron-plate",
 -- }
 t_lunar_pack.unit = {
-    count = 1,
-    ingredients = {},
-    time = 1,
+    count = 1000,
+    ingredients = {
+    {"automation-science-pack", 1},
+     {"logistic-science-pack", 1},
+     {"chemical-science-pack", 1},
+     {"production-science-pack", 1},
+     {"utility-science-pack", 1},
+    {"space-science-pack", 1},
+
+    },
+    time = 60,
 }
 
 -- t_lunar_pack.unit = {}
