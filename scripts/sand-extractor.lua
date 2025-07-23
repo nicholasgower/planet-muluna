@@ -55,8 +55,7 @@ function Public.construct_sand_extractor(event)
         }
         
         return end --If tile is unnatural, like concrete, then don't place mine. Muluna addition.
-    player.print(distance)
-    player.print(player.character.build_distance)
+    
     local is_ghost = (not cursor_stack_valid) or event.input_name == "build-ghost" or event.input_name == "super-forced-build"
     
     if distance >= player.character.build_distance and not is_ghost then
