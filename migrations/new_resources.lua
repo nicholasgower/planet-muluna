@@ -7,7 +7,7 @@ local function regenerate_resource(resource)
 end
 if game.planets.muluna.surface then
     regenerate_resource("anorthite-chunk")
-    regenerate_resource("helium")
+    --regenerate_resource("helium")
 end
 
 
