@@ -1,4 +1,36 @@
 local Public = {}
+local interstellar_pack_name = "interstellar-science-pack"
+
+-- script.on_event(defines.events.on_research_queued,function(event) 
+--     local force = event.force
+--     if not storage.research_queued then storage.research_queued = {} end --Storage array to track whether a research_queue trigger was triggered by this script or not. Important to avoid recursion
+       
+--     if storage.research_queued[force.name] == true then storage.research_queued[force.name] = false return end
+
+
+    
+--     game.print(serpent.block(force.research_queue))
+--     --local research = force.research_queue[#force.research_queue]
+--     local research_queue = table.deepcopy(force.research_queue)
+--     local new_research_queue = {}
+--     for i,research in ipairs(research_queue) do
+--         local research_name = research and type(research) == "string" or research.name
+
+--         if research_name == interstellar_pack_name then
+--             force.print({"console.can-not-be-researched-in-lab",research.name})
+--             --research_queue[i] = nil
+--         else
+--             new_research_queue[i] = research
+--         end 
+--     end
+--     storage.research_queued[force.name] = true
+--     force.research_queue = new_research_queue
+    
+    
+
+
+-- end)
+
 
 function Public.update_interstellar_pack(force,display_notification)
     if display_notification == nil then display_notification = true end
@@ -21,11 +53,13 @@ function Public.update_interstellar_pack(force,display_notification)
             if count == max_count then break end
         end
         if count >= max_count then
+
             if display_notification then
-                force.print({"technology-researched","[technology="..interstellar_pack_name.."]"}, {sound_path = "utility/research_completed"})
+                force.print({"console.technology-enabled","[technology="..interstellar_pack_name.."]"}, {sound_path = "utility/research_completed"})
             end
             
-            technologies[interstellar_pack_name].researched = true
+            technologies[interstellar_pack_name].enabled = true
+            technologies[interstellar_pack_name].saved_progress = 0
             
             
             
@@ -41,6 +75,13 @@ function Public.update_interstellar_pack(force,display_notification)
 
 
 end
+
+script.on_event(defines.events.on_player_cheat_mode_enabled,function(event)
+
+    local force = game.players[event.player_index].force
+    force.technologies[interstellar_pack_name].researched = true
+
+end)
 
 
 
