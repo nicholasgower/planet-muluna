@@ -16,6 +16,7 @@ local Public = {}
 
 
 -- end
+local mining_drill_prototypes = prototypes.get_entity_filtered{{filter="type",type="mining-drill"}}
 
 function Public.construct_sand_extractor(event)
     local player = game.get_player(event.player_index)
@@ -64,10 +65,14 @@ function Public.construct_sand_extractor(event)
     
     --game.print(serpent.block(position))
     local direction = defines.direction.north
-    -- local width = Muluna.constants.regolith_drills[name].size -- To keep things simple, assume only square mining drills
-    -- local height = width
-    local offset_width = Muluna.constants.regolith_drills[name].offset_width
-    local offset_height = Muluna.constants.regolith_drills[name].offset_height
+
+    local drill_prototype = mining_drill_prototypes[name]
+    local offset_width = drill_prototype.tile_width
+    local offset_height = drill_prototype.tile_height
+    if offset_width ~= offset_height then return end 
+    --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
+    --this check allows them to exist in mod-data without crashing.
+
     local neighboring_belts = surface.find_entities_filtered{area={{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, type = {"transport-belt","underground-belt","container"}}
     if neighboring_belts then --If adjacent belts exist, change direction of drill such that it feeds one of those belts. Muluna addition.
         for _,neighbor in pairs(neighboring_belts) do

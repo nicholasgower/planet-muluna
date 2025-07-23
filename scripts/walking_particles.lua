@@ -142,7 +142,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                                     position = player_position,
                                     movement = movement,
                                     height = 0,
-                                    vertical_speed = 0.1,
+                                    vertical_speed = 0.075,
                                     frame_speed = 0.5
                                 }
                             end

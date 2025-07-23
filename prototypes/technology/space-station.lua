@@ -485,6 +485,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "low-density-structure-from-aluminum",
             },
+            {
+                type = "unlock-recipe",
+                recipe = "aluminum-crushing",
+            },
         }
     },
     {
@@ -492,11 +496,11 @@ data:extend{
         name = "muluna-alice-propellant",
         localised_name = {"recipe-name.rocket-fuel-aluminum"},
         localised_description = {"recipe-description.rocket-fuel-aluminum"},
-        prerequisites = {"muluna-alumina-processing","oxide-asteroid-crushing"},
+        prerequisites = {"muluna-aluminum-processing","oxide-asteroid-crushing"},
         research_trigger = {
             type = "craft-item",
-            item = "alumina-crushed",
-            count = 20,
+            item = "aluminum-crushed",
+            count = 5,
         },
         effects = {
             {
@@ -640,7 +644,7 @@ data:extend{
     {
         type = "technology", 
         name = "muluna-greenhouses",
-        prerequisites = {"muluna-wood-cultivation","muluna-aluminum-processing"},
+        prerequisites = {"muluna-wood-cultivation","muluna-aluminum-processing","muluna-regolith-digging"},
         icon = "__muluna-graphics__/graphics/greenhouse/sprites/greenhouse-icon-big.png",--data.raw["technology"]["tree-seeding"].icon,
         icon_size = 640,--data.raw["technology"]["tree-seeding"].icon_size,
         research_trigger = {

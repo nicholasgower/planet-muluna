@@ -43,7 +43,12 @@ t_lunar_pack.icon = "__muluna-graphics__/graphics/technology/space-science-pack.
 --     -- "asteroid-collector"
 --     "low-density-space-platform-foundation"
 
+
 -- }
+
+t_lunar_pack.enabled = false
+t_lunar_pack.visible_when_disabled = true
+
 i_lunar_pack.order = "j[interstellar-science-pack]"
 if data.raw["tool"]["hydraulic-science-pack"] then
     data.raw["tool"]["hydraulic-science-pack"].order = data.raw["tool"]["hydraulic-science-pack"].order .. "a"
@@ -98,6 +103,19 @@ end
 --     count = 1,
 --     ingredients = {},
 --     time = 1,
+-- }
+-- t_lunar_pack.unit = {
+--     count = 1000,
+--     ingredients = {
+--     {"automation-science-pack", 1},
+--      {"logistic-science-pack", 1},
+--      {"chemical-science-pack", 1},
+--      {"production-science-pack", 1},
+--      {"utility-science-pack", 1},
+--     {"space-science-pack", 1},
+
+--     },
+--     time = 60,
 -- }
 
 -- t_lunar_pack.unit = {}
