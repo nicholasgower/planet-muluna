@@ -118,37 +118,37 @@
 -- end
 
 --- TREE-SEEDS ---
-if mods["space-age"] then
-  local function addSeedDrops(Table)
-    -- Calculates value range and probability for tree seed drops (average amount may go above 1):
-    local setting = settings.startup["tree-seed-probability"].value
-    local seed_min = 0
-    local seed_max = math.ceil(setting * 2) -- factor should not be lower than 2 in this setup!
-    local seed_prob = setting / (0.5 * (seed_min + seed_max))    
-    -- Identifies trees and adds the tree seed as a potential drop:
-    for _, Tree in pairs(Table) do
-      if setting == 0 then goto continue end
-      if not string.match(Tree.name, "^tree%-") then goto continue end -- *
-      if not Tree.minable then goto continue end
-      local result_wood = {
-        type = "item", name = "wood", amount = Tree.minable.count or 4
-      }
-      local result_seed = {
-        type = "item", name = "tree-seed", amount_min  = seed_min, amount_max  = seed_max, probability = seed_prob
-      }
-      if Tree.minable.results then    -- loaded first, so checked first
-        table.insert(Tree.minable.results, result_seed)
-      elseif Tree.minable.result then -- loaded if "results" doesn't exist
-        Tree.minable.results = {result_wood, result_seed}
-      end
-      -- log(serpent.block({Tree.name, Tree.minable.results[2].probability}))
-      ::continue::
-    end
-  end
+-- if mods["space-age"] then
+--   local function addSeedDrops(Table)
+--     -- Calculates value range and probability for tree seed drops (average amount may go above 1):
+--     local setting = settings.startup["tree-seed-probability"].value
+--     local seed_min = 0
+--     local seed_max = math.ceil(setting * 2) -- factor should not be lower than 2 in this setup!
+--     local seed_prob = setting / (0.5 * (seed_min + seed_max))    
+--     -- Identifies trees and adds the tree seed as a potential drop:
+--     for _, Tree in pairs(Table) do
+--       if setting == 0 then goto continue end
+--       if not string.match(Tree.name, "^tree%-") then goto continue end -- *
+--       if not Tree.minable then goto continue end
+--       local result_wood = {
+--         type = "item", name = "wood", amount = Tree.minable.count or 4
+--       }
+--       local result_seed = {
+--         type = "item", name = "tree-seed", amount_min  = seed_min, amount_max  = seed_max, probability = seed_prob
+--       }
+--       if Tree.minable.results then    -- loaded first, so checked first
+--         table.insert(Tree.minable.results, result_seed)
+--       elseif Tree.minable.result then -- loaded if "results" doesn't exist
+--         Tree.minable.results = {result_wood, result_seed}
+--       end
+--       -- log(serpent.block({Tree.name, Tree.minable.results[2].probability}))
+--       ::continue::
+--     end
+--   end
 
-  for _, v in pairs({"tree", "plant"}) do addSeedDrops(data.raw[v]) end -- *
+--   for _, v in pairs({"tree", "plant"}) do addSeedDrops(data.raw[v]) end -- *
 
-  -- * Best criterium I could find. Seeds will drop from all normal tree variants, including planted
-  --   ones. They will not drop from dry or dead trees, nor from sugar canes.
+--   -- * Best criterium I could find. Seeds will drop from all normal tree variants, including planted
+--   --   ones. They will not drop from dry or dead trees, nor from sugar canes.
 
-end
+-- end
