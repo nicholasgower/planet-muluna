@@ -2,7 +2,7 @@
 local vector = {}
 
 -- Scalar multiplication: multiplies each element of the vector by a scalar
-function vector.scalar_mul(v, scalar)
+function vector.scalar_times(v, scalar)
     local result = {}
     for i = 1, #v do
         result[i] = v[i] * scalar
@@ -18,6 +18,28 @@ function vector.scalar_add(v, scalar)
     end
     return result
 end
+
+-- Scalar addition: adds two vectors together elementwise
+function vector.element_add(v, v2)
+    assert(#v == #v2,"Vectors must have an equal length.")
+    local result = {}
+    for i = 1, #v do
+        result[i] = v[i] + v2[i]
+    end
+    return result
+end
+
+-- Scalar addition: adds two vectors together
+function vector.vector_average(v, v2)
+    assert(#v == #v2,"Vectors must have an equal length.")
+    local result = {}
+    for i = 1, #v do
+        result[i] = (v[i] + v2[i]) / 2
+    end
+    return result
+end
+
+
 
 -- Dot product: sum of element-wise multiplications
 function vector.dot(v1, v2)

@@ -1,4 +1,6 @@
+
 if settings.startup["muluna-graphics-enable-footstep-animations"].value == true then
+    local vectors = Muluna.vectors
     local m = 0.01 local r = 0.01
     local direction_vectors = { --Velocity vector used to set velocity of kicked up particles.
         North = {0,m},	
@@ -112,7 +114,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                    
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
-                    if walking_state.walking == false then return end --game.print(profiler) return end
+                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} return end --game.print(profiler) return end
                         local player_armor = get_armor(player)
                         local provides_flight = false
                         if player_armor.valid_for_read then 
@@ -132,15 +134,20 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                             local direction = helpers.direction_to_string(walking_state.direction)
                             
                             local speed = player.character_running_speed /0.075
+                            local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
+                            local prev_movement = storage.players_on_muluna[i].previous_movement or {0,0}
+                            movement = vectors.vector_average(movement,prev_movement)
+                            --game.print(serpent.block(movement))
+                            storage.players_on_muluna[i].previous_movement = table.deepcopy(movement)
                             for i = 1,4,1 do
-                                local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
+                                local new_movement = {}
                                 --local random = r*(math.random()-0.5)
-                                movement[1] = (speed)*(movement[1] + r*(math.random()-0.5))
-                                movement[2] = (speed)*(movement[2] + r*(math.random()-0.5))
+                                new_movement[1] = (speed)*(movement[1] + r*(math.random()-0.5))
+                                new_movement[2] = (speed)*(movement[2] + r*(math.random()-0.5))
                                 surface.create_particle{
                                     name = "stone-particle",
                                     position = player_position,
-                                    movement = movement,
+                                    movement = new_movement,
                                     height = 0,
                                     vertical_speed = 0.075,
                                     frame_speed = 0.5
