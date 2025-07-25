@@ -77,6 +77,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     --     game.print(saved_value)
     --     game.print({"",profiler_exp,"saved"})
     -- profiler_exp.reset()
+local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor"}})
 
     local function get_armor(player)
 
@@ -94,7 +95,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
         --local update_tick_rate = event.tick % 180 == true
         
         
-        if game.surfaces.muluna then --If Muluna exists
+        if not game.surfaces.muluna then return end --If Muluna does not exist, don't execute.
             for i,player_info in pairs(storage.players_on_muluna) do
                 --profiler.reset()
                 local player = player_info.player or player_info
@@ -118,9 +119,9 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                         local player_armor = get_armor(player)
                         local provides_flight = false
                         if player_armor.valid_for_read then 
-                            provides_flight=prototypes.item[player_armor.name].provides_flight
+                            provides_flight=armor_list[player_armor.name].provides_flight
                         end
-                        if not player.physical_vehicle and not surface.get_tile(player.position).hidden_tile and not provides_flight then
+                        if player.physical_vehicle or surface.get_tile(player.position).hidden_tile or provides_flight then return end
                             
                             local player_position = character.position
                             surface.create_particle{
@@ -153,12 +154,12 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                                     frame_speed = 0.5
                                 }
                             end
-                        end
+                        --end
                     
                 --game.print(profiler)
                 end
             end
-        end
+        
         end
         )
 end
