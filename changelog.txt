@@ -1,5 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.45.12
+Date: 2025-07-25
+  Compatibility:
+    - Raised required Factorio version to 2.0.60, the latest stable.
+  Bugfixes:
+    - Reworked interstellar science pack technology research process to eliminate issue with instantly unlocking the pack.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.12
 Date: 2025-07-24
   Bugfixes:
     - Removed dependency flag on solar-productivity to fix crash.
