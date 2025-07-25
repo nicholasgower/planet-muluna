@@ -144,7 +144,7 @@ local greenhouse = {
     --crafting_categories = {"greenhouse-10x10"},
     crafting_categories = {"muluna-greenhouse-11x11","muluna-greenhouse"},
     crafting_speed=10,
-    energy_usage = "1MW",
+    energy_usage = "0.5MW",
     graphics_set =
         {
           -- frozen_patch = {
