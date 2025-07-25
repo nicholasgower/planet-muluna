@@ -39,7 +39,12 @@ vacuum_heating_tower.ingredients = {
             type = "item",
             name = "heat-pipe",
             amount = 10
-        }
+        },
+        {
+            type = "item",
+            name = "efficiency-module-3",
+            amount = 1,
+        },
     
 }
 vacuum_heating_tower.energy_required = 10
@@ -53,8 +58,9 @@ crusher_2.name = "crusher-2"
 crusher_2.localised_name = {"",{"item-name.crusher"}," 2"}
 crusher_2.ingredients = {
     {type = "item",name = "tungsten-plate",amount = 10},
-    {type = "item",name = "uranium-238",amount = 10},
+    {type = "item",name = "uranium-238",amount = 2},
     {type = "item",name = "aluminum-plate",amount = 10},
+    {type = "item",name = "speed-module-3",amount = 1},
     {type = "item",name = "crusher",amount = 1}
 }
 if settings.startup["muluna-hardcore-restrict-crusher"].value == true then
@@ -85,8 +91,8 @@ if true or data.raw["recipe"]["biolab"] then
         {type = "item", name = "quantum-processor", amount = 25},
         {type = "item", name = "biolab", amount = 3},
         {type = "item", name = "aluminum-plate", amount = 50},
-        {type = "fluid", name = "fluoroketone-cold", amount = 100},
-        {type = "fluid", name = "carbon-dioxide", amount = 1000},
+        {type = "fluid", name = "fluoroketone-cold", amount = 500},
+        {type = "item", name = "productivity-module-3", amount = 1},
         {type = "item", name = "biter-egg", amount = 5},
         {type = "item", name = "pentapod-egg", amount = 5},
     }
@@ -105,18 +111,6 @@ if true or data.raw["recipe"]["biolab"] then
 end
     
 
-local space_platform_advanced = table.deepcopy(data.raw["recipe"]["space-platform-foundation"])
-space_platform_advanced.name = "advanced-space-platform-foundation"
-space_platform_advanced.ingredients = {
-    {type = "item", name = "aluminum-plate", amount = 10},
-    {type = "item", name = "carbon-fiber", amount = 10},
-    {type = "item", name = "aluminum-cable", amount = 20},
-    {type = "item", name = "space-platform-foundation", amount = 1},
-
-}
-space_platform_advanced.results = {
-    {type = "item", name = "advanced-space-platform-foundation", amount = 1}
-}
 
 local space_chest = table.deepcopy(data.raw["recipe"]["steel-chest"])
 
@@ -241,6 +235,11 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
             type = "item",
             name = "pipe",
             amount = 20,
+        },
+        {
+            type = "item",
+            name = "quality-module-3",
+            amount = 1,
         },
     }
 }

@@ -1,7 +1,7 @@
 
 if settings.startup["muluna-graphics-enable-footstep-animations"].value == true then
     local vectors = Muluna.vectors
-    local m = 0.01 local r = 0.01
+    local m = 0.01 local r = 0.005
     local direction_vectors = { --Velocity vector used to set velocity of kicked up particles.
         North = {0,m},	
         NorthNorthEast = {-m/math.sqrt(2),m/math.sqrt(2)},	
@@ -140,18 +140,18 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
                             movement = vectors.vector_average(movement,prev_movement)
                             --game.print(serpent.block(movement))
                             storage.players_on_muluna[i].previous_movement = table.deepcopy(movement)
-                            for i = 1,4,1 do
+                            for i = 1,math.floor(3*speed),1 do
                                 local new_movement = {}
                                 --local random = r*(math.random()-0.5)
-                                new_movement[1] = (speed)*(movement[1] + r*(math.random()-0.5))
-                                new_movement[2] = (speed)*(movement[2] + r*(math.random()-0.5))
+                                new_movement[1] = (speed)*(movement[1] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
+                                new_movement[2] = (speed)*(movement[2] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
                                 surface.create_particle{
                                     name = "stone-particle",
                                     position = player_position,
                                     movement = new_movement,
                                     height = 0,
-                                    vertical_speed = 0.075,
-                                    frame_speed = 0.5
+                                    vertical_speed = 0.075*math.sqrt(speed),
+                                    frame_speed = 0.1
                                 }
                             end
                         --end
