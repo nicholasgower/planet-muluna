@@ -12,6 +12,7 @@ require("prototypes.sound.index")
 require("prototypes.atmosphere")
 require("prototypes.recipe.index")
 require("prototypes.tiles.tiles")
+
 require("prototypes.tiles.artificial-tiles")
 require("prototypes.radiation")
 require("prototypes.entity.oxidized-boiler")
