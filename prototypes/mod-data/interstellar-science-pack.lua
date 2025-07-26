@@ -12,7 +12,7 @@ local possible_science_packs = --Science pack technologies
     "insulation-science-pack",
     "battlefield-science-pack",
     "compression-science-pack",
-    "omnia-omnite-processing"
+    "omnia-omnite-processing",
     --"igrys-mineral-science-pack",
     --"biorecycling-science-pack"
     --"craptonite-processing",
