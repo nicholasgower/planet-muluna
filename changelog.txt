@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.15
+Date: 2025-07-26
+  Compatibility:
+    - Added Arig and Omnia's science pack technologies to the list of technologies that can unlock the interstellar science pack.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.14
 Date: 2025-07-25
   Bugfixes:
