@@ -11,6 +11,8 @@ local possible_science_packs =
     "nanite-science-pack",
     --"insulation-science-pack",
     "battlefield-science-pack",
+    "compression-science-pack",
+    "omnia-omnite-processing"
     --"igrys-mineral-science-pack",
     --"biorecycling-science-pack"
     --"craptonite-processing",
