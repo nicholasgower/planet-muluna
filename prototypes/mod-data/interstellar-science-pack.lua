@@ -27,9 +27,9 @@ local special_cases = {
 
 
 for _,pack in pairs(possible_science_packs) do 
-    if data.raw["tool"][pack] then
+    if data.raw["technology"][pack] then
         table.insert(science_packs,pack)
-    elseif data.raw["tool"][special_cases[pack]] then
+    elseif data.raw["technology"][special_cases[pack]] then
         table.insert(science_packs,special_cases[pack])
     end
 end
