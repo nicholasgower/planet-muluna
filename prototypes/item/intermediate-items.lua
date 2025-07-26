@@ -106,6 +106,8 @@ data:extend{{
     order=data.raw.item["tree-seed"].order .. "a",
     subgroup=data.raw.item["tree-seed"].subgroup,
     group=data.raw.item["tree-seed"].group,
+    fuel_value = Muluna.multiply_energy(data.raw["item"]["wood"].fuel_value,4/0.95),
+    fuel_category=data.raw["item"]["wood"].fuel_category,
     weight=iron_ore.weight*50,
     default_import_location = "nauvis",
     --plant_result = "tree-01",
