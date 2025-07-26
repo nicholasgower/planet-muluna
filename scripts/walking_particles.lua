@@ -1,22 +1,24 @@
+
 if settings.startup["muluna-graphics-enable-footstep-animations"].value == true then
-    local m = 0.01 local r = 0.01
+    local vectors = Muluna.vectors
+    local m = 0.01 local r = 0.005
     local direction_vectors = { --Velocity vector used to set velocity of kicked up particles.
         North = {0,m},	
-        NorthNorthEast = {-m,m},	
-        NorthEast = {-m,m},
-        EastNorthEast = {-m,m},
+        NorthNorthEast = {-m/math.sqrt(2),m/math.sqrt(2)},	
+        NorthEast = {-m/math.sqrt(2),m/math.sqrt(2)},
+        EastNorthEast = {-m/math.sqrt(2),m/math.sqrt(2)},
         East = {-m,0},	
-        EastSouthEast = {-m,-m},
-        SouthEast = {-m,-m},
-        SouthSouthEast = {-m,-m},
+        EastSouthEast = {-m/math.sqrt(2),-m/math.sqrt(2)},
+        SouthEast = {-m/math.sqrt(2),-m/math.sqrt(2)},
+        SouthSouthEast = {-m/math.sqrt(2),-m/math.sqrt(2)},
         South = {0,-m},	
-        SouthSouthWest = {m,-m},
-        SouthWest = {m,-m},
-        WestSouthWest = {m,-m},
+        SouthSouthWest = {m/math.sqrt(2),-m/math.sqrt(2)},
+        SouthWest = {m/math.sqrt(2),-m/math.sqrt(2)},
+        WestSouthWest = {m/math.sqrt(2),-m/math.sqrt(2)},
         West = {m,0},
-        WestNorthWest = {m,m},
-        NorthWest = {m,m},
-        NorthNorthWest = {m,m},
+        WestNorthWest = {m/math.sqrt(2),m/math.sqrt(2)},
+        NorthWest = {m/math.sqrt(2),m/math.sqrt(2)},
+        NorthNorthWest = {m/math.sqrt(2),m/math.sqrt(2)},
     }
 
 
@@ -75,6 +77,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     --     game.print(saved_value)
     --     game.print({"",profiler_exp,"saved"})
     -- profiler_exp.reset()
+local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor"}})
 
     local function get_armor(player)
 
@@ -92,7 +95,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
         --local update_tick_rate = event.tick % 180 == true
         
         
-        if game.surfaces.muluna then --If Muluna exists
+        if not game.surfaces.muluna then return end --If Muluna does not exist, don't execute.
             for i,player_info in pairs(storage.players_on_muluna) do
                 --profiler.reset()
                 local player = player_info.player or player_info
@@ -112,13 +115,13 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                    
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
-                    if walking_state.walking == false then return end --game.print(profiler) return end
+                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} return end --game.print(profiler) return end
                         local player_armor = get_armor(player)
                         local provides_flight = false
                         if player_armor.valid_for_read then 
-                            provides_flight=prototypes.item[player_armor.name].provides_flight
+                            provides_flight=armor_list[player_armor.name].provides_flight
                         end
-                        if not player.physical_vehicle and not surface.get_tile(player.position).hidden_tile and not provides_flight then
+                        if player.physical_vehicle or surface.get_tile(player.position).hidden_tile or provides_flight then return end
                             
                             local player_position = character.position
                             surface.create_particle{
@@ -132,26 +135,31 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                             local direction = helpers.direction_to_string(walking_state.direction)
                             
                             local speed = player.character_running_speed /0.075
-                            for i = 1,4,1 do
-                                local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
+                            local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
+                            local prev_movement = storage.players_on_muluna[i].previous_movement or {0,0}
+                            movement = vectors.vector_average(movement,prev_movement)
+                            --game.print(serpent.block(movement))
+                            storage.players_on_muluna[i].previous_movement = table.deepcopy(movement)
+                            for i = 1,math.floor(3*speed),1 do
+                                local new_movement = {}
                                 --local random = r*(math.random()-0.5)
-                                movement[1] = (speed)*(movement[1] + r*(math.random()-0.5))
-                                movement[2] = (speed)*(movement[2] + r*(math.random()-0.5))
+                                new_movement[1] = (speed)*(movement[1] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
+                                new_movement[2] = (speed)*(movement[2] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
                                 surface.create_particle{
                                     name = "stone-particle",
                                     position = player_position,
-                                    movement = movement,
+                                    movement = new_movement,
                                     height = 0,
-                                    vertical_speed = 0.075,
-                                    frame_speed = 0.5
+                                    vertical_speed = 0.075*math.sqrt(speed),
+                                    frame_speed = 0.1
                                 }
                             end
-                        end
+                        --end
                     
                 --game.print(profiler)
                 end
             end
-        end
+        
         end
         )
 end

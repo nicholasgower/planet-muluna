@@ -4,6 +4,34 @@ Date: 2025-07-22
   Features:
     - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
 ---------------------------------------------------------------------------------------------------
+Version: 1.99.0
+Date: 2025-07-22
+  Features:
+    - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.15
+Date: 2025-07-26
+  Compatibility:
+    - Added Arig and Omnia's science pack technologies to the list of technologies that can unlock the interstellar science pack.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.14
+Date: 2025-07-25
+  Bugfixes:
+    - Fixed changelog
+---------------------------------------------------------------------------------------------------
+Version: 1.45.13
+Date: 2025-07-25
+  Changes:
+    - test release
+---------------------------------------------------------------------------------------------------
+Version: 1.45.12
+Date: 2025-07-25
+  Compatibility:
+    - Raised required Factorio version to 2.0.60, the latest stable.
+  Bugfixes:
+    - Reworked interstellar science pack technology research process to eliminate issue with instantly unlocking the pack.
+    - Removed dependency flag on solar-productivity to fix crash.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.11
 Date: 2025-07-20
   Bugfixes:

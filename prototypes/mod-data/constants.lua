@@ -1,0 +1,1 @@
+Muluna.constants.oxygen_per_MJ = 10000

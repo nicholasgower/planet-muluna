@@ -30,3 +30,5 @@ elseif Muluna.stage == "control" then
     Muluna.constants = prototypes.mod_data["muluna-constants"].data
     Muluna.events = require("lib.events")
 end 
+
+require("prototypes.mod-data.constants")
