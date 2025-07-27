@@ -626,8 +626,8 @@ data:extend{
         icon_size = 64,
         prerequisites = {"space-platform-thruster"},
         research_trigger = {
-            type = "build-entity",
-            entity = "thruster"
+            type = "craft-item",
+            item = "thruster"
         },
         effects = {
             
