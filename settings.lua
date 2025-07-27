@@ -76,15 +76,15 @@ data:extend{
         name = "muluna-change-quality-science-pack-drain",
         setting_type = "startup",
         default_value = true,
-        order = "cc",
+        order = "dc",
       },
       {
         type = "int-setting",
         name = "space-science-pack-output",
         setting_type = "startup",
         default_value = 2,
-        min = 1,
-        max = 10,
+        minimum_value = 1,
+        maximum_value = 10,
         order = "ca",
       },
       {
@@ -92,8 +92,8 @@ data:extend{
         name = "space-science-pack-energy",
         setting_type = "startup",
         default_value = 7,
-        min = 0.01,
-        max = 60,
+        minimum_value = 0.01,
+        maximum_value = 60,
         order = "cb",
       },
       {
@@ -101,8 +101,8 @@ data:extend{
         name = "muluna-interstellar-science-pack-packs-required",
         setting_type = "startup",
         default_value = 2,
-        min = 1,
-        --max = 10,
+        minimum_value = 1,
+        --maximum_value = 10,
         order = "cc",
       },
       {
@@ -115,6 +115,16 @@ data:extend{
         order = "cd"
 
       },
+      {
+        type = "double-setting",
+        name = "muluna-balance-fulgoran-cargo-drop-item-multiplier",
+        setting_type = "startup",
+        default_value = 1,
+        minimum_value = 0,
+        maximum_value = 10,
+        order = "ce"
+      },
+
     --   {
     --     type = "double-setting",
     --     name = "planet-power-consumption",
