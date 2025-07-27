@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.16
+Date: 2025-07-27
+  Bugfixes:
+    - Changed research trigger of "thruster-oxidixer" from "Build thruster entity" to "Craft thruster item" to reduce confusion.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.15
 Date: 2025-07-26
   Compatibility:
