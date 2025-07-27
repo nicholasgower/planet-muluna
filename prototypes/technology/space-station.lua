@@ -749,8 +749,8 @@ data:extend{
         icons = Muluna.img.blur_technology_icon({{icon = data.raw["fluid"]["thruster-oxidizer"].icon, icon_size = 64}},16),
         prerequisites = {"space-platform-thruster"},
         research_trigger = {
-            type = "build-entity",
-            entity = "thruster"
+            type = "craft-item",
+            item = "thruster"
         },
         effects = {
             
