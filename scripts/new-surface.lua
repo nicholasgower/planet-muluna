@@ -4,23 +4,26 @@ local Public = {}
 
 local spawn_distance = 128
 
+local cargo_drop_radius = settings.startup["muluna-balance-fulgoran-cargo-drop-radius"].value
+local item_multiplier = settings.startup["muluna-balance-fulgoran-cargo-drop-item-multiplier"].value
 local function random_place(surface,item_name,item_count)
+    local item_count_adjusted = item_count * item_multiplier
     --if item_count == nil then item_count = 1 end
-    local x = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
-    local y = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
+    local x = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
+    local y = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
     local entity = {name = "fulgoran-cargo-pod-container", position = {x,y}, force = "player"}
     if surface.can_place_entity(entity) == false then
         entity.position[1] = entity.position[1] + math.random(-8,8)
         entity.position[2] = entity.position[2] + math.random(-8,8) 
     end
     local chest = surface.create_entity(entity)
-    chest.get_output_inventory().insert({name = item_name,count = item_count or 1})
+    chest.get_output_inventory().insert({name = item_name,count = math.floor(item_count_adjusted) or 1})
 end
 
 local function random_place_entity(surface,entity_name)
 
-    local x = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
-    local y = math.random(-spawn_distance,spawn_distance)+math.random(-spawn_distance,spawn_distance)
+    local x = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
+    local y = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
     local entity = {name = entity_name, position = {x,y}, force = "player"}
     if surface.can_place_entity(entity) == false then
         entity.position[1] = entity.position[1] + math.random(-8,8)

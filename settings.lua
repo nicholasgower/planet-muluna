@@ -105,6 +105,16 @@ data:extend{
         --max = 10,
         order = "cc",
       },
+      {
+        type = "double-setting",
+        name = "muluna-balance-fulgoran-cargo-drop-radius",
+        setting_type = "startup",
+        default_value = 64,
+        minimum_value = 16,
+        maximum_value = 512,
+        order = "cd"
+
+      },
     --   {
     --     type = "double-setting",
     --     name = "planet-power-consumption",
