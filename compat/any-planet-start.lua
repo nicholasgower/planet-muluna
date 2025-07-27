@@ -43,8 +43,14 @@ end
 
 
 if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then
+    if mods["aai-industry"] then
+        error("\n\nAAI Industry is incompatible with Muluna start.\n")
+    end
     --assert(settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == false,{"console.muluna-incompatible-aps-setting"})
-    data.raw["technology"]["electronics"].research_trigger.item="aluminum-plate"
+    if data.raw["technology"]["electronics"].research_trigger then
+        data.raw["technology"]["electronics"].research_trigger.item="aluminum-plate"
+    end
+   
     local red_science = table.deepcopy(data.raw["recipe"]["automation-science-pack"])
     rro.replace_name(red_science.ingredients,"copper-plate","aluminum-plate")
     red_science.name="automation-science-pack-muluna"
