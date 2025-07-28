@@ -351,6 +351,7 @@ local muluna=
     },
     surface_render_parameters = {
       shadow_opacity = 0.9,
+      space_dust_foreground = data.raw["space-platform-hub"]["space-platform-hub"].surface_render_parameters.space_dust_foreground
       -- clouds = util.merge{nauvis.surface_render_parameters.clouds,
       --                     opacity_at_day = 0.9,
       --                     opacity_at_night = 0.9,
@@ -398,6 +399,10 @@ local muluna=
       departure = {"planet-to-platform-a"}
     },
     procession_graphic_catalogue = planet_catalogue_vulcanus,
+
+    --Player effects, based on Varaxia's work on Celestial weather
+    ticks_between_player_effects = 1,
+    --player_effects = require("player_effects").player_effects
 
     
 }
