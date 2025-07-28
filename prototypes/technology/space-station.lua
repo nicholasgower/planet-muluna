@@ -238,8 +238,13 @@ data:extend{
         prerequisites = {
             "space-science-pack", "automobilism", "rocketry"
         },
-        icon = data.raw["technology"]["automobilism"].icon,
-        icon_size = data.raw["technology"]["automobilism"].icon_size
+        icons = {
+            {
+                icon = data.raw["technology"]["automobilism"].icon,
+                icon_size = data.raw["technology"]["automobilism"].icon_size
+            }
+        },
+        
     },
     -- {
     --     type = "technology",
@@ -1276,8 +1281,19 @@ data:extend{
     {
         type = "technology",
         name = "muluna-vacuum-heating-tower",
-        icon = data.raw["technology"]["heating-tower"].icon,
-        icon_size = data.raw["technology"]["heating-tower"].icon_size,
+        icons = {
+            {
+            icon = data.raw["technology"]["heating-tower"].icon,
+            icon_size = data.raw["technology"]["heating-tower"].icon_size,
+            },  
+            {
+                icon = data.raw["fluid"]["oxygen"].icon,
+                icon_size=data.raw["fluid"]["oxygen"].icon_size,
+                --scale=0.3,
+                shift = {45,-45},
+                scale=0.75,
+            },
+        },
         localised_name = {"entity-name.muluna-vacuum-heating-tower"},
         unit = {
             count = 2000,

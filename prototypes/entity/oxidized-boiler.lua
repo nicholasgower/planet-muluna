@@ -133,27 +133,27 @@ local space_boiling_atmosphere = util.merge{space_boiling,{
   }
 }}
 
-local temperature_time_ratio = (500-15)/(165-15)
+-- local temperature_time_ratio = (500-15)/(165-15)
 
-local space_boiling_high_temperature = util.merge{space_boiling,{
-  name = "advanced-water-boiling-high-temperature",
-  hide_from_signal_gui = false,
-  --icons = dual_icon("steam","oxygen","oxygen"),
-  --icons = dual_icon("steam","maraxsis-atmosphere"),
-  --icon = data.raw["fluid"]["steam"].icon,
-  --icon_size= data.raw["fluid"]["steam"].icon_size,
-  energy_required = space_boiling.energy_required * temperature_time_ratio,
-  ingredients = {
-    {type = "fluid",name = "water", amount = 6/recipe_time,temperature=15},
-    {type = "fluid",name = "oxygen", amount = temperature_time_ratio*60/recipe_time},
-  },
-  results = {
-    {type = "fluid",name = "steam", amount = 60/recipe_time,temperature=500},
-    {type = "fluid",name = "carbon-dioxide", amount = temperature_time_ratio*60/recipe_time,temperature=500},
-  }
-}}
+-- local space_boiling_high_temperature = util.merge{space_boiling,{
+--   name = "advanced-water-boiling-high-temperature",
+--   hide_from_signal_gui = false,
+--   --icons = dual_icon("steam","oxygen","oxygen"),
+--   --icons = dual_icon("steam","maraxsis-atmosphere"),
+--   --icon = data.raw["fluid"]["steam"].icon,
+--   --icon_size= data.raw["fluid"]["steam"].icon_size,
+--   energy_required = space_boiling.energy_required * temperature_time_ratio,
+--   ingredients = {
+--     {type = "fluid",name = "water", amount = 6/recipe_time,temperature=15},
+--     {type = "fluid",name = "oxygen", amount = temperature_time_ratio*60/recipe_time},
+--   },
+--   results = {
+--     {type = "fluid",name = "steam", amount = 60/recipe_time,temperature=500},
+--     {type = "fluid",name = "carbon-dioxide", amount = temperature_time_ratio*60/recipe_time,temperature=500},
+--   }
+-- }}
 
-data:extend{space_boiling_high_temperature}
+-- data:extend{space_boiling_high_temperature}
 
 
 

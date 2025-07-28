@@ -192,14 +192,14 @@ rro.remove(data.raw["technology"]["agriculture"].effects,{type = "unlock-recipe"
 --     data.raw["assembling-machine"]["E-greenhouse"].localised_name = {"entity-name.n-deprecated",{"entity-name.E-greenhouse"}}
 -- end
 
-table.insert(data.raw["technology"]["heating-tower"].effects,
+-- table.insert(data.raw["technology"]["heating-tower"].effects,
     
-        {
-            type = "unlock-recipe",
-            recipe = "advanced-water-boiling-high-temperature",
-        }
+--         {
+--             type = "unlock-recipe",
+--             recipe = "advanced-water-boiling-high-temperature",
+--         }
     
-)
+-- )
 -- local seed_recipes = {"jellynut","yumako"}
 
 -- for _,seed in pairs(seed_recipes) do
