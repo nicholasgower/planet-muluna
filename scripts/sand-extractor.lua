@@ -72,8 +72,12 @@ function Public.construct_sand_extractor(event)
     if offset_width ~= offset_height then return end 
     --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
     --this check allows them to exist in mod-data without crashing.
-
-    local neighboring_belts = surface.find_entities_filtered{area={{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, type = {"transport-belt","underground-belt","container"}}
+    
+    local neighboring_belts = surface.find_entities_filtered{
+        area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
+        type = {"transport-belt","underground-belt","splitter","container","entity-ghost"},
+        ghost_type = {"transport-belt","underground-belt","splitter","container"},
+    }
     if neighboring_belts then --If adjacent belts exist, change direction of drill such that it feeds one of those belts. Muluna addition.
         for _,neighbor in pairs(neighboring_belts) do
             local delta_pos = {x = neighbor.position.x- position.x, y = neighbor.position.y- position.y}
@@ -107,8 +111,7 @@ function Public.construct_sand_extractor(event)
         raise_built = true,
     }
     if player.force.technologies["muluna-regolith-digging"].researched == false then --Because This script unexpectedly 
-        player.force.technologies["muluna-regolith-digging"].researched = true
-        player.force.print({"technology-researched","[technology=muluna-regolith-digging]"}, {sound_path = "utility/research_completed"})  
+        Muluna.complete_research(player.force,"muluna-regolith-digging")
     end
     
 

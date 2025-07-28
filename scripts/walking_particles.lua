@@ -136,7 +136,7 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
                             
                             local speed = player.character_running_speed /0.075
                             if speed == 1/0 then speed = 1 end --To fix issue where character running speed is infinity for some reason.
-                            game.print(speed)
+                            
                             local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
                             local prev_movement = storage.players_on_muluna[i].previous_movement or {0,0}
                             movement = vectors.vector_average(movement,prev_movement)

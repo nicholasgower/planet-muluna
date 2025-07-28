@@ -29,6 +29,7 @@ if Muluna.stage == "data" then
 elseif Muluna.stage == "control" then
     Muluna.constants = prototypes.mod_data["muluna-constants"].data
     Muluna.events = require("lib.events")
+    Muluna.complete_research = require("lib.notifications").research_technology
 end 
 
 require("prototypes.mod-data.constants")
