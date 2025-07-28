@@ -211,6 +211,8 @@ local regolith_sorting = {
     category = "crushing",
     --additional_categories = {"recycling"},
     auto_recycle = false,
+    allow_decomposition = false,
+    allow_as_intermediate = false,
     enabled = false,
     ingredients = {
         {

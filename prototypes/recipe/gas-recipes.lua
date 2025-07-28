@@ -241,7 +241,8 @@ data:extend{
             {type = "fluid",name = "carbon-dioxide", amount=10, temperature = 165}
         },
         energy_required=1/6,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false
 
     },
     {
@@ -280,8 +281,8 @@ data:extend{
             {type = "fluid",name = "carbon-dioxide", amount=10, temperature = 165}
         },
         energy_required=1/6,
-        subgroup="muluna-products"
-
+        subgroup="muluna-products",
+        hide_from_signal_gui = false,
     },
     -- { 
     --     type = "recipe",

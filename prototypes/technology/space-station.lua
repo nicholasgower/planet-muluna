@@ -1239,8 +1239,10 @@ data:extend{
     {
         type = "technology",
         name = "muluna-cycling-steam-turbine",
+        icons = Muluna.img.blur_technology_icon({{
         icon = "__muluna-graphics__/graphics/icons/advanced-steam-turbine.png",
-        icon_size = 64,
+        icon_size=64,
+        }},16),
         unit = {
             count = 2000,
             time = 60,

@@ -364,4 +364,17 @@ local low_density_space_platform_foundation = {
     scorch_mark_color = {r = 0.373, g = 0.307, b = 0.243, a = 1.000}
   }
 
+-- local gravel = table.deepcopy(data.raw["tile"]["stone-bricks"]) 
+
+
+-- gravel.name = "muluna-gravel"
+-- gravel.walking_speed_modifier=1.0 --Equal to walking on regular ground. Useless everywhere but Muluna
+-- gravel.layer = gravel.layer - 1
+
+
+
+
+
+
+
 data:extend{low_density_space_platform_foundation}

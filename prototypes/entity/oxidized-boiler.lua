@@ -109,6 +109,7 @@ local space_boiling = {
   --icon_size= data.raw["fluid"]["steam"].icon_size,
   subgroup="advanced-boiling",
   energy_required=1/recipe_time,
+  hide_from_signal_gui = false,
   enabled=false,
   ingredients = {
     {type = "fluid",name = "water", amount = 6/recipe_time,temperature=15},
@@ -122,6 +123,7 @@ local space_boiling = {
 
 local space_boiling_atmosphere = util.merge{space_boiling,{
   name = "advanced-water-boiling-atmosphere",
+  hide_from_signal_gui = false,
   icons = dual_icon("steam","maraxsis-atmosphere"),
   --icon = data.raw["fluid"]["steam"].icon,
   --icon_size= data.raw["fluid"]["steam"].icon_size,
@@ -135,6 +137,7 @@ local temperature_time_ratio = (500-15)/(165-15)
 
 local space_boiling_high_temperature = util.merge{space_boiling,{
   name = "advanced-water-boiling-high-temperature",
+  hide_from_signal_gui = false,
   --icons = dual_icon("steam","oxygen","oxygen"),
   --icons = dual_icon("steam","maraxsis-atmosphere"),
   --icon = data.raw["fluid"]["steam"].icon,
@@ -158,6 +161,7 @@ data:extend{space_boiling_high_temperature}
 local space_melting = {
   type = "recipe",
   category = "double-boiler",
+  hide_from_signal_gui = false,
   name = "advanced-water-melting-oxygen",
   icons = {
     {
