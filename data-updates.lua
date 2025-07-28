@@ -6,6 +6,16 @@ local dual_icon = require("lib.dual-item-icon").dual_icon
 local rocket_prod=data.raw["technology"]["rocket-part-productivity"]
 
 if data.raw.technology["rocket-part-productivity"] then
+    data.raw.technology["rocket-part-productivity"].muluna_recipe_productivity_effects = {
+        purge_other_effects = true,
+        effects = {
+            {
+                type = "item",
+                name = "rocket-part",
+                change = 0.1
+            }
+        }
+    }
     table.insert(data.raw.technology["rocket-part-productivity"].effects, {
         type = "change-recipe-productivity",
         recipe = "rocket-part-muluna",
