@@ -863,32 +863,48 @@ data:extend{
                 {"interstellar-science-pack",1},
             }
         },
+        muluna_recipe_productivity_effects = {
+            purge_other_effects = true,
+            effects = {
+                {
+                    type = "fluid",
+                    name = "thruster-fuel",
+                    change = 0.1
+                },
+                {
+                    type = "fluid",
+                    name = "thruster-oxidizer",
+                    change = 0.1
+                },
+            }
+        },
+
         effects = {
-            {
-                type = "change-recipe-productivity",
-                recipe = "thruster-oxidizer",
-                change = 0.1,
-            },
-            {
-                type = "change-recipe-productivity",
-                recipe = "thruster-fuel",
-                change = 0.1,
-            },
-            {
-                type = "change-recipe-productivity",
-                recipe = "advanced-thruster-oxidizer",
-                change = 0.1,
-            },
-            {
-                type = "change-recipe-productivity",
-                recipe = "advanced-thruster-fuel",
-                change = 0.1,
-            },
-            {
-                type = "change-recipe-productivity",
-                recipe = "thruster-fuel-from-rocket-fuel",
-                change = 0.1,
-            },
+            -- {
+            --     type = "change-recipe-productivity",
+            --     recipe = "thruster-oxidizer",
+            --     change = 0.1,
+            -- },
+            -- {
+            --     type = "change-recipe-productivity",
+            --     recipe = "thruster-fuel",
+            --     change = 0.1,
+            -- },
+            -- {
+            --     type = "change-recipe-productivity",
+            --     recipe = "advanced-thruster-oxidizer",
+            --     change = 0.1,
+            -- },
+            -- {
+            --     type = "change-recipe-productivity",
+            --     recipe = "advanced-thruster-fuel",
+            --     change = 0.1,
+            -- },
+            -- {
+            --     type = "change-recipe-productivity",
+            --     recipe = "thruster-fuel-from-rocket-fuel",
+            --     change = 0.1,
+            -- },
         },
     },
     {

@@ -33,7 +33,7 @@ if mods["bztitanium"] or mods["bzcarbon"] or mods["bztin"] or mods["bzlead"] or 
 end
 
 require("prototypes.technology.interstellar-technologies")
-
+require("prototypes.final-fixes.recipe-productivity-technology")
 
 
 --Overrides any mods which add their own techs to space platform thruster as a prereq.

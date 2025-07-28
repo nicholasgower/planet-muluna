@@ -1,0 +1,29 @@
+local rro = require("lib.remove-replace-object")
+for _,tech in pairs(data.raw["technology"]) do
+    if tech.muluna_recipe_productivity_effects then
+        if tech.muluna_recipe_productivity_effects.purge_other_effects then tech.effects = {} end
+        for _,effect in pairs(tech.muluna_recipe_productivity_effects.effects) do
+            local type = effect.type
+            local name = effect.name
+            local change = effect.change
+            for _,recipe in pairs(data.raw["recipe"]) do
+                if recipe.results and (#recipe.results == 1 or effect.allow_multiple_results) then
+                    for _,result in pairs(recipe.results) do
+                        if result.type == type and result.name == name then
+                            local new_effect = {
+                                type = "change-recipe-productivity",
+                                recipe = recipe.name,
+                                change = change,
+                                hidden = effect.hidden,
+                            }
+                            rro.soft_insert(tech.effects,new_effect)
+                        end
+                    end
+                end
+            end
+            
+
+        end
+        tech.muluna_recipe_producitivity_effects = nil
+    end
+end
