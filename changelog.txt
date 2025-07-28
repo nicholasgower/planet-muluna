@@ -9,6 +9,13 @@ Date: 2025-07-22
   Features:
     - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.18
+Date: 2025-07-28
+  Compatibility:
+    - Changed all rocket part productivity technologies to rely on muluna_recipe_productivity_effects field.
+  Bugfixes:
+    - Addressed https://github.com/nicholasgower/planet-muluna/issues/209 by adding a new field to technologies to add all recipes with a certain resulting fluid/item to a technology's list of recipe productivity effects. This feature is a possible future PlanetsLib feature, if sufficient interest exists.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.17
 Date: 2025-07-27
   Compatibility:
