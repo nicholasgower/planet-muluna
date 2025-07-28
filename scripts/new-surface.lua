@@ -51,10 +51,10 @@ local function place_muluna_cargo_pods()
         random_place(muluna,"plastic-bar",math.random(20,40))
     end
     for i = 1,math.random(2,4) do
-        random_place(muluna,"electric-furnace",math.random(1,3))
+        random_place(muluna,"electric-furnace",math.random(3,5))
     end
     for i = 1,math.random(2,4) do
-        random_place(muluna,"electric-mining-drill",math.random(1,3))
+        random_place(muluna,"electric-mining-drill",math.random(3,6))
     end
     for i = 1,math.random(1,2) do
         random_place(muluna,"pipe",math.random(20,40))
@@ -63,7 +63,7 @@ local function place_muluna_cargo_pods()
         random_place(muluna,"pipe-to-ground",math.random(4,10))
     end
     for i = 1,math.random(2,4) do
-        random_place(muluna,"chemical-plant",math.random(1,3))
+        random_place(muluna,"chemical-plant",math.random(3,6))
     end
     for i = 1,math.random(1,3) do
         random_place(muluna,"solar-panel",math.random(3,10))
