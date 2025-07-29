@@ -15,7 +15,7 @@ jobs:
     - name: Setup Lua
       uses: leafo/gh-actions-lua@v8
       with:
-        luaVersion: 5.4
+        luaVersion: 5.2
     - name: Setup Lua Rocks
       uses: leafo/gh-actions-luarocks@v4
     - name: Setup dependencies
