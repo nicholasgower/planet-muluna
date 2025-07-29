@@ -122,7 +122,7 @@ function Public.register_delayed_function(key, func)
 	delayed_functions[key] = func
 end
 
---- Sentinel values for defining groups of events
+-- Sentinel values for defining groups of events
 Public.events = {
 	--- Called after an entity is constructed.
 	--- Note: Using this event may be bad practice. Consider instead defining `created_effect` in the entity prototype.

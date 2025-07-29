@@ -20,3 +20,7 @@ graphics/generate_circles.py export-ignore
 graphics/research-center export-ignore
 graphics/greenhouse/preview export-ignore
 *.sh export-ignore
+docs export-ignore
+*.html export-ignore
+*.ltp export-ignore
+*.css export-ignore

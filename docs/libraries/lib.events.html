@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Muluna documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Muluna</h1>
+
+<ul>
+  <li><a href="https://github.com/lunarmodules/Penlight">GitHub Project</a></li>
+  <li><a href="../index.html">Documentation</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Libraries</h2>
+<ul class="nowrap">
+  <li><a href="../libraries/api.lua.html">api.lua</a></li>
+  <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
+  <li><a href="../libraries/lib.control-stage.html">lib.control-stage</a></li>
+  <li><strong>lib.events</strong></li>
+  <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
+  <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
+  <li><a href="../libraries/remove-replace-object.lua.html">remove-replace-object.lua</a></li>
+  <li><a href="../libraries/wood-gasification.data.html">wood-gasification.data</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lib.events</code></h1>
+<p>Drop-in replacement for script.on_event however it supports multiple handlers per event.</p>
+<p> You can also use 'on<em>built' 'on</em>destroyed' and 'on_init' as shortcuts for multiple events.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Public.execute_later">Public.execute_later (function_key, ticks, ...)</a></td>
+	<td class="summary">use this to execute a script after a delay
+example:
+Public.register<em>delayed</em>function('my<em>delayed</em>func', function(param1, param2, param3) ...</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_built">on_built ()</a></td>
+	<td class="summary">Called after an entity is constructed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_destroyed">on_destroyed ()</a></td>
+	<td class="summary">Called after the results of an entity being mined are collected just before the entity is destroyed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_built_tile">on_built_tile ()</a></td>
+	<td class="summary">Called after a tile is built.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_init">on_init ()</a></td>
+	<td class="summary">Called for on<em>init and on</em>configuration_changed</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on_entity_clicked">on_entity_clicked ()</a></td>
+	<td class="summary">Custom event for when a player clicks on an entity</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Public.execute_later"></a>
+    <strong>Public.execute_later (function_key, ticks, ...)</strong>
+    </dt>
+    <dd>
+    use this to execute a script after a delay
+example:
+Public.register<em>delayed</em>function('my<em>delayed</em>func', function(param1, param2, param3) ...  end)
+Public.execute<em>later('my</em>delayed<em>func', 60, param1, param2, param3)
+The above code will execute my</em>delayed_func after waiting for 60 ticks
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">function_key</span>
+         string
+        </li>
+        <li><span class="parameter">ticks</span>
+         integer
+        </li>
+        <li><span class="parameter">...</span>
+         any
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_built"></a>
+    <strong>on_built ()</strong>
+    </dt>
+    <dd>
+    Called after an entity is constructed.
+ Note: Using this event may be bad practice. Consider instead defining <code>created_effect</code> in the entity prototype.</p>
+
+<p> entity.created_effect = {</p>
+<pre><code>type = 'direct',
+action_delivery = {
+    type = 'instant',
+    source_effects = {
+        type = 'script',
+        effect_id = 'on_built_[ENTITY NAME]'
+    }
+}
+</code></pre>
+<p> }
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_destroyed"></a>
+    <strong>on_destroyed ()</strong>
+    </dt>
+    <dd>
+    Called after the results of an entity being mined are collected just before the entity is destroyed.  [...]
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_built_tile"></a>
+    <strong>on_built_tile ()</strong>
+    </dt>
+    <dd>
+    Called after a tile is built.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_init"></a>
+    <strong>on_init ()</strong>
+    </dt>
+    <dd>
+    Called for on<em>init and on</em>configuration_changed
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on_entity_clicked"></a>
+    <strong>on_entity_clicked ()</strong>
+    </dt>
+    <dd>
+    Custom event for when a player clicks on an entity
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
