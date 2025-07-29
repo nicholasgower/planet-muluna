@@ -19,7 +19,7 @@ jobs:
     - name: Setup Lua Rocks
       uses: leafo/gh-actions-luarocks@v4
     - name: Setup dependencies
-      run: luarocks install --only-deps ldoc-1.5.0-1.rockspec
+      run: luarocks install --only-deps ldoc-1.5.0-1
     - name: Build docs
       run: make doc-site
     - name: Deploy
