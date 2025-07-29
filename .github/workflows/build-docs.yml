@@ -15,11 +15,11 @@ jobs:
     - name: Setup Lua
       uses: leafo/gh-actions-lua@v8
       with:
-        luaVersion: 5.2
+        luaVersion: 5.4
     - name: Setup Lua Rocks
       uses: leafo/gh-actions-luarocks@v4
     - name: Setup dependencies
-      run: luarocks install --only-deps ldoc-1.5.0-1
+      run: luarocks install --only-deps ldoc-1.5.0-1.rockspec
     - name: Build docs
       run: make doc-site
     - name: Deploy
