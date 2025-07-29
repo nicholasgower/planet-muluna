@@ -1,11 +1,13 @@
 project = 'Muluna'
 description = 'Muluna'
-full_description = 'Penlight is a set of pure Lua libraries for making it easier to work with common tasks like iterating over directories, reading configuration files and the like. Provides functional operations on tables and sequences. Visit the <a href="https://github.com/lunarmodules/Penlight">GitHub project</a> to review the code or file issues. Skip to the @{01-introduction.md|introduction}.'
+full_description = 'Muluna, Moon of Nauvis is a mod that expands Factorio by adding a new planet. This documentation is a work in progress.'
 title = 'Muluna documentation'
 dir = 'docs'
 template = true
 use_markdown_titles = true
 readme = "README.md" 
+style = '!fixed'
+template = "docs_templates"
 format = 'discount'
 sort_modules=true
 ignore=true

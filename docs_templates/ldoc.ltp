@@ -36,7 +36,8 @@
 <h1>$(ldoc.project)</h1>
 
 <ul>
-  <li><a href="https://github.com/lunarmodules/Penlight">GitHub Project</a></li>
+  <li><a href="https://github.com/nicholasgower/planet-muluna">GitHub Project</a></li>
+  <li><a href="https://mods.factorio.com/mod/planet-muluna">Mod Portal Download</a></li>
 # if not ldoc.single and module then -- reference back to project index
   <li><a href="../$(ldoc.output).html">Documentation</a></li>
 # else
