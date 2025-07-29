@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Muluna documentation</title>
+    <link rel="stylesheet" href="../ldoc_fixed.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Muluna</h1>
+
+<ul>
+  <li><a href="https://github.com/lunarmodules/Penlight">GitHub Project</a></li>
+  <li><a href="../index.html">Documentation</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Libraries</h2>
+<ul class="nowrap">
+  <li><a href="../libraries/api.lua.html">api.lua</a></li>
+  <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
+  <li><a href="../libraries/lib.control-stage.html">lib.control-stage</a></li>
+  <li><a href="../libraries/lib.events.html">lib.events</a></li>
+  <li><strong>lib.remove-replace-object.lua</strong></li>
+  <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
+  <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
+  <li><a href="../libraries/wood-gasification.data.html">wood-gasification.data</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lib.remove-replace-object.lua</code></h1>
+<p>rro(remove-replace-object)
+ Essential table manipulation library</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#rro.deep_equals">rro.deep_equals (table1, table2)</a></td>
+	<td class="summary">Checks if two objects are identical.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rro.remove">rro.remove (list, objectToRemove)</a></td>
+	<td class="summary">Removes object from list</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rro.replace">rro.replace (list, objectToRemove, replacementObject)</a></td>
+	<td class="summary">Replaces object in list with another object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rro.contains">rro.contains (list, object)</a></td>
+	<td class="summary">Check if object exists in list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rro.soft_insert">rro.soft_insert (list, objectToAdd)</a></td>
+	<td class="summary">Adds object to list if it doesn't already exist.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "rro.deep_equals"></a>
+    <strong>rro.deep_equals (table1, table2)</strong>
+    </dt>
+    <dd>
+    Checks if two objects are identical.  ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">table1</span>
+
+
+
+        </li>
+        <li><span class="parameter">table2</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.remove"></a>
+    <strong>rro.remove (list, objectToRemove)</strong>
+    </dt>
+    <dd>
+    Removes object from list
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">list</span>
+
+
+
+        </li>
+        <li><span class="parameter">objectToRemove</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.replace"></a>
+    <strong>rro.replace (list, objectToRemove, replacementObject)</strong>
+    </dt>
+    <dd>
+    Replaces object in list with another object
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">list</span>
+
+
+
+        </li>
+        <li><span class="parameter">objectToRemove</span>
+
+
+
+        </li>
+        <li><span class="parameter">replacementObject</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.contains"></a>
+    <strong>rro.contains (list, object)</strong>
+    </dt>
+    <dd>
+    Check if object exists in list.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">list</span>
+
+
+
+        </li>
+        <li><span class="parameter">object</span>
+        local contains = false
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.soft_insert"></a>
+    <strong>rro.soft_insert (list, objectToAdd)</strong>
+    </dt>
+    <dd>
+    Adds object to list if it doesn't already exist.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">list</span>
+
+
+
+        </li>
+        <li><span class="parameter">objectToAdd</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

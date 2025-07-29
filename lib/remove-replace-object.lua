@@ -1,7 +1,7 @@
 --- rro(remove-replace-object)
 -- Essential table manipulation library
 -- 
--- @module remove-replace-object.lua
+-- @module lib.remove-replace-object
 -- @pragma nostrip
 local rro = {}
 ---Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
@@ -45,6 +45,7 @@ function rro.replace(list, objectToRemove, replacementObject)
     end
 end
 
+---Searches a list for all items where `item[field] == name`, and replaces `name` with `new_name`.
 function rro.replace_field(list,field,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
         if list[i][field] == name then
@@ -54,6 +55,7 @@ function rro.replace_field(list,field,name,new_name)
     end
 end
 
+---Searches a list for all items where `item.name == name`, and replaces `name` with `new_name`.
 function rro.replace_name(list,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
         if list[i].name == name then
@@ -78,6 +80,8 @@ function rro.contains(list,object)
 end
 
 ---Adds object to list if it doesn't already exist. 
+-- @param list table
+-- @param objectToAdd object
 function rro.soft_insert(list,objectToAdd) 
     if list == nil then list = {} end
     if rro.contains(list,objectToAdd) == false then
@@ -86,6 +90,10 @@ function rro.soft_insert(list,objectToAdd)
 
 end
 
+---Adds fields of `new` to `old`, replacing overlapping fields.
+-- @param old table
+-- @param new table
+-- @return old table
 function rro.merge(old, new)
     old = util.table.deepcopy(old)
 

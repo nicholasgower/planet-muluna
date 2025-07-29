@@ -1,6 +1,6 @@
 --- Muluna API
 -- 
--- Dependencies: `lib.images`, `lib.remove-replace-object`, `lib.vectors`
+-- Dependencies: `lib.remove-replace-object`
 -- @module api.lua
 -- @pragma nostrip
 Muluna = {}
@@ -8,6 +8,7 @@ Muluna = {}
 Muluna.get_stage = require("lib.get-stage").get_stage
 Muluna.stage = Muluna.get_stage()
 --- Library of table manipulation scripts.
+-- @see lib.remove-replace-object
 Muluna.rro = require("lib.remove-replace-object")
 
 Muluna.img = require("lib.images")
