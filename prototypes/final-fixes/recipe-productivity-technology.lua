@@ -16,6 +16,10 @@ for _,tech in pairs(data.raw["technology"]) do
                                 recipe = recipe.name,
                                 change = change,
                                 hidden = effect.hidden,
+                                use_icon_overlay_constant = effect.use_icon_overlay_constant,
+                                icons = effect.icons,
+                                icon = effect.icon,
+                                icon_size = effect.icon_size,
                             }
                             rro.soft_insert(tech.effects,new_effect)
                         end

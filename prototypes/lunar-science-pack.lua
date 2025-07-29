@@ -46,7 +46,6 @@ t_lunar_pack.icon = "__muluna-graphics__/graphics/technology/space-science-pack.
 
 -- }
 
-t_lunar_pack.enabled = false
 t_lunar_pack.visible_when_disabled = true
 
 i_lunar_pack.order = "j[interstellar-science-pack]"

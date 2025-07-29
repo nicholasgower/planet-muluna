@@ -1240,6 +1240,8 @@ data:extend{
         localised_description = {"technology-description.muluna-nanofoamed-polymers",tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
         icon = "__muluna-graphics__/graphics/technology/polymers.png",
         icon_size = 1024,
+        enabled = false,
+        visible_when_disabled = true,
         unit = {
             count = 1,
             time = 1,
