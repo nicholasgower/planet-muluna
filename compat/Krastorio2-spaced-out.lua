@@ -1,3 +1,4 @@
+---Krastorio2-spaced-out compatibility
 if mods["Krastorio2-spaced-out"] then
     
 

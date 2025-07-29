@@ -1,6 +1,11 @@
+--- rro(remove-replace-object)
+-- Essential table manipulation library
+-- 
+-- @module remove-replace-object.lua
+-- @pragma nostrip
 local rro = {}
-
-function rro.deep_equals(table1, table2) --Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
+---Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
+function rro.deep_equals(table1, table2) 
     if table1 == table2 then return true end
     if type(table1) ~= "table" or type(table2) ~= "table" then return false end
     for key, value in pairs(table1) do
@@ -12,7 +17,8 @@ function rro.deep_equals(table1, table2) --Checks if two objects are identical. 
     return true
 end
 
-function rro.remove(list, objectToRemove) --Removes object from list
+---Removes object from list
+function rro.remove(list, objectToRemove) 
     if list then
         for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
             if rro.deep_equals(list[i] , objectToRemove) then
@@ -23,7 +29,8 @@ function rro.remove(list, objectToRemove) --Removes object from list
     end
 end
 
-function rro.replace(list, objectToRemove, replacementObject) --Replaces object in list with another object
+---Replaces object in list with another object
+function rro.replace(list, objectToRemove, replacementObject) 
     if list then
         for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
             if rro.deep_equals(list[i] , objectToRemove) then
@@ -56,7 +63,8 @@ function rro.replace_name(list,name,new_name)
     end
 end
 
-function rro.contains(list,object) --Check if object exists in list.
+---Check if object exists in list.
+function rro.contains(list,object) 
     --local contains = false
     if list == nil then return false end
     for _,item in pairs(list) do -- Iterate forward
@@ -69,7 +77,8 @@ function rro.contains(list,object) --Check if object exists in list.
     return false
 end
 
-function rro.soft_insert(list,objectToAdd) --Adds object to list if it doesn't already exist. 
+---Adds object to list if it doesn't already exist. 
+function rro.soft_insert(list,objectToAdd) 
     if list == nil then list = {} end
     if rro.contains(list,objectToAdd) == false then
         table.insert(list,objectToAdd)

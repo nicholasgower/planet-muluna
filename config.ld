@@ -6,12 +6,9 @@ dir = 'docs'
 style = '!fixed'
 template = true
 use_markdown_titles = true
-topics = 'docs_topics'
-examples = {'./examples','./tests/test-data.lua'}
-package = 'pl'
 format = 'discount'
 sort_modules=true
-file = './lua/pl'
+file = '.'
 kind_names={topic='Manual',module='Libraries'}
 tparam_alias('array','array')
 tparam_alias('array2d','array')

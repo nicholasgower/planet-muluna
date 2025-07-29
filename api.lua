@@ -1,8 +1,15 @@
+--- Muluna API
+-- 
+-- Dependencies: `lib.images`, `lib.remove-replace-object`, `lib.vectors`
+-- @module api.lua
+-- @pragma nostrip
 Muluna = {}
 
 Muluna.get_stage = require("lib.get-stage").get_stage
 Muluna.stage = Muluna.get_stage()
+--- Library of table manipulation scripts.
 Muluna.rro = require("lib.remove-replace-object")
+
 Muluna.img = require("lib.images")
 Muluna.vectors=require("lib.vectors")
 Muluna.multiply_energy = require("lib.energy-multiply").multiply_energy
@@ -33,3 +40,5 @@ elseif Muluna.stage == "control" then
 end 
 
 require("prototypes.mod-data.constants")
+
+return Muluna
