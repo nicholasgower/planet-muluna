@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Muluna documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Muluna</h1>
+
+<ul>
+  <li><a href="https://github.com/lunarmodules/Penlight">GitHub Project</a></li>
+  <li><a href="../index.html">Documentation</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Resources">Resources </a></li>
+<li><a href="#New_recipes">New recipes </a></li>
+<li><a href="#New_Buildings">New Buildings </a></li>
+<li><a href="#Notable_technologies">Notable technologies </a></li>
+<li><a href="#Recommended_Planets">Recommended Planets </a></li>
+<li><a href="#Known_to_be_compatible_with_">Known to be compatible with: </a></li>
+<li><a href="#Author_maintained_locales_">Author-maintained locales: </a></li>
+<li><a href="#Community_maintained_locales_">Community-maintained locales: </a></li>
+<li><a href="#Special_thanks_to_the_following_mods_and_creators_">Special thanks to the following mods and creators: </a></li>
+</ul>
+
+
+<h2>Manual</h2>
+<ul class="nowrap">
+  <li><strong>README</strong></li>
+</ul>
+<h2>Libraries</h2>
+<ul class="nowrap">
+  <li><a href="../libraries/api.lua.html">api.lua</a></li>
+  <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
+  <li><a href="../libraries/lib.control-stage.html">lib.control-stage</a></li>
+  <li><a href="../libraries/lib.events.html">lib.events</a></li>
+  <li><a href="../libraries/lib.remove-replace-object.html">lib.remove-replace-object</a></li>
+  <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
+  <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
+  <li><a href="../libraries/wood-gasification.data.html">wood-gasification.data</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<p><a href="https://ko-fi.com/Y8Y019GOIS"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi"/></a></p>
+
+<p>Explore Nauvis' moon of Muluna, the source of the space science pack, and take your first step into space. Discover new uses for crushers, now enabled on all surfaces. Use the Interstellar science pack to upgrade your space platforms and reach even deeper into space.</p>
+
+<p>Muluna can be seamlessly added to any save, but it is recommended that you start with either a fresh save or a save that has not left Nauvis yet.</p>
+
+<p>Muluna's low gravity makes it easier to launch rockets from than from Nauvis or other planets, making it an ideal location for constructing space platforms and shipping materials to other planets. However, the low pressure makes it impossible to craft any science other than Space Science.</p>
+
+<p>Your first space platform is likely to look very different from a typical Space Age platform. You will not initially have access to asteroid collectors or crushers, so your first platform will be completely dependent on shipments from Nauvis. Thruster fuel can be made from rocket fuel, and like in vanilla, oxidizer can be made from iron ore. Luckily, there are no dangerous asteroids between Nauvis and Muluna, so you can skip placing turrets on any Nauvis-Muluna ships.</p>
+
+<p>Rocket part costs are doubled on every planet except for Muluna, but in return, Rocket Part Productivity is a technology that is present throughout all of Space Age. Four levels of Rocket Part Productivity are available on Muluna, and two are available on Vulcanus, Gleba, and Fulgora respectively. Unlike other bonus technologies, Rocket Part Productivity has a non-linear research order.</p>
+
+<p>This mod currently relies on vanilla prototypes for many world features. While this is likely to become less true with time, any mod that removes vanilla terrain features, such as Alien Biomes, is likely to crash on startup with this mod unless a fix is made specifically for that mod.</p>
+
+<p><a name="Resources"></a></p>
+<h2>Resources</h2>
+
+<ul>
+    <li><p>Metallic asteroid chunk</p></li>
+    <li><p>Carbonic asteroid chunk</p></li>
+    <li><p>Oxide asteroid chunk</p></li>
+    <li><p>Anorthite chunk</p></li>
+    <li><p>Helium</p></li>
+    <li><p>Stone</p></li>
+    <li><p>Uranium ore</p></li>
+</ul>
+
+<p><a name="New_recipes"></a></p>
+<h2>New recipes</h2>
+
+<p>Crushers can now be placed on any surface, and in addition to their vanilla recipes, which form the backbone of any Muluna base, a few new crusher recipes have been added, some of which are useful on any planet.</p>
+
+<ul>
+    <li><p>(Crusher) Anorthite crushing: 1 Anorthite chunk -> 20 Alumina + 20% Anorthite chunk</p></li>
+    <li><p>(Crusher) Alumina Crushing: 6 Alumina -> 10 crushed alumina + 1 stone</p></li>
+    <li><p>(Assembling) ALICE Propellant: 10 crushed alumina + 2 ice + 100 water -> 1 rocket fuel</p></li>
+    <li><p>(Crusher) Stone crushing: 2 stone -> 3 crushed stone + 5% stone</p></li>
+    <li><p>(Furnace) Bricks from crushed stone: 2 crushed stone -> 1 stone brick</p></li>
+    <li><p>(Assembling) Landfill from crushed stone: 40 crushed stone + 5 concrete -> 1 landfill</p></li>
+    <li><p>(Chemical planet) Thruster fuel from rocket fuel: 1 rocket fuel + 10 water -> 250 thruster fuel (This is how your first space platform will generate thruster fuel.)</p></li>
+</ul>
+
+<p><a name="New_Buildings"></a></p>
+<h2>New Buildings</h2>
+
+<ul>
+    <li><p>Crusher 2: A faster crusher with 4 module slots. Requires interstellar science packs to unlock.</p></li>
+    <li><p>Cryolab: A lab with a footprint of 7x7, big enough to easily fit 14 science packs. Has a speed of 6, a science pack drain of 50% and 6 module slots. Crafting this is an endgame-level challenge that stretches the vanilla game mechanics to their absolute limit.</p></li>
+</ul>
+
+<p><a name="Notable_technologies"></a></p>
+<h2>Notable technologies</h2>
+
+<ul>
+    <li><p>Interstellar science pack: Technologies for venturing deeper into space. Requires science packs from Vulcanus, Gleba, and Fulgora. All Aquilo-tier planets require interstellar science packs to discover.</p></li>
+    <li><p>Thruster fuel productivity: Infinite technology that unlocks with the interstellar science pack.</p></li>
+</ul>
+
+<p><a name="Recommended_Planets"></a></p>
+<h2>Recommended Planets</h2>
+
+<ul>
+    <li><p>Maraxsis, which adds several gases also used by this mod.</p></li>
+    <li><p>Corrundum, which offers an alternative form of carbon dioxide venting that generates electricity.</p></li>
+</ul>
+
+<p><a name="Known_to_be_compatible_with_"></a></p>
+<h2>Known to be compatible with:</h2>
+
+<ul>
+    <li><p>Alien Biomes</p></li>
+    <li><p>AAI Industries</p></li>
+    <li><p>Crushing Industries(With this mod installed, the Crusher and Crusher 2 are renamed to "Space crushers," and can only be built on space platforms and on Muluna. Crushing industries gives vanilla/Muluna crushers a 25% quality bonus, which makes Crushing Industries crushers the best crusher to use when starting on Muluna.)</p></li>
+</ul>
+
+<p><a name="Author_maintained_locales_"></a></p>
+<h2>Author-maintained locales:</h2>
+
+<ul>
+    <li>English</li>
+</ul>
+
+<p><a name="Community_maintained_locales_"></a></p>
+<h2>Community-maintained locales:</h2>
+
+<ul>
+    <li><p>Russian</p></li>
+    <li><p>Simplified Chinese</p></li>
+    <li><p>German by <a href="https://github.com/Lucanoria">Lucanoria</a></p></li>
+</ul>
+
+<p><a name="Special_thanks_to_the_following_mods_and_creators_"></a></p>
+<h2>Special thanks to the following mods and creators:</h2>
+
+<ul>
+    <li><p>SafTheLamb, for crushed alumina icon and for collaborating with me to ensure compatibility between Muluna and her mods.</p></li>
+    <li><p>Maraxsis by notnotmelon, for code and certain fluids copied for cross-compatibility purposes.</p></li>
+    <li><p>Hurricane, for their many freely available high-quality art assets.</p></li>
+    <li><p>Unused-renders, for their numerous freely available icon assets.</p></li>
+</ul>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
