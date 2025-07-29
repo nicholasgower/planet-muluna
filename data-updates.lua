@@ -578,12 +578,12 @@ end
 
 
 if data.raw["technology"]["rocket-fuel-productivity"] then
-    table.insert(data.raw["technology"]["rocket-fuel-productivity"].effects,{
-        type = "change-recipe-productivity",
-        recipe = "rocket-fuel-aluminum",
-        change = 0.1,
-        hidden = false
-    })
+    -- table.insert(data.raw["technology"]["rocket-fuel-productivity"].effects,{
+    --     type = "change-recipe-productivity",
+    --     recipe = "rocket-fuel-aluminum",
+    --     change = 0.1,
+    --     hidden = false
+    -- })
 end
 
 
