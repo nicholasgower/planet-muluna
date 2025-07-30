@@ -215,7 +215,7 @@ table.index td { text-align: left; vertical-align: top; }
     body {
         font: 12pt "Times New Roman", "TimeNR", Times, serif;
     }
-    a { font-weight: bold; color: #FFDF20; text-decoration: underline; }
+    a { font-weight: bold; color: #000000; text-decoration: underline; }
 
     #main {
         background-color: #231510;
@@ -290,7 +290,7 @@ ul ol { margin-top: 0px; }
 
 /* make the target distinct; helps when we're navigating to a function */
 a:target + * {
-  background-color: #FF9;
+  background-color: #000000;
 }
 
 
@@ -300,7 +300,7 @@ pre .constant { color: #a8660d; }
 pre .escape { color: #844631; }
 pre .keyword { color: #aa5050; font-weight: bold; }
 pre .library { color: #0e7c6b; }
-pre .marker { color: #512b1e; background: #fedc56; font-weight: bold; }
+pre .marker { color: #512b1e; background: #000000; font-weight: bold; }
 pre .string { color: #8080ff; }
 pre .number { color: #f8660d; }
 pre .function-name { color: #60447f; }
