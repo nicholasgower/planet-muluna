@@ -108,7 +108,7 @@ function Public.construct_sand_extractor(event)
         }
 
     )
-    game.print(serpent.block(neighboring_belts))
+    --game.print(serpent.block(neighboring_belts))
     if neighboring_belts then --If adjacent belts exist, change direction of drill such that it feeds one of those belts. Muluna addition.
         for _,neighbor in pairs(neighboring_belts) do
             local delta_pos = {x = neighbor.position.x- position.x, y = neighbor.position.y- position.y}
