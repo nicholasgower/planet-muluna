@@ -112,8 +112,19 @@ function rro.ammend(old, new)
     old = rro.merge(old, new)
 end
 
-
-
+--- Concatenates the contents of `second` to `first`
+-- @param first table
+-- @param second table
+function rro.get_concatenation(first,second)
+    local first_l = #first
+    local second_l = #second
+    local out = table.deepcopy(first)
+    local out_second = table.deepcopy(second)
+    for i=1,second_l do
+        out[first_l+i] = out_second[i]
+    end
+    return out
+end
 
 
 

@@ -1,3 +1,4 @@
+local rro = Muluna.rro
 local Public = {}
 
 -- Forked from Maraxsis
@@ -67,17 +68,37 @@ function Public.construct_sand_extractor(event)
     local direction = defines.direction.north
 
     local drill_prototype = mining_drill_prototypes[name]
+    
+    
+    local range_offset = drill_prototype.get_mining_drill_radius(quality) 
+
+    local neighboring_resources = surface.find_entities_filtered{ --Search for resources to see if a regular mining drill would be placed.
+        area= {{position.x-range_offset,position.y-range_offset},{position.x+range_offset,position.y+range_offset}}, 
+        type = {"resource"},
+        
+    }
+    if #neighboring_resources ~= 0 then return end --If neighboring resources exist, then do not place
+    
+    --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
+    --this check allows them to exist in mod-data without crashing.
     local offset_width = drill_prototype.tile_width
     local offset_height = drill_prototype.tile_height
     if offset_width ~= offset_height then return end 
-    --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
-    --this check allows them to exist in mod-data without crashing.
-    
-    local neighboring_belts = surface.find_entities_filtered{
-        area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
-        type = {"transport-belt","underground-belt","splitter","container","entity-ghost"},
-        ghost_type = {"transport-belt","underground-belt","splitter","container"},
-    }
+
+    local neighboring_belts = rro.get_concatenation(
+        surface.find_entities_filtered{
+            area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
+            type = {"transport-belt","underground-belt","splitter","container"},
+            --ghost_type = {"transport-belt","underground-belt","splitter","container"},
+        },
+        surface.find_entities_filtered{
+            area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
+            --type = {"entity-ghost"},
+            ghost_type = {"transport-belt","underground-belt","splitter","container"},
+        }
+
+    )
+    game.print(serpent.block(neighboring_belts))
     if neighboring_belts then --If adjacent belts exist, change direction of drill such that it feeds one of those belts. Muluna addition.
         for _,neighbor in pairs(neighboring_belts) do
             local delta_pos = {x = neighbor.position.x- position.x, y = neighbor.position.y- position.y}
@@ -98,6 +119,7 @@ function Public.construct_sand_extractor(event)
             end
         end
     end
+
     
 
     surface.create_entity {
