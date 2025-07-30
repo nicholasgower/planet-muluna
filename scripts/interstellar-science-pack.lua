@@ -1,3 +1,8 @@
+--- Interstellar science pack
+--
+-- @module scripts.interstellar-science-pack.lua
+-- @pragma nostrip
+
 local Public = {}
 local interstellar_pack_name = "interstellar-science-pack"
 
@@ -31,7 +36,9 @@ local interstellar_pack_name = "interstellar-science-pack"
 
 -- end)
 
-
+--- Checks whether a force meets the conditions to unlock the interstellar science pack.
+--- @param force LuaForce
+--- @param display_notification boolean
 function Public.update_interstellar_pack(force,display_notification)
     if display_notification == nil then display_notification = true end
     --local force = event.research.force
