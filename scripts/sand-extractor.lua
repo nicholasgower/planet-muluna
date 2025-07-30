@@ -79,12 +79,22 @@ function Public.construct_sand_extractor(event)
     }
     if #neighboring_resources ~= 0 then return end --If neighboring resources exist, then do not place
     
+
+
+
+
     --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
     --this check allows them to exist in mod-data without crashing.
     local offset_width = drill_prototype.tile_width
     local offset_height = drill_prototype.tile_height
     if offset_width ~= offset_height then return end 
 
+    local colliding_entities = surface.find_entities_filtered{
+            area= {{position.x-offset_width/2,position.y-offset_height/2},{position.x+offset_width/2,position.y+offset_height/2}},
+            to_be_deconstructed = false,
+        }
+    if #colliding_entities ~= 0 then return end
+    
     local neighboring_belts = rro.get_concatenation(
         surface.find_entities_filtered{
             area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 

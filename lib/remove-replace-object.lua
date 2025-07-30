@@ -112,7 +112,7 @@ function rro.ammend(old, new)
     old = rro.merge(old, new)
 end
 
---- Concatenates the contents of `second` to `first`
+--- Returns a concatenation of the contents of two tables.
 -- @param first table
 -- @param second table
 function rro.get_concatenation(first,second)
