@@ -9,6 +9,11 @@ Date: 2025-07-22
   Features:
     - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.19
+Date: 2025-07-31
+  Compatibility:
+    - Added support for "skewer_shattered_planet."
+---------------------------------------------------------------------------------------------------
 Version: 1.45.18
 Date: 2025-07-28
   Compatibility:
