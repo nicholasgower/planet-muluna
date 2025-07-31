@@ -87,16 +87,39 @@ local planets_nexuz = {
     "planet-discovery-arrakis"
 }
 
+local function make_interstellar(tech_name)
+    rro.soft_insert(data.raw["technology"][tech_name].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+    rro.soft_insert(data.raw["technology"][tech_name].prerequisites,"interstellar-science-pack") --Add science pack if it doesn't already exist.
+
+end
+
+for _,tech in pairs(data.raw["technology"]) do
+
+    local interstellar = 
+        ( -- If is Aquilo-tier discovery technology
+            tech.unit and
+            rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}) and
+            rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}) and
+            rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"}) and
+            (
+                string.find(tech.name,"discovery") or
+                string.find(tech.name,"thruster")
+            )
+            
+        )  --Add additional "or" statements below
+    
+    if interstellar then
+        make_interstellar(tech.name)
+    end
+
+end
+
 for _,group in pairs(techs_interstellar) do
     for _,tech in pairs(group) do
         if data.raw["technology"][tech] then
-            rro.soft_insert(data.raw["technology"][tech].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
-            rro.soft_insert(data.raw["technology"][tech].prerequisites,"interstellar-science-pack") --Add science pack if it doesn't already exist.
+            make_interstellar(tech)
         end
     end
-
-    
-    
 end
 
 for _,tech in pairs(techs_asteroid) do
@@ -110,8 +133,7 @@ end
 if mods["Starmap_Nexuz"] then
     for _,tech in pairs(planets_nexuz) do
         if data.raw["technology"][tech] then
-            rro.soft_insert(data.raw["technology"][tech].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
-            rro.soft_insert(data.raw["technology"][tech].prerequisites,"interstellar-science-pack") --Add science pack if it doesn't already exist.
+            make_interstellar(tech)
         end
         
     end
