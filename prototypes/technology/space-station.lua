@@ -242,7 +242,14 @@ data:extend{
             {
                 icon = data.raw["technology"]["automobilism"].icon,
                 icon_size = data.raw["technology"]["automobilism"].icon_size
-            }
+            },
+            {
+                icon = data.raw["item"]["rocket-turret"].icon,
+                icon_size=data.raw["item"]["rocket-turret"].icon_size,
+                --scale=0.3,
+                shift = {-8,-36},
+                scale=0.6,
+            },
         },
         
     },

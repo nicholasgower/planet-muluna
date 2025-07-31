@@ -158,6 +158,19 @@ local buggy = util.merge{table.deepcopy(data.raw["item-with-entity-data"]["car"]
 }
 
 }
+buggy.icons = {
+    {
+        icon = data.raw["item-with-entity-data"]["car"].icon,
+        icon_size = data.raw["item-with-entity-data"]["car"].icon_size
+    },
+    {
+        icon = data.raw["item"]["rocket-turret"].icon,
+        icon_size=data.raw["item"]["rocket-turret"].icon_size,
+        --scale=0.3,
+        shift = {-2,-12},
+        scale=0.2,
+    },
+}
 
 
 data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}

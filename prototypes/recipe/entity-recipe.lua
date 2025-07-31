@@ -254,5 +254,22 @@ buggy.name = "muluna-rocket-buggy"
 
 buggy.results[1].name = "muluna-rocket-buggy"
 
+buggy.ingredients = {
+    {
+        type = "item", name = "aluminum-plate", amount = 20,
+    },
+    {
+        type = "item", name = "electric-engine-unit", amount = 12,
+    },
+    {
+        type = "item", name = "electronic-circuit", amount = 12,
+    },
+    {
+        type = "item", name = "steel-plate", amount = 16,
+    },
+}
+
+buggy.energy_required = 5
+
 
 data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
