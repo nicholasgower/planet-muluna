@@ -118,7 +118,8 @@ local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-adv
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
 
-
+heating_tower.icon = data.raw["item"]["muluna-vacuum-heating-tower"].icon
+heating_tower.icon_size = data.raw["item"]["muluna-vacuum-heating-tower"].icon_size
 
 heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"
