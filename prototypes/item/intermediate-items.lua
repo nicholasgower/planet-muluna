@@ -66,10 +66,11 @@ data:extend{{
     -- },
     
     stack_size=data.raw.item["stone"].stack_size*2,
-    order="c[stone-crushed]",
-    subgroup="muluna-products",
+    order="a[stone-crushed]",
+    subgroup="terrain",
     group=data.raw.item["stone"].group,
     weight=data.raw.item["stone"].weight/2,
+    place_as_tile = util.merge{data.raw["item"]["stone-brick"].place_as_tile,{result = "muluna-gravel"}},
 },
 {
     type="item",
@@ -325,3 +326,5 @@ end
 --       }
     
 -- end
+
+data.raw["item"]["stone-brick"].order = "a" .. data.raw["item"]["stone-brick"].order

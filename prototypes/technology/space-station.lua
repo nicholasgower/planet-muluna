@@ -1250,9 +1250,7 @@ data:extend{
         unit = {
             count = 1,
             time = 1,
-            ingredients = {
-
-            }
+            ingredients = {}
         },
         prerequisites = {
             "kovarex-enrichment-process",

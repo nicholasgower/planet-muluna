@@ -62,11 +62,15 @@ function Public.update_interstellar_pack(force,display_notification)
         if count >= max_count then
 
             if display_notification then
-                force.print({"console.technology-enabled","[technology="..interstellar_pack_name.."]"}, {sound_path = "utility/research_completed"})
+                force.print({"technology-researched","[technology="..interstellar_pack_name.."]"}, {sound_path = "utility/research_completed"})
             end
             
-            technologies[interstellar_pack_name].enabled = true
-            technologies[interstellar_pack_name].saved_progress = 0
+            technologies[interstellar_pack_name].researched = true
+
+            -- if technologies[interstellar_pack_name].researched == false then
+            --     technologies[interstellar_pack_name].saved_progress = 0
+            -- end
+            
             
             
             
