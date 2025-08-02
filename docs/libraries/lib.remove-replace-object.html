@@ -60,11 +60,13 @@
 <div id="content">
 
 <h1>Module <code>lib.remove-replace-object</code></h1>
-<p>rro(remove-replace-object)
- Essential table manipulation library</p>
-<p>
-
-</p>
+<p>remove-replace-object
+ Usually imported as "rro".</p>
+<p> Designed to simplify table manipulation, with preventing crashes when applying functions en masse the first priority.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: MeteorSwarm</li>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -119,7 +121,8 @@
     <strong>rro.deep_equals (table1, table2)</strong>
     </dt>
     <dd>
-    Checks if two objects are identical.  ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
+    Checks if two objects are identical.  ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references.
+ Special string "_any" always returns true if compared with anything else.
 
 
     <h3>Parameters:</h3>

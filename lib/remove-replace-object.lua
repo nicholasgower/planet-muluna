@@ -1,10 +1,13 @@
---- rro(remove-replace-object)
--- Essential table manipulation library
--- 
+--- remove-replace-object
+-- Usually imported as "rro".
+-- Designed to simplify table manipulation, with preventing crashes when applying functions en masse the first priority.
+-- @author MeteorSwarm
 -- @module lib.remove-replace-object
 -- @pragma nostrip
+
 local rro = {}
----Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
+---Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references. 
+-- Special string "_any" always returns true if compared with anything else.
 function rro.deep_equals(table1, table2)
     if table1 == table2 and table1 == "_any" then
         error("Two compare statements should not both contain '_any'.")
@@ -81,6 +84,8 @@ function rro.contains(list,object)
     end
     return false
 end
+
+
 
 ---Adds object to list if it doesn't already exist. 
 -- @param list table
