@@ -18,7 +18,7 @@ Muluna.pipe_pictures = require("lib.pipe-pictures")
 
 --flib imports
 Muluna.flib_bounding_box = require("__flib__.bounding-box")
-
+Muluna.flib_prototypes = require("__flib__.prototypes")
 
 if Muluna.stage == "data" then
     data:extend{{

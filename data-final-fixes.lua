@@ -227,6 +227,26 @@ cable_recycling.surface_conditions = {
 
 }
 
+for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
+    --print(entity.name)
+    if entity.energy_source and 
+    entity.energy_source.type == "burner" and
+    rro.contains(entity.energy_source.fuel_categories,"chemical") and
+    not rro.contains({"car","locomotive"},entity.type) and
+    not rro.contains(Muluna.constants.oxygen_restriction_blacklist,entity.name) and
+    not (entity.type == "assembling-machine" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower"))) 
+    
+    then
+        --print("Burner energy source in " .. entity.name)
+        PlanetsLib.restrict_surface_conditions(entity, {
+            property = "oxygen",
+	        min = 1,
+        })
+        
+    end
+        
+    
+end
 
 
 data:extend{cable_recycling_muluna,cable_recycling}
