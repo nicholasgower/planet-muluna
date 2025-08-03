@@ -194,23 +194,23 @@ data.raw["recipe"]["advanced-thruster-fuel"].surface_conditions = nil
 data.raw["recipe"]["advanced-thruster-oxidizer"].surface_conditions = nil
 
 data.raw["fluid-turret"]["flamethrower-turret"].surface_conditions = ten_pressure_condition
-data.raw["reactor"]["heating-tower"].surface_conditions = ten_pressure_condition
-if data.raw["furnace"]["stone-furnace"] then
-    data.raw["furnace"]["stone-furnace"].surface_conditions = ten_pressure_condition
-elseif data.raw["assembling-machine"]["stone-furnace"] then
-    data.raw["assembling-machine"]["stone-furnace"].surface_conditions = ten_pressure_condition
-end
+-- data.raw["reactor"]["heating-tower"].surface_conditions = ten_pressure_condition
+-- if data.raw["furnace"]["stone-furnace"] then
+--     data.raw["furnace"]["stone-furnace"].surface_conditions = ten_pressure_condition
+-- elseif data.raw["assembling-machine"]["stone-furnace"] then
+--     data.raw["assembling-machine"]["stone-furnace"].surface_conditions = ten_pressure_condition
+-- end
 
-data.raw["mining-drill"]["burner-mining-drill"].surface_conditions = ten_pressure_condition
-if data.raw["furnace"]["steel-furnace"] then
-    data.raw["furnace"]["steel-furnace"].surface_conditions = ten_pressure_condition
-elseif data.raw["assembling-machine"]["steel-furnace"] then
-    data.raw["assembling-machine"]["steel-furnace"].surface_conditions = ten_pressure_condition
-end
+-- data.raw["mining-drill"]["burner-mining-drill"].surface_conditions = ten_pressure_condition
+-- if data.raw["furnace"]["steel-furnace"] then
+--     data.raw["furnace"]["steel-furnace"].surface_conditions = ten_pressure_condition
+-- elseif data.raw["assembling-machine"]["steel-furnace"] then
+--     data.raw["assembling-machine"]["steel-furnace"].surface_conditions = ten_pressure_condition
+-- end
 
-data.raw["boiler"]["boiler"].surface_conditions = ten_pressure_condition
---data.raw["roboport"]["roboport"].surface_conditions = ten_pressure_condition
-data.raw["inserter"]["burner-inserter"].surface_conditions = ten_pressure_condition
+-- data.raw["boiler"]["boiler"].surface_conditions = ten_pressure_condition
+-- --data.raw["roboport"]["roboport"].surface_conditions = ten_pressure_condition
+-- data.raw["inserter"]["burner-inserter"].surface_conditions = ten_pressure_condition
 
 
 data.raw["asteroid-collector"]["asteroid-collector"].surface_conditions = nil
