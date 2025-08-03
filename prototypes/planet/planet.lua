@@ -457,22 +457,6 @@ local muluna_connection = {
 
 
 if settings.startup["override-space-connection"].value == true then
-  local connections = {
-    "nauvis-vulcanus",
-    "nauvis-gleba",
-    "nauvis-fulgora",
-    "nauvis-moshine",
-    "slp-nauvis-sun",
-    "nauvis-corrundum",
-  }
-  --data.raw["space-connection"]["nauvis-vulcanus"].from = "muluna"
-  --data.raw["space-connection"]["nauvis-gleba"].from = "muluna"
-  --data.raw["space-connection"]["nauvis-fulgora"].from = "muluna"
-    for _,connection in pairs(connections) do
-      if data.raw["space-connection"][connection] then
-        data.raw["space-connection"][connection].from = "muluna"
-      end
-    end
   
 
 end

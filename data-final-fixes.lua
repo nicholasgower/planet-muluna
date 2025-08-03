@@ -251,8 +251,23 @@ for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
         })
         
     end
+end
+
+if settings.startup["override-space-connection"].value == true then
+  
+    for _,connection in pairs(data.raw["space-connection"]) do
+        local from = data.raw["planet"][connection.from] or data.raw["space-location"][connection.from]
+        local to = data.raw["planet"][connection.to] or data.raw["space-location"][connection.to]
+
+        if connection.name ~= "nauvis-muluna" then
+            if connection.from == "nauvis" and to.subgroup ~= "satellites" then connection.from = "muluna" end
+            if connection.to == "nauvis" and from.subgroup ~= "satellites" then connection.to = "muluna" end
+            --rro.replace(connection.to,"nauvis","muluna")
+        end
         
-    
+    end
+  
+
 end
 
 

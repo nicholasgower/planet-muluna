@@ -165,7 +165,7 @@ data:extend{
       default_value = 60,
       minimum_value = 1,
       maximum_value = 360,
-      order = "a",
+      order = "dc",
     },
     {
       type = "bool-setting",
