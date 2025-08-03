@@ -24,6 +24,7 @@ local transferred_fields = {
 local copied_fields = {
     "collision_box",
     "selection_box",
+    "circuit_wire_max_distance"
 }
 
 if data.raw["heat-assembling-machine"] then
@@ -49,6 +50,16 @@ if data.raw["heat-assembling-machine"] then
         reactor.neighbour_bonus = 0 or reactor.neighbour_bonus
         reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,0.0)
         assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.2)
+        reactor.circuit_connector = table.deepcopy(assembler.circuit_connector)
+        reactor.default_temperature_signal = data.raw["reactor"]["heating-tower"].default_temperature_signal
+        for _,connector in pairs(reactor.circuit_connector) do
+            for _,wire in pairs(connector) do
+                for _,color in pairs(wire) do
+                    if color.x then color.x=color.x*1.05 end
+                    if color.y then color.y=color.y*1.05 end
+                end
+            end
+        end
         assembler.quality_indicator_shift = {-0.2,0.2}
         reactor.energy_source = {
             type = "void",

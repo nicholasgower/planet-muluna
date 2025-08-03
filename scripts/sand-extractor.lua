@@ -44,7 +44,7 @@ function Public.construct_sand_extractor(event)
     local surface = player.surface
     if surface.name ~= "muluna" then return end
     local position = event.cursor_position
-    local player_position = player.character.position
+    local player_position = (player.character or player).position
     local distance = math.sqrt((position.x-player_position.x)^2+(position.y-player_position.y)^2)
     if surface.entity_prototype_collides(drill_name, position, false) then return end
     if surface.get_tile(position).hidden_tile then 
@@ -60,7 +60,7 @@ function Public.construct_sand_extractor(event)
     
     local is_ghost = (not cursor_stack_valid) or event.input_name == "build-ghost" or event.input_name == "super-forced-build"
     
-    if distance >= player.character.build_distance and not is_ghost then
+    if player.character and (distance >= player.character.build_distance) and not is_ghost then
         -- If unreachable, then don't place
         return end
     
