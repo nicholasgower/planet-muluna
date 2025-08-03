@@ -710,33 +710,7 @@ local gases = {"oxygen","hydrogen","carbon-dioxide","maraxsis-atmosphere"}
 
 --Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
 if mods["maraxsis"] then
-    -- data.raw["recipe"]["maraxsis-water"].ingredients = {
-    --     {type="fluid",name="hydrogen",amount=2000},
-    --     {type="fluid",name="oxygen",amount=1000},
-    -- }
-    -- data.raw["recipe"]["maraxsis-hydrolox-rocket-fuel"].ingredients = {
-    --     {type="fluid",name="hydrogen",amount=2000},
-    --     {type="fluid",name="oxygen",amount=2000},
-    -- }
-    -- rro.replace(data.raw["recipe"]["maraxsis-deepsea-research-utility-science-pack"].ingredients,
-    -- {type="fluid",name="hydrogen",amount=200},
-    -- {type="fluid",name="hydrogen",amount=2000}
-    -- )
-    
-    -- rro.replace(data.raw["recipe"]["maraxsis-deepsea-research-production-science-pack"].ingredients,
-    -- {type="fluid",name="oxygen",amount=100},
-    -- {type="fluid",name="oxygen",amount=1000}
-    -- )
-    -- rro.replace(data.raw["recipe"]["salt"].results,
-    -- {type="fluid",name="oxygen",amount=100},
-    -- {type="fluid",name="oxygen",amount=1000}
-    -- )
-    -- rro.replace(data.raw["recipe"]["salt"].results,
-    -- {type="fluid",name="hydrogen",amount=200},
-    -- {type="fluid",name="hydrogen",amount=2000}
-    -- )
     data.raw["fluid"]["hydrogen"].fuel_value="225kJ"
-    --data.raw["item"]["hydrogen-barrel"].fuel_value="11.3MJ"
     
 end
 if mods["maraxsis"] then
@@ -802,17 +776,7 @@ for _,gas in pairs(gases) do
         end
         
     end
-    -- if data.raw["recipe"][gas.."-barrel"] then
-    --     data.raw["recipe"][gas.."-barrel"].ingredients[1].amount=data.raw["recipe"][gas.."-barrel"].ingredients[1].amount*10
-    -- end
-
-    -- if data.raw["recipe"]["empty-".. gas .."-barrel"] then
-    --     data.raw["recipe"]["empty-".. gas .."-barrel"].results[1].amount=data.raw["recipe"]["empty-".. gas .."-barrel"].results[1].amount*10
-    -- end
-
-    -- if data.raw["recipe"]["maraxsis-fluid-void-".. gas] then
-    --     data.raw["recipe"]["maraxsis-fluid-void-".. gas].ingredients[1].amount=data.raw["recipe"]["maraxsis-fluid-void-".. gas].ingredients[1].amount*10
-    -- end
+    
 end
 
 
@@ -842,10 +806,7 @@ PlanetsLib:update
 
 
 
--- if settings.startup["muluna-hardcore-require-helium-3-in-fusion-cell"].value == true then
---     table.insert(data.raw["recipe"]["fusion-power-cell"].ingredients, {type = "item", name = "helium-3-barrel", amount = 1})
---     table.insert(data.raw["technology"]["fusion-reactor"].prerequisites, "muluna-helium-enrichment")
--- end
+
 
 require("prototypes.technology.interstellar-technologies")
 
@@ -858,11 +819,6 @@ data.raw["recipe"]["space-science-pack"].surface_conditions = {
         min = 0,
         max = 0,
     },
-    -- {
-    --     property = "oxygen",
-    --     min = 0,
-    --     max = 0,
-    -- },
 }
 space_science_pack_advanced.name = "space-science-pack-muluna"
 space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
