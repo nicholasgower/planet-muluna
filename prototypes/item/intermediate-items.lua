@@ -162,35 +162,6 @@ data:extend{{
     fuel_value = "1MJ",
     fuel_category=data.raw["item"]["wood"].fuel_category,
 },
-{ --Copied from Wooden industries
-    type = "item",
-    name = "woodchips",
-    icon = "__muluna-graphics__/graphics/icons/woodchips.png",
-    icon_size = 64,
-    pictures = {
-      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips.png", scale=0.5, mipmap_count=4},
-      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips-1.png", scale=0.5, mipmap_count=4},
-      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips-2.png", scale=0.5, mipmap_count=4},
-      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips-3.png", scale=0.5, mipmap_count=4}
-    },
-    -- icons={
-    --     {
-    --         icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
-    --         --scale=0.25,
-    --         --shift={0.25,0}
-    --         tint = {1,0.8,0.4}
-    --     },
-    -- },
-    fuel_category = "chemical",
-    fuel_value = "1MJ",
-    subgroup = "muluna-forestry",
-    order = "a[wood]-c[chips]",
-    inventory_move_sound = item_sounds.wood_inventory_move,
-    pick_sound = item_sounds.wood_inventory_pickup,
-    drop_sound = item_sounds.wood_inventory_move,
-    stack_size = 200,
-    weight = 1*kg
-  },
   {
     type = "item",
     name = "muluna-microcellular-plastic",
@@ -250,6 +221,38 @@ data:extend{{
 --     fuel_category=data.raw["item"]["wood"].fuel_category,
 -- },
 }
+
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
+    data:extend{{ --Copied from Wooden industries
+    type = "item",
+    name = "woodchips",
+    icon = "__muluna-graphics__/graphics/icons/woodchips.png",
+    icon_size = 64,
+    pictures = {
+      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips.png", scale=0.5, mipmap_count=4},
+      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips-1.png", scale=0.5, mipmap_count=4},
+      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips-2.png", scale=0.5, mipmap_count=4},
+      {size=64, filename="__muluna-graphics__/graphics/icons/woodchips-3.png", scale=0.5, mipmap_count=4}
+    },
+    -- icons={
+    --     {
+    --         icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
+    --         --scale=0.25,
+    --         --shift={0.25,0}
+    --         tint = {1,0.8,0.4}
+    --     },
+    -- },
+    fuel_category = "chemical",
+    fuel_value = "1MJ",
+    subgroup = "muluna-forestry",
+    order = "a[wood]-c[chips]",
+    inventory_move_sound = item_sounds.wood_inventory_move,
+    pick_sound = item_sounds.wood_inventory_pickup,
+    drop_sound = item_sounds.wood_inventory_move,
+    stack_size = 200,
+    weight = 1*kg
+  }}
+end
 
 local placed_tree = table.deepcopy(data.raw["plant"]["tree-plant"])
 placed_tree.name = "muluna-placed-tree"

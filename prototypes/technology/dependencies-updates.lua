@@ -162,10 +162,15 @@ table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
     type = "unlock-recipe",
     recipe="plastic-from-wood"
 })
-table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
-    type = "unlock-recipe",
-    recipe="woodchips"
-})
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
+    table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
+        type = "unlock-recipe",
+        recipe="woodchips"
+    })
+end
+
+    
+
 table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
     type = "unlock-recipe",
     recipe="cellulose"

@@ -24,7 +24,7 @@ local transferred_fields = {
 local copied_fields = {
     "collision_box",
     "selection_box",
-    "circuit_wire_max_distance"
+    "circuit_wire_max_distance",
 }
 
 if data.raw["heat-assembling-machine"] then

@@ -51,6 +51,13 @@ data:extend{
       },
       {
         type = "bool-setting",
+        name = "muluna-hardcore-classic-wood-gasification",
+        setting_type = "startup",
+        default_value = false,
+        order = "ag",
+      },
+      {
+        type = "bool-setting",
         name = "muluna-easy-vanilla-rocket-part-costs",
         setting_type = "startup",
         default_value = false,

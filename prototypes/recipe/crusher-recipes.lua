@@ -248,6 +248,9 @@ local regolith_sorting = {
     icons = crushing_icon(data.raw.item["muluna-lunar-regolith"].icon,data.raw.item["muluna-lunar-regolith"].icon_size)
 }
 
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == false then
+    wood_crushing = nil
+end
 
 local regolith_recycling = table.deepcopy(regolith_sorting)
 local recycling_lib = require("__quality__.prototypes.recycling")
@@ -258,13 +261,18 @@ regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02
 regolith_recycling.icons = generate_recycling_recipe_icons_from_item(data.raw.item["muluna-lunar-regolith"])
 regolith_recycling.order = regolith_recycling.order .. "a"
-local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing,tree_crushing,regolith_sorting,regolith_recycling}
+local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,tree_crushing,regolith_sorting,regolith_recycling}
+if wood_crushing then
+    table.insert(recipes,wood_crushing)
+end
 
 for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  
           recipe.hide_from_signal_gui = false
     end 
 end
+
+
 
 data:extend(recipes)
 

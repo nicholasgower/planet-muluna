@@ -134,6 +134,22 @@ function rro.get_concatenation(first,second)
     return out
 end
 
+--- Attempts to find an object in a complex object, and returns nil if any level in the search returns nil
+-- @param table table
+-- @param crawl_list table
+function rro.safe_find(table,crawl_list)
+    local out = table
+    for i,layer in ipairs(crawl_list) do
+        out= out[layer]
+        if out == nil then return nil end
+    end
+
+    return out
+
+
+
+
+end
 
 
 return rro

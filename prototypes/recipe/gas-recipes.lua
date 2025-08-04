@@ -427,6 +427,11 @@ data:extend{
 
 }
 
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == false then
+    rro.replace(data.raw["recipe"]["cellulose"].ingredients,{type = "item",name = "woodchips", amount="_any"},{type = "item",name = "wood", amount=20})
+    
+end
+
 local divider = 40 --I'm too tired to do mental math. This will simplify the ratio calculations.
 local probability = 1
 local oxygen_from_oxidizer = {
