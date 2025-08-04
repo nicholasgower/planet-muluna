@@ -7,7 +7,8 @@ local telescope = {
     selection_box = Muluna.flib_bounding_box.from_dimensions({0,0},3,3),
     collision_box = Muluna.flib_bounding_box.from_dimensions({0,0},3-0.5,3-0.5),
     energy_usage = "2MW",
-    energy_source = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
+    energy_source = table.deepcopy(data.raw["assembling-machine-3"].energy_source),
+    
     per_surface_limit = 1, --Custom field: Number of telescopes per surface
     circuit_connector = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
 }
