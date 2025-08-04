@@ -9,6 +9,7 @@ local telescope = {
     energy_source = {
         type = "electric",
     },
+    per_surface_limit = 1, --Custom field: Number of telescopes per surface
     circuit_connector = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
 }
 
@@ -18,7 +19,7 @@ local space_telescope = {
     name = "muluna-space-telescope",
     crafting_speed = 1,
     distance_speed_factor = 1, --Custom field: How much distance from Muluna adds to productivity
-    
+    circuit_connector = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
 }
 
 data:extend{telescope}
