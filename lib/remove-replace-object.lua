@@ -145,8 +145,23 @@ function rro.safe_find(table,crawl_list)
     end
 
     return out
+end
 
+--- Copies fields specified in "fields" from "table_from" to "table_to"
+-- @param table_to table
+-- @param table_from table
+-- @param fields table
+-- @param deepcopy boolean (Default true)
+function rro.copy_fields(table_to,table_from,fields,deepcopy)
+    if deepcopy == nil then deepcopy = true end
 
+    for _,field in pairs(fields) do
+        if deepcopy then
+            table_to[field] = table.deepcopy(table_from[field])
+        else
+            table_to[field] = table_from[field]
+        end
+    end
 
 
 end

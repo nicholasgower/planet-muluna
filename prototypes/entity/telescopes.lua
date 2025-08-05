@@ -7,11 +7,23 @@ local telescope = {
     selection_box = Muluna.flib_bounding_box.from_dimensions({0,0},3,3),
     collision_box = Muluna.flib_bounding_box.from_dimensions({0,0},3-0.5,3-0.5),
     energy_usage = "2MW",
-    energy_source = table.deepcopy(data.raw["assembling-machine-3"].energy_source),
-    
+    --energy_source = table.deepcopy(data.raw["assembling-machine-3"].energy_source),
+    effect_receiver = "",
     per_surface_limit = 1, --Custom field: Number of telescopes per surface
-    circuit_connector = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
+    --circuit_connector = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
 }
+
+Muluna.rro.copy_fields(telescope,data.raw["assembling-machine"]["assembling-machine-3"],
+
+    {
+        "selection_box",
+        "collision_box",
+        "energy_source",
+        "effect_receiver",
+        "circuit_connector",
+        "graphics_set",
+    }
+)
 
 --Extends Assembling machine
 local space_telescope = {
@@ -20,6 +32,12 @@ local space_telescope = {
     crafting_speed = 1,
     distance_speed_factor = 1, --Custom field: How much distance from Muluna adds to productivity
     circuit_connector = table.deepcopy(data.raw["assembling-machine-3"].circuit_connector),
+}
+
+Muluna.constants.surface_limited_entities = {
+    {name = "muluna-telescope",
+    count = 1,    
+}
 }
 
 data:extend{telescope}
