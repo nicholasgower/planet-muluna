@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.22
+Date: 2025-08-07
+  Locale:
+    - Updated description of "Use vanilla rocket part costs" option to mention other changes made by the setting in more detail.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.21
 Date: 2025-08-02
   Compatibility:
