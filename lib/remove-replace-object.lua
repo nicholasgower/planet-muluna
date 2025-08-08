@@ -51,6 +51,36 @@ function rro.replace(list, objectToRemove, replacementObject)
     end
 end
 
+--- Similar to rro.replace, but acts recursively within subobjects.
+function rro.deep_replace(list, objectToRemove, replacementObject,gsub)
+    if gsub == nil then gsub = false end
+    if list then
+        for i,item in pairs(list) do -- Can also be a dictionary
+            if type(item) == "string" and type(objectToRemove) == "string" and gsub then
+                item = string.gsub(item,objectToRemove,replacementObject)
+            
+            elseif rro.deep_equals(list[i] , objectToRemove) then
+                if replacementObject ~= nil and not rro.contains(list,replacementObject) then
+                    list[i] = replacementObject -- Replace the object
+                else
+                    list[i] = nil -- Remove the object if no replacement is provided
+                end
+                --break -- Don't exit the loop after replacing or removing
+            elseif type(list[i]) == "table" then
+                rro.deep_replace(list[i],objectToRemove, replacementObject)
+            end
+        end
+    end
+
+
+end
+
+
+function rro.deep_gsub(list, objectToRemove, replacementObject)
+    rro.deep_replace(list, objectToRemove, replacementObject,true)
+
+end
+
 ---Searches a list for all items where `item[field] == name`, and replaces `name` with `new_name`.
 function rro.replace_field(list,field,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
