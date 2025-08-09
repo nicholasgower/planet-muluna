@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.24
+Date: 2025-08-09
+  Bugfixes:
+    - Adjusted previous change to train-related entity surface condition changes to only apply to entities with vanilla-like gravity conditions.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.23
 Date: 2025-08-09
   Compatibility:
