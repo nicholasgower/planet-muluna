@@ -247,13 +247,3 @@ if settings.startup["muluna-hardcore-restrict-asteroid-collector"].value == true
     data.raw["item"]["asteroid-collector"].default_import_location = "muluna"
 end
 
-local one_gravity_condition =
-{
-  {
-    property = "gravity",
-    min = 0.1
-  }
-}
-
-
-data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
