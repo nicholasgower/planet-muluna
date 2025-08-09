@@ -185,7 +185,10 @@ for _,entity in pairs(flib_prototypes.all("entity")) do
             "rail-support"
             },
         
-        entity.type)
+            entity.type)
+        and
+            
+        (entity.surface_conditions and rro.contains(entity.surface_conditions,{property="gravity",min=rro.predicates.compare("<=",1)}))
         
     then
         --print("Burner energy source in " .. entity.name)
