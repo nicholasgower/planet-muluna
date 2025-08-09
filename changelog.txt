@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.23
+Date: 2025-08-09
+  Compatibility:
+    - Changed gravity surface condition changes to rail-related vanilla entities to instead target all prototype types matching those entities. https://github.com/nicholasgower/planet-muluna/issues/245
+---------------------------------------------------------------------------------------------------
 Version: 1.45.22
 Date: 2025-08-07
   Locale:
