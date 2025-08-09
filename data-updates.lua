@@ -663,26 +663,7 @@ rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
 )
 
 data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
-data.raw["legacy-curved-rail"]["legacy-curved-rail"].surface_conditions = one_gravity_condition
-data.raw["legacy-straight-rail"]["legacy-straight-rail"].surface_conditions = one_gravity_condition
-data.raw["locomotive"]["locomotive"].surface_conditions = one_gravity_condition
-data.raw["cargo-wagon"]["cargo-wagon"].surface_conditions = one_gravity_condition
-data.raw["fluid-wagon"]["fluid-wagon"].surface_conditions = one_gravity_condition
-data.raw["artillery-wagon"]["artillery-wagon"].surface_conditions = one_gravity_condition
-data.raw["train-stop"]["train-stop"].surface_conditions = one_gravity_condition
-data.raw["rail-signal"]["rail-signal"].surface_conditions = one_gravity_condition
-data.raw["rail-chain-signal"]["rail-chain-signal"].surface_conditions = one_gravity_condition
-data.raw["curved-rail-b"]["curved-rail-b"].surface_conditions = one_gravity_condition
-data.raw["curved-rail-a"]["curved-rail-a"].surface_conditions = one_gravity_condition
-data.raw["half-diagonal-rail"]["half-diagonal-rail"].surface_conditions = one_gravity_condition
-data.raw["straight-rail"]["straight-rail"].surface_conditions = one_gravity_condition
 
-data.raw["rail-ramp"]["rail-ramp"].surface_conditions = one_gravity_condition
-data.raw["elevated-straight-rail"]["elevated-straight-rail"].surface_conditions = one_gravity_condition
-data.raw["elevated-half-diagonal-rail"]["elevated-half-diagonal-rail"].surface_conditions = one_gravity_condition
-data.raw["elevated-curved-rail-a"]["elevated-curved-rail-a"].surface_conditions = one_gravity_condition
-data.raw["elevated-curved-rail-b"]["elevated-curved-rail-b"].surface_conditions = one_gravity_condition
-data.raw["rail-support"]["rail-support"].surface_conditions = one_gravity_condition
 
 
 
@@ -709,31 +690,6 @@ local gases = {"oxygen","hydrogen","carbon-dioxide","helium","helium-4","helium-
 
 --Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
 if mods["maraxsis"] then
-    -- data.raw["recipe"]["maraxsis-water"].ingredients = {
-    --     {type="fluid",name="hydrogen",amount=2000},
-    --     {type="fluid",name="oxygen",amount=1000},
-    -- }
-    -- data.raw["recipe"]["maraxsis-hydrolox-rocket-fuel"].ingredients = {
-    --     {type="fluid",name="hydrogen",amount=2000},
-    --     {type="fluid",name="oxygen",amount=2000},
-    -- }
-    -- rro.replace(data.raw["recipe"]["maraxsis-deepsea-research-utility-science-pack"].ingredients,
-    -- {type="fluid",name="hydrogen",amount=200},
-    -- {type="fluid",name="hydrogen",amount=2000}
-    -- )
-    
-    -- rro.replace(data.raw["recipe"]["maraxsis-deepsea-research-production-science-pack"].ingredients,
-    -- {type="fluid",name="oxygen",amount=100},
-    -- {type="fluid",name="oxygen",amount=1000}
-    -- )
-    -- rro.replace(data.raw["recipe"]["salt"].results,
-    -- {type="fluid",name="oxygen",amount=100},
-    -- {type="fluid",name="oxygen",amount=1000}
-    -- )
-    -- rro.replace(data.raw["recipe"]["salt"].results,
-    -- {type="fluid",name="hydrogen",amount=200},
-    -- {type="fluid",name="hydrogen",amount=2000}
-    -- )
     data.raw["fluid"]["hydrogen"].fuel_value="225kJ"
     --data.raw["item"]["hydrogen-barrel"].fuel_value="11.3MJ"
     
