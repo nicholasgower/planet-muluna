@@ -177,7 +177,7 @@ if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then 
     
 end
 local flib_prototypes = require("__flib__.prototypes")
--- Train gravity conditions
+-- Train gravity conditions: All train-related entities with min gravity <=1 will be further lowered to 0.1
 for _,entity in pairs(flib_prototypes.all("entity")) do
     --print(entity.name)
     if 
@@ -188,10 +188,13 @@ for _,entity in pairs(flib_prototypes.all("entity")) do
             "curved-rail-a","half-diagonal-rail","straight-rail",
             "rail-ramp","elevated-straight-rail","elevated-half-diagonal-rail",
             "elevated-curved-rail-a","elevated-curved-rail-b",
-            "rail-support"
+            "rail-support","car","spider-vehicle","cargo-landing-pad"
             },
         
-        entity.type)
+            entity.type)
+        and
+            
+        (entity.surface_conditions and rro.contains(entity.surface_conditions,{property="gravity",min=rro.predicates.compare("<=",1)}))
         
     then
         --print("Burner energy source in " .. entity.name)
@@ -202,28 +205,6 @@ for _,entity in pairs(flib_prototypes.all("entity")) do
         
     end
 end
-
-local gravity_condition = { --Taken from Cerys
-	property = "gravity",
-	min = 0.1,
-}
-
-for _, entity in pairs(data.raw["cargo-landing-pad"] or {}) do
-	PlanetsLib.relax_surface_conditions(entity, gravity_condition)
-end
-if data.raw["car"]["car"] then
-	PlanetsLib.relax_surface_conditions(data.raw["car"]["car"], gravity_condition)
-end
-if data.raw["car"]["tank"] then
-	PlanetsLib.relax_surface_conditions(data.raw["car"]["tank"], gravity_condition)
-end
-if data.raw["spider-vehicle"]["spidertron"] then
-	PlanetsLib.relax_surface_conditions(data.raw["spider-vehicle"]["spidertron"], gravity_condition)
-end
-if data.raw["car"]["muluna-rocket-buggy"] then
-	PlanetsLib.relax_surface_conditions(data.raw["car"]["muluna-rocket-buggy"], gravity_condition)
-end
-
 
 --Recycling recipe fixes
 
