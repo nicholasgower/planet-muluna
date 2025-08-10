@@ -1,3 +1,4 @@
+local rro = Muluna.rro
 local asteroid_util = require "__space-age__.prototypes.planet.asteroid-spawn-definitions"
 
 local parent_ratio = {3, 2, 1 , 0}
@@ -24,6 +25,7 @@ local muluna_asteroids =
 
 
 local asteroid_spawn_definitions_connection = asteroid_util.spawn_definitions(muluna_asteroids)
+
 local new_asteroids = {}
 -- for i = 1,#asteroid_spawn_definitions_connection do
 --   if asteroid_spawn_definitions_connection[i].type == "asteroid-chunk" then
@@ -39,4 +41,13 @@ local new_asteroids = {}
 
 data.raw["planet"]["muluna"].asteroid_spawn_definitions = asteroid_util.spawn_definitions(muluna_asteroids,0.9)
 data.raw["planet"]["muluna"].asteroid_spawn_influence = 0.1
+
+local anorthite = table.deepcopy(asteroid_spawn_definitions_connection[1])
+rro.deep_replace(anorthite,"metallic-asteroid-chunk","anorthite-chunk")
+table.insert(asteroid_spawn_definitions_connection,anorthite)
+
+local anorthite = table.deepcopy(data.raw["planet"]["muluna"].asteroid_spawn_definitions[1])
+rro.deep_replace(anorthite,"metallic-asteroid-chunk","anorthite-chunk")
+table.insert(data.raw["planet"]["muluna"].asteroid_spawn_definitions,anorthite)
+
 data.raw["space-connection"]["nauvis-muluna"].asteroid_spawn_definitions= asteroid_spawn_definitions_connection

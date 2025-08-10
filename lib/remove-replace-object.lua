@@ -5,7 +5,10 @@
 -- @module lib.remove-replace-object
 -- @pragma nostrip
 
+
+
 local rro = {}
+rro.predicates = require('lib.predicates')
 ---Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references. 
 -- Special string "_any" always returns true if compared with anything else.
 function rro.deep_equals(table1, table2)
@@ -13,7 +16,36 @@ function rro.deep_equals(table1, table2)
         error("Two compare statements should not both contain '_any'.")
     end
     if table1 == table2 or table1 == "_any" or table2 == "_any" then return true end
+    
+    --If one element is in form of {"_{compare_symbol}",{number}}, this is a comparison operator. They are not looking for equality, they are a comparison.
+    --Example: deep_equals({property = "gravity" , min = 1, max = nil},{property = "gravity" , min = {"<=",1}, max = "_any"}) = true
+    local flagged
+    local other
+    -- if type(table1) == "table" and type(table[1]) == "string" and string.find(table1[1], "_") then flagged = table1 other = table2 end
+    -- if type(table2) == "table" and type(table[1]) == "string" and string.find(table1[1], "_") then flagged = table2 other = table1 end
+    
+    -- if flagged then
+    --     if type(other) ~= "number" then
+    --         goto continue
+    --     end
+    --     if flagged[1] == "_<" then
+    --         return other < flagged[2]
+    --     elseif flagged[1] == "_<=" then
+    --         return other <= flagged[2]
+    --     else
+    --         error("flagged variable wrongly set.")
+    --     end
+    -- end
+    -- ::continue::
+    if type(table1) == "function" then flagged = table1 other = table2 end
+    if type(table2) == "function" then flagged = table2 other = table1 end
+    --Passed function should be in form of function(other) -> boolean
+    if flagged then
+        return flagged(other)
+    end
+
     if type(table1) ~= "table" or type(table2) ~= "table" then return false end
+
     for key, value in pairs(table1) do
         if not rro.deep_equals(value, table2[key]) then return false end
     end
@@ -49,6 +81,36 @@ function rro.replace(list, objectToRemove, replacementObject)
             end
         end
     end
+end
+
+--- Similar to rro.replace, but acts recursively within subobjects.
+function rro.deep_replace(list, objectToRemove, replacementObject,gsub)
+    if gsub == nil then gsub = false end
+    if list then
+        for i,item in pairs(list) do -- Can also be a dictionary
+            if type(item) == "string" and type(objectToRemove) == "string" and gsub then
+                item = string.gsub(item,objectToRemove,replacementObject)
+            
+            elseif rro.deep_equals(list[i] , objectToRemove) then
+                if replacementObject ~= nil and not rro.contains(list,replacementObject) then
+                    list[i] = replacementObject -- Replace the object
+                else
+                    list[i] = nil -- Remove the object if no replacement is provided
+                end
+                --break -- Don't exit the loop after replacing or removing
+            elseif type(list[i]) == "table" then
+                rro.deep_replace(list[i],objectToRemove, replacementObject)
+            end
+        end
+    end
+
+
+end
+
+
+function rro.deep_gsub(list, objectToRemove, replacementObject)
+    rro.deep_replace(list, objectToRemove, replacementObject,true)
+
 end
 
 ---Searches a list for all items where `item[field] == name`, and replaces `name` with `new_name`.

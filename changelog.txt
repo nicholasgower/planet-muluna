@@ -9,6 +9,26 @@ Date: 2025-07-22
   Features:
     - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
 ---------------------------------------------------------------------------------------------------
+Version: 1.45.24
+Date: 2025-08-09
+  Bugfixes:
+    - Adjusted previous change to train-related entity surface condition changes to only apply to entities with vanilla-like gravity conditions.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.23
+Date: 2025-08-09
+  Compatibility:
+    - Changed gravity surface condition changes to rail-related vanilla entities to instead target all prototype types matching those entities. https://github.com/nicholasgower/planet-muluna/issues/245
+---------------------------------------------------------------------------------------------------
+Version: 1.45.22
+Date: 2025-08-07
+  Locale:
+    - Updated description of "Use vanilla rocket part costs" option to mention other changes made by the setting in more detail.
+---------------------------------------------------------------------------------------------------
+Version: 1.45.21
+Date: 2025-08-02
+  Compatibility:
+    - Raised required PlanetsLib version to 1.10.1.
+---------------------------------------------------------------------------------------------------
 Version: 1.45.20
 Date: 2025-07-31
   Graphics:
