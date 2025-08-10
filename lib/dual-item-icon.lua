@@ -20,6 +20,9 @@ function Public.dual_icon(item_1,item_2,item_3)
     local type_1 = "item"
     local type_2 = "item"
     local type_3 = "item"
+    if data.raw["planet"][item_1] then type_1 = "planet" end
+    if data.raw["planet"][item_2] then type_2 = "planet" end
+    if data.raw["planet"][item_3] then type_3 = "planet" end
     if data.raw["fluid"][item_1] then type_1 = "fluid" end
     if data.raw["fluid"][item_2] then type_2 = "fluid" end
     if data.raw["fluid"][item_3] then type_3 = "fluid" end

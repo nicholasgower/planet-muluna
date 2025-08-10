@@ -38,7 +38,8 @@ data:extend{{
     stack_size = 50,
     weight = 2 * kg,
     random_tint_color = item_tints.iron_rust
-  }
+  },
+  
 }
 
 --data:extend{{anorthite}}

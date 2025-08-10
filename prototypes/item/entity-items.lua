@@ -172,5 +172,14 @@ buggy.icons = {
     },
 }
 
+local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-machine-3"]),
+    {
+        name = "muluna-telescope",
+        place_result = "muluna-telescope",
+        
+    }
 
-data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
+)
+
+
+data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope}

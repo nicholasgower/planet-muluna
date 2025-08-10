@@ -168,7 +168,7 @@ function rro.merge(old, new)
     old = util.table.deepcopy(old)
 
     for k, v in pairs(new) do
-        if v == "nil" then
+        if v == "_nil" then
             old[k] = nil
         else
             old[k] = v
@@ -219,9 +219,9 @@ function rro.copy_fields(table_to,table_from,fields,deepcopy)
 
     for _,field in pairs(fields) do
         if deepcopy then
-            table_to[field] = table.deepcopy(table_from[field])
+            table_to[field] = table.deepcopy(table_from[field]) or table_to[field]
         else
-            table_to[field] = table_from[field]
+            table_to[field] = table_from[field] or table_to[field]
         end
     end
 

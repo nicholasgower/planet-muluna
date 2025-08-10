@@ -35,6 +35,7 @@ end
 require("prototypes.technology.interstellar-technologies")
 require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
+require("prototypes.final-fixes.telescope")
 
 
 --Overrides any mods which add their own techs to space platform thruster as a prereq.
@@ -288,3 +289,7 @@ end
 
 
 require("prototypes.custom-prototypes.final-fixes.heat-assembling-machine-final-fix")
+
+for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
+    print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
+end

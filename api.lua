@@ -19,6 +19,7 @@ Muluna.pipe_pictures = require("lib.pipe-pictures")
 --flib imports
 Muluna.flib_bounding_box = require("__flib__.bounding-box")
 Muluna.flib_prototypes = require("__flib__.prototypes")
+Muluna.telescopes = require("lib.telescopes")
 
 if Muluna.stage == "data" then
     data:extend{{
@@ -33,6 +34,7 @@ if Muluna.stage == "data" then
     -- Resource generation libraries forked from vanilla 
     Muluna.resource = require("lib.resources").resource
     Muluna.resource_autoplace = require("lib.resource-autoplace")
+    Muluna.icons = require("lib.dual-item-icon")
 
 elseif Muluna.stage == "control" then
     Muluna.constants = prototypes.mod_data["muluna-constants"].data

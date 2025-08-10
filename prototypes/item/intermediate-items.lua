@@ -201,25 +201,22 @@ data:extend{{
         }
     }
   },
--- {
---     type="item",
---     name="wood-crushed",
---     icons={
---         {
---             icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
---             --scale=0.25,
---             --shift={0.25,0}
---             tint = {1,0.8,0.4}
---         },
---     },
---     stack_size=iron_ore.stack_size*4,
---     order="b[cellulose]",
---     subgroup="muluna-products",
---     --recipe_group="intermediate-products",
---     weight=iron_ore.weight*1/2,
---     fuel_value = "1MJ",
---     fuel_category=data.raw["item"]["wood"].fuel_category,
--- },
+  {
+    type = "item",
+    name = "muluna-astronomical-data",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/silicon-cell.png",
+            icons_size = 64,
+            tint = {0.75,0.75,0.75}
+        }
+    },
+    stack_size = 100,
+    weight = 1 * kg,
+    subgroup = "muluna-products",
+    order = "d[muluna-astronomical-data]",
+  },
+
 }
 
 if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
