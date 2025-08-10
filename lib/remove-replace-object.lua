@@ -5,9 +5,10 @@
 -- @module lib.remove-replace-object
 -- @pragma nostrip
 
-rro.predicates = require('lib.predicates')
+
 
 local rro = {}
+rro.predicates = require('lib.predicates')
 ---Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references. 
 -- Special string "_any" always returns true if compared with anything else.
 function rro.deep_equals(table1, table2)
