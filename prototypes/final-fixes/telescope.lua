@@ -6,7 +6,7 @@ for _,space_location in pairs(data.raw["planet"]) do
         category = "muluna-telescope",
         energy_required = 60,
         ingredients = {},
-        results = {{type = "item", name = "muluna-astronomical-data",amount = 10 + math.floor(Muluna.telescopes.shortest_space_distance("muluna",space_location.name)/1000)}},
+        results = {{type = "item", name = "muluna-astronomical-data",amount = 10 + math.floor(Muluna.telescopes.shortest_space_distance("nauvis",space_location.name)/1500)}},
         icons = Muluna.icons.dual_icon("muluna-astronomical-data",space_location.name),
         surface_conditions = {
             {
@@ -29,6 +29,9 @@ for _,space_location in pairs(data.raw["planet"]) do
         localised_name = {"recipe-name.muluna-telescope-observation-x",{"space-location-name."..space_location.name}},
         order = "aa-" .. space_location.order
     }
+    if space_location.name == "muluna" then
+        recipe.results[1].amount = 10
+    end
     data:extend{recipe}
 end
 
