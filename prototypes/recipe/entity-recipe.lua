@@ -271,5 +271,31 @@ buggy.ingredients = {
 
 buggy.energy_required = 5
 
+local telescope = Muluna.rro.merge(data.raw["recipe"]["assembling-machine-3"],
+    {
+       energy_required = 20,
+       ingredients = {
+        {type = "item", name = "silicon-cell", amount = 20},
+        {type = "item", name = "processing-unit",amount = 25},
+        {type = "item", name = "optical-cable", amount = 10},
+       }
+    }
+)
+rro.deep_replace(telescope,"assembling-machine-3","muluna-telescope")
 
-data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy}
+data:extend{{
+    type = "recipe",
+    name = "muluna-data-cable",
+    energy_required = 2,
+    surface_conditions = {{ property = "moshine-exclusive", min = 1, max = 1}},
+    ingredients = {
+      {type = "item", name = "silicon", amount = 1},
+      {type = "item", name = "silicon-carbide", amount = 1},
+      {type = "item", name = "copper-cable", amount = 10},
+    },
+    results = {{type = "item", name = "muluna-data-cable", amount = 2}},
+    allow_productivity = false,
+    enabled = false,
+  }}
+
+data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope}

@@ -274,7 +274,7 @@ if not data.raw["item"]["silicon"] then --Copied from Moshine
         weight = 20*kg,
       }}
 end
-if not data.raw["item"]["silicon-cell"] then
+if not data.raw["item"]["silicon-carbide"] then
       data:extend{{
         type = "item",
         name = "silicon-cell",
@@ -288,6 +288,21 @@ if not data.raw["item"]["silicon-cell"] then
         stack_size = 50,
         weight = 20*kg,
       }}
+end
+if not data.raw["item"]["silicon-cell"] then
+data:extend{{
+    type = "item",
+    name = "silicon-carbide",
+    icon = "__Moshine__/graphics/icons/silicon-carbide.png",
+    subgroup = "moshine-processes",
+    order = "fff",
+    inventory_move_sound = item_sounds.metal_small_inventory_move,
+    pick_sound = item_sounds.metal_small_inventory_pickup,
+    drop_sound = item_sounds.metal_small_inventory_move,
+    default_import_location = "moshine",
+    stack_size = 40,
+    weight = 12.5*kg,
+  }}
 end
 
 

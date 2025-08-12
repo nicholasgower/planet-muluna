@@ -298,4 +298,24 @@ data:extend{{ --Moshine recipe
 
 end
 
+if not data.raw["recipe"]["silicon-carbide"] then
+
+data:extend{{ --Moshine recipe
+    type = "recipe",
+    name = "silicon-carbide",
+    category = "crafting-with-fluid",
+    energy_required = 8,
+    ingredients =
+    {
+      {type = "item", name = "silicon", amount = 2},
+      {type = "item", name = "carbon", amount = 1},
+      {type = "fluid", name = "sulfuric-acid", amount = 10},
+    },
+    results = {{type = "item", name = "silicon-carbide", amount = 2}},
+    allow_productivity = true,
+    enabled = false,
+  },}
+
+end
+
 
