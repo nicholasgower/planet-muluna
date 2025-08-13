@@ -52,6 +52,10 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
 
+table.remove(telescope.fluid_boxes,1)
+telescope.fluid_boxes[1].pipe_connections[1].connection_category = "data"
+
+
 data:extend{telescope}
 
 -- Muluna.rro.copy_fields(telescope,data.raw["assembling-machine"]["assembling-machine-3"],

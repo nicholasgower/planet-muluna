@@ -56,7 +56,7 @@ end
 
 
 r_lunar_pack.main_product = "interstellar-science-pack"
-r_lunar_pack.category = "crafting-with-fluid"
+r_lunar_pack.category = "crafting-with-fluid-and-data"
 
 
 if true or settings.startup["muluna-old-interstellar-pack-recipe"].value == false then
@@ -66,6 +66,7 @@ if true or settings.startup["muluna-old-interstellar-pack-recipe"].value == fals
         {type = "item", name = "rocket-fuel", amount = 1},
         {type = "item", name = "low-density-space-platform-foundation", amount = 2},
         {type = "item", name = "muluna-steam-crusher", amount = 1},
+        {type = "fluid", name = "muluna-astronomical-data", amount = 10,fluidbox_index = 2},
         
     }
     r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 3}}

@@ -31,7 +31,7 @@ local data_cable = {
     damaged_trigger_effect = hit_effects.entity(),
     fluid_box =
     {
-      volume = 10,
+      volume = 2,
       pipe_covers = opticalfibercoverspictures(), -- in case a real pipe is connected to a ghost --Only works if Moshine is installed
       --filter = "raw-data",
       pipe_connections =

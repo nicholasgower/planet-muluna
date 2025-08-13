@@ -203,19 +203,47 @@ data:extend{{
   },
   {
     type = "item",
+    name = "muluna-basic-hard-drive", --Corresponds to Moshines' "hard-drive" 
+    icon = "__muluna-graphics__/graphics/icons/imgbin.com-cassette-tape.png",
+    icon_size = 64,
+    stack_size = 50,
+    weight = 5 * kg,
+    subgroup = "muluna-products",
+    order = "d[muluna-basic-hard-drive]",
+    -- icons = {
+        
+    --     {
+    --         icon = data.raw["item"]["plastic-bar"].icon,
+    --         icon_size = 64,
+    --         tint = {150,150,0,255},
+    --         draw_background = true,
+    --     }
+    -- },
+    data_capacity=250
+  },
+  rro.merge(data.raw.fluid.oxygen,{
+    type = "fluid",
     name = "muluna-astronomical-data",
-    icons = {
-        {
-            icon = "__muluna-graphics__/graphics/icons/silicon-cell.png",
-            icons_size = 64,
-            tint = {0.75,0.75,0.75}
-        }
-    },
+    default_temperature = 15,
+    base_color = {1, 1, 1},
+    flow_color = {1, 1, 1},
+    auto_barrel = false,
+    localised_name = "_nil",
+    --icon = "_nil",
+    --icon_size = "_nil",
+    icon = "__muluna-graphics__/graphics/icons/raw-astronomical-data.png",
+    icon_size = 64,
+    -- icons = {
+    --     {
+            
+    --         --tint = {0.75,0.75,0.75}
+    --     }
+    -- },
     stack_size = 100,
     weight = 1 * kg,
     subgroup = "muluna-products",
     order = "d[muluna-astronomical-data]",
-  },
+  }),
 
 }
 
@@ -303,6 +331,10 @@ data:extend{{
     stack_size = 40,
     weight = 12.5*kg,
   }}
+end
+
+if data.raw["tool"]["hard-drive"] then
+    data.raw["tool"]["hard-drive"].data_capacity = 1000
 end
 
 

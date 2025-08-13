@@ -4,9 +4,9 @@ for _,space_location in pairs(data.raw["planet"]) do
         type = "recipe",
         name = "muluna-telescope-observation-" .. space_location.name,
         category = "muluna-telescope",
-        energy_required = 60,
+        energy_required = 6,
         ingredients = {},
-        results = {{type = "item", name = "muluna-astronomical-data",amount = 10 + math.floor(Muluna.telescopes.shortest_space_distance("nauvis",space_location.name)/1500)}},
+        results = {{type = "fluid", name = "muluna-astronomical-data",amount = 100 + math.floor(Muluna.telescopes.shortest_space_distance("nauvis",space_location.name)/150)}},
         icons = Muluna.icons.dual_icon("muluna-astronomical-data",space_location.name),
         surface_conditions = {
             {
@@ -30,7 +30,7 @@ for _,space_location in pairs(data.raw["planet"]) do
         order = "aa-" .. space_location.order
     }
     if space_location.name == "muluna" then
-        recipe.results[1].amount = 10
+        recipe.results[1].amount = 100
     end
     Muluna.rro.soft_insert(data.raw["technology"]["muluna-telescope"].effects,
         {

@@ -771,6 +771,7 @@ require("compat.schall-mods")
 require("compat.bob-mods")
 require("compat.transplutonic")
 require("prototypes.technology.technology-updates")
+require("prototypes.overrides.data-cells")
 
 local parent_planet = "nauvis"
 if mods["any-planet-start"] then 
