@@ -123,7 +123,13 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
                         end
                         if player.physical_vehicle or surface.get_tile(player.position).hidden_tile or provides_flight then return end
                             
-                            local player_position = character.position
+                            local player_position
+
+                            if character then
+                                player_position = character.position
+                            else 
+                                player_position = player.position
+                            end
                             surface.create_particle{
                                 name = "stone-particle-medium",
                                 position = player_position,

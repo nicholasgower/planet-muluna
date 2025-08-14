@@ -277,7 +277,7 @@ local telescope = Muluna.rro.merge(data.raw["recipe"]["assembling-machine-3"],
        ingredients = {
         {type = "item", name = "silicon-cell", amount = 20},
         {type = "item", name = "processing-unit",amount = 25},
-        {type = "item", name = "optical-cable", amount = 10},
+        {type = "item", name = "muluna-data-cable", amount = 10},
        }
     }
 )
@@ -287,7 +287,7 @@ data:extend{{
     type = "recipe",
     name = "muluna-data-cable",
     energy_required = 2,
-    surface_conditions = {{ property = "moshine-exclusive", min = 1, max = 1}},
+    --surface_conditions = {{ property = "moshine-exclusive", min = 1, max = 1}},
     ingredients = {
       {type = "item", name = "silicon", amount = 1},
       {type = "item", name = "silicon-carbide", amount = 1},

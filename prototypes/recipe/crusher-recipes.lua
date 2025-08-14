@@ -1,3 +1,4 @@
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 local dual_icon_reversed = require("lib.dual-item-icon").dual_icon_reversed
 
@@ -261,6 +262,17 @@ regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02
 regolith_recycling.icons = generate_recycling_recipe_icons_from_item(data.raw.item["muluna-lunar-regolith"])
 regolith_recycling.order = regolith_recycling.order .. "a"
+
+local data_tape = table.deepcopy(data.raw["recipe"]["electronic-circuit"])
+
+rro.deep_replace(data_tape,"electronic-circuit","muluna-basic-hard-drive")
+
+data_tape.ingredients = {
+    {type = "item", name }
+}
+
+
+
 local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,tree_crushing,regolith_sorting,regolith_recycling}
 if wood_crushing then
     table.insert(recipes,wood_crushing)

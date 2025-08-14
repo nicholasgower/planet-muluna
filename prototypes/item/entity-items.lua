@@ -190,7 +190,7 @@ local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-m
 local data_cable = { --Forked from Moshine optical cable
     type = "item",
     name = "muluna-data-cable",
-    icon = "__Moshine__/graphics/icons/optical-fiber.png",
+    icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
     subgroup = "moshine-production-machine",
     order = "ffi",
     inventory_move_sound = item_sounds.metal_small_inventory_move,
@@ -202,6 +202,13 @@ local data_cable = { --Forked from Moshine optical cable
     weight = 20 * kg,
     random_tint_color = item_tints.iron_rust
   }
+
+if not mods["Moshine"] then
+    data_cable.subgroup = "muluna-products"
+
+end
+
+local data_pump = table.deepcopy(data)
 
 
 data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,data_cable}

@@ -317,17 +317,17 @@ if not data.raw["item"]["silicon-carbide"] then
         weight = 20*kg,
       }}
 end
-if not data.raw["item"]["silicon-cell"] then
+if not data.raw["item"]["silicon-carbide"] then
 data:extend{{
     type = "item",
     name = "silicon-carbide",
-    icon = "__Moshine__/graphics/icons/silicon-carbide.png",
-    subgroup = "moshine-processes",
+    icon = "__muluna-graphics__/graphics/icons/silicon-carbide.png",
+    subgroup = "muluna-products",
     order = "fff",
     inventory_move_sound = item_sounds.metal_small_inventory_move,
     pick_sound = item_sounds.metal_small_inventory_pickup,
     drop_sound = item_sounds.metal_small_inventory_move,
-    default_import_location = "moshine",
+    default_import_location = "muluna",
     stack_size = 40,
     weight = 12.5*kg,
   }}

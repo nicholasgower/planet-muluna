@@ -26,13 +26,13 @@ for _, category in pairs({"item", "tool"}) do
                 local recipe = {
                     type = "recipe",
                     name = data_cell.name,
-                    category = "data-processing",
+                    category = "crafting-with-fluid-and-data",
                     enabled = false,
                     ingredients = { 
                         {type = "item",name = prototype.name, amount = 1},
-                        {type = "fluid", name = "muluna-astronomical-data", amount = prototype.data_capacity},
+                        {type = "fluid", name = "muluna-astronomical-data", amount = prototype.data_capacity, fluidbox_index = 2},
                     },
-                    results = {{type = "item" , name = data_cell.name, amount = 1}},
+                    results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2}},
                     main_product = data_cell.name,
                     energy_required = 5
                 }
@@ -40,7 +40,7 @@ for _, category in pairs({"item", "tool"}) do
                 local recipe_empty = {
                     type = "recipe",
                     name = recipe.name .. "-empty",
-                    category = "data-processing",
+                    category = "crafting-with-fluid-and-data",
                     enabled = false,
                     ingredients = recipe.results,
                     results = recipe.ingredients,
