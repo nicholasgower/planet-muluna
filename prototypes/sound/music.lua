@@ -83,4 +83,6 @@ if settings.startup["disable-muluna-music"].value == false then
     end
 end
 
-PlanetsLib.borrow_music("space-platform", data.raw["planet"]["muluna"],{track_types = {"main-track"},modifier_function = function(track) track.weight = track.weight / 8 end})
+PlanetsLib.borrow_music("space-platform", data.raw["planet"]["muluna"],
+    {track_types = {"main-track"},
+    modifier_function = function(track) track.weight = track.weight / 8 end})
