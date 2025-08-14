@@ -16,54 +16,54 @@ if settings.startup["disable-muluna-music"].value == false then
             track_type = "hero-track",
             sound = {
                 filename = "Anthem",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             track_type = "interlude",
             sound = {
                 filename = "Storm",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             track_type = "interlude",
             sound = {
                 filename = "Muluna-33",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             track_type = "interlude",
             sound = {
                 filename = "Handcrafted",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             
             sound = {
                 filename = "Cryo-Lab",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             
             sound = {
                 filename = "Eclipse",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             sound = {
                 filename = "Factory-FourFour",
-                volume = 0.35
+                volume = 0.5
             }
         },
         {
             sound = {
                 filename = "01010213",
-                volume = 0.35
+                volume = 0.5
             }
         },
     }
