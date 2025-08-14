@@ -84,6 +84,8 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 - German by [Lucanoria](https://github.com/Lucanoria)
 
+## Soundtrack by FluidNatalie
+
 ## Special thanks to the following mods and creators:
 
 - SafTheLamb, for crushed alumina icon and for collaborating with me to ensure compatibility between Muluna and her mods.
