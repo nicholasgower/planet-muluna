@@ -16,10 +16,10 @@ function get_all_matching_name(name)
 
 end
 
-local data_pump_set = get_all_matching_name("pump")
+local data_pump_set = table.deepcopy(get_all_matching_name("pump"))
 
-rro.deep_replace(data_pump_set,"pump","muluna-data-pump")
+--rro.deep_replace(data_pump_set,"pump","muluna-data-pump")
 data_pump_set[1].type = "pump"
 
-data:extend{data_pump_set}
+data:extend(data_pump_set)
 
