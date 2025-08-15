@@ -8,10 +8,15 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=true}
 end
 
-Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity}, function(event)
-    
-    local entity = event.entity
+local function get_telescope_build_limit(force)
+    return 1
 
+end
+
+Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity}, function(event)
+    if not storage.telescopes then storage.telescopes = {} end
+    local entity = event.entity
+    
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
     if heat_assembling_machines[entity.name] then
@@ -27,6 +32,67 @@ Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_b
     -- end
     local reactor = nil
     if is_heat_assembling_machine then
+        local telescope_build_limit = get_telescope_build_limit(entity.force)
+        local count = rro.count(storage.telescopes,function(entry) return entry["assembling-machine"].surface == entity.surface end)
+        if count >= telescope_build_limit then --Forbid building if count exceeded.
+            local position = entity.position
+            local surface = entity.surface
+            
+            local player
+            if event.player_index then
+                player = game.players[event.player_index]
+            else
+                player = event.robot
+            end
+            local stack = {name=entity.prototype.mineable_properties.products[1].name, amount=1}
+
+            --if event.consumed_items then
+                --for i = 1,#event.consumed_items do --Return telescope to player inventory
+                    --local item = event.consumed_items[i]
+                    local inventory_define
+                    if event.name == defines.events.on_built_entity then
+                        inventory_define = defines.inventory.character_main
+                        player.get_inventory(inventory_define).insert(stack)
+                    else
+                        local item = entity.surface.create_entity{
+                            name = "item-on-ground",
+                            position = entity.position,
+                            stack = stack
+                        }
+                        if item then
+                            item.order_deconstruction(entity.force)
+                        end
+                        
+                            
+                    end
+                    
+                    
+                --end
+            
+            --end
+            
+            local text
+            if telescope_build_limit == 1 then
+                text = {"console.can-not-place-more-telescopes-1",tostring(telescope_build_limit)}
+            else
+                text = {"console.can-not-place-more-telescopes-X",tostring(telescope_build_limit)}
+            end
+            if event.name == defines.events.on_built_entity then
+                player.create_local_flying_text{
+                    text = text,
+                    --position = position,
+                    surface = surface,
+                    create_at_cursor = true,
+                    speed = 0.01,
+                }
+            else
+                entity.force.print({"",text,entity.position})
+            end
+            entity.destroy{}
+            return 
+        end
+
+
         if entity.surface.platform then
             
         else
@@ -50,7 +116,7 @@ Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_b
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         reactor.fluidbox.add_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
-        if not storage.telescopes then storage.telescopes = {} end
+        
         storage.telescopes[entity.unit_number] = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior}
     end
 

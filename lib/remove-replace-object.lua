@@ -228,5 +228,16 @@ function rro.copy_fields(table_to,table_from,fields,deepcopy)
 
 end
 
+function rro.count(table,predicate)
+    local i = 0
+    for _,entry in pairs(table) do
+        if predicate(entry) == true then
+            i = i + 1
+        end
+    end
+    return i
+
+end
+
 
 return rro
