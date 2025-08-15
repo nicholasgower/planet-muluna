@@ -74,7 +74,7 @@ if true or settings.startup["muluna-old-interstellar-pack-recipe"].value == fals
     --local oxygen = 60*r_lunar_pack.energy_required
     --table.insert(r_lunar_pack.ingredients,{type = "fluid", name = "oxygen", amount = oxygen})
     --table.insert(r_lunar_pack.results,{type = "fluid", name = "carbon-dioxide", amount = oxygen, temperature = 500,ignored_by_productivity = oxygen})
-    t_lunar_pack.prerequisites = {"low-density-space-platform-foundation"}
+    t_lunar_pack.prerequisites = {"low-density-space-platform-foundation","muluna-telescope"}
     t_lunar_pack.research_trigger = {
         type = "craft-item",
         item = "low-density-space-platform-foundation",
