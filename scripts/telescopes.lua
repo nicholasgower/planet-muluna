@@ -86,7 +86,7 @@ Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_b
                     speed = 0.01,
                 }
             else
-                entity.force.print({"",text,entity.position})
+                entity.force.print({"",text," ",entity.position})
             end
             entity.destroy{}
             return 
