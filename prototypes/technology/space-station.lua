@@ -789,6 +789,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "muluna-data-cable",
             },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-basic-hard-drive",
+            },
             -- All telescope observation recipes added in final-fixes
         },
         localised_name={"entity-name.muluna-telescope"},
@@ -1267,7 +1271,7 @@ data:extend{
             ingredients = {}
         },
         prerequisites = {
-            "kovarex-enrichment-process",
+            --"kovarex-enrichment-process",
             --"muluna-anorthite-processing",
             "asteroid-collector"
         },
