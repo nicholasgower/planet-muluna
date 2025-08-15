@@ -1,0 +1,24 @@
+local flib_bounding_box = Muluna.flib_bounding_box
+Muluna.constants.telescopes = {}
+for _,entity in pairs(data.raw["assembling-machine"]) do
+    if entity.muluna_is_telescope == true then
+        --local telescope = table.deepcopy(entity)
+        --telescope.type = "assembling-machine"
+        local telescope_combinator = Muluna.rro.merge(data.raw["constant-combinator"]["constant-combinator"] ,
+            {
+                name = entity.name .. "-combinator",
+                collision_box = entity.collision_box,
+                minable = "_nil",
+            }
+        )
+        telescope_combinator.selection_box = flib_bounding_box.resize(entity.selection_box,0.0)
+        telescope_combinator.selection_priority=49 --Default is 50
+        entity.selection_box = flib_bounding_box.resize(entity.selection_box,-0.2)
+        Muluna.constants.telescopes[entity.name] = {
+            ["assembling-machine"] = entity.name,
+            ["constant-combinator"] = telescope_combinator.name,
+        }
+        entity.muluna_is_telescope = false
+        data:extend{telescope_combinator}
+    end
+end

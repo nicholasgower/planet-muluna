@@ -172,7 +172,16 @@ data:extend{
       default_value = 60,
       minimum_value = 1,
       maximum_value = 360,
-      order = "dc",
+      order = "eb",
+    },
+    {
+      type = "double-setting",
+      name = "muluna-telescope-combinator-update-ticks",
+      setting_type="startup",
+      default_value = 6,
+      minimum_value = 1,
+      maximum_value = 180,
+      order = "ec",
     },
     {
       type = "bool-setting",

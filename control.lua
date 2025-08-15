@@ -31,6 +31,7 @@ local ground_digger = require("scripts.sand-extractor")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
 require("scripts.heat-assembling-machine")
+require("scripts.telescopes")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
@@ -50,6 +51,18 @@ require("scripts.heat-assembling-machine")
 --     ground_digger.construct_sand_extractor(event)
 -- end)
 
+local function init_storage() 
+    storage.players_on_muluna = {}
+    storage.telescopes = {} 
+end
+
+Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
+
+    init_storage() 
+
+
+end)
+
 Muluna.events.finalize_events()
 
 local new_surface = require("scripts.new-surface")
@@ -66,17 +79,7 @@ end
 
 local interstellar_science_pack = require("scripts.interstellar-science-pack")
 
-local function init_storage() 
-    storage.players_on_muluna = {}
 
-end
-
-Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
-
-    init_storage() 
-
-
-end)
 
 script.on_event(defines.events.on_research_finished, function(event) interstellar_science_pack.update_interstellar_pack(event.research.force) end)
 script.on_configuration_changed(function()
@@ -93,6 +96,7 @@ script.on_configuration_changed(function()
             storage.players_on_muluna[i] = {player=player}
         end
     end
+    if not storage.telescopes then storage.telescopes = {} end 
 end
 )
 
