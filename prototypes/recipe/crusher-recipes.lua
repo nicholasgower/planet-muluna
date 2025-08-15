@@ -330,4 +330,18 @@ data:extend{{ --Moshine recipe
 
 end
 
+data:extend{{
+    type = "recipe",
+    name = "muluna-basic-hard-drive",
+    category = "crafting-with-fluid",
+    ingredients = {
+        {type = "item", name = "iron-plate",amount = 1},
+        {type = "item", name = "plastic-bar", amount = 5},
+        {type = "fluid", name = "lubricant", amount = 10}
+    },
+    enabled = false,
+    energy_require = 5,
+    results = {{type = "item", name = "muluna-basic-hard-drive", amount = 1}}, 
+}}
+
 
