@@ -36,7 +36,7 @@ local function correct_surface_space_science_packs(surface,desired_recipe)
                 local position = machine.position
                 local offset_width = 5
                 local offset_height = 5
-                game.print("Assembler found")
+                --game.print("Assembler found")
                 local neighboring_inserters = surface.find_entities_filtered{area={{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, type = {"inserter"}}
 
                 for _,inserter in pairs(neighboring_inserters) do
@@ -67,7 +67,7 @@ local function correct_surface_space_science_packs(surface,desired_recipe)
                 local position = machine.position
                 local offset_width = 8
                 local offset_height = 8
-                game.print("Assembler found")
+                --game.print("Assembler found")
                 local neighboring_assemblers = surface.find_entities_filtered{area={{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, type = {"assembling-machine"}}
 
                 for _,neighbor in pairs(neighboring_assemblers) do

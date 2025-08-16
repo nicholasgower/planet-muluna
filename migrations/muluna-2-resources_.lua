@@ -1,4 +1,3 @@
-game.print("test")
 local function remove_resource(resource) 
     local map_gen_settings = game.planets.muluna.surface.map_gen_settings
     map_gen_settings.autoplace_controls[resource] = nil
