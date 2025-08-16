@@ -756,22 +756,22 @@ data:extend{
         type = "technology",
         name = "muluna-telescope",
         unit = {
-            count = 100,
+            count = 1000,
             time = 30,
             ingredients = {
                     {"automation-science-pack", 1},
                     {"logistic-science-pack", 1},
                     {"chemical-science-pack", 1},
                     {"production-science-pack", 1},
-                    --{"utility-science-pack", 1},
+                    {"utility-science-pack", 1},
                     {"space-science-pack", 1},
             }
         },
         prerequisites = {
             "muluna-silicon-processing",
-            --"space-science-pack",
-            "muluna-nanofoamed-polymers",
-            --"utility-science-pack",
+            "space-science-pack",
+            --"muluna-nanofoamed-polymers",
+            "utility-science-pack",
         },
         icons = Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope.png",icon_size = 128}},8),
         --icon = "__muluna-graphics__/graphics/technology/moshine-tech-silicon-cell.png",
@@ -796,6 +796,7 @@ data:extend{
             -- All telescope observation recipes added in final-fixes
         },
         localised_name={"entity-name.muluna-telescope"},
+        localised_description={"entity-description.muluna-telescope"}
     },
     {
         type = "technology",
