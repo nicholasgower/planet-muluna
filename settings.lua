@@ -83,7 +83,7 @@ data:extend{
         name = "muluna-change-quality-science-pack-drain",
         setting_type = "startup",
         default_value = true,
-        order = "dc",
+        order = "ee",
       },
       {
         type = "int-setting",
@@ -156,7 +156,7 @@ data:extend{
       localised_name = {"mod-setting-name.enable-muluna-satellite-radar"},
       setting_type = "startup",
       default_value = true,
-      order = "da"
+      order = "fa"
     },
     {
       type = "bool-setting",
