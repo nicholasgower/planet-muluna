@@ -9,7 +9,7 @@
   "dependencies": [
     "base >= 2.0.64",
     "space-age",
-    "PlanetsLib >= 1.10.6",
+    "PlanetsLib >= 1.11.0",
     "muluna-graphics >= 1.0.27",
     "muluna-utility-constants",
     "tile-upgrade-planner-muluna >= 1.0.1",
