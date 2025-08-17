@@ -9,6 +9,10 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
                 name = entity.name .. "-combinator",
                 collision_box = entity.collision_box,
                 minable = "_nil",
+                sprites = "_nil",
+                activity_led_sprites = "_nil",
+                max_health = 10000,
+
             }
         )
         telescope_combinator.selection_box = flib_bounding_box.resize(entity.selection_box,0.0)

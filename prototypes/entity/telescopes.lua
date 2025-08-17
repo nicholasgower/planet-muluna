@@ -3,6 +3,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     type = "assembling-machine", --Extends Assembling machine
     name = "muluna-telescope",
     muluna_is_telescope = true,
+    module_slots = 2,
     crafting_speed = 1,
     crafting_categories = {"muluna-telescope"},
     selection_box = Muluna.flib_bounding_box.from_dimensions({0,0},3,3),
@@ -56,7 +57,10 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
 table.remove(telescope.fluid_boxes,1)
 telescope.fluid_boxes[1].pipe_connections[1].connection_category = "data"
 telescope.fluid_boxes[1].filter = "muluna-astronomical-data"
-
+telescope.fluid_boxes[1].pipe_covers = nil
+telescope.fluid_boxes[1].pipe_covers_frozen = nil
+telescope.fluid_boxes[1].pipe_picture = nil
+telescope.fluid_boxes[1].pipe_picture_frozen = nil
 
 data:extend{telescope}
 
@@ -96,7 +100,10 @@ Muluna.rro.soft_insert(Muluna.constants.telescope_entities, --Entities with limi
 
 
 
-data:extend{{
+data:extend{
+  {
     type = "recipe-category",
     name = "muluna-telescope"
-}}
+  },
+
+}
