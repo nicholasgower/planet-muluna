@@ -9,7 +9,7 @@ local possible_science_packs = --Science pack technologies
     "janus-time-science-pack",
     "slp-sunpack",
     "nanite-science-pack",
-    "insulation-science-pack",
+    --"insulation-science-pack",
     "battlefield-science-pack",
     "compression-science-pack",
     "omnia-omnite-processing",
@@ -21,8 +21,8 @@ local possible_science_packs = --Science pack technologies
     "quantum-science-pack",
     "ring-science-pack",
     "anomaly-science-pack",
-    "thermodynamic-science-pack",
-    "aerospace-science-pack",
+    --"thermodynamic-science-pack",
+    --"aerospace-science-pack",
     "tiberium-mechanical-research"
 }
 
