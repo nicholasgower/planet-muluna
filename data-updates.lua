@@ -123,7 +123,8 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         local tech_2=table.deepcopy(tech)
         tech_2.name=tech_2.name .. "-2"
         tech_2.unit.count=1500
-        tech_2.prerequisites={tech.name}
+        rro.soft_insert(tech_2.unit.ingredients,{"interstellar-science-pack",1})
+        tech_2.prerequisites={tech.name,"interstellar-science-pack"}
         tech_2.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(2)}
         --table.insert(t2_planet_rocket_prod,tech_2.name)
         table.insert(rocket_prod_aquilo.prerequisites,tech_2.name)
@@ -139,6 +140,7 @@ rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     rro.soft_insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
+    rro.soft_insert(rocket_prod_aquilo.unit.ingredients,{"interstellar-science-pack",1})
 end
 -- for entry in ipairs(t2_planet_rocket_prod) do
 --     table.insert(rocket_prod_aquilo.prerequisites,entry)
