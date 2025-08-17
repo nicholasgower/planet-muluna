@@ -145,6 +145,12 @@ t_lunar_pack.effects = {
 -- local r_lunar_pack_4 = table.deepcopy(r_lunar_pack)
 --r_lunar_pack_4.name = "interstellar-science-pack-helium-4"
 r_lunar_pack.main_product = "interstellar-science-pack"
+
+if mods["Igrys"] then
+    r_lunar_pack.auto_enrich = false
+end
+
+
  data:extend(all)
 
 -- r_lunar_pack_4.ingredients = {
