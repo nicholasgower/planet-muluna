@@ -7,7 +7,7 @@ for _, category in pairs({"item", "tool"}) do
                 local data_cell = table.deepcopy(prototype)
                 data_cell.name = name .. "-astronomical-data"
                 data_cell.data_capacity = nil
-
+                data_cell.localised_name = {"item-name.muluna-databank-filled",{"item-name."..name}}
                 data_cell.icons = {
                     {
                         icon = prototype.icon,
@@ -26,6 +26,7 @@ for _, category in pairs({"item", "tool"}) do
                 local recipe = {
                     type = "recipe",
                     name = data_cell.name,
+                    localised_name = data_cell.localised_name,
                     category = "crafting-with-fluid-and-data",
                     enabled = false,
                     ingredients = { 
@@ -40,7 +41,10 @@ for _, category in pairs({"item", "tool"}) do
                 local recipe_empty = {
                     type = "recipe",
                     name = recipe.name .. "-empty",
+                    localised_name = {"recipe-name.muluna-load-data-from-X",{"item-name."..name}},
                     category = "crafting-with-fluid-and-data",
+                    subgroup = "muluna-telescope",
+                    order = data_cell.order .. "a",
                     enabled = false,
                     ingredients = recipe.results,
                     results = recipe.ingredients,
@@ -101,7 +105,8 @@ if am3 and am3.fluid_boxes then
         {
             type = "recipe-category",
             name = "crafting-with-fluid-and-data",
-            order = "a[fluid]-b[data]"
+            order = "a[fluid]-b[data]",
+            category = "intermediate-products",
         }
     }
 

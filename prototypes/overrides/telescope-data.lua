@@ -43,8 +43,9 @@ for _,space_location in pairs(data.raw["planet"]) do
                     },
                 },
                 auto_recycle = false,
+                enabled = false,
                 localised_name = {"recipe-name.muluna-telescope-observation-x",{"space-location-name."..space_location.name}},
-                order = "aa-" .. (space_location.order or "")
+                order = "zz-" .. (space_location.order or "")
             }
             if space_location.name == "muluna" then
                 recipe.results[1].amount = 100

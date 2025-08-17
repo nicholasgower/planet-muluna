@@ -32,7 +32,7 @@ vacuum_heating_tower.icons = {
         }
 vacuum_heating_tower.localised_name = {"entity-name.muluna-vacuum-heating-tower"}
 vacuum_heating_tower.order = "d[muluna-vacuum-heating-tower]"
-vacuum_heating_tower.weight = 100 * kg
+vacuum_heating_tower.weight = 200 * kg
 
 local crusher_2 = table.deepcopy(data.raw["item"]["crusher"])
 
@@ -180,6 +180,8 @@ local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-m
     {
         name = "muluna-telescope",
         place_result = "muluna-telescope",
+        subgroup = "muluna-telescope",
+        order = "a[muluna-telescope]",
         icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
         icon_size = 64,
         default_import_location = "muluna",
@@ -190,7 +192,12 @@ local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-m
 local data_cable = { --Forked from Moshine optical cable
     type = "item",
     name = "muluna-data-cable",
-    icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+            tint = {238, 139, 0}
+        }
+    },
     subgroup = "moshine-production-machine",
     order = "ffi",
     inventory_move_sound = item_sounds.metal_small_inventory_move,
@@ -203,8 +210,9 @@ local data_cable = { --Forked from Moshine optical cable
     random_tint_color = item_tints.iron_rust
   }
 
-if not mods["Moshine"] then
-    data_cable.subgroup = "muluna-products"
+if not mods["Moshine"] or true then
+    data_cable.subgroup = "muluna-telescope"
+    data_cable.order = "b[muluna-data-cable]"
 
 end
 

@@ -208,7 +208,7 @@ data:extend{{
     icon_size = 64,
     stack_size = 50,
     weight = 5 * kg,
-    subgroup = "muluna-products",
+    subgroup = "muluna-telescope",
     order = "d[muluna-basic-hard-drive]",
     -- icons = {
         
@@ -241,11 +241,18 @@ data:extend{{
     -- },
     stack_size = 100,
     weight = 1 * kg,
-    subgroup = "muluna-products",
-    order = "d[muluna-astronomical-data]",
+    subgroup = "muluna-telescope",
+    order = "b[muluna-astronomical-data]",
   }),
+  {
+    type = "item-subgroup",
+    name = "muluna-telescope",
+    group = "space",
+    order = "g"
+  }
 
 }
+
 
 if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
     data:extend{{ --Copied from Wooden industries
