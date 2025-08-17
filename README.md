@@ -49,13 +49,13 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 ## Resources
 
-- Metallic asteroid chunk
+- Metallic meteorite chunks, mined from resource patches with mining drills. Produces iron ore and/or copper ore when crushed.
 
-- Carbonic asteroid chunk
+- Carbonic meteorite chunks, mined from resource patches with mining drills. Produces carbon and/or sulfur when crushed.
 
-- Oxide asteroid chunk
+- Oxide meteorite chunks, mined from resource patches with mining drills. Produces ice and/or calcite when crushed.
 
-- Anorthite chunk
+- Anorthite chunks, mined from resource patches with mining drills. Produces alumina and silicon when crushed
 
 - Lunar Regolith
 
