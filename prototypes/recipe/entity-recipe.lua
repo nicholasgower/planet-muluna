@@ -122,6 +122,7 @@ space_chest = util.merge{space_chest,
             {type = "item", name = "aluminum-plate", amount = 8},
             {type = "item", name = "low-density-structure", amount = 1},
             {type = "item", name = "processing-unit", amount = 1},
+            {type = "item", name = "carbon-fiber", amount = 1}
             },
         subgroup = "space-platform",
         order = "ca[space-chest-muluna]"
