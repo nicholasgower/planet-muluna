@@ -200,6 +200,7 @@ end
 -- @param table table
 -- @param crawl_list table
 function rro.safe_find(table,crawl_list)
+    if table == nil then return nil end
     local out = table
     for i,layer in ipairs(crawl_list) do
         out= out[layer]
@@ -208,6 +209,9 @@ function rro.safe_find(table,crawl_list)
 
     return out
 end
+
+rro.safe_get = rro.safe_find
+
 
 --- Copies fields specified in "fields" from "table_from" to "table_to"
 -- @param table_to table
