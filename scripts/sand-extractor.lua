@@ -93,7 +93,7 @@ function Public.construct_sand_extractor(event)
             area= {{position.x-offset_width/2,position.y-offset_height/2},{position.x+offset_width/2,position.y+offset_height/2}},
             to_be_deconstructed = false,
         }
-    if #colliding_entities ~= 0 then return end
+    if rro.count(colliding_entities,function(entry) return entry.type ~= "entity-ghost" end) ~= 0 then game.print("Colliding entities")return end
     
     local neighboring_belts = rro.get_concatenation(
         surface.find_entities_filtered{
@@ -134,7 +134,7 @@ function Public.construct_sand_extractor(event)
 
     surface.create_entity {
         name = is_ghost and "entity-ghost" or drill_name,
-        inner_name = is_ghost and name or nil,
+        inner_name = is_ghost and drill_name or nil,
         position = position,
         force = player.force,
         player = player,
