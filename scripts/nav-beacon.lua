@@ -1,7 +1,8 @@
 local debug_mode = false
 local DT = "[NavBeacon] "
+local radar_data 
 if settings.startup["enable-nav-beacon"].value == true then
-    local radar_data = prototypes.mod_data["muluna-satellite-radar"].data
+    radar_data = prototypes.mod_data["muluna-satellite-radar"].data
 end
 
 require("__core__/lualib/util.lua")
@@ -139,10 +140,11 @@ local function built_nav_beacon(entity)
         storage.beaconed_platforms[platform.index] = nav
         storage.nav_surfaces[nav.unit_number] = platform.space_location
         storage.nav_beacons[nav.unit_number] = nav
-    end
-    if #storage.nav_beacons > 0 then
         storage.has_nav_beacons = true
     end
+    --if #storage.nav_beacons > 0 then
+        
+    --end
 end
 
 ---@param entity LuaEntity
@@ -163,7 +165,7 @@ local function destroyed_nav_beacon(entity)
 end
 
 ---@param e on_space_platform_changed_state
-script.on_event(defines.events.on_space_platform_changed_state, function(e)
+Muluna.events.on_event(defines.events.on_space_platform_changed_state, function(e)
     --only track platforms with a nav beacon
     local platformBeacon = storage.beaconed_platforms[e.platform.index]
     if platformBeacon ~= nil then
@@ -275,7 +277,7 @@ end
 ----- need to register all build events because of the custom energy interface
 ------------------------------------------------------------------------------------------------------------------------
 ---@param event on_space_platform_built_entity
-script.on_event(defines.events.on_space_platform_built_entity, function(event)
+Muluna.events.on_event(defines.events.on_space_platform_built_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -283,7 +285,7 @@ script.on_event(defines.events.on_space_platform_built_entity, function(event)
 end, filter_built)
 
 ---@param event script_raised_built
-script.on_event(defines.events.script_raised_built, function(event)
+Muluna.events.on_event(defines.events.script_raised_built, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -291,7 +293,7 @@ script.on_event(defines.events.script_raised_built, function(event)
 end, filter_built)
 
 -- ---@param event on_built_entity
--- script.on_event(defines.events.on_built_entity, function(event)
+-- Muluna.events.on_event(defines.events.on_built_entity, function(event)
 --     local entity = event.entity or event.created_entity
 --     if not entity or not entity.valid then return end
 
@@ -299,7 +301,7 @@ end, filter_built)
 -- end, filter_built)
 
 ---@param event on_robot_built_entity
-script.on_event(defines.events.on_robot_built_entity, function(event)
+Muluna.events.on_event(defines.events.on_robot_built_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -313,7 +315,7 @@ end, filter_built)
 ------------------------------------------------------------------------------------------------------------------------
 
 ---@param event on_space_platform_mined_entity
-script.on_event(defines.events.on_space_platform_mined_entity, function(event)
+Muluna.events.on_event(defines.events.on_space_platform_mined_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -321,7 +323,7 @@ script.on_event(defines.events.on_space_platform_mined_entity, function(event)
 end, filter_built)
 
 ---@param event on_entity_died
-script.on_event(defines.events.on_entity_died, function(event)
+Muluna.events.on_event(defines.events.on_entity_died, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -329,7 +331,7 @@ script.on_event(defines.events.on_entity_died, function(event)
 end, filter_built)
 
 ---@param event script_raised_destroy
-script.on_event(defines.events.script_raised_destroy, function(event)
+Muluna.events.on_event(defines.events.script_raised_destroy, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -337,7 +339,7 @@ script.on_event(defines.events.script_raised_destroy, function(event)
 end, filter_built)
 
 ---@param event on_player_mined_entity
-script.on_event(defines.events.on_player_mined_entity, function(event)
+Muluna.events.on_event(defines.events.on_player_mined_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -345,7 +347,7 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
 end, filter_built)
 
 ---@param event on_robot_mined_entity
-script.on_event(defines.events.on_robot_mined_entity, function(event)
+Muluna.events.on_event(defines.events.on_robot_mined_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
