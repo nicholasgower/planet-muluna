@@ -1076,7 +1076,7 @@ data:extend{
             },
         },
         unit = {
-            count = 500,
+            count = 1000,
             time = 60,
             ingredients = {
                 {"automation-science-pack", 1},
@@ -1085,6 +1085,8 @@ data:extend{
                 {"production-science-pack", 1},
                 {"utility-science-pack", 1},
                 {"space-science-pack", 1},
+                {"agricultural-science-pack",1},
+                {"electromagnetic-science-pack",1},
                 {"interstellar-science-pack",1},
             }
         },
