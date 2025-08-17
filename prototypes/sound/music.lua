@@ -85,4 +85,4 @@ end
 
 PlanetsLib.borrow_music("space-platform", data.raw["planet"]["muluna"],
     {track_types = {"main-track"},
-    modifier_function = function(track) track.weight = track.weight / 8 end})
+    modifier_function = function(track) track.weight = track.weight / 32 end})
