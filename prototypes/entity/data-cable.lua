@@ -29,7 +29,7 @@ local function make_disabled_visualization(i)
 end
 
 mulunadatacablepictures = function()
-  return
+  local layers =
   {
     straight_vertical_single =
     {
@@ -270,10 +270,14 @@ mulunadatacablepictures = function()
       frame_count = 60
     }
   }
+  for _,layer in pairs(layers) do
+    layer.tint = {238, 139, 0}
+  end
+  return layers
 end
 
 mulunadatacablecoverspictures = function()
-  return
+  local layers =
   {
     north =
     {
@@ -328,6 +332,10 @@ mulunadatacablecoverspictures = function()
       }
     }
   }
+  for _,layer in pairs(layers) do
+    layer.layers[1].tint = {238, 139, 0}
+  end
+  return layers
 end
 
 
@@ -355,6 +363,7 @@ local corpse = {
       line_length = 1,
       direction_count = 2,
       shift = util.by_pixel(1.5, 2.5), -- -0,5
+      tint = {238, 139, 0},
       scale = 0.5
     })
   }
@@ -397,7 +406,7 @@ local data_cable = {
         { direction = defines.direction.west, position = {0, 0}, connection_category = "data" }
       },
       hide_connection_info = true,
-      max_pipeline_extent = 50,
+      max_pipeline_extent = 100,
     },
     impact_category = "glass",
     pictures = (mulunadatacablepictures or function() return nil end)(), --Only works if Moshine is installed
