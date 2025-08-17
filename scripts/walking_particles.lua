@@ -31,11 +31,15 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     local function update_step_tick_rates(event)
         if game.surfaces.muluna then
             if not storage.walking_tick_rates then storage.walking_tick_rates = {} end
-            for i,player in pairs(game.players) do
-                if player.surface.name ~= "muluna" then break end
+            for i,player in pairs(storage.players_on_muluna) do
+                if not (player.connected and player.surface.name == "muluna") then goto continue end
+                --player.print(player.name)
                 local speed = player.character_running_speed
                 local tick_rate = storage.walking_tick_rates[i]
                 storage.walking_tick_rates[i] = step_process_tick_rate*math.ceil(30/(speed/0.075)/step_process_tick_rate)
+                --player.print(storage.walking_tick_rates[i])
+                --player.print(speed)
+                ::continue::
             end
         end
     end
@@ -104,9 +108,8 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                 if not storage.walking_tick_rates then update_step_tick_rates(event) end
                 local tick_rate = storage.walking_tick_rates[i] or 30
                 --if not tick_rate then update_step_tick_rates(event) end
-                if surface.name ~= "muluna" then break end
+                if surface.name ~= "muluna" then goto continue end
                 if event.tick % tick_rate == 0 then
-                    
                     --game.print(surface.name)
                     
                     
@@ -115,7 +118,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                    
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
-                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} return end --game.print(profiler) return end
+                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} goto continue end --game.print(profiler) return end
                         --local player_armor = get_armor(player)
                         -- local provides_flight = false
                         -- if player_armor.valid_for_read then 
@@ -167,6 +170,7 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                     
                 --game.print(profiler)
                 end
+                ::continue::
             end
         
         end
