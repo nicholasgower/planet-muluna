@@ -152,10 +152,10 @@ if settings.startup["enable-nav-beacon"].value == true then
             {
                 { type = "item", name = "processing-unit", amount = 500 },
                 { type = "item", name = "radar",           amount = 250 },
-                { type = "item", name = "beacon",          amount = 100 },
+                { type = "item", name = "muluna-telescope",          amount = 50 },
                 { type = "item", name = "superconductor",          amount = 500 },
-                { type = "item", name = "tungsten-plate",          amount = 500 },
                 { type = "item", name = "aluminum-plate",          amount = 500 },
+                { type = "item", name = "silicon-cell",          amount = 100 },
             },
             results = { { type = "item", name = "muluna-satellite-radar", amount = 1 } },
         }
@@ -180,7 +180,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                     recipe = "muluna-satellite-radar"
                 }
             },
-            prerequisites = { "radar", "effect-transmission", "interstellar-science-pack","artillery"},
+            prerequisites = { "radar", "interstellar-science-pack", "metallurgic-science-pack", "electromagnetic-science-pack"},
             unit =
             {
                 count = 3000,
