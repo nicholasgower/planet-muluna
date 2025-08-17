@@ -93,7 +93,7 @@ function Public.construct_sand_extractor(event)
             area= {{position.x-offset_width/2,position.y-offset_height/2},{position.x+offset_width/2,position.y+offset_height/2}},
             to_be_deconstructed = false,
         }
-    if rro.count(colliding_entities,function(entry) return entry.type ~= "entity-ghost" end) ~= 0 then game.print("Colliding entities")return end
+    if #colliding_entities ~= 0 then return end
     
     local neighboring_belts = rro.get_concatenation(
         surface.find_entities_filtered{
