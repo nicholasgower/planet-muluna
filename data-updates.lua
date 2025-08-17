@@ -674,6 +674,10 @@ if data.raw["tool"]["alien-science-pack"] then
     data.raw["tool"]["alien-science-pack"].order="fa[alien-science-pack]"
 end
 
+if data.raw["tool"]["electrochemical-science-pack"] then
+    data.raw["tool"]["electrochemical-science-pack"].order="iz[electrochemical-science-pack]"
+end
+
 if data.raw.planet["lignumis"] == nil then
     data.raw.planet["nauvis"].localised_description={"planetslib-templates.planet-description-one-moon",{"space-location-description.nauvis"},"[planet=muluna]"}
 else
