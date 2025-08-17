@@ -109,6 +109,8 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 ## Soundtrack by [FluidNatalie](https://anagramofme.bandcamp.com/)
 
+- Space platform tracks will also play at a very low frequency.
+
 ## Special thanks to the following mods and creators:
 
 - SafTheLamb, for crushed alumina icon and for collaborating with me to ensure compatibility between Muluna and her mods.
