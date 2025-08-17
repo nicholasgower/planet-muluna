@@ -278,6 +278,8 @@ local telescope = Muluna.rro.merge(data.raw["recipe"]["assembling-machine-3"],
         {type = "item", name = "silicon-cell", amount = 20},
         {type = "item", name = "processing-unit",amount = 25},
         {type = "item", name = "muluna-data-cable", amount = 10},
+        {type = "item", name = "electric-engine-unit", amount = 10},
+        {type = "item", name = "steel-plate", amount = 50}
        }
     }
 )
