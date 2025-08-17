@@ -1,4 +1,4 @@
-if settings.startup["disable-muluna-music"].value == false then
+if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == false then
     -- data:extend{
     --     {
     --     name = "muluna-sandy-boys-beth-cohens",
