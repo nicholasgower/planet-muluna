@@ -22,13 +22,21 @@ After leaving Muluna and exploring other planets, you will soon be called back t
 
 - Steam crushers/furnaces: Cheaper but less efficient alternatives to more expensive electric crushers/furnaces. Graphics based on vanilla assets.
 
+![Example 1](https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/boiler.GIF?raw=true)
+
 - Rocket buggy: A larger, faster car armed with a rocket launcher and equipment grid. Graphics based on vanilla assets.
 
+![Example 2](https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/buggy.GIF?raw=true)
+
 - Telescope: Gazes into the universe, gathering information about the telescope's surroundings, generating astronomical data, an ingredient in the Exploration science pack. Placing telescopes deeper into the solar system will reward you with more astronomical data. Also acts as a combinator that produces information. On a space platform, telescopes track the position of the platform as well as nearby asteroids. On a planet, telescopes produce information about platforms currently orbiting the planet.
+
+![Example 3](https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/telescope.GIF?raw=true)
 
 - Vacuum heating tower: A heating tower that can burn fuel with piped oxygen at 300% efficiency. Graphics based on vanilla assets.
 
 - Condenser turbine: A more efficient steam turbine that allows some consumed steam to be condensed back into water for reheating. Prefers higher quality steam. Graphics by Raiguard.
+
+![Example 4](https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/heating%20tower.GIF?raw=true)
 
 - Satellite Radar(Based on [Navigation Beacon](https://mods.factorio.com/mod/nav-beacon-fork)): Acts as a radar with unlimited range, charting the remote view of players on planets that the satellite radar orbits. Only consumes energy when in use. Higher quality radars chart more tiles and consume less energy per charted tile. Graphics by Earendel.
 
@@ -40,7 +48,7 @@ After leaving Muluna and exploring other planets, you will soon be called back t
 
 Crushers can now be placed on any surface, and in addition to their vanilla recipes, which form the backbone of any Muluna base, a few new crusher recipes have been added, some of which are useful on any planet.
 
--
+
 ## Resources
 
 - Metallic asteroid chunk
@@ -122,4 +130,4 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 - Unused-renders, for their numerous freely available icon assets.
 
 
-Muluna would not be possible without the wider community of Factorio modders, and I have taken inspiration or based code on other mods. I have given credit where I have remembered to give credit, but if I have forgotten to credit someone's content, feel free to reach out to me on my [Discord](https://discord.gg/8pD6A3JRtZ) server.
+Muluna would not be possible without the wider community of Factorio modders, and I have taken inspiration from or based code on other mods. I have given credit where I have remembered to give credit, but if I have forgotten to credit someone's content, feel free to reach out to me on my [Discord](https://discord.gg/8pD6A3JRtZ) server.
