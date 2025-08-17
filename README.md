@@ -4,15 +4,13 @@ Explore Nauvis' moon of Muluna, the source of the space science pack, and take y
 
 Muluna can be seamlessly added to any save, but it is recommended that you start with either a fresh save or a save that has not left Nauvis yet.
 
+Early-game space platforms take a different form when Muluna is installed. Much like Muluna, ship platforms are initially dependent on external shipments. Crushers and asteroid collects are unlocked on Muluna, so pre-Muluna ships are fueled through shipments from Nauvis.
+
 Muluna's low gravity makes it easier to launch rockets from than from Nauvis or other planets, making it an ideal location to construct space platforms and ship materials to other planets. However, the lack of oxygen and oil will make building anything of note here a challenge.
-
-Early-game space platforms take a different form when Muluna is installed. Much like Muluna, ship platforms are initially dependent on external shipments. Crushers and asteroid collects are unlocked on Muluna, so pre-Muluna ships are fuels through shipments from Nauvis.
-
-Your first space platform is likely to look very different from a typical Space Age platform. You will not initially have access to asteroid collectors or crushers, so your first platform will be completely dependent on shipments from Nauvis. Thruster fuel can be made from rocket fuel, and like in vanilla, oxidizer can be made from iron ore. Luckily, there are no dangerous asteroids between Nauvis and Muluna, so you can skip placing turrets on any Nauvis-Muluna ships.
 
 Rocket part costs are doubled on every planet except for Muluna, but in return, Rocket Part Productivity upgrades are available earlier. Four levels of Rocket Part Productivity are available on Muluna, and two are available on Vulcanus, Gleba, and Fulgora respectively.
 
-After leaving Muluna and exploring other planets, you will soon be called back to Muluna to craft the "Exploration science pack". This pack is made from nanofoamed polymers and astronomical data, among other ingredients. [Nanofoamed polymers](https://github.com/nicholasgower/Heated-Pressure-Chamber/blob/master/Nanofoamed%20Polymers%2C%20Final%20Report(6-6-2023).pdf) are a form of plastic produced by saturating a thin plastic sample with high pressure carbon dioxide and rapidly heating the plastic with steam, nucleating nanoscale bubbles in the plastic. Nanofoamed polymers are noted for their low thermal conductivity and high specific strength. Astronomical data is collected from telescopes, which produce more data the farther they are from Nauvis. 
+After leaving Muluna and exploring other planets, you will soon be called back to Muluna to craft the "Exploration science pack". This pack is made from nanofoamed polymers and astronomical data, among other ingredients. [Nanofoamed polymers](https://github.com/nicholasgower/Heated-Pressure-Chamber/blob/master/Nanofoamed%20Polymers%2C%20Final%20Report(6-6-2023).pdf) are a form of plastic produced by saturating a thin plastic sample with high pressure carbon dioxide and rapidly heating the plastic with steam, nucleating nanoscale bubbles in the plastic. Nanofoamed polymers are noted for their low thermal conductivity and high specific strength. Astronomical data is collected from telescopes, which produce more data the farther they are from Nauvis. While producing data on Muluna is simple, the amount that can be made is limited, so to increase data output, you must transport data from other planets via data tapes.
 
 ## New Entities
 
@@ -61,37 +59,19 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 - Lunar Regolith
 
-## New recipes
+- Astronomical data
 
-Crushers can now be placed on any surface, and in addition to their vanilla recipes, which form the backbone of any Muluna base, a few new crusher recipes have been added, some of which are useful on any planet.
-
-- (Crusher) Anorthite crushing: 1 Anorthite chunk -> 20 Alumina + 20% Anorthite chunk
-
-- (Crusher) Alumina Crushing: 6 Alumina -> 10 crushed alumina + 1 stone
-
-  - (Assembling) ALICE Propellant: 10 crushed alumina + 2 ice + 100 water -> 1 rocket fuel
-
-- (Crusher) Stone crushing: 2 stone -> 3 crushed stone + 5% stone
-
-  - (Furnace) Bricks from crushed stone: 2 crushed stone -> 1 stone brick
-  
-  - (Assembling) Landfill from crushed stone: 40 crushed stone + 5 concrete -> 1 landfill
-    
-- (Chemical plant) Thruster fuel from rocket fuel: 1 rocket fuel + 10 water -> 250 thruster fuel (This is how your first space platform will generate thruster fuel.)
-
-
-## Recommended Planets to play with:
+## Recommended Planets
 
 "Muluna has put a lot of effort into compatibility and it shows. There is great synergy between mods such as maraxsis, moshine, and k2." -[notnotmelon](https://discord.com/channels/1309620686347702372/1337535095300423691/1401656779330555914)
 
 - [Maraxsis](https://mods.factorio.com/mod/maraxsis), which adds several gases also used by this mod.
 
-- [Moshine](https://mods.factorio.com/mod/Moshine), which adds a data transport mechanism that is compatible with Muluna's astronomical science. Muluna and Moshine share the silicon resource and each use them in different ways.
+- [Moshine](https://mods.factorio.com/mod/Moshine), which adds a data transport mechanism that is compatible with Muluna's astronomical science. Muluna and Moshine share the silicon resource and each use them in different ways. Moshine's data banks can be used to move astronomical data at a higher data density.
 
 - [Corrundum](https://mods.factorio.com/mod/corrundum), which offers an alternative form of carbon dioxide venting that generates electricity.
 
-
-## Other recommended mods:
+## Other recommended mods
 
 - [Any Planet Start](https://mods.factorio.com/mod/any-planet-start) Any planet start is fully supported by Muluna.
 
@@ -101,7 +81,7 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 - [K2SO](https://mods.factorio.com/mod/Krastorio2-spaced-out)
 
-## Locales:
+## Locales
 
 - English by MeteorSwarm(Fully supported)
 
