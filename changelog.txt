@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2025-08-18
+  Bugfixes:
+    - Modified manner in which fluid-handling technology was modified to improve compatibility.
+  Graphics:
+    - Added barrel sprite to "Fluid barreling" technology.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.10
 Date: 2025-08-18
   Changes:
