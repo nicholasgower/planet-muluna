@@ -9,9 +9,21 @@ local function is_square(entity)
     return math.ceil(width) == math.ceil(height)
 end
 
+local function contains_quality_name(entity) 
+
+    for _,quality in pairs(data.raw["quality"]) do
+        if string.find(entity,quality.name) then
+            return true
+        end
+    end 
+
+
+    return false
+end
+
 
 for name,drill in pairs(data.raw["mining-drill"]) do
-    if drill.energy_source.type == "electric" and drill.output_fluid_box == nil and is_square(drill) and not Muluna.constants.regolith_drills_blacklist[name] then
+    if drill.energy_source.type == "electric" and drill.output_fluid_box == nil and is_square(drill) and not Muluna.constants.regolith_drills_blacklist[name] and not contains_quality_name(name) then
         Muluna.constants.regolith_drills[name] = {name = name}
     end
 
