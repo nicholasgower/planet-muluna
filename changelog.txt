@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2025-08-18
+  Bugfixes:
+    - When another mod gives the vanilla constant combinator a map_generator_bounding_box, when the Telescope combinator copies its traits, the combinator will have its map_generator_bounding_box removed. Addresses https://github.com/nicholasgower/planet-muluna/issues/251
+---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2025-08-18
   Bugfixes:
