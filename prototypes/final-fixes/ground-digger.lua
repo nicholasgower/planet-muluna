@@ -60,6 +60,9 @@ end
 for _,digger in pairs(Muluna.constants.regolith_drills) do
     if not data.raw["mining-drill"][digger.name] then error("Invalid ground digger: " .. digger.name) end
     local extractor = table.deepcopy(data.raw["mining-drill"][digger.name])
+    local original_drill = data.raw["mining-drill"][digger.name]
+    original_drill.custom_tooltip_fields = original_drill.custom_tooltip_fields or {}
+    rro.soft_insert(original_drill.custom_tooltip_fields,{name = {"tooltip.digging-result-drill-on-X","[planet=muluna]"},value = "[item=muluna-lunar-regolith]"})
     extractor.type = "assembling-machine"
     extractor.crafting_categories = {"ground-digging"}
     extractor.placeable_by = {item = extractor.name, count = 1}
