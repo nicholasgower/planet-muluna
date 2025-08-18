@@ -1,4 +1,107 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.46.0
+Date: 2025-08-18
+  Features:
+    - Added "Crushed aluminum" item, made by crushing aluminum plates.
+    - Added "Gravel path" tile, placed by placing crushed stone as a tile.
+    - Added "Huge lunar rock" entity and medium, small and tiny lunar rock decoratives.
+    - Added "Lunar regolith digging," achieved by placing a mining drill on Lunar dirt without any nearby meteorites. Regolith acts as a source of both stone and trace amounts of uranium. Code forked from Maraxsis' sand extractor code, with various improvements.
+    - Added "Rocket Buggy" vehicle, a larger variant of the car with a rocket launcher and higher speed. Perfect for exploring Muluna. Unlocked with space science packs.
+    - Added "telescope" entity to game. The telescope acts as both a source of astronomical data, essential to producing the Exploration science pack, and as a combinator that gathers information about orbiting space platforms(When placed on a planet), or about the platform itself.
+    - Added "Vacuum heating tower," an upgraded version of the heating tower that consumes oxygen and generates carbon dioxide, and can be placed on Muluna and on space platforms.
+    - Added Anorthite asteroids around the orbit of Muluna. https://github.com/nicholasgower/planet-muluna/issues/239
+    - Added crushed alumina to basic wood gasification recipe.
+    - Added Lunar regolith item.
+    - Added microcellular plastic item, made by diffusing carbon dioxide into plastic bars and heating up the plastic with steam.
+    - Added option to revert Muluna's change of advanced thruster fuel recipes from 1000 back to their original value of 1500.
+    - Hydrogen and all recipes using Hydrogen have been removed from Muluna. This does not affect Maraxsis.
+    - Removed "high temperature water boiling" recipe from the advanced boiler, with no replacement.
+    - Removed Helium and all recipes essential to the fluid from the game, and removed the fluid from other recipes containing the fluid.
+    - Replaced "Crushed alumina" with "Crushed aluminum" in "ALICE propellant" recipe.
+    - Reverted behavior of vanilla space science pack recipe to match vanilla behavior. Added new space science recipe matching behavior of space science pack intended to be crafted on Muluna. This change makes it possible to use vanilla space science platform blueprints without manually reassigning space science recipes. This change breaks existing space science factories, requiring manual reassignment of factories.
+    - Simplified tree growth system, consolidating wood production and sapling production recipes into single sapling production system and adding a crusher recipe to generate wood from saplings.
+  Balancing:
+    - "Vulcanus/Fulgora/Gleba rocket part productivity 2" technologies now require Exploration science pack.
+    - Added fuel value to tree item.
+    - Adjusted prerequisites of "ALICE propellant" and "Greenhouses" technologies to better fit new expected path.
+    - Adjusted prices of Crusher-2, Cryolab, and Advanced steam turbine recipes.
+    - Adjusted resource spawning algorithm and mining time to normalize mining time among all resource types, reducing richness by a factor of 10, and eliminating the influence of distance on ore richness.
+    - Adjusted space chest technology to require agricultural science pack.
+    - Both agricultural and electromagnetic science packs are now required to research "Advanced space research."
+    - Changed Dea Dia's planets from contributing to the unlock of the Exploration science pack to requiring the Exploration science pack.
+    - Changed recipe of satellite radar to require telescopes and silicon cells in recipe, and not require tungsten plates.
+    - Concentrated spawned cargo pod items among fewer cargo pods.
+    - Increased stack size of "Tree" item to 10.
+    - Inventory size of Space chest no longer scales with quality.
+    - Items are now destroyed when dropped on Muluna soil.
+    - Raised cost of Cryolab and Satellite radar.
+    - Reduced crafting time of advanced boiler to 5 seconds.
+    - Reduced energy usage of Greenhouse to 500 kW.
+    - Reduced number of aluminum plates require to unlock aluminum processing technology from 20 to 5.
+    - Reduced walking speed on natural Muluna tiles to 0.5.
+    - Removed changes to tree seed drops(An artifact of wood gasification).
+    - Replaced "Production science pack" in "Advanced steam turbine" technology with "Utility science pack."
+  Optimizations:
+    - Optimized on_nth_tick code governing satellite radars.
+  Compatibility:
+    - Added migration script to assist in migrating from Muluna 1 to Muluna 2. This includes applying a context-based migration from old space science pack recipes to new space science pack recipes, which are not guaranteed to work, but should work for most factories.
+    - Applied oxygen restriction to every entity in the game that consumes chemical fuel, restricting their use on Muluna and on space platforms.
+    - Raised required Factorio version to 2.0.60.
+    - Raised required Factorio version to 2.0.64.
+    - Raised required muluna-graphics version to 1.0.22.
+    - Rewrote "Redirect space connections to Nauvis" option to require less maintenance.
+    - Updated compatibility patch for Brevven mods to remove vanilla-style ore patches for Titanium and Zircon from Muluna and adding these materials to the regolith digging recipe.
+    - When Igrys is installed, Exploration science pack will be incompatible with the Science enhancer machine. This is to address a multi-mod conflict with no known cause. https://github.com/nicholasgower/planet-muluna/issues/247
+  Bugfixes:
+    - Fixed crash on load with both Muluna start and AAI Industry. AAI Industry is still unplayable on Muluna start.
+  Graphics:
+    - Added footstep particles when walking on natural tiles on Muluna.
+    - Added pipe covers to advanced steam turbine.
+    - Added pipe pictures to Advanced boiler entity.
+    - Added pipe pictures to greenhouse entity.
+    - Added shadow to Advanced boiler entity sprite.
+    - Added slight blue tint to map color of all Muluna tiles.
+    - Added standard space dust foreground to Muluna.
+    - Adjusted map distance of Muluna from Nauvis.
+    - Applied code-based blur effect to technology icons using item icons sprites to reduce pixellation.
+    - Changed icon of cellulose item.
+    - Rearranged icons for alumina products to better reflect real-world material appearances.
+    - Replaced corpse graphics of greenhouse with generic medium remnants.
+    - Replaced graphics for Satellite radar with graphics from Space Exploration.
+    - Replaced lunar rock sprites with versions with shadow opacities of 80%, matching the rest of Muluna.
+    - Replaced mining particles of Anorthite resource.
+  Sounds:
+    - Added original soundtrack by FluidNatalie.
+    - Added pickup/dropoff sounds to sapling and cellulose items.
+    - Changed dying explosion of greenhouse to that of the chemical plant.
+  Locale:
+    - Added tooltip to technologies that contribute to unlocking the interstellar science pack to increase clarity.
+    - Added tooltips to Muluna tiles indicating a digging result and that items are destroyed when dropped.
+    - Changed description of "Automation 3" technology to include a mention of the Assembling machine 3's data ports.
+    - Changed name of "Advanced boiler" to "Vacuum boiler" and "Advanced steam turbine" to "Condenser turbine."
+    - Changed name of "Interstellar science pack" to "Exploration science pack".
+    - Standardized description of satellite radar across technology, item, entity, and recipe.
+    - Updated cs locale(By Vagonek).
+    - Updated Russian locale(By Astorin)
+    - Updated zh-CN locale(By cyx2015s).
+  Changes:
+    - (>=2.0.59) Added custom tooltip to advanced boiler for efficiency.
+    - Added global variable "Muluna" to store functions related to Muluna. Added rro to Muluna, and replaced all imports of rro with a reference to Muluna.
+    - Added option to configure spawn radius of spawned cargo pods on new Muluna surfaces, and reduced the default value from 128 to 64.
+    - Added option to multiply items spawned in cargo pods by a provided value.
+    - Adjusted order of Corrundum's Electrochemical science pack to be before Exploration science pack.
+    - Any-planet-start: Deleted techs from the tech tree that were either unnecessary or acted as a frustrating barrier.
+    - Changed recipe for low density space platform foundation to require microcellular plastic.
+    - Enabled circuit signals for advanced boiler recipes.
+    - Fixed broken template setting.
+    - Improved organization of settings menu.
+    - Minor rearrangement of Muluna tech tree.
+    - Refactored Satellite Radar code to draw behavior from mod-data object, and replaced description-based quality tooltip with tooltip based on 2.0.59's custom_tooltip_fields.
+    - Removed "unclaimed cargo pods" alert from Fulgoran cargo pods.
+    - Removed vanilla-style stone and uranium patches from Muluna.
+    - Reworked experimental interstellar science pack recipe.
+    - Simplified wood gasification crafting chain and added option to revert changes.
+---------------------------------------------------------------------------------------------------
 Version: 1.99.0
 Date: 2025-07-22 - 2025-08-16
   Features:
