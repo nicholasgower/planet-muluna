@@ -6,7 +6,7 @@ local Public = {}
 ---Drop-in replacement for script.on_event however it supports multiple handlers per event. You can also use 'on_built' 'on_destroyed' and 'on_init' as shortcuts for multiple events.
 ---@param event defines.events|defines.events[]|string
 ---@param f function
-Public.on_event = function(event, f)
+Public.on_event = function(event, f,filters)
 	for _, event in pairs(type(event) == "table" and event or {event}) do
 		event = tostring(event)
 		events[event] = events[event] or {}
