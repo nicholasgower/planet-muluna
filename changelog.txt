@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2025-08-18
+  Bugfixes:
+    - Added backup weight value when tracks borrowed from "space-platform" don't have a defined weight.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2025-08-18
   Features:
