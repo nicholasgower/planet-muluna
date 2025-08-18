@@ -17,6 +17,12 @@ local function contains_quality_name(entity)
         end
     end 
 
+    for _,resource in pairs(data.raw["resource"]) do
+        if string.find(entity,resource.name) then
+            return true
+        end
+    end 
+
 
     return false
 end
