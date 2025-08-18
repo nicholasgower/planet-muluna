@@ -41,6 +41,7 @@
                 },
                 "presetConfig": {
                     "types": [
+                        { "type": "breaking", "breaking": true, "section": "Features" },
                         { "type": "info", "section": "Info" },
                         { "type": "feat", "section": "Features" },
                         { "type": "feature", "section": "Features" },
