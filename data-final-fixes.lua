@@ -113,10 +113,20 @@ local barreling_tech = rro.merge(data.raw["technology"]["fluid-handling"],{
     }
 })
 
-for i,effect in pairs(data.raw["technology"]["fluid-handling"].effects) do
-    if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
-        table.insert(barreling_tech.effects,effect)
-        data.raw["technology"]["fluid-handling"].effects[i] = nil
+-- for i,effect in pairs(data.raw["technology"]["fluid-handling"].effects) do
+--     if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
+--         table.insert(barreling_tech.effects,effect)
+--         data.raw["technology"]["fluid-handling"].effects[i] = nil
+--     end
+-- end
+
+ 
+    for i = #data.raw["technology"]["fluid-handling"].effects, 1, -1 do -- Iterate backward to avoid index shifting
+    local effect = data.raw["technology"]["fluid-handling"].effects[i]
+        if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
+            table.insert(barreling_tech.effects,effect)
+            table.remove(data.raw["technology"]["fluid-handling"].effects, i)
+        end
     end
 
 
