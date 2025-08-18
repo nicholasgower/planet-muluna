@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2025-08-18
+  Bugfixes:
+    - Added Subsurface's "surface-drill" to list of blacklisted regolith drills.
+    - When mining drill name contains resource name, add it to mining drill blacklist. https://github.com/nicholasgower/planet-muluna/issues/253
+    - When regolith drill base has multilayer icon, add special case that adds to that icon instead of creating a new one. https://github.com/nicholasgower/planet-muluna/issues/252
+  Locale:
+    - Added custom tooltip to all mining drills that can dig regolith indicating they can dig regolith.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.5
 Date: 2025-08-18
   Bugfixes:
