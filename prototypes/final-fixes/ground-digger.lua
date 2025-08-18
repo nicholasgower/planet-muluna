@@ -18,7 +18,7 @@ local function contains_quality_name(entity)
     end 
 
     for _,resource in pairs(data.raw["resource"]) do
-        if string.find(entity,resource.name) then
+        if string.find(entity,string.gsub(resource.name,"%-","%%-")) then
             return true
         end
     end 
