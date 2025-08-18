@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2025-08-18
+  Changes:
+    - Split Fluid barreling from "Fluid handling" technology. "Fluid barreling" is a trigger technology unlocked by crafting a barrel. This technology is a prerequisite to crafting thruster oxidizer.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.9
 Date: 2025-08-18
   Sounds:
