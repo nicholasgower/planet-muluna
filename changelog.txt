@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2025-08-18
+  Sounds:
+    - When Muluna Start is enabled, the title menu track is changed to "Factory-Four-Four" by FluidNatalie.
+  Changes:
+    - When Muluna start is enabled, Muluna autoplace settings are moved above Nauvis autoplace settings in map generation settings.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.8
 Date: 2025-08-18
   Bugfixes:
