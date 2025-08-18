@@ -81,8 +81,24 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         track.sound.filename = track.sound.filename .. ".ogg"
         data:extend{track}
     end
+
+    if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then --Title track when Muluna start is loaded.
+        local title_track = table.deepcopy(data.raw["ambient-sound"]["muluna-music-Factory-FourFour"])
+        title_track.track_type = "menu-track"
+        title_track.planet = nil
+
+        for _,track in pairs(data.raw["ambient-sound"]) do
+            if track.track_type == "menu-track" then
+                data.raw["ambient-sound"][track.name] = nil
+            end
+        end
+        data:extend{title_track}
+    end
 end
 
 PlanetsLib.borrow_music("space-platform", data.raw["planet"]["muluna"],
     {track_types = {"main-track"},
     modifier_function = function(track) track.weight = (track.weight or 1) / 32 end})
+
+
+
