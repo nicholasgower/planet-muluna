@@ -8,6 +8,7 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
             {
                 name = entity.name .. "-combinator",
                 collision_box = entity.collision_box,
+                map_generator_bounding_box = "_nil",
                 minable = "_nil",
                 sprites = "_nil",
                 activity_led_sprites = "_nil",
