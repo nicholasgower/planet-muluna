@@ -81,19 +81,20 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
     --     game.print(saved_value)
     --     game.print({"",profiler_exp,"saved"})
     -- profiler_exp.reset()
--- local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor"}})
+local experimental = helpers.compare_versions(helpers.game_version,"2.0.64") >= 0
+local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor"}})
 
---     local function get_armor(player)
+    local function get_armor(player)
 
---         local armor_inventory = nil
---         if player.controller_type == defines.controllers.editor then
---             armor_inventory = player.get_inventory(defines.inventory.editor_armor)
---         else
---             armor_inventory = player.get_inventory(defines.inventory.character_armor)
---         end
---         --if not armor_inventory or armor_inventory.is_empty() then return end
---         return (armor_inventory or {{valid_for_read = false}})[1] 
---     end
+        local armor_inventory = nil
+        if player.controller_type == defines.controllers.editor then
+            armor_inventory = player.get_inventory(defines.inventory.editor_armor)
+        else
+            armor_inventory = player.get_inventory(defines.inventory.character_armor)
+        end
+        --if not armor_inventory or armor_inventory.is_empty() then return end
+        return (armor_inventory or {{valid_for_read = false}})[1] 
+    end
     --local profiler = helpers.create_profiler()
     Muluna.events.on_nth_tick(step_process_tick_rate, function(event)
         --local update_tick_rate = event.tick % 180 == true
@@ -119,12 +120,18 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
                     if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} goto continue end --game.print(profiler) return end
-                        --local player_armor = get_armor(player)
-                        -- local provides_flight = false
-                        -- if player_armor.valid_for_read then 
-                        --     provides_flight=armor_list[player_armor.name].provides_flight
-                        -- end
-                        local character_is_flying = not character or character.is_flying 
+                        local character_is_flying
+                        if experimental then
+                            character_is_flying = not character or character.is_flying 
+                        else
+                            local player_armor = get_armor(player)
+                            character_is_flying = false
+                            if player_armor.valid_for_read then 
+                                character_is_flying=armor_list[player_armor.name].provides_flight
+                            end
+                        end
+                        
+                        
                         if player.physical_vehicle or surface.get_tile(player.position).hidden_tile or character_is_flying then return end
                             
                             local player_position
