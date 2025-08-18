@@ -79,19 +79,26 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     extractor.allowed_effects = {"productivity", "consumption", "speed", "pollution", "quality"}
     extractor.resource_drain_rate_percent = nil
     extractor.name = extractor.name .. "-ground-digger"
-    extractor.icons = {
-        {
-            icon = extractor.icon,
-            icon_size = extractor.icon_size,
-        },
-        {
+    local new_icon = {
                 icon = data.raw["item"]["muluna-lunar-regolith"].icon,
                 icon_size = data.raw["item"]["muluna-lunar-regolith"].icon_size,
                 scale = 0.25,
                 shift = {10,-10},
                 draw_background = true,
         }
-    }
+    if extractor.icons then
+        rro.soft_insert(extractor.icons,new_icon)
+    else
+        extractor.icons = {
+            {
+                icon = extractor.icon or data.raw["mining-drill"]["electric-mining-drill"].icon,
+                icon_size = extractor.icon_size or data.raw["mining-drill"]["electric-mining-drill"].icon_size,
+            },
+            new_icon
+        }
+    end
+    extractor.icon = nil
+    extractor.icon_size = nil
     data:extend {extractor}
 
     
