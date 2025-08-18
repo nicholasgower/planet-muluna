@@ -1,13 +1,8 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.99.3
-Date: 2025-07-26
-  Features:
-    - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
----------------------------------------------------------------------------------------------------
 Version: 1.99.0
-Date: 2025-07-22
+Date: 2025-07-22 - 2025-08-16
   Features:
-    - Muluna 2.0 prerelease. This version was not pushed to the mod portal.
+    - Muluna 2.0 prerelease. These versions were not pushed to the mod portal. Check changelogs on Github. https://github.com/nicholasgower/planet-muluna/compare/p1.99.0...p1.99.12
 ---------------------------------------------------------------------------------------------------
 Version: 1.45.24
 Date: 2025-08-09
