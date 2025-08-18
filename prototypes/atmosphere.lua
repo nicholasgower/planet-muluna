@@ -15,7 +15,8 @@ if data.raw["fluid"]["maraxsis-atmosphere"] == nil then
         icon_size = 64,
         gas_temperature = 25,
     }}
-
+end
+if data.raw["recipe"]["maraxsis-atmosphere"] == nil then
     data:extend {{
         type = "recipe",
         name = "maraxsis-atmosphere",
