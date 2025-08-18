@@ -123,6 +123,18 @@ function rro.replace_field(list,field,name,new_name)
     end
 end
 
+
+function rro.cut_paste_items(list_from,list_to,objectToMove) 
+    if list_from then
+        for i = #list_from, 1, -1 do -- Iterate backward to avoid index shifting
+            if rro.deep_equals(list[i] , objectToMove) then
+                table.insert(list_to,list_from[i])
+                table.remove(list_from, i) -- Remove the object if no replacement is provided
+            end
+        end
+    end
+end
+
 ---Searches a list for all items where `item.name == name`, and replaces `name` with `new_name`.
 function rro.replace_name(list,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting

@@ -87,7 +87,26 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     end
 end
 
+local barreling_tech = rro.merge(data.raw["technology"]["fluid-handling"],{
+    type = "technology",
+    name = "fluid-barreling",
+    prerequisites = {"fluid-handling"},
+    effects = {},
+    unit = "_nil",
+    research_trigger = {
+        type = "craft-item",
+        item = "barrel",
+    }
+})
 
+for i,effect in pairs(data.raw["technology"]["fluid-handling"].effects) do
+    if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
+        table.insert(barreling_tech.effects,effect)
+        data.raw["technology"]["fluid-handling"].effects[i] = nil
+    end
+end
+rro.soft_insert(data.raw["technology"]["thruster-oxidizer"].prerequisites,barreling_tech.name)
+data:extend{barreling_tech}
 
 
 
