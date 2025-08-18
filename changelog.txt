@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2025-08-18
+  Bugfixes:
+    - Fixed that when any entity would be placed on a space platform, a satellite radar would be placed instead.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2025-08-18
   Compatibility:
