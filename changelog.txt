@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.46.0
+Version: 2.0.0
 Date: 2025-08-18
   Features:
     - Added "Crushed aluminum" item, made by crushing aluminum plates.
