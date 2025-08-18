@@ -92,6 +92,20 @@ local barreling_tech = rro.merge(data.raw["technology"]["fluid-handling"],{
     name = "fluid-barreling",
     prerequisites = {"fluid-handling"},
     effects = {},
+    icons = {
+        {
+            icon = data.raw["technology"]["fluid-handling"].icon,
+            icon_size = data.raw["technology"]["fluid-handling"].icon_size,
+        },  
+        {
+            icon = data.raw["item"]["barrel"].icon,
+            icon_size=data.raw["item"]["barrel"].icon_size,
+            --scale=0.3,
+            shift = {45,45},
+            scale=0.75,
+        },
+        
+    },
     unit = "_nil",
     research_trigger = {
         type = "craft-item",
@@ -104,7 +118,9 @@ for i,effect in pairs(data.raw["technology"]["fluid-handling"].effects) do
         table.insert(barreling_tech.effects,effect)
         data.raw["technology"]["fluid-handling"].effects[i] = nil
     end
-end
+
+
+
 rro.soft_insert(data.raw["technology"]["thruster-oxidizer"].prerequisites,barreling_tech.name)
 data:extend{barreling_tech}
 
