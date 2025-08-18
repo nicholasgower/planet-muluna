@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2025-08-18
+  Compatibility:
+    - Reduced required version of Factorio to 2.0.60 by backporting features available in 2.0.64. This will result in a minute performance penalty when playing on Factorio 2.0.60.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025-08-18
   Bugfixes:
