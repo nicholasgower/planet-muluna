@@ -28,5 +28,6 @@ if data.raw["mining-drill"]["Schall-uranium-mining-drill"] then
 end
 
 Muluna.constants.regolith_drills_blacklist = { --Blacklisted drills go here
-    ["seafloor-drill"] = true
+    ["seafloor-drill"] = true,
+    ["surface-drill"] = true,
 }
