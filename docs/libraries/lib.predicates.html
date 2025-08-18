@@ -44,11 +44,11 @@
   <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
   <li><a href="../libraries/lib.control-stage.html">lib.control-stage</a></li>
   <li><a href="../libraries/lib.events.html">lib.events</a></li>
-  <li><a href="../libraries/lib.predicates.html">lib.predicates</a></li>
+  <li><strong>lib.predicates</strong></li>
   <li><a href="../libraries/lib.remove-replace-object.html">lib.remove-replace-object</a></li>
   <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
   <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
-  <li><strong>scripts.interstellar-science-pack.lua</strong></li>
+  <li><a href="../libraries/scripts.interstellar-science-pack.lua.html">scripts.interstellar-science-pack.lua</a></li>
   <li><a href="../libraries/wood-gasification.data.html">wood-gasification.data</a></li>
 </ul>
 <h2>Manual</h2>
@@ -60,8 +60,8 @@
 
 <div id="content">
 
-<h1>Module <code>scripts.interstellar-science-pack.lua</code></h1>
-<p>Interstellar science pack</p>
+<h1>Module <code>lib.predicates</code></h1>
+<p>Library of functions to make more detailed filters</p>
 <p>
 
 </p>
@@ -70,8 +70,8 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Public.update_interstellar_pack">Public.update_interstellar_pack (force, display_notification)</a></td>
-	<td class="summary">Checks whether a force meets the conditions to unlock the interstellar science pack.</td>
+	<td class="name" nowrap><a href="#Public.compare">Public.compare (comparison, value)</a></td>
+	<td class="summary">Generates a simple comparison predicate</td>
 	</tr>
 </table>
 
@@ -83,20 +83,24 @@
 
     <dl class="function">
     <dt>
-    <a name = "Public.update_interstellar_pack"></a>
-    <strong>Public.update_interstellar_pack (force, display_notification)</strong>
+    <a name = "Public.compare"></a>
+    <strong>Public.compare (comparison, value)</strong>
     </dt>
     <dd>
-    Checks whether a force meets the conditions to unlock the interstellar science pack.
+    Generates a simple comparison predicate
 
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">force</span>
-         LuaForce
+        <li><span class="parameter">comparison</span>
+
+
+
         </li>
-        <li><span class="parameter">display_notification</span>
-         boolean
+        <li><span class="parameter">value</span>
+
+
+
         </li>
     </ul>
 

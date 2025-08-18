@@ -44,6 +44,7 @@
   <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
   <li><a href="../libraries/lib.control-stage.html">lib.control-stage</a></li>
   <li><a href="../libraries/lib.events.html">lib.events</a></li>
+  <li><a href="../libraries/lib.predicates.html">lib.predicates</a></li>
   <li><strong>lib.remove-replace-object</strong></li>
   <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
   <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
@@ -84,6 +85,10 @@
 	<td class="summary">Replaces object in list with another object</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#rro.deep_replace">rro.deep_replace (list, objectToRemove, replacementObject, gsub)</a></td>
+	<td class="summary">Similar to rro.replace, but acts recursively within subobjects.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#rro.replace_field">rro.replace_field (list, field, name, new_name)</a></td>
 	<td class="summary">Searches a list for all items where <code>item[field] == name</code>, and replaces <code>name</code> with <code>new_name</code>.</td>
 	</tr>
@@ -106,6 +111,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#rro.get_concatenation">rro.get_concatenation (first, second)</a></td>
 	<td class="summary">Returns a concatenation of the contents of two tables.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rro.safe_find">rro.safe_find (table, crawl_list)</a></td>
+	<td class="summary">Attempts to find an object in a complex object, and returns nil if any level in the search returns nil</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rro.copy_fields">rro.copy_fields (table_to, table_from, fields, deepcopy)</a></td>
+	<td class="summary">Copies fields specified in "fields" from "table<em>from" to "table</em>to"</td>
 	</tr>
 </table>
 
@@ -192,6 +205,43 @@
 
         </li>
         <li><span class="parameter">replacementObject</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.deep_replace"></a>
+    <strong>rro.deep_replace (list, objectToRemove, replacementObject, gsub)</strong>
+    </dt>
+    <dd>
+    Similar to rro.replace, but acts recursively within subobjects.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">list</span>
+
+
+
+        </li>
+        <li><span class="parameter">objectToRemove</span>
+
+
+
+        </li>
+        <li><span class="parameter">replacementObject</span>
+
+
+
+        </li>
+        <li><span class="parameter">gsub</span>
 
 
 
@@ -363,6 +413,58 @@
         </li>
         <li><span class="parameter">second</span>
          table
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.safe_find"></a>
+    <strong>rro.safe_find (table, crawl_list)</strong>
+    </dt>
+    <dd>
+    Attempts to find an object in a complex object, and returns nil if any level in the search returns nil
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">table</span>
+         table
+        </li>
+        <li><span class="parameter">crawl_list</span>
+         table
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rro.copy_fields"></a>
+    <strong>rro.copy_fields (table_to, table_from, fields, deepcopy)</strong>
+    </dt>
+    <dd>
+    Copies fields specified in "fields" from "table<em>from" to "table</em>to"
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">table_to</span>
+         table
+        </li>
+        <li><span class="parameter">table_from</span>
+         table
+        </li>
+        <li><span class="parameter">fields</span>
+         table
+        </li>
+        <li><span class="parameter">deepcopy</span>
+         boolean (Default true)
         </li>
     </ul>
 
