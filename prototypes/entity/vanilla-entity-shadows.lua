@@ -1,5 +1,5 @@
 if settings.startup["muluna-separate-shadows"].value == true then 
-    local rro = require("lib.remove-replace-object")
+    local rro = Muluna.rro
 
     if not reskins then --Reskins-library already replaces these assets
         local pipe_ground = table.deepcopy(data.raw["pipe-to-ground"]["pipe-to-ground"])

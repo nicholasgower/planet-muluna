@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Muluna documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Muluna</h1>
+
+<ul>
+  <li><a href="https://github.com/nicholasgower/planet-muluna">GitHub Project</a></li>
+  <li><a href="https://mods.factorio.com/mod/planet-muluna">Mod Portal Download</a></li>
+  <li><a href="../index.html">Documentation</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#New_Entities">New Entities </a></li>
+<li><a href="#Crushers_rework">Crushers rework </a></li>
+<li><a href="#Resources">Resources </a></li>
+<li><a href="#Recommended_Planets">Recommended Planets </a></li>
+<li><a href="#Other_recommended_mods">Other recommended mods </a></li>
+<li><a href="#Locales">Locales </a></li>
+<li><a href="#Soundtrack_by__FluidNatalie__https___anagramofme_bandcamp_com__">Soundtrack by [FluidNatalie](https://anagramofme.bandcamp.com/) </a></li>
+<li><a href="#Special_thanks_to_the_following_mods_and_creators_">Special thanks to the following mods and creators: </a></li>
+</ul>
+
+
+<h2>Manual</h2>
+<ul class="nowrap">
+  <li><strong>README</strong></li>
+</ul>
+<h2>Libraries</h2>
+<ul class="nowrap">
+  <li><a href="../libraries/api.lua.html">api.lua</a></li>
+  <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
+  <li><a href="../libraries/lib.control-stage.html">lib.control-stage</a></li>
+  <li><a href="../libraries/lib.events.html">lib.events</a></li>
+  <li><a href="../libraries/lib.predicates.html">lib.predicates</a></li>
+  <li><a href="../libraries/lib.remove-replace-object.html">lib.remove-replace-object</a></li>
+  <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
+  <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
+  <li><a href="../libraries/scripts.interstellar-science-pack.lua.html">scripts.interstellar-science-pack.lua</a></li>
+  <li><a href="../libraries/wood-gasification.data.html">wood-gasification.data</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+    <a href="https://ko-fi.com/Y8Y019GOIS"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi"/></a></p>
+
+<p>Explore Nauvis' moon of Muluna, the source of the space science pack, and take your first step into space. Discover new uses for crushers, now enabled on all surfaces. Explore the universe, collect data from the skies, and bring it back to Muluna to generate Exploration science in order to upgrade your space platforms and reach even deeper into space.</p>
+
+<p>Muluna can be seamlessly added to any save, but it is recommended that you start with either a fresh save or a save that has not left Nauvis yet.</p>
+
+<p>Early-game space platforms take a different form when Muluna is installed. Much like Muluna, ship platforms are initially dependent on external shipments. Crushers and asteroid collects are unlocked on Muluna, so pre-Muluna ships are fueled through shipments from Nauvis.</p>
+
+<p>Muluna's low gravity makes it easier to launch rockets from than from Nauvis or other planets, making it an ideal location to construct space platforms and ship materials to other planets. However, the lack of oxygen and oil will make building anything of note here a challenge.</p>
+
+<p>Rocket part costs are doubled on every planet except for Muluna, but in return, Rocket Part Productivity upgrades are available earlier. Four levels of Rocket Part Productivity are available on Muluna, and two are available on Vulcanus, Gleba, and Fulgora respectively.</p>
+
+<p>After leaving Muluna and exploring other planets, you will soon be called back to Muluna to craft the "Exploration science pack". This pack is made from nanofoamed polymers and astronomical data, among other ingredients. <a href="https://github.com/nicholasgower/Heated-Pressure-Chamber/blob/master/Nanofoamed%20Polymers%2C%20Final%20Report(6-6-2023">Nanofoamed polymers</a> are a form of plastic produced by saturating a thin plastic sample with high pressure carbon dioxide and rapidly heating the plastic with steam, nucleating nanoscale bubbles in the plastic. Nanofoamed polymers are noted for their low thermal conductivity and high specific strength. Astronomical data is collected from telescopes, which produce more data the farther they are from Nauvis. While producing data on Muluna is simple, the amount that can be made is limited, so to increase data output, you must transport data from other planets via data tapes.</p>
+
+<p><a name="New_Entities"></a></p>
+<h2>New Entities</h2>
+
+<ul>
+    <li><p>Vacuum Boiler: A boiler that can burn fuel with piped oxygen as an oxidizer, producing carbon dioxide as a byproduct. Allows the generation of steam on Muluna and space platforms. Graphics by Hurricane.</p></li>
+    <li><p>Sealed Greenhouse: Converts unwanted carbon dioxide into wood, which can be used as a source of oil through <a href="https://mods.factorio.com/mod/Wood_Gasification_updated">wood gasification</a>. Graphics by Hurricane.</p></li>
+    <li><p>Steam crushers/furnaces: Cheaper but less efficient alternatives to more expensive electric crushers/furnaces. Graphics based on vanilla assets.</p></li>
+</ul>
+
+<p><img src="https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/boiler.GIF?raw=true" alt="Example 1"/></p>
+
+<ul>
+    <li>Rocket buggy: A larger, faster car armed with a rocket launcher and equipment grid. Graphics based on vanilla assets.</li>
+</ul>
+
+<p><img src="https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/buggy.GIF?raw=true" alt="Example 2"/></p>
+
+<ul>
+    <li>Telescope: Gazes into the universe, gathering information about the telescope's surroundings, generating astronomical data, an ingredient in the Exploration science pack. Placing telescopes deeper into the solar system will reward you with more astronomical data. Also acts as a combinator that produces information. On a space platform, telescopes track the position of the platform as well as nearby asteroids. On a planet, telescopes produce information about platforms currently orbiting the planet.</li>
+</ul>
+
+<p><img src="https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/telescope.GIF?raw=true" alt="Example 3"/></p>
+
+<ul>
+    <li><p>Vacuum heating tower: A heating tower that can burn fuel with piped oxygen at 300% efficiency. Graphics based on vanilla assets.</p></li>
+    <li><p>Condenser turbine: A more efficient steam turbine that allows some consumed steam to be condensed back into water for reheating. Prefers higher quality steam. Graphics by Raiguard.</p></li>
+</ul>
+
+<p><img src="https://github.com/nicholasgower/planet-muluna/blob/muluna-2-prerelease/README_images/examples/heating%20tower.GIF?raw=true" alt="Example 4"/></p>
+
+<ul>
+    <li><p>Satellite Radar(Based on <a href="https://mods.factorio.com/mod/nav-beacon-fork">Navigation Beacon</a>): Acts as a radar with unlimited range, charting the remote view of players on planets that the satellite radar orbits. Only consumes energy when in use. Higher quality radars chart more tiles and consume less energy per charted tile. Graphics by Earendel.</p></li>
+    <li><p>Crusher 2: A faster crusher with 4 module slots. Graphics based on vanilla assets.</p></li>
+    <li><p>Cryolab: A lab with a footprint of 7x7, big enough to easily fit 14 science packs. Has a speed of 6, a science pack drain of 50% and 6 module slots. Crafting this is an endgame-level challenge that stretches the vanilla game mechanics to their absolute limit. Graphics by Hurricane.</p></li>
+</ul>
+
+<p><a name="Crushers_rework"></a></p>
+<h2>Crushers rework</h2>
+
+<p>Crushers can now be placed on any surface, and in addition to their vanilla recipes, which form the backbone of any Muluna base, a few new crusher recipes have been added, some of which are useful on any planet.</p>
+
+
+<p><a name="Resources"></a></p>
+<h2>Resources</h2>
+
+<ul>
+    <li><p>Metallic meteorite chunks, mined from resource patches with mining drills. Produces iron ore and/or copper ore when crushed.</p></li>
+    <li><p>Carbonic meteorite chunks, mined from resource patches with mining drills. Produces carbon and/or sulfur when crushed.</p></li>
+    <li><p>Oxide meteorite chunks, mined from resource patches with mining drills. Produces ice and/or calcite when crushed.</p></li>
+    <li><p>Anorthite chunks, mined from resource patches with mining drills. Produces alumina and silicon when crushed</p></li>
+    <li><p>Lunar Regolith</p></li>
+    <li><p>Astronomical data</p></li>
+</ul>
+
+<p><a name="Recommended_Planets"></a></p>
+<h2>Recommended Planets</h2>
+
+<p>"Muluna has put a lot of effort into compatibility and it shows. There is great synergy between mods such as maraxsis, moshine, and k2." -<a href="https://discord.com/channels/1309620686347702372/1337535095300423691/1401656779330555914">notnotmelon</a></p>
+
+<ul>
+    <li><p><a href="https://mods.factorio.com/mod/maraxsis">Maraxsis</a>, which adds several gases also used by this mod.</p></li>
+    <li><p><a href="https://mods.factorio.com/mod/Moshine">Moshine</a>, which adds a data transport mechanism that is compatible with Muluna's astronomical science. Muluna and Moshine share the silicon resource and each use them in different ways. Moshine's data banks can be used to move astronomical data at a higher data density.</p></li>
+    <li><p><a href="https://mods.factorio.com/mod/corrundum">Corrundum</a>, which offers an alternative form of carbon dioxide venting that generates electricity.</p></li>
+</ul>
+
+<p><a name="Other_recommended_mods"></a></p>
+<h2>Other recommended mods</h2>
+
+<ul>
+    <li><p><a href="https://mods.factorio.com/mod/any-planet-start">Any Planet Start</a> Any planet start is fully supported by Muluna.</p></li>
+    <li><p><a href="https://mods.factorio.com/mod/crushing-industry">Crushing Industry</a>(With this mod installed, the Crusher and Crusher 2 are renamed to "Space crushers," and can only be built on space platforms and on Muluna. Crushing industries gives vanilla/Muluna crushers a 25% quality bonus, which makes Crushing Industries crushers the best crusher to use when starting on Muluna.)</p></li>
+    <li><p><a href="https://mods.factorio.com/mod/aai-industry">AAI Industry</a></p></li>
+    <li><p><a href="https://mods.factorio.com/mod/Krastorio2-spaced-out">K2SO</a></p></li>
+</ul>
+
+<p><a name="Locales"></a></p>
+<h2>Locales</h2>
+
+<ul>
+    <li><p>English by MeteorSwarm(Fully supported)</p></li>
+    <li><p>Russian by <a href="https://github.com/nicholasgower/planet-muluna/issues?q=is%3Apr+author%3AAstorin">Astorin</a></p></li>
+    <li><p>Czech by <a href="https://github.com/nicholasgower/planet-muluna/issues?q=is%3Apr+author%3Avagonek">Vagonek</a></p></li>
+    <li><p>Chinese by <a href="https://github.com/nicholasgower/planet-muluna/issues?q=is%3Apr+author%3Acyx2015s">cyx2015s</a></p></li>
+    <li><p>French by <a href="https://github.com/nicholasgower/planet-muluna/commits?author=Fr-Dae">Fr-Dae</a></p></li>
+    <li><p>German by <a href="https://github.com/nicholasgower/planet-muluna/commits?author=Lucanoria">Lucanoria</a></p></li>
+</ul>
+
+<p><a name="Soundtrack_by__FluidNatalie__https___anagramofme_bandcamp_com__"></a></p>
+<h2>Soundtrack by <a href="https://anagramofme.bandcamp.com/">FluidNatalie</a></h2>
+
+<ul>
+    <li>Space platform tracks will also play at a very low frequency.</li>
+</ul>
+
+<p><a name="Special_thanks_to_the_following_mods_and_creators_"></a></p>
+<h2>Special thanks to the following mods and creators:</h2>
+
+<ul>
+    <li><p>SafTheLamb, for crushed alumina icon and for collaborating with me to ensure compatibility between Muluna and her mods.</p></li>
+    <li><p>Maraxsis by notnotmelon, for code and certain fluids copied for cross-compatibility purposes.</p></li>
+    <li><p>Hurricane, for their many freely available high-quality art assets.</p></li>
+    <li><p>Unused-renders, for their numerous freely available icon assets.</p></li>
+</ul>
+
+
+<p>Muluna would not be possible without the wider community of Factorio modders, and I have taken inspiration from or based code on other mods. I have given credit where I have remembered to give credit, but if I have forgotten to credit someone's content, feel free to reach out to me on my <a href="https://discord.gg/8pD6A3JRtZ">Discord</a> server.
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

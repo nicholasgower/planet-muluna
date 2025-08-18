@@ -18,12 +18,12 @@ local greenhouse = {
     minable = {mining_time = 0.5, result = "muluna-greenhouse-wood"},
     fast_replaceable_group = "",
     max_health = 1000,
-    corpse = "boiler-remnants",
+    corpse = "medium-small-remnants",
     --effect_receiver = { base_effect = { productivity = 0.5 }},
     allowed_effects = {"consumption", "speed", "productivity", "pollution", "quality"},
     module_slots = 4,
     heating_energy = "2.5MW",
-    dying_explosion = "boiler-explosion",
+    dying_explosion = "chemical-plant-explosion",
     impact_category = "metal-large",
     match_animation_speed_to_activity = false,
     mode = "output-to-separate-pipe",
@@ -64,6 +64,7 @@ local greenhouse = {
       {
         volume = 200,
         pipe_covers = pipecoverspictures(),
+        pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
         pipe_connections =
         {
           {flow_direction = "input-output", direction = defines.direction.west, position = {-4.0, 3}},
@@ -77,6 +78,7 @@ local greenhouse = {
         {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
           pipe_connections =
           {
             --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
@@ -91,6 +93,7 @@ local greenhouse = {
         {
             volume = 200,
             pipe_covers = pipecoverspictures(),
+            pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
             --pipe_picture =  require("__space-age__.prototypes.entity.cryogenic-plant-pictures").pipe_picture,
             --always_draw_covers = true, -- fighting against FluidBoxPrototype::always_draw_covers crazy default
             pipe_connections =
@@ -106,6 +109,7 @@ local greenhouse = {
         {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
           pipe_connections =
           {
             --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
@@ -119,6 +123,7 @@ local greenhouse = {
         {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.greenhouse_pipe_pictures(),
           pipe_connections =
           {
             --{flow_direction = "input", direction = defines.direction.west, position = {-5.0, 0}},
@@ -139,7 +144,7 @@ local greenhouse = {
     --crafting_categories = {"greenhouse-10x10"},
     crafting_categories = {"muluna-greenhouse-11x11","muluna-greenhouse"},
     crafting_speed=10,
-    energy_usage = "1MW",
+    energy_usage = "0.5MW",
     graphics_set =
         {
           -- frozen_patch = {

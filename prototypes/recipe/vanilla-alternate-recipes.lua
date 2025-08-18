@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 --Muluna-specific alternative recipes for vanilla items
 
 local dual_icon = require("lib.dual-item-icon").dual_icon
@@ -43,10 +43,10 @@ motor_carbon.icons=dual_icon("electric-engine-unit","carbon")
 
 local aluminum_rocket_fuel=table.deepcopy(data.raw["recipe"]["rocket-fuel"])
 aluminum_rocket_fuel.name="rocket-fuel-aluminum"
-aluminum_rocket_fuel.ingredients = {{type = "item",name = "alumina-crushed",amount = 20},{type = "item",name = "ice",amount = 4},{type = "fluid",name = "water",amount = 200}}
+aluminum_rocket_fuel.ingredients = {{type = "item",name = "aluminum-crushed",amount = 20},{type = "item",name = "ice",amount = 4},{type = "fluid",name = "water",amount = 200}}
 
 aluminum_rocket_fuel.auto_recycle=false
-aluminum_rocket_fuel.icons= dual_icon_reversed("rocket-fuel","alumina-crushed")
+aluminum_rocket_fuel.icons= dual_icon_reversed("rocket-fuel","aluminum-crushed")
 aluminum_rocket_fuel.allow_decomposition = false
 
 local carbon_nanotubes_lds = table.deepcopy(data.raw["recipe"]["low-density-structure"])

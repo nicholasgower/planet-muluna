@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 local function technology_icon_constant_recipe_productivity(technology_icon,new_icon_size)
     local icon_size = new_icon_size or 256
@@ -50,7 +50,7 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     if data.raw["technology"]["electronics"].research_trigger then
         data.raw["technology"]["electronics"].research_trigger.item="aluminum-plate"
     end
-   
+
     local red_science = table.deepcopy(data.raw["recipe"]["automation-science-pack"])
     rro.replace_name(red_science.ingredients,"copper-plate","aluminum-plate")
     red_science.name="automation-science-pack-muluna"
@@ -73,10 +73,13 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     delete_tech("advanced-circuit","electronics")
     delete_tech("oil-processing","oil-gathering")
     delete_tech("fluid-handling","oxide-asteroid-crushing")
+    delete_tech("thruster-fuel","space-platform-thruster")
+    delete_tech("thruster-oxidizer","space-platform-thruster")
+    delete_tech("landfill","muluna-greenhouses")
     rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack",1})
     rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"chemical-science-pack",1})
     --rro.soft_insert(data.raw["technology"]["steam-power"].prerequisites,"metallic-asteroid-crushing")
-    
+    table.insert(data.raw["technology"]["muluna-greenhouses"].prerequisites,"lamp")
     if data.raw["technology"]["steam-power"].prerequisites == nil then
         data.raw["technology"]["steam-power"].prerequisites = {"metallic-asteroid-crushing"}
     end

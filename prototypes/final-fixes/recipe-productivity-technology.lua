@@ -1,7 +1,20 @@
 local rro = require("lib.remove-replace-object")
 for _,tech in pairs(data.raw["technology"]) do
     if tech.muluna_recipe_productivity_effects then
-        if tech.muluna_recipe_productivity_effects.purge_other_effects then tech.effects = {} end
+        local new_effects = {}
+        if not tech.effects then tech.effects = {} end
+        if tech.muluna_recipe_productivity_effects.purge_other_effects then
+            for _,effect in pairs(tech.effects) do
+                if effect.muluna_force_include then
+                    table.insert(new_effects,effect)
+                end
+            end
+        else
+            new_effects = tech.effects
+        end
+        
+        
+
         for _,effect in pairs(tech.muluna_recipe_productivity_effects.effects) do
             local type = effect.type
             local name = effect.name
@@ -15,13 +28,17 @@ for _,tech in pairs(data.raw["technology"]) do
                                 recipe = recipe.name,
                                 change = change,
                                 hidden = effect.hidden,
+                                use_icon_overlay_constant = effect.use_icon_overlay_constant,
+                                icons = effect.icons,
+                                icon = effect.icon,
+                                icon_size = effect.icon_size,
                             }
-                            rro.soft_insert(tech.effects,new_effect)
+                            rro.soft_insert(new_effects,new_effect)
                         end
                     end
                 end
             end
-            
+            tech.effects = new_effects
 
         end
         tech.muluna_recipe_producitivity_effects = nil

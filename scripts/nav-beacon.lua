@@ -1,5 +1,9 @@
 local debug_mode = false
 local DT = "[NavBeacon] "
+local radar_data 
+if settings.startup["enable-nav-beacon"].value == true then
+    radar_data = prototypes.mod_data["muluna-satellite-radar"].data
+end
 
 require("__core__/lualib/util.lua")
 
@@ -31,6 +35,11 @@ local function init_storage_nav_beacons()
     if storage.beacon_electric_interfaces == nil then
         storage.beacon_electric_interfaces = {}
     end
+    
+    storage.has_nav_beacons = #storage.nav_beacons > 0
+    
+
+    
 end
 
 local function reset_storage_nav_beacons() 
@@ -65,7 +74,7 @@ local function reset_storage_nav_beacons()
         --Register those beacons using existing functions.
 end
 
-script.on_init(function()
+Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
 
     init_storage_nav_beacons()
 
@@ -77,7 +86,7 @@ script.on_configuration_changed(function()
         log(DT .. "initialized storage")
         log(serpent.block(storage))
     end
-
+    
     init_storage_nav_beacons()
 end)
 
@@ -95,17 +104,17 @@ local function built_nav_beacon(entity)
     
 
     if platform == nil then
-        entity.destroy({
-            raise_destroy = false
-        })
-        surface.create_entity({
-            name = "nav-beacon-planet",
-            position = position,
-            force = force,
-            raise_built = false,
-            fast_replace = true,
-            quality = quality
-        })
+        -- entity.destroy({
+        --     raise_destroy = false
+        -- })
+        -- surface.create_entity({
+        --     name = "nav-beacon-planet",
+        --     position = position,
+        --     force = force,
+        --     raise_built = false,
+        --     fast_replace = true,
+        --     quality = quality
+        -- })
     else
         if storage.beaconed_platforms[platform.index] ~= nil then
             game.print({"", DT, {"nav-beacon.single-per-platform"}, " @ ",entity.gps_tag})
@@ -131,7 +140,11 @@ local function built_nav_beacon(entity)
         storage.beaconed_platforms[platform.index] = nav
         storage.nav_surfaces[nav.unit_number] = platform.space_location
         storage.nav_beacons[nav.unit_number] = nav
+        storage.has_nav_beacons = true
     end
+    --if #storage.nav_beacons > 0 then
+        
+    --end
 end
 
 ---@param entity LuaEntity
@@ -146,10 +159,13 @@ local function destroyed_nav_beacon(entity)
     storage.beaconed_platforms[platform.index] = nil
     storage.nav_surfaces[entity.unit_number] = nil
     storage.nav_beacons[entity.unit_number] = nil
+    if #storage.nav_beacons == 0 then
+        storage.has_nav_beacons = false
+    end
 end
 
 ---@param e on_space_platform_changed_state
-script.on_event(defines.events.on_space_platform_changed_state, function(e)
+Muluna.events.on_event(defines.events.on_space_platform_changed_state, function(e)
     --only track platforms with a nav beacon
     local platformBeacon = storage.beaconed_platforms[e.platform.index]
     if platformBeacon ~= nil then
@@ -164,8 +180,8 @@ end)
 
 local filter_built = {
     {filter = "name", name = "muluna-satellite-radar"},
-    {filter = "name", name = "nav-beacon-platform"},
-    {filter = "name", name = "nav-beacon-planet"},
+    --{filter = "name", name = "nav-beacon-platform"},
+    --{filter = "name", name = "nav-beacon-planet"},
 }
 
 
@@ -175,103 +191,109 @@ local filter_built = {
 -----
 ------------------------------------------------------------------------------------------------------------------------
 
+--local profiler_1 = helpers.create_profiler()
+if settings.startup["enable-nav-beacon"].value == true then
 ---@param event on_tick
-script.on_event(defines.events.on_tick, function(event)
-    
-    if event.tick % settings.global["nav-beacon-update-ticks"].value ~= 0 then return end
-    if settings.startup["enable-nav-beacon"].value == true then
-        for _,player in pairs(game.players) do
-            if player.controller_type == defines.controllers.remote then
-                local display_beacon_alert = player.mod_settings["nav-beacon-display-alert"].value
-                --chart_zoomed_in doesn't seem to work
-                --if player.render_mode == defines.render_mode.chart or player.render_mode == defines.render_mode.chart_zoomed_in then
-                local navSat = nil
-                local enough_light = false
-                --game.print(serpent.block(storage.nav_surfaces))
-                for beacon_id,nav_surface in pairs(storage.nav_surfaces) do
-                        if nav_surface.name == player.surface.name then
-                            local beacon = storage.nav_beacons[beacon_id] 
+    Muluna.events.on_nth_tick(settings.startup["nav-beacon-update-ticks"].value, function(event)
+        --profiler_1.reset()
+        --if event.tick % settings.startup["nav-beacon-update-ticks"].value ~= 0 then return end
+            if not storage.has_nav_beacons == true then return end
+                for _,player in pairs(game.players) do
+                    if player.controller_type == defines.controllers.remote then
+                        local display_beacon_alert = player.mod_settings["nav-beacon-display-alert"].value
+                        --chart_zoomed_in doesn't seem to work
+                        --if player.render_mode == defines.render_mode.chart or player.render_mode == defines.render_mode.chart_zoomed_in then
+                        local navSat = nil
+                        local enough_light = false
+                        --game.print(serpent.block(storage.nav_surfaces))
+                        for beacon_id,nav_surface in pairs(storage.nav_surfaces) do
+                                if nav_surface.name == player.surface.name then
+                                    local beacon = storage.nav_beacons[beacon_id] 
 
-                            if beacon.valid == false then 
-                                game.print("[Muluna] ERROR: Satellite Radar data storage invalid, deleting storage to prevent crash. You might need to place your radars again.") 
-                                log("ERROR: Navigation beacon storage invalidated to prevent crash.")
-                                log("planet-muluna storage contents:")
-                                log(serpent.block(storage))
-                                log("End planet-muluna storage")
-                                reset_storage_nav_beacons() break 
+                                    if beacon.valid == false then 
+                                        game.print("[Muluna] ERROR: Satellite Radar data storage invalid, deleting storage to prevent crash. You might need to place your radars again.") 
+                                        log("ERROR: Navigation beacon storage invalidated to prevent crash.")
+                                        log("planet-muluna storage contents:")
+                                        log(serpent.block(storage))
+                                        log("End planet-muluna storage")
+                                        reset_storage_nav_beacons() break 
 
+                                        end
+                                    --game.print(beacon)
+                                    if beacon ~= nil then if beacon.force == player.force then
+                                            navSat = beacon
+                                            if display_beacon_alert then
+                                                player.add_custom_alert(beacon,
+                                                    {type = "item", name = "muluna-satellite-radar"},
+                                                    {"alert.nav-beacon-available",{"space-location-name."..player.surface.name}},
+                                                    false
+                                                )
+                                            end
+                                            
+                                            break
+                                    else
+                                        player.remove_alert{entity = beacon}
+                                    end end
+                                
+                                else 
+                                    player.remove_alert{entity = beacon}
                                 end
-                            --game.print(beacon)
-                            if beacon ~= nil then if beacon.force == player.force then
-                                    navSat = beacon
-                                    if display_beacon_alert then
-                                        player.add_custom_alert(beacon,
-                                            {type = "item", name = "muluna-satellite-radar"},
-                                            {"alert.nav-beacon-available",{"space-location-name."..player.surface.name}},
-                                            false
-                                        )
-                                    end
-                                    
-                                    break
-                            else
-                                player.remove_alert{entity = beacon}
-                            end end
-                        
-                        else 
-                            player.remove_alert{entity = beacon}
                         end
-                end
 
-                if navSat ~= nil then
-                    local multiplier = 1/(1+0.3*navSat.quality.level)
-                    if navSat.energy >= (util.parse_energy((settings.startup["platform-power-consumption"].value *multiplier) .. "MJ") * 1) then
-                        local pos = player.position
-                        --if player.force.is_chunk_visible(player.surface,{pos.x/32,pos.y/32}) == false then
-                            --local multiplier = (1-0.1667*navSat.quality.level)
-                            
-                            navSat.energy = navSat.energy - util.parse_energy((settings.startup["platform-power-consumption"].value *multiplier) .. "MJ")
-                            --game.print(navSat.quality.level)
-                            local offset = 100 * (1+0.3*navSat.quality.level)
-                            local chartBounds = {
-                                left_top = { pos.x - offset/2, pos.y - offset/2},
-                                right_bottom = { pos.x + offset/2, pos.y + offset/2}
-                            }
-                            player.force.chart(player.surface, chartBounds)
-                        --end
-                    end
+                        if navSat ~= nil then
+                            --local multiplier = 1/(1+0.3*navSat.quality.level)
+                            local energy_cost = util.parse_energy(tostring(helpers.evaluate_expression(radar_data.energy_per_scan_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})) .. "MJ")
+                            if navSat.energy >= energy_cost then
+                                local pos = player.position
+                                --if player.force.is_chunk_visible(player.surface,{pos.x/32,pos.y/32}) == false then
+                                    --local multiplier = (1-0.1667*navSat.quality.level)
+                                    
+                                    navSat.energy = navSat.energy - energy_cost
+                                    --game.print(navSat.quality.level)
+                                    --local offset = 100 * (1+0.3*navSat.quality.level)
+                                    local offset = helpers.evaluate_expression(radar_data.scan_size_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})
+                                    local chartBounds = {
+                                        left_top = { pos.x - offset/2, pos.y - offset/2},
+                                        right_bottom = { pos.x + offset/2, pos.y + offset/2}
+                                    }
+                                    player.force.chart(player.surface, chartBounds)
+                                --end
+                            end
+                                
                         
-                
+                        end
+                        --end
+                    else
+                        player.remove_alert{type = defines.alert_type.custom, icon = {type = "item", name = "muluna-satellite-radar"},message = {"alert.nav-beacon-available",{"space-location-name."..player.surface.name}}}
+                    end
                 end
-                --end
-            else
-                player.remove_alert{type = defines.alert_type.custom, icon = {type = "item", name = "muluna-satellite-radar"},message = {"alert.nav-beacon-available",{"space-location-name."..player.surface.name}}}
-            end
-        end
-    end
-end)
+            
+          --game.print(profiler_1)
+    end)
+end
 
 ------------------------------------------------------------------------------------------------------------------------
 ----- BUILT RADAR -----
 ----- need to register all build events because of the custom energy interface
 ------------------------------------------------------------------------------------------------------------------------
 ---@param event on_space_platform_built_entity
-script.on_event(defines.events.on_space_platform_built_entity, function(event)
+Muluna.events.on_event(defines.events.on_space_platform_built_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
-
+    if not entity.name == "muluna-satellite-radar" then return end
     built_nav_beacon(entity)
 end, filter_built)
 
 ---@param event script_raised_built
-script.on_event(defines.events.script_raised_built, function(event)
+Muluna.events.on_event(defines.events.script_raised_built, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
-
+    if not entity.name == "muluna-satellite-radar" then return end
     built_nav_beacon(entity)
 end, filter_built)
 
 -- ---@param event on_built_entity
--- script.on_event(defines.events.on_built_entity, function(event)
+-- Muluna.events.on_event(defines.events.on_built_entity, function(event)
 --     local entity = event.entity or event.created_entity
 --     if not entity or not entity.valid then return end
 
@@ -279,10 +301,10 @@ end, filter_built)
 -- end, filter_built)
 
 ---@param event on_robot_built_entity
-script.on_event(defines.events.on_robot_built_entity, function(event)
+Muluna.events.on_event(defines.events.on_robot_built_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
-
+    if not entity.name == "muluna-satellite-radar" then return end
     built_nav_beacon(entity)
 end, filter_built)
 
@@ -293,7 +315,7 @@ end, filter_built)
 ------------------------------------------------------------------------------------------------------------------------
 
 ---@param event on_space_platform_mined_entity
-script.on_event(defines.events.on_space_platform_mined_entity, function(event)
+Muluna.events.on_event(defines.events.on_space_platform_mined_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -301,7 +323,7 @@ script.on_event(defines.events.on_space_platform_mined_entity, function(event)
 end, filter_built)
 
 ---@param event on_entity_died
-script.on_event(defines.events.on_entity_died, function(event)
+Muluna.events.on_event(defines.events.on_entity_died, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -309,7 +331,7 @@ script.on_event(defines.events.on_entity_died, function(event)
 end, filter_built)
 
 ---@param event script_raised_destroy
-script.on_event(defines.events.script_raised_destroy, function(event)
+Muluna.events.on_event(defines.events.script_raised_destroy, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -317,7 +339,7 @@ script.on_event(defines.events.script_raised_destroy, function(event)
 end, filter_built)
 
 ---@param event on_player_mined_entity
-script.on_event(defines.events.on_player_mined_entity, function(event)
+Muluna.events.on_event(defines.events.on_player_mined_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 
@@ -325,7 +347,7 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
 end, filter_built)
 
 ---@param event on_robot_mined_entity
-script.on_event(defines.events.on_robot_mined_entity, function(event)
+Muluna.events.on_event(defines.events.on_robot_mined_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
 

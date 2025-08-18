@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 if data.raw["tool"]["electrochemical-science-pack"] then
     local electrochemical_techs = {
         

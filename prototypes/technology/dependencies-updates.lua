@@ -1,22 +1,16 @@
-local rro=require("lib.remove-replace-object")
+local rro=Muluna.rro
 
 
-for _,tech in pairs(data.raw["technology"]) do
-    if tech.prerequisites then
-        rro.replace(tech.prerequisites,"space-platform-thruster","space-science-pack")
-    end
-    
-end
-
-data.raw["recipe"]["crusher"].subgroup = "smelting-machine"
-data.raw["item"]["crusher"].subgroup = "smelting-machine"
-data.raw["assembling-machine"]["crusher"].subgroup = "smelting-machine"
-data.raw["item"]["crusher"].order = "ca[crusher]"
 
 
 --replace_object(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform-thruster","space-platform")
 rro.replace(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform","muluna-alice-propellant")
 table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"wood-gas-processing")
+for _,result in pairs(data.raw["technology"]["space-science-pack"].effects) do
+    if result.recipe == "space-science-pack" then
+        result.recipe = "space-science-pack-muluna"
+    end
+end
 --table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"muluna-oxide-asteroid-processing")
 -- table.insert(data.raw["technology"]["space-platform-thruster"].effects,{
 --     type="unlock-space-location",
@@ -168,10 +162,15 @@ table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
     type = "unlock-recipe",
     recipe="plastic-from-wood"
 })
-table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
-    type = "unlock-recipe",
-    recipe="woodchips"
-})
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
+    table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
+        type = "unlock-recipe",
+        recipe="woodchips"
+    })
+end
+
+    
+
 table.insert(data.raw["technology"]["wood-gas-processing"].effects, {
     type = "unlock-recipe",
     recipe="cellulose"
@@ -198,14 +197,14 @@ rro.remove(data.raw["technology"]["agriculture"].effects,{type = "unlock-recipe"
 --     data.raw["assembling-machine"]["E-greenhouse"].localised_name = {"entity-name.n-deprecated",{"entity-name.E-greenhouse"}}
 -- end
 
-table.insert(data.raw["technology"]["heating-tower"].effects,
+-- table.insert(data.raw["technology"]["heating-tower"].effects,
     
-        {
-            type = "unlock-recipe",
-            recipe = "advanced-water-boiling-high-temperature",
-        }
+--         {
+--             type = "unlock-recipe",
+--             recipe = "advanced-water-boiling-high-temperature",
+--         }
     
-)
+-- )
 -- local seed_recipes = {"jellynut","yumako"}
 
 -- for _,seed in pairs(seed_recipes) do

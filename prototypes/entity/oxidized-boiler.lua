@@ -109,6 +109,7 @@ local space_boiling = {
   --icon_size= data.raw["fluid"]["steam"].icon_size,
   subgroup="advanced-boiling",
   energy_required=1/recipe_time,
+  hide_from_signal_gui = false,
   enabled=false,
   ingredients = {
     {type = "fluid",name = "water", amount = 6/recipe_time,temperature=15},
@@ -122,6 +123,7 @@ local space_boiling = {
 
 local space_boiling_atmosphere = util.merge{space_boiling,{
   name = "advanced-water-boiling-atmosphere",
+  hide_from_signal_gui = false,
   icons = dual_icon("steam","maraxsis-atmosphere"),
   --icon = data.raw["fluid"]["steam"].icon,
   --icon_size= data.raw["fluid"]["steam"].icon_size,
@@ -131,26 +133,27 @@ local space_boiling_atmosphere = util.merge{space_boiling,{
   }
 }}
 
-local temperature_time_ratio = (500-15)/(165-15)
+-- local temperature_time_ratio = (500-15)/(165-15)
 
-local space_boiling_high_temperature = util.merge{space_boiling,{
-  name = "advanced-water-boiling-high-temperature",
-  --icons = dual_icon("steam","oxygen","oxygen"),
-  --icons = dual_icon("steam","maraxsis-atmosphere"),
-  --icon = data.raw["fluid"]["steam"].icon,
-  --icon_size= data.raw["fluid"]["steam"].icon_size,
-  energy_required = space_boiling.energy_required * temperature_time_ratio,
-  ingredients = {
-    {type = "fluid",name = "water", amount = 6/recipe_time,temperature=15},
-    {type = "fluid",name = "oxygen", amount = temperature_time_ratio*60/recipe_time},
-  },
-  results = {
-    {type = "fluid",name = "steam", amount = 60/recipe_time,temperature=500},
-    {type = "fluid",name = "carbon-dioxide", amount = temperature_time_ratio*60/recipe_time,temperature=500},
-  }
-}}
+-- local space_boiling_high_temperature = util.merge{space_boiling,{
+--   name = "advanced-water-boiling-high-temperature",
+--   hide_from_signal_gui = false,
+--   --icons = dual_icon("steam","oxygen","oxygen"),
+--   --icons = dual_icon("steam","maraxsis-atmosphere"),
+--   --icon = data.raw["fluid"]["steam"].icon,
+--   --icon_size= data.raw["fluid"]["steam"].icon_size,
+--   energy_required = space_boiling.energy_required * temperature_time_ratio,
+--   ingredients = {
+--     {type = "fluid",name = "water", amount = 6/recipe_time,temperature=15},
+--     {type = "fluid",name = "oxygen", amount = temperature_time_ratio*60/recipe_time},
+--   },
+--   results = {
+--     {type = "fluid",name = "steam", amount = 60/recipe_time,temperature=500},
+--     {type = "fluid",name = "carbon-dioxide", amount = temperature_time_ratio*60/recipe_time,temperature=500},
+--   }
+-- }}
 
-data:extend{space_boiling_high_temperature}
+-- data:extend{space_boiling_high_temperature}
 
 
 
@@ -158,6 +161,7 @@ data:extend{space_boiling_high_temperature}
 local space_melting = {
   type = "recipe",
   category = "double-boiler",
+  hide_from_signal_gui = false,
   name = "advanced-water-melting-oxygen",
   icons = {
     {
@@ -227,6 +231,7 @@ local space_boiler_new = {
       {
         volume = 200,
         pipe_covers = pipecoverspictures(),
+        pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
         pipe_connections =
         {
           {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 0}},
@@ -238,6 +243,7 @@ local space_boiler_new = {
       {
         volume = 200,
         pipe_covers = pipecoverspictures(),
+        pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
         pipe_connections =
         {
           {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 1}},
@@ -249,6 +255,7 @@ local space_boiler_new = {
       {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
           pipe_connections =
           {
             {flow_direction = "input-output", direction = defines.direction.north, position = {0, -1.0}},
@@ -259,6 +266,7 @@ local space_boiler_new = {
       {
           volume = 200,
           pipe_covers = pipecoverspictures(),
+          pipe_picture = Muluna.pipe_pictures.advanced_boiler_pipe_pictures(),
           pipe_connections =
           {
             {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
@@ -304,6 +312,15 @@ local space_boiler_new = {
           layers =
           {
             {
+              filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-shadow.png",
+              priority = "extra-high",
+              width = 900,
+              height = 500,
+              scale = 0.35,
+              shift = util.by_pixel(0, -20.5),
+              draw_as_shadow = true
+            },
+            {
               filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-animation-1.png",
               priority = "extra-high",
               width = 1300,
@@ -316,15 +333,7 @@ local space_boiler_new = {
               shift = util.by_pixel(0, -20),
               scale = 0.35,
             },
-            -- {
-            --   filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-shadow.png",
-            --   priority = "extra-high",
-            --   width = 900,
-            --   height = 500,
-            --   scale = 0.125,
-            --   shift = util.by_pixel(20.5, 9),
-            --   draw_as_shadow = true
-            -- }
+            
           }
         },
         fire_glow =
@@ -363,6 +372,12 @@ local space_boiler_new = {
 --space_boiler_new.pictures.south=space_boiler_new.pictures.north
 if data.raw["container"]["bottomless-chest"] then --Checking if game version >= 2.0.57
   space_boiler_new.quality_affects_energy_usage = true
+  space_boiler_new.custom_tooltip_fields = {
+    {
+      name = {"description.effectivity"},
+      value = "150%"
+    }
+  }
 end
 space_boiler_new.energy_source.light_flicker =
   {
@@ -400,6 +415,16 @@ space_boiler_new.graphics_set.animation = { north = {
               shift = util.by_pixel(0, -20),
               scale = 0.35,
               run_mode="forward-then-backward",
+            },
+            {
+              filename = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-hr-shadow.png",
+              priority = "extra-high",
+              width = 900,
+              height = 500,
+              scale = 0.35,
+              repeat_count = 126,
+              shift = util.by_pixel(0, -20),
+              draw_as_shadow = true
             },
             
             -- {
@@ -457,16 +482,11 @@ space_boiler_new.graphics_set.working_visualisations = {
   }
 }
 
-if settings.startup["muluna-new-interstellar-pack-recipe"].value == true then 
-  space_boiler_new.module_slots = 2
-  space_boiler_new.crafting_speed=2
-  space_boiler_new.allowed_module_categories = data.raw["assembling-machine"]["assembling-machine-3"].allowed_module_categories
-  space_boiler_new.allowed_effects = data.raw["assembling-machine"]["assembling-machine-3"].allowed_effects
-end
   
 if mods["QualityEffectsFixed"] then
   space_boiler_new.qef_ignore = true
 end
+
 
 
 data:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}

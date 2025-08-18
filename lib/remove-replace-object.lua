@@ -1,7 +1,20 @@
+--- remove-replace-object
+-- Usually imported as "rro".
+-- Designed to simplify table manipulation, with preventing crashes when applying functions en masse the first priority.
+-- @author MeteorSwarm
+-- @module lib.remove-replace-object
+-- @pragma nostrip
+
+
+
 local rro = {}
 rro.predicates = require('lib.predicates')
-
-function rro.deep_equals(table1, table2) --Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references
+---Checks if two objects are identical. ie returns true if {"space-science-pack",1} and {"space-science-pack",1} are compared from different object references. 
+-- Special string "_any" always returns true if compared with anything else.
+function rro.deep_equals(table1, table2)
+    if table1 == table2 and table1 == "_any" then
+        error("Two compare statements should not both contain '_any'.")
+    end
     if table1 == table2 or table1 == "_any" or table2 == "_any" then return true end
     
     --If one element is in form of {"_{compare_symbol}",{number}}, this is a comparison operator. They are not looking for equality, they are a comparison.
@@ -42,7 +55,8 @@ function rro.deep_equals(table1, table2) --Checks if two objects are identical. 
     return true
 end
 
-function rro.remove(list, objectToRemove) --Removes object from list
+---Removes object from list
+function rro.remove(list, objectToRemove) 
     if list then
         for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
             if rro.deep_equals(list[i] , objectToRemove) then
@@ -53,7 +67,8 @@ function rro.remove(list, objectToRemove) --Removes object from list
     end
 end
 
-function rro.replace(list, objectToRemove, replacementObject) --Replaces object in list with another object
+---Replaces object in list with another object
+function rro.replace(list, objectToRemove, replacementObject) 
     if list then
         for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
             if rro.deep_equals(list[i] , objectToRemove) then
@@ -68,6 +83,37 @@ function rro.replace(list, objectToRemove, replacementObject) --Replaces object 
     end
 end
 
+--- Similar to rro.replace, but acts recursively within subobjects.
+function rro.deep_replace(list, objectToRemove, replacementObject,gsub)
+    if gsub == nil then gsub = false end
+    if list then
+        for i,item in pairs(list) do -- Can also be a dictionary
+            if type(item) == "string" and type(objectToRemove) == "string" and gsub then
+                item = string.gsub(item,objectToRemove,replacementObject)
+            
+            elseif rro.deep_equals(list[i] , objectToRemove) then
+                if replacementObject ~= nil and not rro.contains(list,replacementObject) then
+                    list[i] = replacementObject -- Replace the object
+                else
+                    list[i] = nil -- Remove the object if no replacement is provided
+                end
+                --break -- Don't exit the loop after replacing or removing
+            elseif type(list[i]) == "table" then
+                rro.deep_replace(list[i],objectToRemove, replacementObject)
+            end
+        end
+    end
+
+
+end
+
+
+function rro.deep_gsub(list, objectToRemove, replacementObject)
+    rro.deep_replace(list, objectToRemove, replacementObject,true)
+
+end
+
+---Searches a list for all items where `item[field] == name`, and replaces `name` with `new_name`.
 function rro.replace_field(list,field,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
         if list[i][field] == name then
@@ -77,6 +123,7 @@ function rro.replace_field(list,field,name,new_name)
     end
 end
 
+---Searches a list for all items where `item.name == name`, and replaces `name` with `new_name`.
 function rro.replace_name(list,name,new_name) 
     for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
         if list[i].name == name then
@@ -86,7 +133,8 @@ function rro.replace_name(list,name,new_name)
     end
 end
 
-function rro.contains(list,object) --Check if object exists in list.
+---Check if object exists in list.
+function rro.contains(list,object) 
     --local contains = false
     if list == nil then return false end
     for _,item in pairs(list) do -- Iterate forward
@@ -99,7 +147,12 @@ function rro.contains(list,object) --Check if object exists in list.
     return false
 end
 
-function rro.soft_insert(list,objectToAdd) --Adds object to list if it doesn't already exist. 
+
+
+---Adds object to list if it doesn't already exist. 
+-- @param list table
+-- @param objectToAdd object
+function rro.soft_insert(list,objectToAdd) 
     if list == nil then list = {} end
     if rro.contains(list,objectToAdd) == false then
         table.insert(list,objectToAdd)
@@ -107,11 +160,15 @@ function rro.soft_insert(list,objectToAdd) --Adds object to list if it doesn't a
 
 end
 
+---Adds fields of `new` to `old`, replacing overlapping fields.
+-- @param old table
+-- @param new table
+-- @return old table
 function rro.merge(old, new)
     old = util.table.deepcopy(old)
 
     for k, v in pairs(new) do
-        if v == "nil" then
+        if v == "_nil" then
             old[k] = nil
         else
             old[k] = v
@@ -125,9 +182,66 @@ function rro.ammend(old, new)
     old = rro.merge(old, new)
 end
 
+--- Returns a concatenation of the contents of two tables.
+-- @param first table
+-- @param second table
+function rro.get_concatenation(first,second)
+    local first_l = #first
+    local second_l = #second
+    local out = table.deepcopy(first)
+    local out_second = table.deepcopy(second)
+    for i=1,second_l do
+        out[first_l+i] = out_second[i]
+    end
+    return out
+end
+
+--- Attempts to find an object in a complex object, and returns nil if any level in the search returns nil
+-- @param table table
+-- @param crawl_list table
+function rro.safe_find(table,crawl_list)
+    if table == nil then return nil end
+    local out = table
+    for i,layer in ipairs(crawl_list) do
+        out= out[layer]
+        if out == nil then return nil end
+    end
+
+    return out
+end
+
+rro.safe_get = rro.safe_find
 
 
+--- Copies fields specified in "fields" from "table_from" to "table_to"
+-- @param table_to table
+-- @param table_from table
+-- @param fields table
+-- @param deepcopy boolean (Default true)
+function rro.copy_fields(table_to,table_from,fields,deepcopy)
+    if deepcopy == nil then deepcopy = true end
 
+    for _,field in pairs(fields) do
+        if deepcopy then
+            table_to[field] = table.deepcopy(table_from[field]) or table_to[field]
+        else
+            table_to[field] = table_from[field] or table_to[field]
+        end
+    end
+
+
+end
+
+function rro.count(table,predicate)
+    local i = 0
+    for _,entry in pairs(table) do
+        if predicate(entry) == true then
+            i = i + 1
+        end
+    end
+    return i
+
+end
 
 
 return rro

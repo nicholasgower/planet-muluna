@@ -12,7 +12,7 @@ function Public.get_stage()
     else
         error("Could not determine load order stage.")
     end
-
+    return stage
 end
 
 function Public.has_new_quality_features()

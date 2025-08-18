@@ -1,3 +1,4 @@
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 local dual_icon_reversed = require("lib.dual-item-icon").dual_icon_reversed
 
@@ -130,12 +131,21 @@ data:extend{advanced_anorthite_crushing}
 
 
 local alumina_crushing=table.deepcopy(anorthite_crushing)
-alumina_crushing.icons = crushing_icon("__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",64)
+alumina_crushing.icons = crushing_icon(data.raw["item"]["alumina"].icon,64)
 alumina_crushing.name="alumina-crushing"
 alumina_crushing.results = {{type = "item", name = "alumina", amount = 1,ignored_by_productivity=1, probability = 1/20 },{type = "item",name = "alumina-crushed",amount = 2}}
 alumina_crushing.ingredients = {{type = "item",name = "alumina",amount = 1}}
 alumina_crushing.energy_required = 1
 alumina_crushing.order="b-aa-a"
+
+local aluminum_crushing=table.deepcopy(anorthite_crushing)
+aluminum_crushing.icons = crushing_icon("__muluna-graphics__/graphics/icons/metal-plate-aluminium.png",64)
+aluminum_crushing.name="aluminum-crushing"
+aluminum_crushing.results = {{type = "item", name = "aluminum-plate", amount = 1,ignored_by_productivity=1, probability = 1/20 },{type = "item",name = "aluminum-crushed",amount = 2}}
+aluminum_crushing.ingredients = {{type = "item",name = "aluminum-plate",amount = 1}}
+aluminum_crushing.energy_required = 1
+aluminum_crushing.order="b-aa-b"
+
 local stone_crushing=table.deepcopy(anorthite_crushing)
 
 stone_crushing.results = {{type = "item", name = "stone", amount = 1,ignored_by_productivity=1, probability = 1/10},{type = "item",name = "stone-crushed",amount = 3}}
@@ -182,15 +192,99 @@ wood_crushing.ingredients = {{type = "item",name = "wood",amount = 1}}
 wood_crushing.energy_required = 0.5
 
 wood_crushing.icons=crushing_icon(data.raw.item["wood"].icon,data.raw.item["wood"].icon_size)
-wood_crushing.order="b-aa-b"
+wood_crushing.order="b-aa-c"
 
-local recipes = {anorthite_crushing,alumina_crushing,stone_crushing,aluminum_plate,aluminum_cable,wood_crushing}
+local tree_crushing = table.deepcopy(wood_crushing)
+
+tree_crushing.name = "muluna-tree-crushing"
+
+tree_crushing.results = {{type = "item", name = "muluna-sapling", amount = 1,ignored_by_productivity=1, probability = 1/20 },{type = "item",name = "wood",amount = 4}}
+tree_crushing.ingredients = {{type = "item",name = "muluna-sapling",amount = 1}}
+tree_crushing.icons=crushing_icon(data.raw.item["muluna-sapling"].icon,data.raw.item["muluna-sapling"].icon_size)
+tree_crushing.order="b-aa-b"
+
+
+local regolith_sorting = {
+    type = "recipe",
+    name = "muluna-regolith-sorting",
+    group = "space",
+    subgroup = "space-crushing",
+    category = "crushing",
+    order = "h[muluna-regolith-sorting]",
+    --additional_categories = {"recycling"},
+    auto_recycle = false,
+    allow_decomposition = false,
+    allow_as_intermediate = false,
+    enabled = false,
+    ingredients = {
+        {
+            type = "item",
+            name = "muluna-lunar-regolith",
+            amount = 1,
+        }
+    },
+    energy_required = 1,
+    results = {
+        {
+            type = "item",
+            name = "stone",
+            amount = 1,
+            --probability = 0.50,
+        },
+        {
+            type = "item",
+            name = "stone-crushed",
+            amount = 1,
+            --probability = 0.50,
+        },
+        {
+            type = "item",
+            name = "uranium-ore",
+            amount = 1,
+            probability = 0.01,
+        }
+
+
+    },
+    icons = crushing_icon(data.raw.item["muluna-lunar-regolith"].icon,data.raw.item["muluna-lunar-regolith"].icon_size)
+}
+
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == false then
+    wood_crushing = nil
+end
+
+local regolith_recycling = table.deepcopy(regolith_sorting)
+local recycling_lib = require("__quality__.prototypes.recycling")
+
+regolith_recycling.name = "muluna-regolith-recycling"
+regolith_recycling.category = "recycling"
+regolith_recycling.energy_required = regolith_sorting.energy_required / 4
+regolith_recycling.results[3].probability = 0.02
+regolith_recycling.icons = generate_recycling_recipe_icons_from_item(data.raw.item["muluna-lunar-regolith"])
+regolith_recycling.order = regolith_recycling.order .. "a"
+
+local data_tape = table.deepcopy(data.raw["recipe"]["electronic-circuit"])
+
+rro.deep_replace(data_tape,"electronic-circuit","muluna-basic-hard-drive")
+
+data_tape.ingredients = {
+    {type = "item", name }
+}
+
+
+
+local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,tree_crushing,regolith_sorting,regolith_recycling}
+if wood_crushing then
+    table.insert(recipes,wood_crushing)
+end
 
 for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  
           recipe.hide_from_signal_gui = false
     end 
 end
+
+
 
 data:extend(recipes)
 
@@ -215,5 +309,39 @@ data:extend{{ --Moshine recipe
   }}
 
 end
+
+if not data.raw["recipe"]["silicon-carbide"] then
+
+data:extend{{ --Moshine recipe
+    type = "recipe",
+    name = "silicon-carbide",
+    category = "crafting-with-fluid",
+    energy_required = 8,
+    ingredients =
+    {
+      {type = "item", name = "silicon", amount = 2},
+      {type = "item", name = "carbon", amount = 1},
+      {type = "fluid", name = "sulfuric-acid", amount = 10},
+    },
+    results = {{type = "item", name = "silicon-carbide", amount = 2}},
+    allow_productivity = true,
+    enabled = false,
+  },}
+
+end
+
+data:extend{{
+    type = "recipe",
+    name = "muluna-basic-hard-drive",
+    category = "crafting-with-fluid",
+    ingredients = {
+        {type = "item", name = "iron-plate",amount = 1},
+        {type = "item", name = "plastic-bar", amount = 5},
+        {type = "fluid", name = "lubricant", amount = 10}
+    },
+    enabled = false,
+    energy_require = 5,
+    results = {{type = "item", name = "muluna-basic-hard-drive", amount = 1}}, 
+}}
 
 

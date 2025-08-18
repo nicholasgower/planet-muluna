@@ -20,6 +20,9 @@ function Public.dual_icon(item_1,item_2,item_3)
     local type_1 = "item"
     local type_2 = "item"
     local type_3 = "item"
+    if data.raw["planet"][item_1] then type_1 = "planet" end
+    if data.raw["planet"][item_2] then type_2 = "planet" end
+    if data.raw["planet"][item_3] then type_3 = "planet" end
     if data.raw["fluid"][item_1] then type_1 = "fluid" end
     if data.raw["fluid"][item_2] then type_2 = "fluid" end
     if data.raw["fluid"][item_3] then type_3 = "fluid" end
@@ -113,6 +116,12 @@ function Public.dual_icon(item_1,item_2,item_3)
                 tint = data.raw[type_3][item_3].icons[1].tint,
                 }
         end
+    end
+    for _,sub_icon in pairs(icon) do
+        sub_icon.scale = sub_icon.scale / 1
+        if not sub_icon.shift then sub_icon.shift = {0,0} end
+        sub_icon.shift[1] = (sub_icon.shift[1]-5) / 1 
+        sub_icon.shift[2] = (sub_icon.shift[2]+5) / 1 
     end
     
     

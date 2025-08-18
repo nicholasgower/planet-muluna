@@ -2,7 +2,7 @@
 -- with the collective effect being that you unlock the interstellar science pack upon unlocking two planetary science packs.
 -- Technologies that require at least two interplanetary science packs will have these new technologies added to their prereqs, and
 -- technologies with one interplanetary science pack have their prerequisite removed.
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 
 

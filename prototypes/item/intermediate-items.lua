@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local item_sounds = require("__base__.prototypes.item_sounds")
 local item_tints = require("__base__.prototypes.item-tints")
 
@@ -6,12 +6,12 @@ local iron_ore=data.raw["item"]["iron-ore"]
 data:extend{{
     type="item",
     name="alumina",
-    icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
+    icon = "__muluna-graphics__/graphics/icons/crushed-alumina.png",
     pictures =
     {
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",scale = 0.5, mipmap_count = 4},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",scale = 0.5, mipmap_count = 4},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-3.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina-1.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina-2.png",scale = 0.5, mipmap_count = 4},
     },
     stack_size=iron_ore.stack_size,
     order="a[alumina]",
@@ -22,35 +22,30 @@ data:extend{{
 {
     type="item",
     name="alumina-crushed",
-    icon = "__muluna-graphics__/graphics/icons/crushed-alumina.png",
+    icon = "__muluna-graphics__/graphics/icons/alumina-new.png",
     pictures =
     {
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina.png",scale = 0.5, mipmap_count = 4},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina-1.png",scale = 0.5, mipmap_count = 4},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/crushed-alumina-2.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/alumina-new.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/alumina-new-2.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/alumina-new-3.png",scale = 0.5, mipmap_count = 4},
     },
-    -- icons={
-    --     {
-    --         icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
-    --         scale=0.25,
-    --         shift={0.25,0}
-    --     },
-    --     {
-    --         icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-3.png",
-    --         scale=0.25,
-    --         shift={0,0.25}
-    --     },
-    --     {
-    --         icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",
-    --         scale=0.25,
-    --         shift={0,-0.25}
-    --     },
-    --     {
-    --         icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",
-    --         scale=0.25,
-    --         shift={-0.25,0}
-    --     },
-    -- },
+    stack_size=iron_ore.stack_size*2,
+    order="b[alumina-crushed]",
+    subgroup="muluna-products",
+    --recipe_group="intermediate-products",
+    weight=iron_ore.weight*2/3,
+    default_import_location = "muluna",
+},
+{
+    type="item",
+    name="aluminum-crushed",
+    icon = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
+    pictures =
+    {
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-3.png",scale = 0.5, mipmap_count = 4},
+    },
     stack_size=iron_ore.stack_size*2,
     order="b[alumina-crushed]",
     subgroup="muluna-products",
@@ -71,10 +66,11 @@ data:extend{{
     -- },
     
     stack_size=data.raw.item["stone"].stack_size*2,
-    order="c[stone-crushed]",
-    subgroup="muluna-products",
+    order="a[stone-crushed]",
+    subgroup="terrain",
     group=data.raw.item["stone"].group,
     weight=data.raw.item["stone"].weight/2,
+    place_as_tile = util.merge{data.raw["item"]["stone-brick"].place_as_tile,{result = "muluna-gravel"}},
 },
 {
     type="item",
@@ -107,14 +103,18 @@ data:extend{{
         
     -- },
     
-    stack_size=1,
+    stack_size=10,
     order=data.raw.item["tree-seed"].order .. "a",
     subgroup=data.raw.item["tree-seed"].subgroup,
     group=data.raw.item["tree-seed"].group,
+    fuel_value = Muluna.multiply_energy(data.raw["item"]["wood"].fuel_value,4/0.95),
+    fuel_category=data.raw["item"]["wood"].fuel_category,
     weight=iron_ore.weight*50,
     default_import_location = "nauvis",
     --plant_result = "tree-01",
     place_result = "muluna-placed-tree",
+    pick_sound = item_sounds.wood_inventory_pickup,
+    drop_sound = item_sounds.wood_inventory_move,
 },
 -- {
 --     type="item",
@@ -140,27 +140,122 @@ data:extend{{
     name="cellulose",
     icons={
         {
-            icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
+            icon="__muluna-graphics__/graphics/icons/material-fiber-cellulose-1.png",
             --scale=0.25,
             --shift={0.25,0}
-            tint = {1,0.8,0.4}
+            --tint = {1,0.8,0.4},
         },
     },
     pictures =
     {
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",scale = 0.5, mipmap_count = 4,tint = {1,0.8,0.4}},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-2.png",scale = 0.5, mipmap_count = 4,tint = {1,0.8,0.4}},
-        {size = 64, filename = "__muluna-graphics__/graphics/icons/scrap-metal-aluminium-3.png",scale = 0.5, mipmap_count = 4,tint = {1,0.8,0.4}},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/material-fiber-cellulose-1.png", scale = 0.5, mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/material-fiber-cellulose-2.png", scale = 0.5,mipmap_count = 4},
+        {size = 64, filename = "__muluna-graphics__/graphics/icons/material-fiber-cellulose-3.png", scale = 0.5,mipmap_count = 4},
     },
     stack_size=iron_ore.stack_size*4,
     order="b[cellulose]",
     subgroup="muluna-forestry",
     --recipe_group="intermediate-products",
+    pick_sound = item_sounds.wood_inventory_pickup,
+    drop_sound = item_sounds.wood_inventory_move,
     weight=iron_ore.weight*1/2,
     fuel_value = "1MJ",
     fuel_category=data.raw["item"]["wood"].fuel_category,
 },
-{ --Copied from Wooden industries
+  {
+    type = "item",
+    name = "muluna-microcellular-plastic",
+    --icon = data.raw["item"]["plastic-bar"].icon,
+    --icon_size = 64,
+    stack_size = 100,
+    weight = 2 * kg,
+    subgroup = "muluna-products",
+    order = "c[muluna-microcellular-plastic]",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/plastic-bar-flipped.png",
+            icon_size = 64,
+            tint = {150,150,0,255},
+            draw_background = true,
+        }
+    }
+  },
+  {
+    type = "item",
+    name = "muluna-diffused-plastic",
+    icon = data.raw["item"]["plastic-bar"].icon,
+    icon_size = 64,
+    stack_size = 100,
+    weight = 2 * kg,
+    subgroup = "muluna-products",
+    order = "c[muluna-microfoamed-plastic]",
+    spoil_ticks = 7*60,
+    spoil_result = "plastic-bar",
+    icons = {
+        
+        {
+            icon = data.raw["item"]["plastic-bar"].icon,
+            icon_size = 64,
+            tint = {150,150,0,255},
+            draw_background = true,
+        }
+    }
+  },
+  {
+    type = "item",
+    name = "muluna-basic-hard-drive", --Corresponds to Moshines' "hard-drive" 
+    icon = "__muluna-graphics__/graphics/icons/imgbin.com-cassette-tape.png",
+    icon_size = 64,
+    stack_size = 50,
+    weight = 5 * kg,
+    subgroup = "muluna-telescope",
+    order = "d[muluna-basic-hard-drive]",
+    -- icons = {
+        
+    --     {
+    --         icon = data.raw["item"]["plastic-bar"].icon,
+    --         icon_size = 64,
+    --         tint = {150,150,0,255},
+    --         draw_background = true,
+    --     }
+    -- },
+    data_capacity=250
+  },
+  rro.merge(data.raw.fluid.oxygen,{
+    type = "fluid",
+    name = "muluna-astronomical-data",
+    default_temperature = 15,
+    base_color = {1, 1, 1},
+    flow_color = {1, 1, 1},
+    auto_barrel = false,
+    localised_name = "_nil",
+    --icon = "_nil",
+    --icon_size = "_nil",
+    icon = "__muluna-graphics__/graphics/icons/raw-astronomical-data.png",
+    icon_size = 64,
+    -- icons = {
+    --     {
+            
+    --         --tint = {0.75,0.75,0.75}
+    --     }
+    -- },
+    stack_size = 100,
+    weight = 1 * kg,
+    subgroup = "muluna-telescope",
+    order = "b[muluna-astronomical-data]",
+  }),
+  {
+    type = "item-subgroup",
+    name = "muluna-telescope",
+    group = "space",
+    order = "g"
+  }
+
+}
+
+
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
+    data:extend{{ --Copied from Wooden industries
     type = "item",
     name = "woodchips",
     icon = "__muluna-graphics__/graphics/icons/woodchips.png",
@@ -188,27 +283,8 @@ data:extend{{
     drop_sound = item_sounds.wood_inventory_move,
     stack_size = 200,
     weight = 1*kg
-  },
--- {
---     type="item",
---     name="wood-crushed",
---     icons={
---         {
---             icon="__muluna-graphics__/graphics/icons/scrap-metal-aluminium-1.png",
---             --scale=0.25,
---             --shift={0.25,0}
---             tint = {1,0.8,0.4}
---         },
---     },
---     stack_size=iron_ore.stack_size*4,
---     order="b[cellulose]",
---     subgroup="muluna-products",
---     --recipe_group="intermediate-products",
---     weight=iron_ore.weight*1/2,
---     fuel_value = "1MJ",
---     fuel_category=data.raw["item"]["wood"].fuel_category,
--- },
-}
+  }}
+end
 
 local placed_tree = table.deepcopy(data.raw["plant"]["tree-plant"])
 placed_tree.name = "muluna-placed-tree"
@@ -233,7 +309,7 @@ if not data.raw["item"]["silicon"] then --Copied from Moshine
         weight = 20*kg,
       }}
 end
-if not data.raw["item"]["silicon-cell"] then
+if not data.raw["item"]["silicon-carbide"] then
       data:extend{{
         type = "item",
         name = "silicon-cell",
@@ -247,6 +323,25 @@ if not data.raw["item"]["silicon-cell"] then
         stack_size = 50,
         weight = 20*kg,
       }}
+end
+if not data.raw["item"]["silicon-carbide"] then
+data:extend{{
+    type = "item",
+    name = "silicon-carbide",
+    icon = "__muluna-graphics__/graphics/icons/silicon-carbide.png",
+    subgroup = "muluna-products",
+    order = "fff",
+    inventory_move_sound = item_sounds.metal_small_inventory_move,
+    pick_sound = item_sounds.metal_small_inventory_pickup,
+    drop_sound = item_sounds.metal_small_inventory_move,
+    default_import_location = "muluna",
+    stack_size = 40,
+    weight = 12.5*kg,
+  }}
+end
+
+if data.raw["tool"]["hard-drive"] then
+    data.raw["tool"]["hard-drive"].data_capacity = 1000
 end
 
 
@@ -285,3 +380,5 @@ end
 --       }
     
 -- end
+
+data.raw["item"]["stone-brick"].order = "a" .. data.raw["item"]["stone-brick"].order

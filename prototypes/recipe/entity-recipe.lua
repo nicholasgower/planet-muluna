@@ -1,7 +1,7 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local space_boiler = table.deepcopy(data.raw["recipe"]["boiler"])
-space_boiler.icon = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon.png"
+--space_boiler.icon = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon.png"
 space_boiler.name = "muluna-advanced-boiler"
 space_boiler.place_result = "muluna-advanced-boiler"
 
@@ -10,10 +10,45 @@ space_boiler.ingredients = {
     {type = "item", name = "pipe", amount = 4},
     {type = "item", name = "steel-plate", amount = 8},
 }
-space_boiler.energy_required = 10
+space_boiler.energy_required = 5
 
 
 space_boiler.results = {{type = "item",name = "muluna-advanced-boiler",amount = 1}}
+
+local vacuum_heating_tower = table.deepcopy(space_boiler)
+vacuum_heating_tower.name = "muluna-vacuum-heating-tower"
+vacuum_heating_tower.results[1].name = "muluna-vacuum-heating-tower"
+vacuum_heating_tower.ingredients = {
+    
+        {
+            type = "item",
+            name = "heating-tower",
+            amount = 3,
+        },
+        {
+            type = "item",
+            name = "pipe",
+            amount = 20,
+        },
+        {
+            type = "item",
+            name = "refined-concrete",
+            amount = 30,
+        },
+        {
+            type = "item",
+            name = "heat-pipe",
+            amount = 10
+        },
+        {
+            type = "item",
+            name = "efficiency-module-3",
+            amount = 1,
+        },
+    
+}
+vacuum_heating_tower.energy_required = 10
+--vacuum_heating_tower.enabled = true
 
 local crusher_2 = table.deepcopy(data.raw["recipe"]["crusher"])
 
@@ -23,8 +58,9 @@ crusher_2.name = "crusher-2"
 crusher_2.localised_name = {"",{"item-name.crusher"}," 2"}
 crusher_2.ingredients = {
     {type = "item",name = "tungsten-plate",amount = 10},
-    {type = "item",name = "uranium-238",amount = 10},
+    {type = "item",name = "uranium-238",amount = 2},
     {type = "item",name = "aluminum-plate",amount = 10},
+    {type = "item",name = "speed-module-3",amount = 1},
     {type = "item",name = "crusher",amount = 1}
 }
 if settings.startup["muluna-hardcore-restrict-crusher"].value == true then
@@ -52,11 +88,11 @@ if true or data.raw["recipe"]["biolab"] then
     cryolab.localised_name={"entity-name.cryolab"}
     cryolab.results = {{type = "item",name = "cryolab",amount = 1}}
     cryolab.ingredients = {
-        {type = "item", name = "quantum-processor", amount = 10},
-        {type = "item", name = "biolab", amount = 1},
-        {type = "item", name = "aluminum-plate", amount = 20},
-        {type = "fluid", name = "fluoroketone-cold", amount = 100},
-        {type = "fluid", name = "helium-3", amount = 100},
+        {type = "item", name = "quantum-processor", amount = 25},
+        {type = "item", name = "biolab", amount = 3},
+        {type = "item", name = "aluminum-plate", amount = 50},
+        {type = "fluid", name = "fluoroketone-cold", amount = 500},
+        {type = "item", name = "productivity-module-3", amount = 1},
         {type = "item", name = "biter-egg", amount = 5},
         {type = "item", name = "pentapod-egg", amount = 5},
     }
@@ -75,18 +111,6 @@ if true or data.raw["recipe"]["biolab"] then
 end
     
 
-local space_platform_advanced = table.deepcopy(data.raw["recipe"]["space-platform-foundation"])
-space_platform_advanced.name = "advanced-space-platform-foundation"
-space_platform_advanced.ingredients = {
-    {type = "item", name = "aluminum-plate", amount = 10},
-    {type = "item", name = "carbon-fiber", amount = 10},
-    {type = "item", name = "aluminum-cable", amount = 20},
-    {type = "item", name = "space-platform-foundation", amount = 1},
-
-}
-space_platform_advanced.results = {
-    {type = "item", name = "advanced-space-platform-foundation", amount = 1}
-}
 
 local space_chest = table.deepcopy(data.raw["recipe"]["steel-chest"])
 
@@ -98,6 +122,7 @@ space_chest = util.merge{space_chest,
             {type = "item", name = "aluminum-plate", amount = 8},
             {type = "item", name = "low-density-structure", amount = 1},
             {type = "item", name = "processing-unit", amount = 1},
+            {type = "item", name = "carbon-fiber", amount = 1}
             },
         subgroup = "space-platform",
         order = "ca[space-chest-muluna]"
@@ -169,16 +194,13 @@ local low_density_space_platform_foundation = util.merge{table.deepcopy(data.raw
             name = "aluminum-plate",
             amount = 2,
         },
-        {
-            type = "item",
-            name = "carbon-fiber",
-            amount = 2,
-        },
+        {type = "item", name = "muluna-microcellular-plastic", amount = 5},
         {
             type = "item",
             name = "low-density-structure",
-            amount = 5,
+            amount = 2,
         },
+        
     }
 }
 }
@@ -215,6 +237,11 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
             name = "pipe",
             amount = 20,
         },
+        {
+            type = "item",
+            name = "quality-module-3",
+            amount = 1,
+        },
     }
 }
 }
@@ -222,6 +249,56 @@ recycling_turbine.category = "crafting"
 recycling_turbine.surface_conditions = nil
 recycling_turbine.factoriopedia_description = nil
 
+local buggy = table.deepcopy(data.raw["recipe"]["car"])
 
+buggy.name = "muluna-rocket-buggy"
 
-data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine}
+buggy.results[1].name = "muluna-rocket-buggy"
+
+buggy.ingredients = {
+    {
+        type = "item", name = "aluminum-plate", amount = 20,
+    },
+    {
+        type = "item", name = "electric-engine-unit", amount = 12,
+    },
+    {
+        type = "item", name = "electronic-circuit", amount = 12,
+    },
+    {
+        type = "item", name = "steel-plate", amount = 16,
+    },
+}
+
+buggy.energy_required = 5
+
+local telescope = Muluna.rro.merge(data.raw["recipe"]["assembling-machine-3"],
+    {
+       energy_required = 20,
+       ingredients = {
+        {type = "item", name = "silicon-cell", amount = 20},
+        {type = "item", name = "processing-unit",amount = 25},
+        {type = "item", name = "muluna-data-cable", amount = 10},
+        {type = "item", name = "electric-engine-unit", amount = 10},
+        {type = "item", name = "steel-plate", amount = 50}
+       }
+    }
+)
+rro.deep_replace(telescope,"assembling-machine-3","muluna-telescope")
+
+data:extend{{
+    type = "recipe",
+    name = "muluna-data-cable",
+    energy_required = 2,
+    --surface_conditions = {{ property = "moshine-exclusive", min = 1, max = 1}},
+    ingredients = {
+      {type = "item", name = "silicon", amount = 1},
+      {type = "item", name = "silicon-carbide", amount = 1},
+      {type = "item", name = "copper-cable", amount = 10},
+    },
+    results = {{type = "item", name = "muluna-data-cable", amount = 2}},
+    allow_productivity = false,
+    enabled = false,
+  }}
+
+data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope}

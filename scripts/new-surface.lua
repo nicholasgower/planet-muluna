@@ -1,24 +1,29 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local Public = {}
 
+local spawn_distance = 128
+
+local cargo_drop_radius = settings.startup["muluna-balance-fulgoran-cargo-drop-radius"].value
+local item_multiplier = settings.startup["muluna-balance-fulgoran-cargo-drop-item-multiplier"].value
 local function random_place(surface,item_name,item_count)
+    local item_count_adjusted = item_count * item_multiplier
     --if item_count == nil then item_count = 1 end
-    local x = math.random(-128,128)+math.random(-128,128)
-    local y = math.random(-128,128)+math.random(-128,128)
+    local x = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
+    local y = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
     local entity = {name = "fulgoran-cargo-pod-container", position = {x,y}, force = "player"}
     if surface.can_place_entity(entity) == false then
         entity.position[1] = entity.position[1] + math.random(-8,8)
         entity.position[2] = entity.position[2] + math.random(-8,8) 
     end
     local chest = surface.create_entity(entity)
-    chest.get_output_inventory().insert({name = item_name,count = item_count or 1})
+    chest.get_output_inventory().insert({name = item_name,count = math.floor(item_count_adjusted) or 1})
 end
 
 local function random_place_entity(surface,entity_name)
 
-    local x = math.random(-128,128)+math.random(-128,128)
-    local y = math.random(-128,128)+math.random(-128,128)
+    local x = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
+    local y = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
     local entity = {name = entity_name, position = {x,y}, force = "player"}
     if surface.can_place_entity(entity) == false then
         entity.position[1] = entity.position[1] + math.random(-8,8)
@@ -46,25 +51,25 @@ local function place_muluna_cargo_pods()
         random_place(muluna,"plastic-bar",math.random(20,40))
     end
     for i = 1,math.random(2,4) do
-        random_place(muluna,"electric-furnace",math.random(1,3))
+        random_place(muluna,"electric-furnace",math.random(3,5))
     end
     for i = 1,math.random(2,4) do
-        random_place(muluna,"electric-mining-drill",math.random(1,3))
+        random_place(muluna,"electric-mining-drill",math.random(3,6))
+    end
+    for i = 1,math.random(1,2) do
+        random_place(muluna,"pipe",math.random(20,40))
+    end
+    for i = 1,2 do
+        random_place(muluna,"pipe-to-ground",math.random(4,10))
     end
     for i = 1,math.random(2,4) do
-        random_place(muluna,"pipe",math.random(10,20))
+        random_place(muluna,"chemical-plant",math.random(3,6))
     end
-    for i = 1,math.random(2,4) do
-        random_place(muluna,"pipe-to-ground",math.random(2,5))
+    for i = 1,math.random(1,3) do
+        random_place(muluna,"solar-panel",math.random(3,10))
     end
-    for i = 1,math.random(2,4) do
-        random_place(muluna,"chemical-plant",math.random(1,3))
-    end
-    for i = 1,math.random(3,10) do
-        random_place(muluna,"solar-panel",math.random(1,3))
-    end
-    for i = 1,math.random(3,10) do
-        random_place(muluna,"medium-electric-pole",math.random(1,3))
+    for i = 1,math.random(1,3) do
+        random_place(muluna,"medium-electric-pole",math.random(3,10))
     end
     for i = 1,1 do
         random_place(muluna,"tungsten-plate",math.random(2,5)+math.random(2,5))

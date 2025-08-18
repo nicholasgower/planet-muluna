@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 if data.raw["technology"]["planet-discovery-corrundum"] then
     --rro.replace(data.raw["technology"]["planet-discovery-corrundum"].prerequisites,"space-science-pack","asteroid-collector")

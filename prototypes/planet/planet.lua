@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local planet_lib = require("__PlanetsLib__.lib.planet")
 local nauvis = data.raw["planet"]["nauvis"]
 local nauvis_gen = nauvis.map_gen_settings
@@ -206,15 +206,15 @@ local map_gen = {
       },
     autoplace_controls = 
     {
-        ["stone"] = {},
+        --["stone"] = {},
         ["lunar_rocks"] = {},
         ["muluna_cliff"] = {},
         ["oxide-asteroid-chunk"] = {},
         ["metallic-asteroid-chunk"] = {},
         ["carbonic-asteroid-chunk"] = {},
         ["anorthite-chunk"] = {},
-        ["helium"] = {},
-        ["uranium-ore"] = {},
+        --["helium"] = {},
+        --["uranium-ore"] = {},
       },
     autoplace_settings = {
         ["tile"] =
@@ -236,9 +236,9 @@ local map_gen = {
       {
         settings =
         {
-          --["medium-rock"] = {},
-          --["small-rock"] = {},
-          --["tiny-rock"] = {},
+          ["lunar-medium-rock"] = {},
+          ["lunar-small-rock"] = {},
+          ["lunar-tiny-rock"] = {},
           --["medium-sand-rock"] = {},
           --["small-sand-rock"] = {}
         }
@@ -247,8 +247,9 @@ local map_gen = {
       {
         settings =
         {
-          ["stone"] = {},
+          --["stone"] = {},
           ["lunar-rock"] = {},
+          ["lunar-huge-rock"] = {},
           --["big-sand-rock"] = {},
           --["huge-rock"] = {},
           --["big-rock"] = {},
@@ -256,8 +257,8 @@ local map_gen = {
           ["metallic-asteroid-chunk"] = {},
           ["carbonic-asteroid-chunk"] = {},
           ["anorthite-chunk"] = {},
-          ["helium"] = {},
-          ["uranium-ore"] = {},
+          --["helium"] = {},
+          --["uranium-ore"] = {},
         }
       }
     }
@@ -335,7 +336,7 @@ local muluna=
     orbit = { --Added in preparation for PlanetsLib to display orbits, hopefully in a less invasive way than MTLib.
       --polar = {2,0.005*tau},
       orientation = 0.75, --When planetsLib orbit is added, orientation and distance are set relative to parent body.
-      distance = 1.6*o_parent_planet.magnitude/(nauvis.magnitude),
+      distance = 1.5*o_parent_planet.magnitude/(nauvis.magnitude),
       parent = {
         type = "planet",
         name = parent_planet,
@@ -350,6 +351,7 @@ local muluna=
     },
     surface_render_parameters = {
       shadow_opacity = 0.9,
+      space_dust_foreground = data.raw["space-platform-hub"]["space-platform-hub"].surface_render_parameters.space_dust_foreground
       -- clouds = util.merge{nauvis.surface_render_parameters.clouds,
       --                     opacity_at_day = 0.9,
       --                     opacity_at_night = 0.9,
@@ -397,6 +399,10 @@ local muluna=
       departure = {"planet-to-platform-a"}
     },
     procession_graphic_catalogue = planet_catalogue_vulcanus,
+
+    --Player effects, based on Varaxia's work on Celestial weather
+    ticks_between_player_effects = 1,
+    --player_effects = require("player_effects").player_effects
 
     
 }
@@ -451,22 +457,6 @@ local muluna_connection = {
 
 
 if settings.startup["override-space-connection"].value == true then
-  local connections = {
-    "nauvis-vulcanus",
-    "nauvis-gleba",
-    "nauvis-fulgora",
-    "nauvis-moshine",
-    "slp-nauvis-sun",
-    "nauvis-corrundum",
-  }
-  --data.raw["space-connection"]["nauvis-vulcanus"].from = "muluna"
-  --data.raw["space-connection"]["nauvis-gleba"].from = "muluna"
-  --data.raw["space-connection"]["nauvis-fulgora"].from = "muluna"
-    for _,connection in pairs(connections) do
-      if data.raw["space-connection"][connection] then
-        data.raw["space-connection"][connection].from = "muluna"
-      end
-    end
   
 
 end

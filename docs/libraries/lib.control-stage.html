@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Muluna documentation</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Muluna</h1>
+
+<ul>
+  <li><a href="https://github.com/nicholasgower/planet-muluna">GitHub Project</a></li>
+  <li><a href="https://mods.factorio.com/mod/planet-muluna">Mod Portal Download</a></li>
+  <li><a href="../index.html">Documentation</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Libraries</h2>
+<ul class="nowrap">
+  <li><a href="../libraries/api.lua.html">api.lua</a></li>
+  <li><a href="../libraries/compat.Krastorio2-spaced-out.html">compat.Krastorio2-spaced-out</a></li>
+  <li><strong>lib.control-stage</strong></li>
+  <li><a href="../libraries/lib.events.html">lib.events</a></li>
+  <li><a href="../libraries/lib.predicates.html">lib.predicates</a></li>
+  <li><a href="../libraries/lib.remove-replace-object.html">lib.remove-replace-object</a></li>
+  <li><a href="../libraries/lib.resource-autoplace.html">lib.resource-autoplace</a></li>
+  <li><a href="../libraries/prototypes.entity.oxidized-boiler.html">prototypes.entity.oxidized-boiler</a></li>
+  <li><a href="../libraries/scripts.interstellar-science-pack.lua.html">scripts.interstellar-science-pack.lua</a></li>
+  <li><a href="../libraries/wood-gasification.data.html">wood-gasification.data</a></li>
+</ul>
+<h2>Manual</h2>
+<ul class="nowrap">
+  <li><a href="../manual/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lib.control-stage</code></h1>
+<p>Draws a red error icon at the entity's position.</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#muluna.randomize_position">muluna.randomize_position (position, factor)</a></td>
+	<td class="summary">Randomizes a position by a factor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#muluna.cancel_creation">muluna.cancel_creation (entity, player_index, message, color)</a></td>
+	<td class="summary">Intended to be called inside a build event.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#muluna.find_grandparent">muluna.find_grandparent (element, name)</a></td>
+	<td class="summary">Returns the grandparent gui element with the given name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#muluna.format_energy">muluna.format_energy (energy, watts_or_joules)</a></td>
+	<td class="summary">formats a number into the amount of energy.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#muluna.distance">muluna.distance (x, y)</a></td>
+	<td class="summary">Returns the distance from 0,0</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#muluna.distance_squared">muluna.distance_squared (first, second)</a></td>
+	<td class="summary">Returns the squared distance between two points.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "muluna.randomize_position"></a>
+    <strong>muluna.randomize_position (position, factor)</strong>
+    </dt>
+    <dd>
+    Randomizes a position by a factor.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">position</span>
+         Position
+        </li>
+        <li><span class="parameter">factor</span>
+         number?
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Position
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "muluna.cancel_creation"></a>
+    <strong>muluna.cancel_creation (entity, player_index, message, color)</strong>
+    </dt>
+    <dd>
+    Intended to be called inside a build event.  Cancels creation of the entity.
+Returns its item<em>to</em>place back to the player or spills it on the ground.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">entity</span>
+         LuaEntity
+        </li>
+        <li><span class="parameter">player_index</span>
+         integer?
+        </li>
+        <li><span class="parameter">message</span>
+         LocalisedString?
+        </li>
+        <li><span class="parameter">color</span>
+         Color?
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "muluna.find_grandparent"></a>
+    <strong>muluna.find_grandparent (element, name)</strong>
+    </dt>
+    <dd>
+    Returns the grandparent gui element with the given name.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">element</span>
+         LuaGuiElement
+        </li>
+        <li><span class="parameter">name</span>
+         string
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        LuaGuiElement
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "muluna.format_energy"></a>
+    <strong>muluna.format_energy (energy, watts_or_joules)</strong>
+    </dt>
+    <dd>
+    formats a number into the amount of energy.  Requires 'W' or 'J' as the second parameter
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">energy</span>
+         number
+        </li>
+        <li><span class="parameter">watts_or_joules</span>
+         string
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "muluna.distance"></a>
+    <strong>muluna.distance (x, y)</strong>
+    </dt>
+    <dd>
+    Returns the distance from 0,0
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+         number
+        </li>
+        <li><span class="parameter">y</span>
+         number
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "muluna.distance_squared"></a>
+    <strong>muluna.distance_squared (first, second)</strong>
+    </dt>
+    <dd>
+    Returns the squared distance between two points.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">first</span>
+         Position
+        </li>
+        <li><span class="parameter">second</span>
+         Position
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        number
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -21,4 +21,8 @@ function Public.compare(comparison, value)
     end
 end
 
+function Public.equals(value)
+    return Public.compare("==", value) 
+end
+
 return Public

@@ -1,4 +1,4 @@
-local rro=require("lib.remove-replace-object")
+local rro=Muluna.rro
 local thruster_fuel=table.deepcopy(data.raw["recipe"]["thruster-fuel"])
 
 rro.replace(thruster_fuel.ingredients,{type="item", name="carbon", amount=2},{type="item", name="rocket-fuel", amount=1})

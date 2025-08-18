@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 -- Runs once during data and once during data-updates
 -- This is done in each step to:
 -- Data stage: To allow other mods to propogate changes from this code to their mod's technologies.
@@ -98,9 +98,12 @@ for _,tech in pairs(data.raw["technology"]) do
     local interstellar = 
         ( -- If is Aquilo-tier discovery technology
             tech.unit and
-            rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}) and
-            rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}) and
-            rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"}) and
+            rro.count(
+                {rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}),
+                rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}),
+                rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"})}
+            ,rro.predicates.equals(true)) >= 2
+            and
             (
                 string.find(tech.name,"discovery") or
                 string.find(tech.name,"thruster")

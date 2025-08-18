@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local turbine =data.raw["generator"]["steam-turbine"]
 local fusion_generator = data.raw["fusion-generator"]["fusion-generator"]
@@ -86,6 +86,12 @@ local cooled_steam = util.merge{table.deepcopy(data.raw["fluid"]["steam"]),
 
 
 }
+
+--recycling_turbine.output_fluid_box.pipe_picture = assembler2pipepictures()
+recycling_turbine.output_fluid_box.pipe_covers = pipecoverspictures()
+
+--recycling_turbine.input_fluid_box.pipe_picture = assembler2pipepictures()
+recycling_turbine.input_fluid_box.pipe_covers = pipecoverspictures()
 
 recycling_turbine.factoriopedia_description = nil
 

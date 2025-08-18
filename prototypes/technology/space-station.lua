@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local function technology_icon_constant_productivity(technology_icon,new_icon_size)
     local icon_size = new_icon_size or 256
@@ -107,6 +107,25 @@ local function crushing_technology_icon(item_sprite,item_sprite_size)
     }
 end
 
+local function digging_technology_icon(item_sprite,item_sprite_size)
+    if not item_sprite_size then item_sprite_size = 64 end
+
+    return  {
+        {
+            icon = data.raw["technology"]["electric-mining-drill"].icon,
+            icon_size = data.raw["technology"]["electric-mining-drill"].icon_size,
+        },  
+        {
+            icon = item_sprite,
+            icon_size=item_sprite_size,
+            --scale=0.3,
+            shift = {45,45},
+            scale=0.75,
+        },
+        
+    }
+end
+
 local function greenhouse_technology_icon(item_sprite,item_sprite_size)
     if not item_sprite_size then item_sprite_size = 64 end
 
@@ -191,6 +210,46 @@ data:extend{
         },
         icon = "__muluna-graphics__/graphics/technology/crusher-ai-upscaled.png",
         icon_size=256,
+        
+    },
+    {
+        type = "technology",
+        name = "muluna-rocket-buggy",
+        localised_name = {"entity-name.muluna-rocket-buggy"},
+        localised_description = {"entity-description.muluna-rocket-buggy"},
+        unit= {
+            count = 250,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"military-science-pack", 1},
+                {"space-science-pack", 1},
+            }
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-rocket-buggy"
+            }
+        },
+        prerequisites = {
+            "space-science-pack", "automobilism", "rocketry"
+        },
+        icons = {
+            {
+                icon = data.raw["technology"]["automobilism"].icon,
+                icon_size = data.raw["technology"]["automobilism"].icon_size
+            },
+            {
+                icon = data.raw["item"]["rocket-turret"].icon,
+                icon_size=data.raw["item"]["rocket-turret"].icon_size,
+                --scale=0.3,
+                shift = {-8,-36},
+                scale=0.6,
+            },
+        },
     },
     -- {
     --     type = "technology",
@@ -246,6 +305,46 @@ data:extend{
         --     },  
         -- }
         icons = crushing_technology_icon(data.raw["item"]["metallic-asteroid-chunk"].icon,data.raw["item"]["metallic-asteroid-chunk"].icon_size)
+    },
+    {
+        type = "technology",
+        name = "muluna-regolith-digging",
+        localised_name = {"recipe-name.muluna-regolith-digging"},
+        localised_description = {"recipe-description.muluna-regolith-digging"},
+        research_trigger = {
+            type = "build-entity",
+            entity = "electric-mining-drill-ground-digger"
+        },
+        --localised_name = {"item-name.crusher"},
+        --localised_description = {"entity-description.crusher"},
+        effects = {
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "crusher"
+            -- },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-regolith-digging"
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-regolith-sorting"
+            },
+            
+            
+            
+            
+        },
+        prerequisites = {
+             "planet-discovery-muluna"
+        },
+        -- icons = {
+        --     {
+        --         icon = "__muluna-graphics__/graphics/technology/comminution.png",
+        --         icon_size = 968,
+        --     },  
+        -- }
+        icons = digging_technology_icon(data.raw["item"]["muluna-lunar-regolith"].icon,data.raw["item"]["muluna-lunar-regolith"].icon_size)
     },
     {
         type = "technology",
@@ -339,7 +438,7 @@ data:extend{
             -- },
         },
         prerequisites = {
-            "metallic-asteroid-crushing"
+            "planet-discovery-muluna"
         },
         icons = {
             {
@@ -385,7 +484,7 @@ data:extend{
         research_trigger = {
             type = "craft-item",
             item = "aluminum-plate",
-            count = 20,
+            count = 5,
         },
         effects = {
             {
@@ -396,6 +495,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "low-density-structure-from-aluminum",
             },
+            {
+                type = "unlock-recipe",
+                recipe = "aluminum-crushing",
+            },
         }
     },
     {
@@ -403,11 +506,11 @@ data:extend{
         name = "muluna-alice-propellant",
         localised_name = {"recipe-name.rocket-fuel-aluminum"},
         localised_description = {"recipe-description.rocket-fuel-aluminum"},
-        prerequisites = {"muluna-alumina-processing","oxide-asteroid-crushing"},
+        prerequisites = {"muluna-aluminum-processing","oxide-asteroid-crushing"},
         research_trigger = {
             type = "craft-item",
-            item = "alumina-crushed",
-            count = 20,
+            item = "aluminum-crushed",
+            count = 5,
         },
         effects = {
             {
@@ -420,6 +523,19 @@ data:extend{
         type = "technology",
         name = "muluna-oxygen",
         prerequisites = {"metallic-asteroid-crushing","oxide-asteroid-crushing"},
+        icons = {
+            {
+            icon = "__muluna-graphics__/graphics/technology/molecule-oxygen.png",
+            icon_size = 256,
+            },  
+            {
+                icon = data.raw["fluid"]["thruster-oxidizer"].icon,
+                icon_size=data.raw["fluid"]["thruster-oxidizer"].icon_size,
+                --scale=0.3,
+                shift = {45,-45},
+                scale=0.75,
+            },
+        },
         research_trigger = {
             type = "craft-item",
             item = "ice",
@@ -430,10 +546,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "muluna-oxygen-from-oxidizer"
             },
-            {
-                type = "unlock-recipe",
-                recipe="muluna-electrolysis"
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe="muluna-electrolysis"
+            -- },
             {
                 type = "unlock-recipe",
                 recipe = "maraxsis-atmosphere"
@@ -525,15 +641,20 @@ data:extend{
             -- },
             {
                 type = "unlock-recipe",
+                recipe="muluna-tree-crushing"
+            },
+            {
+                type = "unlock-recipe",
                 recipe="wood-processing"
             },
+            
             
         }
     },
     {
         type = "technology", 
         name = "muluna-greenhouses",
-        prerequisites = {"muluna-wood-cultivation","muluna-aluminum-processing"},
+        prerequisites = {"muluna-wood-cultivation","muluna-aluminum-processing","muluna-regolith-digging"},
         icon = "__muluna-graphics__/graphics/greenhouse/sprites/greenhouse-icon-big.png",--data.raw["technology"]["tree-seeding"].icon,
         icon_size = 640,--data.raw["technology"]["tree-seeding"].icon_size,
         research_trigger = {
@@ -546,10 +667,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "muluna-greenhouse",
             },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-sapling-growth-greenhouse",
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "muluna-sapling-growth-greenhouse",
+            -- },
             {
                 type = "unlock-recipe",
                 recipe = "muluna-greenhouse-wood",
@@ -559,6 +680,19 @@ data:extend{
     {
         type = "technology",
         name = "muluna-gas-venting",
+        icons = {
+            {
+            icon = "__muluna-graphics__/graphics/technology/molecule-carbon-dioxide.png",
+            icon_size = 256,
+            },  
+            -- {
+            --     icon = data.raw["fluid"]["thruster-oxidizer"].icon,
+            --     icon_size=data.raw["fluid"]["thruster-oxidizer"].icon_size,
+            --     --scale=0.3,
+            --     shift = {45,-45},
+            --     scale=0.75,
+            -- },
+        },
         prerequisites = {"muluna-wood-cultivation"},
         research_trigger = {
             type = "craft-item",
@@ -574,10 +708,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "oxygen-venting"
             },
-            {
-                type = "unlock-recipe",
-                recipe = "hydrogen-venting"
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "hydrogen-venting"
+            -- },
         }
     },
     {
@@ -620,10 +754,55 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-telescope",
+        unit = {
+            count = 1000,
+            time = 30,
+            ingredients = {
+                    {"automation-science-pack", 1},
+                    {"logistic-science-pack", 1},
+                    {"chemical-science-pack", 1},
+                    {"production-science-pack", 1},
+                    {"utility-science-pack", 1},
+                    {"space-science-pack", 1},
+            }
+        },
+        prerequisites = {
+            "muluna-silicon-processing",
+            "space-science-pack",
+            --"muluna-nanofoamed-polymers",
+            "utility-science-pack",
+        },
+        icons = Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope.png",icon_size = 128}},8),
+        --icon = "__muluna-graphics__/graphics/technology/moshine-tech-silicon-cell.png",
+        --icon_size = 128,
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-telescope",
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "silicon-carbide",
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-data-cable",
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-basic-hard-drive",
+            },
+            -- All telescope observation recipes added in final-fixes
+        },
+        localised_name={"entity-name.muluna-telescope"},
+        localised_description={"entity-description.muluna-telescope"}
+    },
+    {
+        type = "technology",
         name = "thruster-oxidizer",
         localised_name = {"fluid-name.thruster-oxidizer"},
-        icon = data.raw["fluid"]["thruster-oxidizer"].icon,
-        icon_size = 64,
+        icons = Muluna.img.blur_technology_icon({{icon = data.raw["fluid"]["thruster-oxidizer"].icon, icon_size = 64}},16),
         prerequisites = {"space-platform-thruster"},
         research_trigger = {
             type = "craft-item",
@@ -771,7 +950,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "biolab","quantum-processor","muluna-helium-enrichment"
+            "biolab","quantum-processor",--"muluna-helium-enrichment"
         },
         icons = {
             {
@@ -785,57 +964,57 @@ data:extend{
         --icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
         --icon_size=256,
     },
-    {
-        type = "technology",
-        name = "muluna-helium-enrichment",
-        --localised_name = {"entity-name.cryolab"},
-        --localised_description = {"entity-description.asteroid-collector"},
-        unit= {
-            count = 500,
-            time = 60,
-            ingredients = --Normally, I would base these costs on vanilla technologies to increase tolerance of other mods, but since this tech is intended to 
-                {
-                    {"automation-science-pack", 1},
-                    {"logistic-science-pack", 1},
-                    {"chemical-science-pack", 1},
-                    {"production-science-pack", 1},
-                    {"utility-science-pack", 1},
-                    {"space-science-pack", 1},
-                    {"metallurgic-science-pack", 1},
-                    {"agricultural-science-pack", 1},
-                    {"electromagnetic-science-pack", 1},
-                    {"cryogenic-science-pack", 1},
-                    {"interstellar-science-pack",1}
-              },
-        },
-        effects = {
-            -- {
-            --     type = "unlock-recipe",
-            --     recipe = "interstellar-science-pack-helium-4"
-            -- },
-            {
-                type = "unlock-recipe",
-                recipe = "helium-separation"
-            },
-            {
-                type = "unlock-recipe",
-                recipe = "kovarex-helium-enrichment"
-            },
-        },
-        prerequisites = {
-            "interstellar-science-pack",
-            "cryogenic-science-pack"
-        },
-        icons = {
-            {
-                icon="__muluna-graphics__/graphics/technology/molecule-noble-gas.png",
-                icon_size=644,
-                tint = {r=0.7,g=0.7,b=1}
-            },
-        }
-        --icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
-        --icon_size=256,
-    },
+    -- {
+    --     type = "technology",
+    --     name = "muluna-helium-enrichment",
+    --     --localised_name = {"entity-name.cryolab"},
+    --     --localised_description = {"entity-description.asteroid-collector"},
+    --     unit= {
+    --         count = 500,
+    --         time = 60,
+    --         ingredients = --Normally, I would base these costs on vanilla technologies to increase tolerance of other mods, but since this tech is intended to 
+    --             {
+    --                 {"automation-science-pack", 1},
+    --                 {"logistic-science-pack", 1},
+    --                 {"chemical-science-pack", 1},
+    --                 {"production-science-pack", 1},
+    --                 {"utility-science-pack", 1},
+    --                 {"space-science-pack", 1},
+    --                 {"metallurgic-science-pack", 1},
+    --                 {"agricultural-science-pack", 1},
+    --                 {"electromagnetic-science-pack", 1},
+    --                 {"cryogenic-science-pack", 1},
+    --                 {"interstellar-science-pack",1}
+    --           },
+    --     },
+    --     effects = {
+    --         -- {
+    --         --     type = "unlock-recipe",
+    --         --     recipe = "interstellar-science-pack-helium-4"
+    --         -- },
+    --         {
+    --             type = "unlock-recipe",
+    --             recipe = "helium-separation"
+    --         },
+    --         {
+    --             type = "unlock-recipe",
+    --             recipe = "kovarex-helium-enrichment"
+    --         },
+    --     },
+    --     prerequisites = {
+    --         "interstellar-science-pack",
+    --         "cryogenic-science-pack"
+    --     },
+    --     icons = {
+    --         {
+    --             icon="__muluna-graphics__/graphics/technology/molecule-noble-gas.png",
+    --             icon_size=644,
+    --             tint = {r=0.7,g=0.7,b=1}
+    --         },
+    --     }
+    --     --icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
+    --     --icon_size=256,
+    -- },
     {
         type = "technology",
         name = "thruster-fuel-productivity",
@@ -897,7 +1076,7 @@ data:extend{
             },
         },
         unit = {
-            count = 500,
+            count = 1000,
             time = 60,
             ingredients = {
                 {"automation-science-pack", 1},
@@ -906,6 +1085,8 @@ data:extend{
                 {"production-science-pack", 1},
                 {"utility-science-pack", 1},
                 {"space-science-pack", 1},
+                {"agricultural-science-pack",1},
+                {"electromagnetic-science-pack",1},
                 {"interstellar-science-pack",1},
             }
         },
@@ -913,7 +1094,7 @@ data:extend{
         effects = {
             {
                 type = "unlock-recipe",
-                recipe = "space-science-pack-advanced"
+                recipe = "space-science-pack"
             }
         }
     },
@@ -1027,14 +1208,15 @@ data:extend{
                 {"automation-science-pack", 1},
                 {"logistic-science-pack", 1},
                 {"chemical-science-pack", 1},
-                {"production-science-pack", 1},
-                --{"utility-science-pack", 1},
+                --{"production-science-pack", 1},
+                {"utility-science-pack", 1},
                 {"space-science-pack", 1},
                 {"interstellar-science-pack",1},
+                {"agricultural-science-pack",1},
             }
         },
         prerequisites = {
-            "interstellar-science-pack", "production-science-pack", "space-science-pack"
+            "interstellar-science-pack", "production-science-pack", "space-science-pack", "agricultural-science-pack"
         },
         effects = {
             {
@@ -1049,22 +1231,27 @@ data:extend{
         localised_name = {"item-name.low-density-space-platform-foundation"},
         icon = data.raw["technology"]["space-platform"].icon,
         icon_size = data.raw["technology"]["space-platform"].icon_size,
-        unit = {
-            count = 2000,
-            time = 60,
-            ingredients = {
-                {"automation-science-pack", 1},
-                {"logistic-science-pack", 1},
-                {"chemical-science-pack", 1},
-                --{"production-science-pack", 1},
-                {"utility-science-pack", 1},
-                {"space-science-pack", 1},
-                {"interstellar-science-pack",1},
-                {"agricultural-science-pack",1},
-            }
+        -- unit = {
+        --     count = 2000,
+        --     time = 60,
+        --     ingredients = {
+        --         {"automation-science-pack", 1},
+        --         {"logistic-science-pack", 1},
+        --         {"chemical-science-pack", 1},
+        --         --{"production-science-pack", 1},
+        --         {"utility-science-pack", 1},
+        --         {"space-science-pack", 1},
+        --         {"interstellar-science-pack",1},
+        --         {"agricultural-science-pack",1},
+        --     }
+        -- },
+        research_trigger = {
+            type = "craft-item",
+            item = "muluna-microcellular-plastic",
+            amount = 10,
         },
         prerequisites = {
-            "interstellar-science-pack","carbon-fiber"
+            "muluna-nanofoamed-polymers"
         },
         effects = {
             {
@@ -1075,9 +1262,35 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-nanofoamed-polymers",
+        --localised_name = {"item-name.muluna-microcellular-plastic"},
+        localised_description = {"technology-description.muluna-nanofoamed-polymers",tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
+        icon = "__muluna-graphics__/graphics/technology/polymers.png",
+        icon_size = 1024,
+        enabled = false,
+        visible_when_disabled = true,
+        unit = {
+            count = 1,
+            time = 1,
+            ingredients = {}
+        },
+        prerequisites = {
+            --"kovarex-enrichment-process",
+            --"muluna-anorthite-processing",
+            "asteroid-collector"
+        },
+        effects = {
+            {type = "unlock-recipe", recipe = "muluna-diffused-plastic"},
+            {type = "unlock-recipe", recipe = "muluna-microcellular-plastic"},
+        }
+    },
+    {
+        type = "technology",
         name = "muluna-cycling-steam-turbine",
+        icons = Muluna.img.blur_technology_icon({{
         icon = "__muluna-graphics__/graphics/icons/advanced-steam-turbine.png",
-        icon_size = 64,
+        icon_size=64,
+        }},16),
         unit = {
             count = 2000,
             time = 60,
@@ -1085,8 +1298,8 @@ data:extend{
                 {"automation-science-pack", 1},
                 {"logistic-science-pack", 1},
                 {"chemical-science-pack", 1},
-                --{"production-science-pack", 1},
-                {"utility-science-pack", 1},
+                {"production-science-pack", 1},
+                --{"utility-science-pack", 1},
                 {"space-science-pack", 1},
                 {"interstellar-science-pack",1},
                 {"electromagnetic-science-pack",1},
@@ -1104,6 +1317,53 @@ data:extend{
             {
                 type = "unlock-recipe",
                 recipe= "muluna-steam-condensation"
+            },
+           
+        }
+    },
+    {
+        type = "technology",
+        name = "muluna-vacuum-heating-tower",
+        icons = {
+            {
+            icon = data.raw["technology"]["heating-tower"].icon,
+            icon_size = data.raw["technology"]["heating-tower"].icon_size,
+            },  
+            {
+                icon = data.raw["fluid"]["oxygen"].icon,
+                icon_size=data.raw["fluid"]["oxygen"].icon_size,
+                --scale=0.3,
+                shift = {45,-45},
+                scale=0.75,
+            },
+        },
+        localised_name = {"entity-name.muluna-vacuum-heating-tower"},
+        unit = {
+            count = 2000,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                --{"utility-science-pack", 1},
+                {"space-science-pack", 1},
+                {"interstellar-science-pack",1},
+                {"agricultural-science-pack",1},
+                {"metallurgic-science-pack",1},
+            }
+        },
+        prerequisites = {
+            "interstellar-science-pack","agricultural-science-pack","heating-tower","metallurgic-science-pack"
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe= "muluna-vacuum-heating-tower"
+            },
+            {
+                type = "unlock-recipe",
+                recipe= "muluna-vacuum-heating"
             },
            
         }

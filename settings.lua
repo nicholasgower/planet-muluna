@@ -28,13 +28,13 @@ data:extend{
         default_value = false,
         order = "ac",
       },
-      {
-        type = "bool-setting",
-        name = "muluna-hardcore-require-helium-3-in-fusion-cell",
-        setting_type = "startup",
-        default_value = false,
-        order = "ad",
-      },
+      -- {
+      --   type = "bool-setting",
+      --   name = "muluna-hardcore-require-helium-3-in-fusion-cell",
+      --   setting_type = "startup",
+      --   default_value = false,
+      --   order = "ad",
+      -- },
       {
         type = "bool-setting",
         name = "muluna-hardcore-remove-steam-furnaces",
@@ -51,6 +51,13 @@ data:extend{
       },
       {
         type = "bool-setting",
+        name = "muluna-hardcore-classic-wood-gasification",
+        setting_type = "startup",
+        default_value = false,
+        order = "ag",
+      },
+      {
+        type = "bool-setting",
         name = "muluna-easy-vanilla-rocket-part-costs",
         setting_type = "startup",
         default_value = false,
@@ -58,25 +65,33 @@ data:extend{
       },
       {
         type = "bool-setting",
-        name = "muluna-easy-wood-gasification-productivity",
+        name = "muluna-easy-vanilla-advanced-thruster-fuel-costs",
         setting_type = "startup",
         default_value = false,
         order = "bb",
       },
       {
         type = "bool-setting",
+        name = "muluna-easy-wood-gasification-productivity",
+        setting_type = "startup",
+        default_value = false,
+        order = "bc",
+      },
+      
+      {
+        type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",
         setting_type = "startup",
         default_value = true,
-        order = "cc",
+        order = "ee",
       },
       {
         type = "int-setting",
         name = "space-science-pack-output",
         setting_type = "startup",
         default_value = 2,
-        min = 1,
-        max = 10,
+        minimum_value = 1,
+        maximum_value = 10,
         order = "ca",
       },
       {
@@ -84,8 +99,8 @@ data:extend{
         name = "space-science-pack-energy",
         setting_type = "startup",
         default_value = 7,
-        min = 0.01,
-        max = 60,
+        minimum_value = 0.01,
+        maximum_value = 60,
         order = "cb",
       },
       {
@@ -93,10 +108,30 @@ data:extend{
         name = "muluna-interstellar-science-pack-packs-required",
         setting_type = "startup",
         default_value = 2,
-        min = 1,
-        --max = 10,
+        minimum_value = 1,
+        --maximum_value = 10,
         order = "cc",
       },
+      {
+        type = "double-setting",
+        name = "muluna-balance-fulgoran-cargo-drop-radius",
+        setting_type = "startup",
+        default_value = 64,
+        minimum_value = 16,
+        maximum_value = 512,
+        order = "cd"
+
+      },
+      {
+        type = "double-setting",
+        name = "muluna-balance-fulgoran-cargo-drop-item-multiplier",
+        setting_type = "startup",
+        default_value = 1,
+        minimum_value = 0,
+        maximum_value = 10,
+        order = "ce"
+      },
+
     --   {
     --     type = "double-setting",
     --     name = "planet-power-consumption",
@@ -121,16 +156,32 @@ data:extend{
       localised_name = {"mod-setting-name.enable-muluna-satellite-radar"},
       setting_type = "startup",
       default_value = true,
-      order = "da"
+      order = "fa"
+    },
+    {
+      type = "bool-setting",
+      name = "muluna-graphics-enable-footstep-animations",
+      setting_type = "startup",
+      default_value = true,
+      order = "ea"
     },
     {
       type = "double-setting",
       name = "nav-beacon-update-ticks",
-      setting_type="runtime-global",
+      setting_type="startup",
       default_value = 60,
       minimum_value = 1,
       maximum_value = 360,
-      order = "a",
+      order = "eb",
+    },
+    {
+      type = "double-setting",
+      name = "muluna-telescope-combinator-update-ticks",
+      setting_type="startup",
+      default_value = 6,
+      minimum_value = 1,
+      maximum_value = 180,
+      order = "ec",
     },
     {
       type = "bool-setting",
@@ -139,13 +190,20 @@ data:extend{
       default_value = true,
       order = "ba"
     },
-    {
-      type = "bool-setting",
-      name = "muluna-new-interstellar-pack-recipe",
-      setting_type = "startup",
-      default_value = false,
-      order = "za"
-    },
+    -- {
+    --   type = "bool-setting",
+    --   name = "muluna-new-interstellar-pack-recipe",
+    --   setting_type = "startup",
+    --   default_value = false,
+    --   order = "za"
+    -- },
+    -- {
+    --   type = "bool-setting",
+    --   name = "muluna-old-interstellar-pack-recipe",
+    --   setting_type = "startup",
+    --   default_value = false,
+    --   order = "za"
+    -- },
 
 }
 

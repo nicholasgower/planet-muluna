@@ -1,6 +1,6 @@
 require("prototypes.recipe.vanilla-alternate-recipes")
 require("prototypes.planet.planet-position-update")
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 
 local rocket_prod=data.raw["technology"]["rocket-part-productivity"]
@@ -123,7 +123,8 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         local tech_2=table.deepcopy(tech)
         tech_2.name=tech_2.name .. "-2"
         tech_2.unit.count=1500
-        tech_2.prerequisites={tech.name}
+        rro.soft_insert(tech_2.unit.ingredients,{"interstellar-science-pack",1})
+        tech_2.prerequisites={tech.name,"interstellar-science-pack"}
         tech_2.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(2)}
         --table.insert(t2_planet_rocket_prod,tech_2.name)
         table.insert(rocket_prod_aquilo.prerequisites,tech_2.name)
@@ -139,6 +140,7 @@ rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     rro.soft_insert(rocket_prod_aquilo.unit.ingredients,{"space-science-pack",1})
+    rro.soft_insert(rocket_prod_aquilo.unit.ingredients,{"interstellar-science-pack",1})
 end
 -- for entry in ipairs(t2_planet_rocket_prod) do
 --     table.insert(rocket_prod_aquilo.prerequisites,entry)
@@ -194,23 +196,23 @@ data.raw["recipe"]["advanced-thruster-fuel"].surface_conditions = nil
 data.raw["recipe"]["advanced-thruster-oxidizer"].surface_conditions = nil
 
 data.raw["fluid-turret"]["flamethrower-turret"].surface_conditions = ten_pressure_condition
-data.raw["reactor"]["heating-tower"].surface_conditions = ten_pressure_condition
-if data.raw["furnace"]["stone-furnace"] then
-    data.raw["furnace"]["stone-furnace"].surface_conditions = ten_pressure_condition
-elseif data.raw["assembling-machine"]["stone-furnace"] then
-    data.raw["assembling-machine"]["stone-furnace"].surface_conditions = ten_pressure_condition
-end
+-- data.raw["reactor"]["heating-tower"].surface_conditions = ten_pressure_condition
+-- if data.raw["furnace"]["stone-furnace"] then
+--     data.raw["furnace"]["stone-furnace"].surface_conditions = ten_pressure_condition
+-- elseif data.raw["assembling-machine"]["stone-furnace"] then
+--     data.raw["assembling-machine"]["stone-furnace"].surface_conditions = ten_pressure_condition
+-- end
 
-data.raw["mining-drill"]["burner-mining-drill"].surface_conditions = ten_pressure_condition
-if data.raw["furnace"]["steel-furnace"] then
-    data.raw["furnace"]["steel-furnace"].surface_conditions = ten_pressure_condition
-elseif data.raw["assembling-machine"]["steel-furnace"] then
-    data.raw["assembling-machine"]["steel-furnace"].surface_conditions = ten_pressure_condition
-end
+-- data.raw["mining-drill"]["burner-mining-drill"].surface_conditions = ten_pressure_condition
+-- if data.raw["furnace"]["steel-furnace"] then
+--     data.raw["furnace"]["steel-furnace"].surface_conditions = ten_pressure_condition
+-- elseif data.raw["assembling-machine"]["steel-furnace"] then
+--     data.raw["assembling-machine"]["steel-furnace"].surface_conditions = ten_pressure_condition
+-- end
 
-data.raw["boiler"]["boiler"].surface_conditions = ten_pressure_condition
---data.raw["roboport"]["roboport"].surface_conditions = ten_pressure_condition
-data.raw["inserter"]["burner-inserter"].surface_conditions = ten_pressure_condition
+-- data.raw["boiler"]["boiler"].surface_conditions = ten_pressure_condition
+-- --data.raw["roboport"]["roboport"].surface_conditions = ten_pressure_condition
+-- data.raw["inserter"]["burner-inserter"].surface_conditions = ten_pressure_condition
 
 
 data.raw["asteroid-collector"]["asteroid-collector"].surface_conditions = nil
@@ -347,10 +349,11 @@ for _,pack in pairs(data.raw["tool"]) do
         end
     end
 end
-
+local img = Muluna.img
 local function copy_icons(to,from)
     to.icon = from.icon
-    to.icons = from.icons
+    to.icons = table.deepcopy(from.icons)
+    if to.icons then to.icons = img.blur_technology_icon(to.icons,16) end
     to.icon_size = from.icon_size
 end
 
@@ -577,12 +580,12 @@ end
 
 
 if data.raw["technology"]["rocket-fuel-productivity"] then
-    table.insert(data.raw["technology"]["rocket-fuel-productivity"].effects,{
-        type = "change-recipe-productivity",
-        recipe = "rocket-fuel-aluminum",
-        change = 0.1,
-        hidden = false
-    })
+    -- table.insert(data.raw["technology"]["rocket-fuel-productivity"].effects,{
+    --     type = "change-recipe-productivity",
+    --     recipe = "rocket-fuel-aluminum",
+    --     change = 0.1,
+    --     hidden = false
+    -- })
 end
 
 
@@ -665,10 +668,14 @@ rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
 data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
 
 
-
+require("prototypes.mod-data.interstellar-science-pack")
 
 if data.raw["tool"]["alien-science-pack"] then
     data.raw["tool"]["alien-science-pack"].order="fa[alien-science-pack]"
+end
+
+if data.raw["tool"]["electrochemical-science-pack"] then
+    data.raw["tool"]["electrochemical-science-pack"].order="iz[electrochemical-science-pack]"
 end
 
 if data.raw.planet["lignumis"] == nil then
@@ -686,12 +693,11 @@ for _,lab in pairs(data.raw["lab"]) do
     end
 end
 
-local gases = {"oxygen","hydrogen","carbon-dioxide","helium","helium-4","helium-3","maraxsis-atmosphere"}
+local gases = {"oxygen","hydrogen","carbon-dioxide","maraxsis-atmosphere"}
 
 --Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
 if mods["maraxsis"] then
     data.raw["fluid"]["hydrogen"].fuel_value="225kJ"
-    --data.raw["item"]["hydrogen-barrel"].fuel_value="11.3MJ"
     
 end
 if mods["maraxsis"] then
@@ -741,6 +747,7 @@ local recipe_blacklist = {
 local category_blacklist = {
     "double-boiler",
     "muluna-greenhouse",
+    "muluna-vacuum-heating-tower",
     "kr-fuel-burning"
 }
 
@@ -756,17 +763,7 @@ for _,gas in pairs(gases) do
         end
         
     end
-    -- if data.raw["recipe"][gas.."-barrel"] then
-    --     data.raw["recipe"][gas.."-barrel"].ingredients[1].amount=data.raw["recipe"][gas.."-barrel"].ingredients[1].amount*10
-    -- end
-
-    -- if data.raw["recipe"]["empty-".. gas .."-barrel"] then
-    --     data.raw["recipe"]["empty-".. gas .."-barrel"].results[1].amount=data.raw["recipe"]["empty-".. gas .."-barrel"].results[1].amount*10
-    -- end
-
-    -- if data.raw["recipe"]["maraxsis-fluid-void-".. gas] then
-    --     data.raw["recipe"]["maraxsis-fluid-void-".. gas].ingredients[1].amount=data.raw["recipe"]["maraxsis-fluid-void-".. gas].ingredients[1].amount*10
-    -- end
+    
 end
 
 
@@ -780,6 +777,7 @@ require("compat.schall-mods")
 require("compat.bob-mods")
 require("compat.transplutonic")
 require("prototypes.technology.technology-updates")
+require("prototypes.overrides.data-cells")
 
 local parent_planet = "nauvis"
 if mods["any-planet-start"] then 
@@ -796,29 +794,22 @@ PlanetsLib:update
 
 
 
-if settings.startup["muluna-hardcore-require-helium-3-in-fusion-cell"].value == true then
-    table.insert(data.raw["recipe"]["fusion-power-cell"].ingredients, {type = "item", name = "helium-3-barrel", amount = 1})
-    table.insert(data.raw["technology"]["fusion-reactor"].prerequisites, "muluna-helium-enrichment")
-end
+
 
 require("prototypes.technology.interstellar-technologies")
 
 
 local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["space-science-pack"])
-
-space_science_pack_advanced.surface_conditions = {
+data.raw["recipe"]["space-science-pack"].order = data.raw["tool"]["space-science-pack"].order .. "-2"
+data.raw["recipe"]["space-science-pack"].surface_conditions = {
     {
         property = "gravity",
         min = 0,
         max = 0,
     },
-    -- {
-    --     property = "oxygen",
-    --     min = 0,
-    --     max = 0,
-    -- },
 }
-space_science_pack_advanced.name = "space-science-pack-advanced"
+space_science_pack_advanced.name = "space-science-pack-muluna"
+space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
 --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
 data:extend{space_science_pack_advanced}
 
@@ -853,8 +844,10 @@ end
 
 -- data.raw["recipe"]["wood-greenhouse"].enabled = false
 
-data.raw["recipe"]["advanced-thruster-fuel"].results[1].amount = 1000
-data.raw["recipe"]["advanced-thruster-oxidizer"].results[1].amount = 1000
+if settings.startup["muluna-easy-vanilla-advanced-thruster-fuel-costs"].value == false then
+    data.raw["recipe"]["advanced-thruster-fuel"].results[1].amount = 1000
+    data.raw["recipe"]["advanced-thruster-oxidizer"].results[1].amount = 1000
+end
 
 data.raw["recipe"]["wood-processing"].surface_conditions = nil
 data.raw["recipe"]["wood-processing"].category = "crafting"

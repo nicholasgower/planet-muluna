@@ -1,5 +1,5 @@
 local dual_icon = require("lib.dual-item-icon").dual_icon
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local function generate_void_icons(fluid_icons)
     local icons = fluid_icons
@@ -24,14 +24,14 @@ data:extend{
         name = "muluna-tree-growth-greenhouse",
         enabled = false,
         category = "muluna-greenhouse",
-        icons = dual_icon("wood","carbon-dioxide"),
+        icons = dual_icon("muluna-sapling","carbon-dioxide"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
             {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
             {type = "fluid",name = "water", amount=500,fluidbox_index = 2},
         },
         results = {
-            {type = "item",name = "wood", amount=40},
+            {type = "item",name = "muluna-sapling", amount=10},
             {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000,fluidbox_index = 1}
         },
         energy_required=5*60,
@@ -47,48 +47,48 @@ data:extend{
             }
         }
     },
-    {
-        type = "recipe",
-        name = "muluna-sapling-growth-greenhouse",
-        enabled = false,
-        category = "muluna-greenhouse",
-        --icons = dual_icon("muluna-sapling","carbon-dioxide"),
-        ingredients = {
-            {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
-            {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
-            {type = "fluid",name = "water", amount=500, fluidbox_index = 2},
-        },
-        results = {
-            {type = "item",name = "muluna-sapling", amount=10},
-            {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
-        },
-        energy_required=5*60,
-        auto_recycle=false,
-        subgroup="muluna-forestry",
-        main_product = "muluna-sapling",
-        max_productivity = 3,
-        allow_productivity = true,
-        hide_from_signal_gui = false,
-        surface_conditions = {
-            {
-                property = "temperature",
-                max = 314
-            }
-        }
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "muluna-sapling-growth-greenhouse",
+    --     enabled = false,
+    --     category = "muluna-greenhouse",
+    --     --icons = dual_icon("muluna-sapling","carbon-dioxide"),
+    --     ingredients = {
+    --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
+    --         {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
+    --         {type = "fluid",name = "water", amount=500, fluidbox_index = 2},
+    --     },
+    --     results = {
+    --         {type = "item",name = "muluna-sapling", amount=10},
+    --         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
+    --     },
+    --     energy_required=5*60,
+    --     auto_recycle=false,
+    --     subgroup="muluna-forestry",
+    --     main_product = "muluna-sapling",
+    --     max_productivity = 3,
+    --     allow_productivity = true,
+    --     hide_from_signal_gui = false,
+    --     surface_conditions = {
+    --         {
+    --             property = "temperature",
+    --             max = 314
+    --         }
+    --     }
+    -- },
     {
         type = "recipe",
         name = "muluna-tree-growth-greenhouse-water-saving",
         enabled = false,
         category = "muluna-greenhouse",
-        icons = dual_icon("wood","water"),
+        icons = dual_icon("muluna-sapling","water"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
             {type = "fluid",name = "carbon-dioxide", amount=10000,fluidbox_index = 1},
             {type = "fluid",name = "water", amount=250, fluidbox_index = 2},
         },
         results = {
-            {type = "item",name = "wood", amount=40},
+            {type = "item",name = "muluna-sapling", amount=10},
             {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000, fluidbox_index = 1}
         },
         energy_required=10*60,
@@ -104,6 +104,7 @@ data:extend{
             }
         }
     },
+    
     -- {
     --     type = "recipe",
     --     name = "muluna-tree-growth-greenhouse-quick",
@@ -116,7 +117,7 @@ data:extend{
     --         {type = "fluid",name = "water", amount=1000},
     --     },
     --     results = {
-    --         {type = "item",name = "wood", amount=40},
+    --         {type = "item",name = "muluna-sapling", amount=10},
     --         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
     --     },
     --     energy_required=3*60,
@@ -131,24 +132,24 @@ data:extend{
     --         }
     --     }
     -- },
-    {
-        type = "recipe",
-        name = "muluna-electrolysis",
-        enabled = false,
-        icons = dual_icon("oxygen","hydrogen"),
-        --icon = "__muluna-graphics__/graphics/icons/maraxsis-water.png",
-        --icon_size = 64,
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "water", amount=30},
-        },
-        results = {
-            {type = "fluid",name = "oxygen", amount=100},
-            {type = "fluid",name = "hydrogen", amount=200}
-        },
-        energy_required=2,
-        subgroup="muluna-products"
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "muluna-electrolysis",
+    --     enabled = false,
+    --     icons = dual_icon("oxygen","hydrogen"),
+    --     --icon = "__muluna-graphics__/graphics/icons/maraxsis-water.png",
+    --     --icon_size = 64,
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "water", amount=30},
+    --     },
+    --     results = {
+    --         {type = "fluid",name = "oxygen", amount=100},
+    --         {type = "fluid",name = "hydrogen", amount=200}
+    --     },
+    --     energy_required=2,
+    --     subgroup="muluna-products"
+    -- },
     {
         type = "recipe",
         name = "oxygen-venting",
@@ -189,26 +190,26 @@ data:extend{
         energy_required=0.1,
         subgroup="muluna-products"
     },
-    {
-        type = "recipe",
-        name = "hydrogen-venting",
-        enabled = false,
-        hidden_in_factoriopedia = true,
-        icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "hydrogen", amount=54},
-        },
-        results = {},
-        -- surface_conditions = {
-        --     {
-        --         property = "pressure",
-        --         max = 50,
-        --     }
-        -- },
-        energy_required=0.1,
-        subgroup="muluna-products"
-    },
+    -- {
+    --     type = "recipe",
+    --     name = "hydrogen-venting",
+    --     enabled = false,
+    --     hidden_in_factoriopedia = true,
+    --     icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "hydrogen", amount=54},
+    --     },
+    --     results = {},
+    --     -- surface_conditions = {
+    --     --     {
+    --     --         property = "pressure",
+    --     --         max = 50,
+    --     --     }
+    --     -- },
+    --     energy_required=0.1,
+    --     subgroup="muluna-products"
+    -- },
     -- {
     --     type = "recipe",
     --     name = "muluna-atmosphere-separation",
@@ -240,7 +241,8 @@ data:extend{
             {type = "fluid",name = "carbon-dioxide", amount=10, temperature = 165}
         },
         energy_required=1/6,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false
 
     },
     {
@@ -279,84 +281,84 @@ data:extend{
             {type = "fluid",name = "carbon-dioxide", amount=10, temperature = 165}
         },
         energy_required=1/6,
-        subgroup="muluna-products"
-
-    },
-    { 
-        type = "recipe",
-        name = "helium-separation",
-        enabled = false,
-        icons = {   
-                {
-                    icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                    icon_size = 64,
-                    tint = {1,0.8,1},
-                    scale = 0.5,
-                    shift = {16,0}
-                },
-                {
-                    icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                    icon_size = 64,
-                    tint = {1,0.6,1},
-                    scale = 0.5,
-                    shift = {-16,0}
-                },   
-        },
-        --icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-        --icon_size = 64,
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "helium", amount=1000}
-        },
-        results = {
-            {type = "fluid",name = "helium-4", amount=993},
-            {type = "fluid",name = "helium-3", amount=7}
-        },
-        energy_required=2,
         subgroup="muluna-products",
-        allow_productivity = false,
-
+        hide_from_signal_gui = false,
     },
-    { 
-        type = "recipe",
-        name = "kovarex-helium-enrichment",
-        localised_name = {"recipe-name.kovarex-muluna-helium-enrichment"},
-        enabled = false,
-        icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-        allow_productivity = true,
-        --icon_size = 64,
-        icons = {   
-            {
-                icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                icon_size = 64,
-                tint = {1,0.6,1},
-                scale = 0.5,
-                shift = {16,0},
-                draw_background = true,
-            },
-            {
-                icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
-                icon_size = 64,
-                tint = {1,0.6,1},
-                scale = 0.5,
-                shift = {-16,0},
-                draw_background = true,
-            },
+    -- { 
+    --     type = "recipe",
+    --     name = "helium-separation",
+    --     enabled = false,
+    --     icons = {   
+    --             {
+    --                 icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --                 icon_size = 64,
+    --                 tint = {1,0.8,1},
+    --                 scale = 0.5,
+    --                 shift = {16,0}
+    --             },
+    --             {
+    --                 icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --                 icon_size = 64,
+    --                 tint = {1,0.6,1},
+    --                 scale = 0.5,
+    --                 shift = {-16,0}
+    --             },   
+    --     },
+    --     --icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --     --icon_size = 64,
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "helium", amount=1000}
+    --     },
+    --     results = {
+    --         {type = "fluid",name = "helium-4", amount=993},
+    --         {type = "fluid",name = "helium-3", amount=7}
+    --     },
+    --     energy_required=2,
+    --     subgroup="muluna-products",
+    --     allow_productivity = false,
+
+    -- },
+    -- { 
+    --     type = "recipe",
+    --     name = "kovarex-helium-enrichment",
+    --     localised_name = {"recipe-name.kovarex-muluna-helium-enrichment"},
+    --     enabled = false,
+    --     icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --     allow_productivity = true,
+    --     --icon_size = 64,
+    --     icons = {   
+    --         {
+    --             icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --             icon_size = 64,
+    --             tint = {1,0.6,1},
+    --             scale = 0.5,
+    --             shift = {16,0},
+    --             draw_background = true,
+    --         },
+    --         {
+    --             icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
+    --             icon_size = 64,
+    --             tint = {1,0.6,1},
+    --             scale = 0.5,
+    --             shift = {-16,0},
+    --             draw_background = true,
+    --         },
            
-    },
-        category = "chemistry",
-        ingredients = {
-            {type = "fluid",name = "helium-4", amount=60},
-            {type = "fluid",name = "helium-3", amount=400}
-        },
-        results = {
-            {type = "fluid",name = "helium-4", amount=10},
-            {type = "fluid",name = "helium-3", amount=402, ignored_by_productivity=400}
-        },
-        energy_required=0.2,
-        subgroup="muluna-products"
+    -- },
+    --     category = "chemistry",
+    --     ingredients = {
+    --         {type = "fluid",name = "helium-4", amount=60},
+    --         {type = "fluid",name = "helium-3", amount=400}
+    --     },
+    --     results = {
+    --         {type = "fluid",name = "helium-4", amount=10},
+    --         {type = "fluid",name = "helium-3", amount=402, ignored_by_productivity=400}
+    --     },
+    --     energy_required=0.2,
+    --     subgroup="muluna-products"
 
-    },
+    -- },
     {
         type = "recipe",
         category = "chemistry",
@@ -372,6 +374,22 @@ data:extend{
         },
         auto_recycle=false,
         allow_productivity = true,
+    },
+    {
+        type = "recipe",
+        name = "muluna-microcellular-plastic",
+        enabled = false,
+        category = "chemistry-or-cryogenics",
+        ingredients = {
+            {type = "item",name = "muluna-diffused-plastic", amount = 1},
+            {type = "fluid",name = "steam", amount = 25}
+        },
+        results = {
+            {type = "item",name = "muluna-microcellular-plastic", amount = 1},
+        },
+        energy_required = 1,
+        allow_productivity = true,
+        auto_recycle = false,
     },
     --local steam_condensing = 
     {   
@@ -409,6 +427,11 @@ data:extend{
 
 }
 
+if settings.startup["muluna-hardcore-classic-wood-gasification"].value == false then
+    rro.replace(data.raw["recipe"]["cellulose"].ingredients,{type = "item",name = "woodchips", amount="_any"},{type = "item",name = "wood", amount=20})
+    
+end
+
 local divider = 40 --I'm too tired to do mental math. This will simplify the ratio calculations.
 local probability = 1
 local oxygen_from_oxidizer = {
@@ -443,13 +466,39 @@ local oxygen_from_oxidizer = {
 
 data:extend{oxygen_from_oxidizer}
 
+local diffusion = {
+        type = "recipe",
+        name = "muluna-diffused-plastic",
+        enabled = false,
+        category = "chemistry-or-cryogenics",
+        ingredients = {
+            {type = "item",name = "plastic-bar", amount = 1},
+            {type = "fluid",name = "carbon-dioxide", amount = 10}
+        },
+        results = {
+            --{type = "item",name = "muluna-diffused-plastic", amount = 1},
+            {type = "fluid",name = "carbon-dioxide", amount = 2.5} --Because I want to make finding the perfect combination of productivity vs speed more challenging
+        },
+        energy_required = 10,
+        main_product = "muluna-diffused-plastic",
+        --icons = data.raw["item"][].icons,
+        --allow_productivity = false,
+        auto_recycle = false,
+    }
+local steps = 20
+for i = 1,steps,1 do
+    table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 1/steps,percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
+end
+
+data:extend{diffusion}
+
 local greenhouse_recipes_with_nutrients = {}
-local recipe_icons_vulcanus = {dual_icon("wood","fluoroketone-cold","carbon-dioxide"),dual_icon("wood","fluoroketone-cold","water"),dual_icon("muluna-sapling","fluoroketone-cold")}
-local recipe_icons_heated = {dual_icon("wood","fluoroketone-hot","carbon-dioxide"),dual_icon("wood","fluoroketone-hot","water"),dual_icon("muluna-sapling","fluoroketone-hot")}
+local recipe_icons_vulcanus = {dual_icon("muluna-sapling","fluoroketone-cold","carbon-dioxide"),dual_icon("muluna-sapling","fluoroketone-cold","water")}
+local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carbon-dioxide"),dual_icon("muluna-sapling","fluoroketone-hot","water")}
 
     -- Nutrient-using greenhouse recipes
-    local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving","muluna-sapling-growth-greenhouse"}
-    local recipe_icons = {dual_icon("wood","nutrients","carbon-dioxide"),dual_icon("wood","nutrients","water"),dual_icon("muluna-sapling","nutrients")}
+    local greenhouse_recipes = {"muluna-tree-growth-greenhouse","muluna-tree-growth-greenhouse-water-saving"}
+    local recipe_icons = {dual_icon("muluna-sapling","nutrients","carbon-dioxide"),dual_icon("muluna-sapling","nutrients","water")}
     greenhouse_recipes_with_nutrients = table.deepcopy(greenhouse_recipes)
     for i,recipe_name in ipairs(greenhouse_recipes) do
         local recipe
@@ -483,7 +532,7 @@ local recipe_icons_heated = {dual_icon("wood","fluoroketone-hot","carbon-dioxide
                     --item.amount = 20000
                     --item.ignored_by_productivity = 20000
                     table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500*(500/item.amount), fluidbox_index = 3})
-                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500*(500/item.amount),ignored_by_productivity=500*(500/item.amount),fluidbox_index = 2})
+                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=495*(500/item.amount),ignored_by_productivity=495*(500/item.amount),fluidbox_index = 2})
                 end
             end
             --table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500, fluidbox_index = 3})

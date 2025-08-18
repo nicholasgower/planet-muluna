@@ -1,4 +1,4 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 
 local function delete_tech(deleted_tech,new_tech)
     for _,effect in pairs(data.raw["technology"][deleted_tech].effects) do
@@ -33,8 +33,10 @@ if mods["bztitanium"] or mods["bzcarbon"] or mods["bztin"] or mods["bzlead"] or 
 end
 
 require("prototypes.technology.interstellar-technologies")
+require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
-
+require("prototypes.overrides.telescope-data")
+require("prototypes.final-fixes.telescope-prototype")
 
 --Overrides any mods which add their own techs to space platform thruster as a prereq.
 --Moves prereq to asteroid collector, which is roughly equivalent to space platform thruster's place in the vanilla tech tree.
@@ -144,26 +146,31 @@ if data.raw["assembling-machine"]["muluna-advanced-boiler"] then
     if not data.raw["assembling-machine"]["muluna-advanced-boiler"].quality_affects_energy_usage then
         data.raw["assembling-machine"]["muluna-advanced-boiler"].factoriopedia_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",boiler_description}
     else
-        data.raw["assembling-machine"]["muluna-advanced-boiler"].localised_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",{"recipe-description.global-advanced-boiler-efficiency-description","150"}}
+        
+        --data.raw["assembling-machine"]["muluna-advanced-boiler"].localised_description = {"",{"entity-description.muluna-advanced-boiler"},"\n",{"recipe-description.global-advanced-boiler-efficiency-description","150"}}
     end
 end
 
-if data.raw["accumulator"]["muluna-satellite-radar"] then
+if helpers.compare_versions(helpers.game_version,"2.0.59") == -1 then
+  if data.raw["accumulator"]["muluna-satellite-radar"] then
     data.raw["accumulator"]["muluna-satellite-radar"].factoriopedia_description = {"",{"entity-description.muluna-satellite-radar"},"\n",electricity_description}
+    end
+    if data.raw["item"]["muluna-satellite-radar"] then
+        data.raw["item"]["muluna-satellite-radar"].factoriopedia_description = {"",{"item-description.muluna-satellite-radar"},"\n",electricity_description}
+    end
 end
-if data.raw["item"]["muluna-satellite-radar"] then
-    data.raw["item"]["muluna-satellite-radar"].factoriopedia_description = {"",{"item-description.muluna-satellite-radar"},"\n",electricity_description}
-end
+
 
 -- navBeaconItem.localised_description = {"",{"item-description.nav-beacon"},"\n",electricity_description}
 data.raw["recipe"]["copper-cable"].localised_name={"recipe-name.copper-cable"}
 
 require("compat.aai-industry")
 --require("prototypes.technology.interstellar-science-pack-final-fix")
+require("prototypes.final-fixes.nav-beacon-final-fix")
 --require("prototypes.entity.vanilla-entity-shadows")
 if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then --Removed vanilla/wood-gasification recipes from tree seeding, then deletes the tech if no other mods add recipes to the tech.
 --Technologies that have this tech as a prerequisite are moved to having agricultural science pack as the prerequisite.
-    rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-processing"})
+    --rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-processing"})
     rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-seed-greenhouse"})
     -- if #data.raw["technology"]["tree-seeding"].effects == 0 then
     --     delete_tech("tree-seeding","agricultural-science-pack")
@@ -228,6 +235,48 @@ cable_recycling.surface_conditions = {
 
 }
 
+for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
+    --print(entity.name)
+    if 
+        entity.energy_source and 
+        ((
+            entity.energy_source.type == "burner" and
+            rro.contains(entity.energy_source.fuel_categories,"chemical") and
+            not rro.contains({"car","locomotive"},entity.type) and
+            not rro.contains(Muluna.constants.oxygen_restriction_blacklist,entity.name) and
+            not (entity.type == "assembling-machine" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower"))) 
+        )
+            or
+        (
+            entity.energy_source.type == "fluid" and 
+            entity.energy_source.burns_fluid == true
+        ))
+    then
+        --print("Burner energy source in " .. entity.name)
+        PlanetsLib.restrict_surface_conditions(entity, {
+            property = "oxygen",
+	        min = 1,
+        })
+        
+    end
+end
+
+if settings.startup["override-space-connection"].value == true then
+  
+    for _,connection in pairs(data.raw["space-connection"]) do
+        local from = data.raw["planet"][connection.from] or data.raw["space-location"][connection.from]
+        local to = data.raw["planet"][connection.to] or data.raw["space-location"][connection.to]
+
+        if connection.name ~= "nauvis-muluna" then
+            if connection.from == "nauvis" and to.subgroup ~= "satellites" then connection.from = "muluna" end
+            if connection.to == "nauvis" and from.subgroup ~= "satellites" then connection.to = "muluna" end
+            --rro.replace(connection.to,"nauvis","muluna")
+        end
+        
+    end
+  
+
+end
 
 
 data:extend{cable_recycling_muluna,cable_recycling}
@@ -236,4 +285,11 @@ if data.raw["container"]["bottomless-chest"] then --If version >= 2.0.57
     for _,quality in pairs(data.raw["quality"]) do
         quality.crafting_machine_energy_usage_multiplier = quality.default_multiplier or (1+ 0.3*quality.level)
     end
+end
+
+
+require("prototypes.custom-prototypes.final-fixes.heat-assembling-machine-final-fix")
+
+for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
+    print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
 end

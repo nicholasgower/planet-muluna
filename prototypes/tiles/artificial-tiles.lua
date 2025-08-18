@@ -364,4 +364,30 @@ local low_density_space_platform_foundation = {
     scorch_mark_color = {r = 0.373, g = 0.307, b = 0.243, a = 1.000}
   }
 
-data:extend{low_density_space_platform_foundation}
+local gravel = table.deepcopy(data.raw["tile"]["stone-path"])
+
+
+gravel.name = "muluna-gravel"
+gravel.walking_speed_modifier=1.0 --Equal to walking on regular ground. Useless everywhere but Muluna
+gravel.layer = gravel.layer - 1
+gravel.minable.result = "stone-crushed"
+gravel.map_color = {45,45,45}
+gravel.variants = tile_variations_template(
+    "__muluna-graphics__/graphics/terrain/gravel/Xander Mod - sheet.png", "__base__/graphics/terrain/masks/transition-3.png",
+    {
+   
+      max_size = 4,
+      [1] = { weights = {0.085, 0.085, 0.085, 0.085, 0.087, 0.085, 0.065, 0.085, 0.045, 0.045, 0.045, 0.045, 0.005, 0.025, 0.045, 0.045 } },
+      [2] = { probability = 1, weights = {0.070, 0.070, 0.025, 0.070, 0.070, 0.070, 0.007, 0.025, 0.070, 0.050, 0.015, 0.026, 0.030, 0.005, 0.070, 0.027 }, },
+      [4] = { probability = 1.00, weights = {0.070, 0.070, 0.070, 0.070, 0.070, 0.070, 0.015, 0.070, 0.070, 0.070, 0.015, 0.050, 0.070, 0.070, 0.065, 0.070 }, },
+      --[8] = { probability = 1.00, weights = {0.090, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.025, 0.125, 0.005, 0.010, 0.100, 0.100, 0.010, 0.020, 0.020} }
+    }
+    )
+gravel.transitions_between_transitions[1].spritesheet = "__muluna-graphics__/graphics/terrain/gravel/Xander Mod - between-transitions.png"
+gravel.transitions_between_transitions[2].spritesheet = "__muluna-graphics__/graphics/terrain/gravel/Xander Mod - out-of-map-transitions.png"
+gravel.transitions_between_transitions[3].spritesheet = "__muluna-graphics__/graphics/terrain/gravel/Xander Mod - out-of-map-water-transitions.png"
+
+
+
+
+data:extend{low_density_space_platform_foundation,gravel}

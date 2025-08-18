@@ -1,5 +1,8 @@
-local rro = require("lib.remove-replace-object")
+local rro = Muluna.rro
 local all = {}
+local item_sounds = require("__base__.prototypes.item_sounds")
+local item_tints = require("__base__.prototypes.item-tints")
+local space_age_item_sounds = require("__space-age__.prototypes.item_sounds")
 
 local space_boiler = table.deepcopy(data.raw["item"]["boiler"])
 
@@ -10,6 +13,26 @@ space_boiler.localised_name = {"entity-name.muluna-advanced-boiler"}
 space_boiler.order = "b[steam-power]-aa[muluna-advanced-boiler]"
 space_boiler.weight = 40 * kg
 
+local vacuum_heating_tower = table.deepcopy(space_boiler)
+vacuum_heating_tower.name = "muluna-vacuum-heating-tower"
+vacuum_heating_tower.place_result = "muluna-vacuum-heating-tower"
+vacuum_heating_tower.subgroup = "environmental-protection"
+vacuum_heating_tower.icons = {
+            {
+                icon = data.raw["item"]["heating-tower"].icon,
+                icon_size = 64,
+            },
+            {
+                icon = data.raw["fluid"]["oxygen"].icon,
+                icon_size = data.raw["fluid"]["oxygen"].icon_size,
+                scale = 0.25,
+                shift = {10,-10},
+                draw_background = true,
+            }
+        }
+vacuum_heating_tower.localised_name = {"entity-name.muluna-vacuum-heating-tower"}
+vacuum_heating_tower.order = "d[muluna-vacuum-heating-tower]"
+vacuum_heating_tower.weight = 200 * kg
 
 local crusher_2 = table.deepcopy(data.raw["item"]["crusher"])
 
@@ -131,5 +154,69 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["item"]["fusion-gen
 
 }
 
+local buggy = util.merge{table.deepcopy(data.raw["item-with-entity-data"]["car"]),
+{
+    name = "muluna-rocket-buggy",
+    place_result = "muluna-rocket-buggy",
+}
 
-data:extend{space_boiler,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine}
+}
+buggy.icons = {
+    {
+        icon = data.raw["item-with-entity-data"]["car"].icon,
+        icon_size = data.raw["item-with-entity-data"]["car"].icon_size
+    },
+    {
+        icon = data.raw["item"]["rocket-turret"].icon,
+        icon_size=data.raw["item"]["rocket-turret"].icon_size,
+        --scale=0.3,
+        shift = {-2,-12},
+        scale=0.2,
+    },
+}
+buggy.default_import_location = "muluna"
+
+local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-machine-3"]),
+    {
+        name = "muluna-telescope",
+        place_result = "muluna-telescope",
+        subgroup = "muluna-telescope",
+        order = "a[muluna-telescope]",
+        icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
+        icon_size = 64,
+        default_import_location = "muluna",
+    }
+
+)
+
+local data_cable = { --Forked from Moshine optical cable
+    type = "item",
+    name = "muluna-data-cable",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+            tint = {238, 139, 0}
+        }
+    },
+    subgroup = "moshine-production-machine",
+    order = "ffi",
+    inventory_move_sound = item_sounds.metal_small_inventory_move,
+    pick_sound = item_sounds.metal_small_inventory_pickup,
+    drop_sound = item_sounds.metal_small_inventory_move,
+    place_result = "muluna-data-cable",
+    stack_size = 100,
+    default_import_location = "nauvis",
+    weight = 20 * kg,
+    random_tint_color = item_tints.iron_rust
+  }
+
+if not mods["Moshine"] or true then
+    data_cable.subgroup = "muluna-telescope"
+    data_cable.order = "b[muluna-data-cable]"
+
+end
+
+local data_pump = table.deepcopy(data)
+
+
+data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,data_cable}

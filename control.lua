@@ -1,4 +1,6 @@
-local rro = require("lib.remove-replace-object")
+
+require("api")
+local rro = Muluna.rro
 -- script.on_configuration_changed(function()
 --     if debug_mode then
 --         log(DT .. "initialized storage")
@@ -25,8 +27,11 @@ local rro = require("lib.remove-replace-object")
 --muluna={}
 --require("lib.control-stage")
 
-
+local ground_digger = require("scripts.sand-extractor")
 require("scripts.nav-beacon")
+require("scripts.walking_particles")
+require("scripts.heat-assembling-machine")
+require("scripts.telescopes")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
@@ -43,8 +48,22 @@ require("scripts.nav-beacon")
 -- end) 
 
 -- script.on_event(defines.events.on_built_entity, function(event)
---     sd.on_built_rocket_silo(event)
+--     ground_digger.construct_sand_extractor(event)
 -- end)
+
+local function init_storage() 
+    storage.players_on_muluna = {}
+    storage.telescopes = {} 
+end
+
+Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
+
+    init_storage() 
+
+
+end)
+
+Muluna.events.finalize_events()
 
 local new_surface = require("scripts.new-surface")
 
@@ -61,12 +80,23 @@ end
 local interstellar_science_pack = require("scripts.interstellar-science-pack")
 
 
+
 script.on_event(defines.events.on_research_finished, function(event) interstellar_science_pack.update_interstellar_pack(event.research.force) end)
 script.on_configuration_changed(function()
-
+    storage.walking_tick_rates = {}
     for _,force in pairs(game.forces) do
-        interstellar_science_pack.update_interstellar_pack(force)
+        local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
+        local interstellar_pack_name = data.gated_technology
+        force.technologies[interstellar_pack_name].researched = false
+        interstellar_science_pack.update_interstellar_pack(force,false)
     end
+    storage.players_on_muluna = {}
+    for i,player in pairs(game.players) do
+        if player.surface.name == "muluna" then
+            storage.players_on_muluna[i] = {player=player}
+        end
+    end
+    if not storage.telescopes then storage.telescopes = {} end 
 end
 )
 
