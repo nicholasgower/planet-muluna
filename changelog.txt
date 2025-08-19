@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2025-08-19
+  Bugfixes:
+    - Recipes craftable in Assembly machine 2/3 that use exactly one fluid ingredient/product will have their fluidbox index set to 1 to prevent those recipes from interacting with the Assembling machine 3's data ports.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.12
 Date: 2025-08-19
   Compatibility:
