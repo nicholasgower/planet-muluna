@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.20
+Date: 2025-08-19
+  Bugfixes:
+    - Added default icon representing fluid handling when removed by another mod. https://github.com/nicholasgower/planet-muluna/issues/256
+---------------------------------------------------------------------------------------------------
 Version: 2.0.19
 Date: 2025-08-19
   Compatibility:
