@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 2025-08-19
+  Compatibility:
+    - Krastorio2 Spaced Out: Rare metal ore is a potential product of regolith digging, currently with a 2.5% chance of being produced. This value can be tuned in the future if demand for it exists. https://github.com/nicholasgower/planet-muluna/issues/246
+---------------------------------------------------------------------------------------------------
 Version: 2.0.14
 Date: 2025-08-19
   Compatibility:
