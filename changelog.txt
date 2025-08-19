@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.18
+Date: 2025-08-19
+  Bugfixes:
+    - Another attempt to fix issues with Assembling Machine 3 and data fluids. This attempt prioritizes keeping existing machines functional at the expense of aesthetics. Adding a parallel fluid system that interacts with existing recipes may have resulted in hitting an engine limit that Wube will need to address in order for my vision to be fulfilled. I may be wrong and I may find a better solution in the future.
+    - Cleared next_upgrade target from telescope. https://github.com/nicholasgower/planet-muluna/issues/258
+  Locale:
+    - Updated RU locale(By Astorin)
+---------------------------------------------------------------------------------------------------
 Version: 2.0.17
 Date: 2025-08-19
   Balancing:
