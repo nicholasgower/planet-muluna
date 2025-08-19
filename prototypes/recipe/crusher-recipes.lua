@@ -74,9 +74,14 @@ end
 -- New icons
 
 table.insert(data.raw["character"]["character"].crafting_categories,
-"crushing"    
+data.raw["recipe"]["oxide-asteroid-crushing"].category  
 
 )
+if mods["crushing-industry"] then
+    table.insert(data.raw["character"]["character"].crafting_categories,
+        "basic-crushing"
+    )
+end
 
 local anorthite_crushing = table.deepcopy(data.raw["recipe"]["oxide-asteroid-crushing"])
 anorthite_crushing.name = "anorthite-crushing"
