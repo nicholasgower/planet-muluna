@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.16
+Date: 2025-08-19
+  Compatibility:
+    - Age of Production: Replaced Biolab with Cryolab in Quantum Computer recipe.
+  Bugfixes:
+    - Undid previous attempts to fix fluidbox indexing issues and moved recipe fluidbox indexing script from data-updates to data-final fixes. https://github.com/nicholasgower/planet-muluna/issues/255
+---------------------------------------------------------------------------------------------------
 Version: 2.0.15
 Date: 2025-08-19
   Compatibility:
