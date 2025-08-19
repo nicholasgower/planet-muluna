@@ -33,7 +33,7 @@ Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_b
     local reactor = nil
     if is_heat_assembling_machine then
         local telescope_build_limit = get_telescope_build_limit(entity.force)
-        local count = rro.count(storage.telescopes,function(entry) return entry["assembling-machine"].surface == entity.surface end)
+        local count = rro.count(storage.telescopes,function(entry) return entry["assembling-machine"].valid and entry["assembling-machine"].surface == entity.surface end)
         if count >= telescope_build_limit then --Forbid building if count exceeded.
             local position = entity.position
             local surface = entity.surface
