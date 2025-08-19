@@ -55,6 +55,10 @@ local techs_interstellar = {
             "promethium-space-travel",
             "promethium-power-handling"
         },
+    ["vesta"] = 
+        {
+            "planet-discovery-vesta"
+        },
     other = 
         {
             "promethium-science-pack",
