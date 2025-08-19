@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 2025-08-19
+  Compatibility:
+    - Added "Planet discovery Vesta" to list of interstellar technologies.
+    - When Igrys is installed, Muluna will force disable Igrys' "Enhance modded science packs" option. This is hopefully a temporary fix that can be undone once Igrys' science pack enhancement code is able to account for recipes with custom fluid box indexes.  https://github.com/nicholasgower/planet-muluna/issues/247
+---------------------------------------------------------------------------------------------------
 Version: 2.0.13
 Date: 2025-08-19
   Bugfixes:
