@@ -101,17 +101,25 @@ for _,tech in pairs(data.raw["technology"]) do
 
     local interstellar = 
         ( -- If is Aquilo-tier discovery technology
-            tech.unit and
-            rro.count(
-                {rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}),
-                rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}),
-                rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"})}
-            ,rro.predicates.equals(true)) >= 2
-            and
+            tech.unit and 
             (
-                string.find(tech.name,"discovery") or
-                string.find(tech.name,"thruster")
+                (
+                        rro.count(
+                        {rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}),
+                        rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}),
+                        rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"})}
+                    ,rro.predicates.equals(true)) >= 2
+                    and
+                    (
+                        string.find(tech.name,"discovery") or
+                        string.find(tech.name,"thruster")
+                    )
+                ) or
+                (
+                    string.find(tech.name,"aop")
+                )
             )
+            
             
         )  --Add additional "or" statements below
     
