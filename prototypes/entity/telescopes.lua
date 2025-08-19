@@ -3,6 +3,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     type = "assembling-machine", --Extends Assembling machine
     name = "muluna-telescope",
     muluna_is_telescope = true,
+    next_upgrade = "_nil",
     module_slots = 2,
     crafting_speed = 1,
     crafting_categories = {"muluna-telescope"},
