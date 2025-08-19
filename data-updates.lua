@@ -334,7 +334,14 @@ data.raw.recipe["interstellar-science-pack"].surface_conditions = data.raw.recip
 -- rro.replace(data.raw["technology"]["planet-discovery-fulgora"].prerequisites,"space-science-pack","asteroid-collector")
 
 
-data.raw.recipe["space-science-pack"].results[1].amount = settings.startup["space-science-pack-output"].value --1 by default 
+
+
+if mods["Krastorio2-spaced-out"] then
+    rro.deep_replace(data.raw.recipe["kr-space-research-data"].results,5,settings.startup["space-science-pack-output"].value)
+    data.raw.recipe["space-science-pack"].surface_conditions = nil
+else
+    data.raw.recipe["space-science-pack"].results[1].amount = settings.startup["space-science-pack-output"].value --1 by default 
+end
 
 
 for _,pack in pairs(data.raw["tool"]) do
