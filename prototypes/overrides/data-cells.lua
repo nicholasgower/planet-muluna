@@ -107,6 +107,7 @@ if am3 and am3.fluid_boxes then
         pipe_connections = {{ flow_direction="input", direction = defines.direction.east, position = {1, 0} , connection_category = "data"}},
         secondary_draw_orders = { north = -1 },
         connection_category = "data",
+        filter = "muluna-astronomical-data",
       }
 )
     table.insert(am3.fluid_boxes, 
@@ -118,6 +119,7 @@ if am3 and am3.fluid_boxes then
         pipe_connections = {{ flow_direction="output", direction = defines.direction.west, position = {-1, 0} , connection_category = "data"}},
         secondary_draw_orders = { north = -1 },
         connection_category = "data",
+        filter = "muluna-astronomical-data",
       }
     )
     table.insert(am3.crafting_categories, "crafting-with-fluid-and-data")

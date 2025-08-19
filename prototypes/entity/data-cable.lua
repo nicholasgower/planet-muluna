@@ -408,6 +408,7 @@ local data_cable = {
       hide_connection_info = true,
       max_pipeline_extent = 100,
     },
+    filter = "muluna-astronomical-data",
     impact_category = "glass",
     pictures = (mulunadatacablepictures or function() return nil end)(), --Only works if Moshine is installed
     --working_sound = sounds.pipe,
