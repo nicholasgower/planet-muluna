@@ -73,8 +73,29 @@ for _, category in pairs({"item", "tool"}) do
     end
 end
 
+
+
 -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
+
+
+for _,recipe in pairs(data.raw["recipe"]) do
+    if rro.contains(am3.crafting_categories,recipe.category) then
+        for _,input in pairs({recipe.ingredients,recipe.results}) do
+            if rro.count(input,function(entry) return entry.type == "fluid" end) == 1 then
+                for _,recipe in pairs(input) do
+                    if recipe.type == "fluid" then
+                        recipe.fluidbox_index = 1
+                    end
+                end
+            end
+        end
+    end
+
+end
+
+
+
 if am3 and am3.fluid_boxes then
     table.insert(am3.fluid_boxes, 
 
