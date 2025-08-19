@@ -94,8 +94,8 @@ local barreling_tech = rro.merge(data.raw["technology"]["fluid-handling"],{
     effects = {},
     icons = {
         {
-            icon = data.raw["technology"]["fluid-handling"].icon,
-            icon_size = data.raw["technology"]["fluid-handling"].icon_size,
+            icon = data.raw["technology"]["fluid-handling"].icon or "__base__/graphics/technology/fluid-handling.png",
+            icon_size = data.raw["technology"]["fluid-handling"].icon_size or 256,
         },  
         {
             icon = data.raw["item"]["barrel"].icon,
