@@ -558,10 +558,6 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "atmosphere-oxygen-separation"
             },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-carbon-dioxide"
-            },
             
             
             
@@ -917,7 +913,10 @@ data:extend{
         },
         prerequisites = {"cryogenic-science-pack","muluna-fertilized-greenhouses"},
         effects = {
-
+            {
+                type = "unlock-recipe",
+                recipe = "carbon-dioxide"
+            },
         }
     },
     {

@@ -247,7 +247,7 @@ data:extend{
     },
     {
         type = "recipe",
-        name = "muluna-carbon-dioxide",
+        name = "carbon-dioxide",
         localised_name={"fluid-name.carbon-dioxide"},
         category = "chemistry",
         energy_required = 10,
