@@ -1471,7 +1471,7 @@ data:extend{
     -- }
 
 }
-if settings.startup["muluna-easy-wood-gasification-productivity"].value == true then-- or  then
+if settings.startup["muluna-easy-wood-gasification-productivity"].value == true or (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") then-- or  then
     local gasification_prod = {
         type = "technology",
         name = "wood-gas-processing-productivity",
