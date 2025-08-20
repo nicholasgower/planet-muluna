@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.26
+Date: 2025-08-20
+  Locale:
+    - "Nanofoamed polymers" technology now includes a list of science pack that help unlock itself in its description.  In response to https://github.com/nicholasgower/planet-muluna/issues/266
+---------------------------------------------------------------------------------------------------
 Version: 2.0.25
 Date: 2025-08-20
   Locale:
