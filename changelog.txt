@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.24
+Date: 2025-08-20
+  Bugfixes:
+    - Moved Vulcanus carbon dioxide recipe later in the game and merged Factoriopedia entries for the "Carbon dioxide" recipe(only for Vulcanus) and the "Carbon dioxide" fluid. Intended to reduce confusion similar to https://github.com/nicholasgower/planet-muluna/issues/260
+  Locale:
+    - Adjusted description of regolith digging recipe to reduce confusion.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.23
 Date: 2025-08-20
   Bugfixes:
