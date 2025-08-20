@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.22
+Date: 2025-08-20
+  Bugfixes:
+    - Fixed crash on load with Muluna start. https://github.com/nicholasgower/planet-muluna/issues/261
+---------------------------------------------------------------------------------------------------
 Version: 2.0.21
 Date: 2025-08-19
   Compatibility:
