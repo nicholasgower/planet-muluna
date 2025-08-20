@@ -23,7 +23,7 @@ local possible_science_packs = --Science pack technologies
     "anomaly-science-pack",
     --"thermodynamic-science-pack",
     --"aerospace-science-pack",
-    "tiberium-mechanical-research"
+    "tiberium-mechanical-research",
 }
 
 -- local special_cases = {
@@ -60,6 +60,11 @@ for _,pack in pairs(possible_science_packs) do
     --elseif data.raw["technology"][special_cases[pack]] then
     --    table.insert(science_packs,special_cases[pack])
     end
+end
+local tech = data.raw["technology"][gated_technology]
+for _,pack in pairs(science_packs) do
+    tech.localised_description = {"",tech.localised_description or {"technology-description."..tech.name},"\n[technology="..pack.."]"}
+    
 end
 
 data:extend{
