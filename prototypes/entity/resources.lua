@@ -128,7 +128,7 @@ data:extend {{
   type = "autoplace-control",
   category = "terrain",
   name = "lunar_rocks",
-  localised_name = {"entity-name.lunar-rock"},
+  --localised_name = {"entity-name.lunar-rock"},
   order = u_ore_order.."5",
   richness = true
 }}
