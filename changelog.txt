@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.25
+Date: 2025-08-20
+  Locale:
+    - Changed locale name of lunar rocks autoplace to be more general.
+  Changes:
+    - Added an option to double the output of several recipes in the wood gasification chain to make it simpler for beginners. This option also bans productivity modules in those recipes to prevent late-game loops. https://github.com/nicholasgower/planet-muluna/issues/243
+    - Muluna start: "Wood gasification productivity" is now always enabled on Muluna start.
+    - Muluna start: All autoplace settings are placed after Muluna autoplace settings.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.24
 Date: 2025-08-20
   Bugfixes:
