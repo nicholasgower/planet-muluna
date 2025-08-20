@@ -43,11 +43,15 @@ end
 
 
 if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then
-    
-    for control_name,settings in pairs(data.raw["planet"]["nauvis"].map_gen_settings.autoplace_controls) do
-        local control = data.raw["autoplace-control"][control_name]
-        control.order = "ab" .. control.order
+    for control_name,control in pairs(data.raw["autoplace-control"]) do
+        if not rro.contains(table.keys(data.raw["planet"]["muluna"].map_gen_settings.autoplace_controls),control_name) then
+            control.order = "ab" .. control.order
+        end
     end
+    -- for control_name,settings in pairs(data.raw["planet"]["nauvis"].map_gen_settings.autoplace_controls) do
+    --     local control = data.raw["autoplace-control"][control_name]
+        
+    -- end
 
     if mods["aai-industry"] then
         error("\n\nAAI Industry is incompatible with Muluna start.\n")
