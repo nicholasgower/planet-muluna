@@ -77,6 +77,13 @@ data:extend{
         default_value = false,
         order = "bc",
       },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-simple-wood-gasification",
+        setting_type = "startup",
+        default_value = false,
+        order = "bd",
+      },
       
       {
         type = "bool-setting",

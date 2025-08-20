@@ -881,3 +881,21 @@ if mods["cupric-asteroids"] then
     data:extend{cupric_crushing}
     rro.remove(data.raw["technology"]["space-platform"].effects,{type = "unlock-recipe",recipe = "cupric-asteroid-crushing"})
 end
+
+if settings.startup["muluna-easy-simple-wood-gasification"]["value"] == true then
+    local recipe_names = {
+        "cellulose",
+        "wood-gasification",
+        "advanced-wood-gasification",
+
+    }
+    for _,recipe_name in pairs(recipe_names) do
+        local recipe = data.raw["recipe"][recipe_name]
+        for _,result in pairs(recipe.results) do
+            if rro.deep_equals({type = "_any",name = function(name) return not rro.contains({"carbon-dioxide","oxygen"},name) end, amount = "_any"},result) then
+                result.amount = result.amount * 2
+            end
+        end
+        recipe.allow_productivity = false
+    end
+end
