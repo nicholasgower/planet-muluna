@@ -76,7 +76,15 @@ end
 
 
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
-local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
+local am4 = {table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"]),
+            table.deepcopy(data.raw["item"]["assembling-machine-3"]),
+            table.deepcopy(data.raw["recipe"]["assembling-machine-3"]),
+            table.deepcopy(data.raw["technology"]["automation-3"]),
+            }
+rro.deep_replace(am4,"assembling-machine-3","muluna-data-assembler")
+am4[4].name = "muluna-data-assembler"
+rro.deep_replace(am4.prerequisites,"automation-3","muluna-data-assembler")
+local am3 = am4[1]
 
 
 -- for _,recipe in pairs(data.raw["recipe"]) do
@@ -95,6 +103,7 @@ local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
 -- end
 
 
+am3.crafting_speed=1.5
 
 if am3 and am3.fluid_boxes then
     table.insert(am3.fluid_boxes, 
@@ -133,6 +142,6 @@ if am3 and am3.fluid_boxes then
         }
     }
 
+    data:extend(am4)
 end
-
 
