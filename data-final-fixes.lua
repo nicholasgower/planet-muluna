@@ -87,52 +87,54 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     end
 end
 
-local barreling_tech = rro.merge(data.raw["technology"]["fluid-handling"],{
-    type = "technology",
-    name = "fluid-barreling",
-    prerequisites = {"fluid-handling"},
-    effects = {},
-    icons = {
-        {
-            icon = data.raw["technology"]["fluid-handling"].icon or "__base__/graphics/technology/fluid-handling.png",
-            icon_size = data.raw["technology"]["fluid-handling"].icon_size or 256,
-        },  
-        {
-            icon = data.raw["item"]["barrel"].icon,
-            icon_size=data.raw["item"]["barrel"].icon_size,
-            --scale=0.3,
-            shift = {45,45},
-            scale=0.75,
+if data.raw["technology"]["fluid-handling"] then
+    local barreling_tech = rro.merge(data.raw["technology"]["fluid-handling"],{
+        type = "technology",
+        name = "fluid-barreling",
+        prerequisites = {"fluid-handling"},
+        effects = {},
+        icons = {
+            {
+                icon = data.raw["technology"]["fluid-handling"].icon or "__base__/graphics/technology/fluid-handling.png",
+                icon_size = data.raw["technology"]["fluid-handling"].icon_size or 256,
+            },  
+            {
+                icon = data.raw["item"]["barrel"].icon,
+                icon_size=data.raw["item"]["barrel"].icon_size,
+                --scale=0.3,
+                shift = {45,45},
+                scale=0.75,
+            },
+            
         },
-        
-    },
-    unit = "_nil",
-    research_trigger = {
-        type = "craft-item",
-        item = "barrel",
-    }
-})
+        unit = "_nil",
+        research_trigger = {
+            type = "craft-item",
+            item = "barrel",
+        }
+    })
 
--- for i,effect in pairs(data.raw["technology"]["fluid-handling"].effects) do
---     if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
---         table.insert(barreling_tech.effects,effect)
---         data.raw["technology"]["fluid-handling"].effects[i] = nil
---     end
--- end
+    -- for i,effect in pairs(data.raw["technology"]["fluid-handling"].effects) do
+    --     if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
+    --         table.insert(barreling_tech.effects,effect)
+    --         data.raw["technology"]["fluid-handling"].effects[i] = nil
+    --     end
+    -- end
 
- 
-    for i = #data.raw["technology"]["fluid-handling"].effects, 1, -1 do -- Iterate backward to avoid index shifting
-    local effect = data.raw["technology"]["fluid-handling"].effects[i]
-        if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
-            table.insert(barreling_tech.effects,effect)
-            table.remove(data.raw["technology"]["fluid-handling"].effects, i)
+    
+        for i = #data.raw["technology"]["fluid-handling"].effects, 1, -1 do -- Iterate backward to avoid index shifting
+        local effect = data.raw["technology"]["fluid-handling"].effects[i]
+            if effect.type == "unlock-recipe" and string.find(effect.recipe,"%-barrel") then
+                table.insert(barreling_tech.effects,effect)
+                table.remove(data.raw["technology"]["fluid-handling"].effects, i)
+            end
         end
-    end
-
-
-
 rro.soft_insert(data.raw["technology"]["thruster-oxidizer"].prerequisites,barreling_tech.name)
 data:extend{barreling_tech}
+
+end
+
+
 
 
 
