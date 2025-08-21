@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.29
+Date: 2025-08-21
+  Bugfixes:
+    - Added additional check to digging mining drill generator that checks if at least one item can place the mining drill entity in question. Response to https://github.com/nicholasgower/planet-muluna/issues/267
+---------------------------------------------------------------------------------------------------
 Version: 2.0.28
 Date: 2025-08-21
   Compatibility:
