@@ -243,7 +243,7 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
             space_platforms = planet.get_space_platforms(force)
         else
             for j,platform in pairs(force.platforms) do
-                if platform.space_location.name == planet.name then
+                if platform.space_location and platform.space_location.name == planet.name then
                     space_platforms[j] = platform
                 end
             end
