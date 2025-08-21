@@ -215,6 +215,7 @@ require("compat.aai-industry")
 --require("prototypes.technology.interstellar-science-pack-final-fix")
 require("prototypes.final-fixes.nav-beacon-final-fix")
 require("prototypes.final-fixes.data-cells")
+require("prototypes.final-fixes.interstellar-science-pack")
 --require("prototypes.entity.vanilla-entity-shadows")
 if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then --Removed vanilla/wood-gasification recipes from tree seeding, then deletes the tech if no other mods add recipes to the tech.
 --Technologies that have this tech as a prerequisite are moved to having agricultural science pack as the prerequisite.
