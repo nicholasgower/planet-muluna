@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.30
+Date: 2025-08-21
+  Bugfixes:
+    - Added additional check to telescope combinator on planet code checking if platforms have space location data attached to them. https://github.com/nicholasgower/planet-muluna/issues/269
+---------------------------------------------------------------------------------------------------
 Version: 2.0.29
 Date: 2025-08-21
   Bugfixes:
