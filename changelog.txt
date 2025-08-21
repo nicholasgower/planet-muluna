@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.27
+Date: 2025-08-21
+  Compatibility:
+    - The technology field "muluna_adds_progress_to_exploration_science_pack" can now be used by other mods to define whether or not a technology should contribute to the exploration science pack's discovery.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.26
 Date: 2025-08-20
   Locale:
