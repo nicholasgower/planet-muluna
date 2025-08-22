@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.31
+Date: 2025-08-22
+  Compatibility:
+    - Added hardcoded fallback research trigger to space platform thruster technology when space platform research trigger is removed by another mod. https://github.com/nicholasgower/planet-muluna/issues/271
+---------------------------------------------------------------------------------------------------
 Version: 2.0.30
 Date: 2025-08-21
   Bugfixes:
