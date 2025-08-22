@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.34
+Date: 2025-08-22
+  Bugfixes:
+    - Added tier 3 modules to prerequisite list of technologies that unlock recipes that require tier 3 modules to craft.
+  Graphics:
+    - Vacuum heating tower ghost now has completed graphics. https://github.com/nicholasgower/planet-muluna/issues/272
+---------------------------------------------------------------------------------------------------
 Version: 2.0.33
 Date: 2025-08-22
   Graphics:
