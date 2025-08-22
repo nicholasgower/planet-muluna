@@ -13,7 +13,7 @@ local function get_telescope_build_limit(force)
 
 end
 
-Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity}, function(event)
+Muluna.events.on_event({defines.events.on_built_entity,defines.events.on_robot_built_entity,defines.events.on_space_platform_built_entity}, function(event)
     if not storage.telescopes then storage.telescopes = {} end
     local entity = event.entity
     
@@ -125,7 +125,7 @@ end
 )
 
 
-Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_entity_died,defines.events.on_robot_mined_entity}, function(event)
+Muluna.events.on_event({defines.events.on_player_mined_entity,defines.events.on_entity_died,defines.events.on_robot_mined_entity,defines.events.on_space_platform_mined_entity}, function(event)
 
     local entity = event.entity
     --game.print(entity.name)
