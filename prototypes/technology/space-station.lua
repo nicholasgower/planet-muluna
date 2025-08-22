@@ -949,7 +949,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "biolab","quantum-processor",--"muluna-helium-enrichment"
+            "biolab","quantum-processor","productivity-module-3",--"muluna-helium-enrichment"
         },
         icons = {
             {
@@ -1121,7 +1121,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack", "metallic-asteroid-crushing","metallurgic-science-pack"
+            "interstellar-science-pack", "metallic-asteroid-crushing","metallurgic-science-pack","speed-module-3"
         },
         icons = {
             {
@@ -1311,7 +1311,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack"
+            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack","quality-module-3"
         },
         effects = {
             {
@@ -1358,7 +1358,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack","agricultural-science-pack","heating-tower","metallurgic-science-pack"
+            "interstellar-science-pack","agricultural-science-pack","heating-tower","metallurgic-science-pack","efficiency-module-3"
         },
         effects = {
             {
