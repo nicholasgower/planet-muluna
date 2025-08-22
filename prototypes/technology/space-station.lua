@@ -1264,8 +1264,13 @@ data:extend{
         name = "muluna-nanofoamed-polymers",
         --localised_name = {"item-name.muluna-microcellular-plastic"},
         localised_description = {"technology-description.muluna-nanofoamed-polymers",tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
-        icon = "__muluna-graphics__/graphics/technology/polymers.png",
-        icon_size = 1024,
+        icons = {
+            {
+                icon = "__space-age__/graphics/technology/plastics-productivity.png",
+                icon_size = 256,
+                tint = {150,150,0,255}
+            }
+        },
         enabled = false,
         visible_when_disabled = true,
         unit = {
