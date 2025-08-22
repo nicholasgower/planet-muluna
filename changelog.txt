@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.32
+Date: 2025-08-22
+  Bugfixes:
+    - Made script triggers for Vacuum heating tower and telescopes also trigger when building/deconstructing on space platforms.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.31
 Date: 2025-08-22
   Compatibility:
