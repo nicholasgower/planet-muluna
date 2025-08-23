@@ -236,9 +236,9 @@ local map_gen = {
       {
         settings =
         {
-          ["lunar-medium-rock"] = {},
-          ["lunar-small-rock"] = {},
-          ["lunar-tiny-rock"] = {},
+          ["lunar-medium-rock"] = data.raw["optimized-decorative"]["lunar-medium-rock"] ~= nil and {} or nil,
+          ["lunar-small-rock"] = data.raw["optimized-decorative"]["lunar-small-rock"] ~= nil and {} or nil,
+          ["lunar-tiny-rock"] = data.raw["optimized-decorative"]["lunar-tiny-rock"] ~= nil and {} or nil,
           --["medium-sand-rock"] = {},
           --["small-sand-rock"] = {}
         }
@@ -248,8 +248,8 @@ local map_gen = {
         settings =
         {
           --["stone"] = {},
-          ["lunar-rock"] = {},
-          ["lunar-huge-rock"] = {},
+          ["lunar-rock"] = data.raw["simple-entity"]["lunar-rock"] ~= nil and {} or nil,
+          ["lunar-huge-rock"] = data.raw["simple-entity"]["lunar-huge-rock"] ~= nil and {} or nil,
           --["big-sand-rock"] = {},
           --["huge-rock"] = {},
           --["big-rock"] = {},
@@ -275,6 +275,10 @@ if mods["alien-biomes"] then
   map_gen.autoplace_settings["entity"].settings["huge-rock"] = nil
   map_gen.autoplace_settings["entity"].settings["big-rock"] = nil
 end
+
+
+
+
 
 local parent_planet = "nauvis"
 

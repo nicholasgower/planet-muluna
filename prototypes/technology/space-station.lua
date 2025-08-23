@@ -558,10 +558,6 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "atmosphere-oxygen-separation"
             },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-carbon-dioxide"
-            },
             
             
             
@@ -917,7 +913,10 @@ data:extend{
         },
         prerequisites = {"cryogenic-science-pack","muluna-fertilized-greenhouses"},
         effects = {
-
+            {
+                type = "unlock-recipe",
+                recipe = "carbon-dioxide"
+            },
         }
     },
     {
@@ -950,7 +949,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "biolab","quantum-processor",--"muluna-helium-enrichment"
+            "biolab","quantum-processor","productivity-module-3",--"muluna-helium-enrichment"
         },
         icons = {
             {
@@ -1122,7 +1121,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack", "metallic-asteroid-crushing","metallurgic-science-pack"
+            "interstellar-science-pack", "metallic-asteroid-crushing","metallurgic-science-pack","speed-module-3"
         },
         icons = {
             {
@@ -1265,8 +1264,13 @@ data:extend{
         name = "muluna-nanofoamed-polymers",
         --localised_name = {"item-name.muluna-microcellular-plastic"},
         localised_description = {"technology-description.muluna-nanofoamed-polymers",tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
-        icon = "__muluna-graphics__/graphics/technology/polymers.png",
-        icon_size = 1024,
+        icons = {
+            {
+                icon = "__space-age__/graphics/technology/plastics-productivity.png",
+                icon_size = 256,
+                tint = {150,150,0,255}
+            }
+        },
         enabled = false,
         visible_when_disabled = true,
         unit = {
@@ -1307,7 +1311,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack"
+            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack","quality-module-3"
         },
         effects = {
             {
@@ -1354,7 +1358,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack","agricultural-science-pack","heating-tower","metallurgic-science-pack"
+            "interstellar-science-pack","agricultural-science-pack","heating-tower","metallurgic-science-pack","efficiency-module-3"
         },
         effects = {
             {
@@ -1472,7 +1476,7 @@ data:extend{
     -- }
 
 }
-if settings.startup["muluna-easy-wood-gasification-productivity"].value == true then-- or  then
+if settings.startup["muluna-easy-wood-gasification-productivity"].value == true or (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") then-- or  then
     local gasification_prod = {
         type = "technology",
         name = "wood-gas-processing-productivity",

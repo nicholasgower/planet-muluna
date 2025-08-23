@@ -1,4 +1,84 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.35
+Date: 2025-08-23
+  Bugfixes:
+    - Added migration that enables the exploration science pack if it was disabled.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.34
+Date: 2025-08-22
+  Bugfixes:
+    - Added tier 3 modules to prerequisite list of technologies that unlock recipes that require tier 3 modules to craft.
+  Graphics:
+    - Vacuum heating tower ghost now has completed graphics. https://github.com/nicholasgower/planet-muluna/issues/272
+---------------------------------------------------------------------------------------------------
+Version: 2.0.33
+Date: 2025-08-22
+  Graphics:
+    - Replaced icon of "nanofoamed polymers" technology with tinted "plastic bar productivity" icon.
+  Locale:
+    - Made name generator of "Sky observation" recipes more robust.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.32
+Date: 2025-08-22
+  Bugfixes:
+    - Made script triggers for Vacuum heating tower and telescopes also trigger when building/deconstructing on space platforms.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.31
+Date: 2025-08-22
+  Compatibility:
+    - Added hardcoded fallback research trigger to space platform thruster technology when space platform research trigger is removed by another mod. https://github.com/nicholasgower/planet-muluna/issues/271
+---------------------------------------------------------------------------------------------------
+Version: 2.0.30
+Date: 2025-08-21
+  Bugfixes:
+    - Added additional check to telescope combinator on planet code checking if platforms have space location data attached to them. https://github.com/nicholasgower/planet-muluna/issues/269
+---------------------------------------------------------------------------------------------------
+Version: 2.0.29
+Date: 2025-08-21
+  Bugfixes:
+    - Added additional check to digging mining drill generator that checks if at least one item can place the mining drill entity in question. Response to https://github.com/nicholasgower/planet-muluna/issues/267
+---------------------------------------------------------------------------------------------------
+Version: 2.0.28
+Date: 2025-08-21
+  Compatibility:
+    - Lunar rock decoratives are removed from Muluna when the vanilla equivalents were removed from Nauvis. Attempt to address https://github.com/nicholasgower/planet-muluna/issues/259
+---------------------------------------------------------------------------------------------------
+Version: 2.0.27
+Date: 2025-08-21
+  Compatibility:
+    - The technology field "muluna_adds_progress_to_exploration_science_pack" can now be used by other mods to define whether or not a technology should contribute to the exploration science pack's discovery.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.26
+Date: 2025-08-20
+  Locale:
+    - "Nanofoamed polymers" technology now includes a list of science pack that help unlock itself in its description.  In response to https://github.com/nicholasgower/planet-muluna/issues/266
+---------------------------------------------------------------------------------------------------
+Version: 2.0.25
+Date: 2025-08-20
+  Locale:
+    - Changed locale name of lunar rocks autoplace to be more general.
+  Changes:
+    - Added an option to double the output of several recipes in the wood gasification chain to make it simpler for beginners. This option also bans productivity modules in those recipes to prevent late-game loops. https://github.com/nicholasgower/planet-muluna/issues/243
+    - Muluna start: "Wood gasification productivity" is now always enabled on Muluna start.
+    - Muluna start: All autoplace settings are placed after Muluna autoplace settings.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.24
+Date: 2025-08-20
+  Bugfixes:
+    - Moved Vulcanus carbon dioxide recipe later in the game and merged Factoriopedia entries for the "Carbon dioxide" recipe(only for Vulcanus) and the "Carbon dioxide" fluid. Intended to reduce confusion similar to https://github.com/nicholasgower/planet-muluna/issues/260
+  Locale:
+    - Adjusted description of regolith digging recipe to reduce confusion.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.23
+Date: 2025-08-20
+  Bugfixes:
+    - Fixed crash when loading existing Muluna start save.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.22
+Date: 2025-08-20
+  Bugfixes:
+    - Fixed crash on load with Muluna start. https://github.com/nicholasgower/planet-muluna/issues/261
+---------------------------------------------------------------------------------------------------
 Version: 2.0.21
 Date: 2025-08-19
   Compatibility:

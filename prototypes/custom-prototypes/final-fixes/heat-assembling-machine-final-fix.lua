@@ -43,6 +43,15 @@ if data.raw["heat-assembling-machine"] then
             move_field(assembler,reactor,field)
 
         end
+        if not assembler.graphics_set then
+             local graphics = table.deepcopy(reactor.picture)
+             graphics.frame_count = 1
+             for _,frame in pairs(graphics.layers) do
+                frame.line_length = 1
+                frame.frame_count = 1
+             end
+             assembler.graphics_set =  {animation = {north = graphics}}
+        end
         for _,field in pairs(copied_fields) do
             reactor[field] = assembler[field]
 

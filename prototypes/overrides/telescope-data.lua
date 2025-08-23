@@ -44,7 +44,7 @@ for _,space_location in pairs(data.raw["planet"]) do
                 },
                 auto_recycle = false,
                 enabled = false,
-                localised_name = {"recipe-name.muluna-telescope-observation-x",{"space-location-name."..space_location.name}},
+                localised_name = {"recipe-name.muluna-telescope-observation-x",space_location.localised_name or {"space-location-name."..space_location.name}},
                 order = "zz-" .. (space_location.order or "")
             }
             if space_location.name == "muluna" then

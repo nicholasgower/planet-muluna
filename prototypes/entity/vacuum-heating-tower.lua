@@ -185,6 +185,23 @@ heating_boiler = util.merge{heating_boiler,
             })
         }
         },
+        -- graphics_set = {
+        --     animation = {
+        --         north = {
+        --             filenames =
+        --                 {
+        --                     util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-main", {
+        --                     scale = 0.65,
+        --                     }),
+        --                     util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-shadow", {
+        --                     scale = 0.65,
+        --                     draw_as_shadow = true,
+        --                     })
+        --                 }
+        --         }
+        --     }
+            
+        -- },
 
         working_light_picture =
         {

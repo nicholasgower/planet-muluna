@@ -23,13 +23,21 @@ local function contains_quality_name(entity)
         end
     end 
 
+    return false
+end
 
+local function is_placeable(entity)
+    for _,item in pairs(data.raw["item"]) do
+        if item.place_result == entity.name then
+            return true
+        end
+    end
     return false
 end
 
 
 for name,drill in pairs(data.raw["mining-drill"]) do
-    if drill.energy_source.type == "electric" and drill.output_fluid_box == nil and is_square(drill) and not Muluna.constants.regolith_drills_blacklist[name] and not contains_quality_name(name) then
+    if is_placeable(drill) and drill.energy_source.type == "electric" and drill.output_fluid_box == nil and is_square(drill) and not Muluna.constants.regolith_drills_blacklist[name] and not contains_quality_name(name) then
         Muluna.constants.regolith_drills[name] = {name = name}
     end
 

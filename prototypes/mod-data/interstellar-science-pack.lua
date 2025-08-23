@@ -23,8 +23,17 @@ local possible_science_packs = --Science pack technologies
     "anomaly-science-pack",
     --"thermodynamic-science-pack",
     --"aerospace-science-pack",
-    "tiberium-mechanical-research"
+    "tiberium-mechanical-research",
 }
+
+-- Other mods can use the field "muluna_adds_progress_to_exploration_science_pack" to make a technology contribute progress to the exploration science pack.
+for _,tech in pairs(data.raw["technology"]) do
+    if tech.muluna_adds_progress_to_exploration_science_pack == true then
+        table.insert(possible_science_packs,tech.name)
+    elseif tech.muluna_adds_progress_to_exploration_science_pack == false then
+        Muluna.rro.remove(possible_science_packs,tech.name)
+    end
+end
 
 -- local special_cases = {
 --     ["slp-sunpack"] = "slp-sun-science-pack",
@@ -38,29 +47,12 @@ for _,pack in pairs(possible_science_packs) do
     if data.raw["technology"][pack] then
         table.insert(science_packs,pack)
         --add_interstellar_pack_tooltip(data.raw["technology"][pack])
-        table.insert(data.raw["technology"][pack].effects ,
-    {
-			type = "nothing",
-			icons = {
-                {icon= "__muluna-graphics__/graphics/icons/green-rectangle.png", icon_size = 64},
-                {icon = data.raw["tool"]["interstellar-science-pack"].icon, shift = {0,0}, scale = 0.375},
-                {
-                    icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-recipe-productivity.png",
-                    icon_size = 64,
-                    --scale = 0.375,
-                    --shift = {4,-8},
-                    --draw_background = true,
-                }
-                
-            },
-			effect_description = { "technology-effect.contributes-to-discovery", gated_technology,{"technology-name.".. gated_technology},tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
-	}
-
-)
+        
     --elseif data.raw["technology"][special_cases[pack]] then
     --    table.insert(science_packs,special_cases[pack])
     end
 end
+
 
 data:extend{
     {

@@ -36,7 +36,9 @@ data.raw["technology"]["space-platform-thruster"].unit=nil
 -- else
     table.insert(data.raw["technology"]["space-platform-thruster"].prerequisites,"space-platform")
    
-    data.raw["technology"]["space-platform-thruster"].research_trigger = data.raw["technology"]["space-platform"].research_trigger
+    data.raw["technology"]["space-platform-thruster"].research_trigger = data.raw["technology"]["space-platform"].research_trigger or {
+        type = "create-space-platform"
+    }
     table.insert(data.raw["technology"]["space-platform-thruster"].prerequisites,"space-platform")
 -- end
 
