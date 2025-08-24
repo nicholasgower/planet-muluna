@@ -58,6 +58,13 @@ data:extend{
       },
       {
         type = "bool-setting",
+        name = "muluna-hardcore-remove-space-casino",
+        setting_type = "startup",
+        default_value = false,
+        order = "ah",
+      },
+      {
+        type = "bool-setting",
         name = "muluna-easy-vanilla-rocket-part-costs",
         setting_type = "startup",
         default_value = false,
