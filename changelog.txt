@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.36
+Date: 2025-08-24
+  Changes:
+    - Added optional setting to disable quality modules in asteroid reprocessing recipes(recipes containing "asteroid-reprocessing" in internal name).
+---------------------------------------------------------------------------------------------------
 Version: 2.0.35
 Date: 2025-08-23
   Bugfixes:
