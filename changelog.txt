@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.37
+Date: 2025-08-25
+  Bugfixes:
+    - Set effect_receiver of telescope entity from blank string to nil to prevent startup crash when loaded with ic-tweaks. https://github.com/nicholasgower/planet-muluna/issues/275
+---------------------------------------------------------------------------------------------------
 Version: 2.0.36
 Date: 2025-08-24
   Changes:
