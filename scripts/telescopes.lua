@@ -19,7 +19,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
-    if heat_assembling_machines[entity.name] then
+    if entity.valid and heat_assembling_machines[entity.name] then
         is_heat_assembling_machine = true
         heat_assembling_machine_data = heat_assembling_machines[entity.name]
     end

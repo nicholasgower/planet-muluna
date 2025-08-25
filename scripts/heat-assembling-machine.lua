@@ -15,7 +15,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
     for _,machine in pairs(heat_assembling_machines) do
-        if entity.name == machine["assembling-machine"] then
+        if entity.valid and entity.name == machine["assembling-machine"] then
             is_heat_assembling_machine = true
             heat_assembling_machine_data = machine
             break
