@@ -50,4 +50,6 @@ local anorthite = table.deepcopy(data.raw["planet"]["muluna"].asteroid_spawn_def
 rro.deep_replace(anorthite,"metallic-asteroid-chunk","anorthite-chunk")
 table.insert(data.raw["planet"]["muluna"].asteroid_spawn_definitions,anorthite)
 
-data.raw["space-connection"]["nauvis-muluna"].asteroid_spawn_definitions= asteroid_spawn_definitions_connection
+if data.raw["space-connection"]["nauvis-muluna"] then
+  data.raw["space-connection"]["nauvis-muluna"].asteroid_spawn_definitions= asteroid_spawn_definitions_connection
+end
