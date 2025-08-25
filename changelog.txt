@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.38
+Date: 2025-08-25
+  Bugfixes:
+    - Fixed crash when another mod deletes the "nauvis-muluna" space connection. https://github.com/nicholasgower/planet-muluna/issues/273
+    - Fixed crash when building satellite radar. https://github.com/nicholasgower/planet-muluna/issues/274
+  Locale:
+    - Updated CS locale(By Vagonek)
+  Changes:
+    - Moshine's "Neural networks" technology now contributes to the discovery of nanofoamed polymers.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.37
 Date: 2025-08-25
   Bugfixes:
