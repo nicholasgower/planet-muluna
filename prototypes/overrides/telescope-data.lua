@@ -18,7 +18,7 @@ for _,space_location in pairs(data.raw["planet"]) do
                 category = "muluna-telescope",
                 energy_required = 6,
                 ingredients = {},
-                results = {{type = "fluid", name = "muluna-astronomical-data",amount = 100 + math.floor(distance_factor)/150}},
+                results = {{type = "fluid", name = "muluna-astronomical-data",amount = 10 + math.floor(distance_factor)/1500}},
                 icons = Muluna.icons.dual_icon("muluna-astronomical-data",space_location.name),
                 surface_conditions = {
                     {
@@ -48,7 +48,7 @@ for _,space_location in pairs(data.raw["planet"]) do
                 order = "zz-" .. (space_location.order or "")
             }
             if space_location.name == "muluna" then
-                recipe.results[1].amount = 100
+                recipe.results[1].amount = 10
             end
             Muluna.rro.soft_insert(data.raw["technology"]["muluna-telescope"].effects,
                 {
