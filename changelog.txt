@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.39
+Date: 2025-08-26
+  Balancing:
+    - Reduced data output of telescopes.
+  Bugfixes:
+    - Disabled auto-recycling of "empty astronomical data from data tape" recipe.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.38
 Date: 2025-08-25
   Bugfixes:
