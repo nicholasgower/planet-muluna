@@ -35,7 +35,8 @@ for _, category in pairs({"item", "tool"}) do
                     },
                     results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2}},
                     main_product = data_cell.name,
-                    energy_required = 5
+                    energy_required = 5,
+                    
                 }
 
                 local recipe_empty = {
@@ -49,7 +50,8 @@ for _, category in pairs({"item", "tool"}) do
                     ingredients = recipe.results,
                     results = recipe.ingredients,
                     energy_required = 5,
-                    icons = Muluna.icons.dual_icon("muluna-astronomical-data",prototype.name)
+                    icons = Muluna.icons.dual_icon("muluna-astronomical-data",prototype.name),
+                    auto_recycle = false,
                 }
 
                 for _,recipe in pairs({recipe,recipe_empty}) do
