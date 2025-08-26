@@ -30,10 +30,10 @@ for _, category in pairs({"item", "tool"}) do
                     category = "crafting-with-fluid-and-data",
                     enabled = false,
                     ingredients = { 
-                        {type = "item",name = prototype.name, amount = 1},
-                        {type = "fluid", name = "muluna-astronomical-data", amount = prototype.data_capacity, fluidbox_index = 2},
+                        {type = "item",name = prototype.name, amount = 1,ignored_by_stats = 1},
+                        {type = "fluid", name = "muluna-astronomical-data", amount = prototype.data_capacity, fluidbox_index = 2,ignored_by_stats = prototype.data_capacity},
                     },
-                    results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2}},
+                    results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2,ignored_by_stats = 1}},
                     main_product = data_cell.name,
                     energy_required = 5,
                     
