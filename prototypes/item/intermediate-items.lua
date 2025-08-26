@@ -189,7 +189,7 @@ data:extend{{
     weight = 2 * kg,
     subgroup = "muluna-products",
     order = "c[muluna-microfoamed-plastic]",
-    spoil_ticks = 7*60,
+    spoil_ticks =  7*60,
     spoil_result = "plastic-bar",
     icons = {
         
@@ -253,6 +253,11 @@ data:extend{{
 
 }
 
+if settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true then
+  --data.raw["item"]["muluna-diffused-plastic"].spoil_ticks = nil
+  -- data.raw["item"]["muluna-diffused-plastic"].spoil_result = nil
+  -- data.raw["item"]["muluna-diffused-plastic"].localised_description = {"item-description.muluna-diffused-plastic-simplified-recipe"}
+end
 
 if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
     data:extend{{ --Copied from Wooden industries

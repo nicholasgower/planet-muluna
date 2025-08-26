@@ -91,6 +91,13 @@ data:extend{
         default_value = false,
         order = "bd",
       },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-simple-nanofoamed-polymers",
+        setting_type = "startup",
+        default_value = false,
+        order = "be",
+      },
       
       {
         type = "bool-setting",
