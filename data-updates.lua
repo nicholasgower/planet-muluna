@@ -637,10 +637,10 @@ for i = 1,10,1 do --For compatibility with Roc's hardcore tech tree.
 end
 
 if data.raw["technology"]["space-platform"].effects then
-table.insert(data.raw["technology"]["space-platform"].effects,{
-    type = "unlock-recipe",
-    recipe = "cargo-bay"
-})
+    rro.soft_insert(data.raw["technology"]["space-platform"].effects,{
+        type = "unlock-recipe",
+        recipe = "cargo-bay"
+    })
 else
     data.raw["technology"]["space-platform"].effects = {{
         type = "unlock-recipe",
@@ -649,6 +649,7 @@ else
 end
 
 require("compat.orbital-ion-cannon")
+require("compat.lignumis")
 
 
 local one_gravity_condition =
@@ -659,18 +660,20 @@ local one_gravity_condition =
   }
 }
 
-rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
-    {
-        type = "unlock-recipe",
-        recipe = "thruster-oxidizer",
-    }
-)
-rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
-    {
-        type = "unlock-recipe",
-        recipe = "thruster-fuel",
-    }
-)
+if not (settings.startup["muluna-easy-revert-changes-to-space-platform-technology"].value == true) then
+    rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
+        {
+            type = "unlock-recipe",
+            recipe = "thruster-oxidizer",
+        }
+    )
+    rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
+        {
+            type = "unlock-recipe",
+            recipe = "thruster-fuel",
+        }
+    )
+end
 
 data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
 

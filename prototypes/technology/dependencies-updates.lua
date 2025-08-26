@@ -71,7 +71,12 @@ local space_platform=data.raw["technology"]["space-platform"]
 --         entity="aai-signal-sender"
 --     }
 -- else
+
+if settings.startup["muluna-easy-revert-changes-to-space-platform-technology"].value == true then
+
+else
     space_platform.effects = {}
+end
 -- end
 
 data.raw["technology"]["space-science-pack"].research_trigger = {

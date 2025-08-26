@@ -98,6 +98,13 @@ data:extend{
         default_value = false,
         order = "be",
       },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-revert-changes-to-space-platform-technology",
+        setting_type = "startup",
+        default_value = false,
+        order = "bf",
+      },
       
       {
         type = "bool-setting",
