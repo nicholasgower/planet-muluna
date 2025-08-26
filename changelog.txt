@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.41
+Date: 2025-08-26
+  Compatibility:
+    - Lignumis: Production/utility science pack recipes now have "space science pack" technology as a prerequisite.
+  Changes:
+    - Added optional setting to reduce difficulty of nanofoamed polymer crafting chain by making the spoilage of diffused plastic begin when crafted, rather than when beginning the craft.
+    - Added optional setting to revert features of space platform thruster and space platform technologies to make asteroid collectors, crushers, and thruster fuel/oxidizer recipes available before reaching Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.40
 Date: 2025-08-26
   Bugfixes:
