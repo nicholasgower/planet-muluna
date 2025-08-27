@@ -20,13 +20,14 @@ for _,pack in pairs(pack_conditions.science_packs) do
                     }
                     
                 },
-                effect_description = { "technology-effect.contributes-to-discovery", gated_technology,{"technology-name.".. gated_technology},tostring(settings.startup["muluna-interstellar-science-pack-packs-required"].value)},
+                effect_description = { "technology-effect.contributes-to-discovery", gated_technology,{"technology-name.".. gated_technology},tostring(pack_conditions.required_science_packs)},
         }
 
     )
 end
 
 local tech = data.raw["technology"][gated_technology]
+tech.localised_description =  {"technology-description.muluna-nanofoamed-polymers",tostring(data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data.required_science_packs)}
 for _,pack in pairs(pack_conditions.science_packs) do
     tech.localised_description = {"",tech.localised_description or {"technology-description."..tech.name},"\n[technology="..pack.."]"}
     

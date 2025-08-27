@@ -52,7 +52,7 @@ function Public.update_interstellar_pack(force,display_notification)
     
     if technologies[interstellar_pack_name].researched == false then
         local count = 0
-        local max_count = settings.startup["muluna-interstellar-science-pack-packs-required"].value
+        local max_count = data.required_science_packs
         for _, pack in pairs(science_packs) do
             if technologies[pack].researched == true then
                 count = count + 1

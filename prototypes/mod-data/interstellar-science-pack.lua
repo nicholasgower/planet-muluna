@@ -54,6 +54,15 @@ for _,pack in pairs(possible_science_packs) do
     end
 end
 
+local required_science_packs
+
+if settings.startup["muluna-interstellar-science-pack-dynamic-packs-required"].value == false then
+    required_science_packs = settings.startup["muluna-interstellar-science-pack-packs-required"].value
+else
+    local percentage = settings.startup["muluna-interstellar-science-pack-dynamic-packs-required-percentage-required"].value / 100
+    required_science_packs = math.ceil(#science_packs*percentage)
+end
+
 
 data:extend{
     {
@@ -62,7 +71,8 @@ data:extend{
         data_type = "table",
         data = {
             science_packs = science_packs,
-            gated_technology = gated_technology
+            gated_technology = gated_technology,
+            required_science_packs = required_science_packs
         }
     }
 

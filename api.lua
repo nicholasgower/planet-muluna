@@ -35,13 +35,13 @@ if Muluna.stage == "data" then
     Muluna.resource = require("lib.resources").resource
     Muluna.resource_autoplace = require("lib.resource-autoplace")
     Muluna.icons = require("lib.dual-item-icon")
-
+    require("prototypes.mod-data.constants")
 elseif Muluna.stage == "control" then
     Muluna.constants = prototypes.mod_data["muluna-constants"].data
     Muluna.events = require("lib.events")
     Muluna.complete_research = require("lib.notifications").research_technology
 end 
 
-require("prototypes.mod-data.constants")
+
 
 return Muluna
