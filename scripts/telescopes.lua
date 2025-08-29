@@ -92,11 +92,23 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             return 
         end
 
-
+        local recipe_name
         if entity.surface.platform then
             
-        else
-            entity.set_recipe("muluna-telescope-observation-" .. entity.surface.name,"normal")
+        elseif string.find(entity.surface.name,"bpsb") then --If surface is a blueprint sandbox
+            for _,planet in pairs(prototypes.space_location) do
+                if planet.surface_properties and entity.surface.planet then
+                    if rro.deep_equals(entity.surface.planet,planet) then
+                        recipe_name = "muluna-telescope-observation-" .. planet.name
+                    end
+                end
+            end
+
+        elseif prototypes.recipe["muluna-telescope-observation-" .. entity.surface.name] then
+            recipe_name = "muluna-telescope-observation-" .. entity.surface.name
+        end
+        if recipe_name and prototypes.recipe[recipe_name] then
+            entity.set_recipe(recipe_name,"normal")
         end
         
         entity.recipe_locked = true
