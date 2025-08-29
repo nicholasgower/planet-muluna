@@ -17,7 +17,7 @@ Muluna.multiply_energy = require("lib.energy-multiply").multiply_energy
 Muluna.pipe_pictures = require("lib.pipe-pictures")
 
 --flib imports
-Muluna.flib_bounding_box = require("__flib__.bounding-box")
+Muluna.flib_bounding_box = require("__planet-muluna__.lib.flib-bounding-box")
 Muluna.flib_prototypes = require("__flib__.prototypes")
 Muluna.telescopes = require("lib.telescopes")
 
