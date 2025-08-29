@@ -22,35 +22,42 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
     icon_size = 64,
     graphics_set = {
-      animation =
-      {
-        layers =
+      working_visualisations = {{
+        constant_speed = true,
+        always_draw = true,
+        north_animation =
         {
+          layers =
           {
-            filename = "__space-exploration-graphics-4__/graphics/entity/telescope/telescope.png",
-            priority = "high",
-            width = 2080/8,
-            height = 2128/8,
-            frame_count = 64,
-            line_length = 8,
-            shift = util.by_pixel(6, -19),
-            animation_speed = 0.3,
-            scale = 0.5,
-          },
-          {
-            draw_as_shadow = true,
-            filename = "__space-exploration-graphics-4__/graphics/entity/telescope/telescope-shadow.png",
-            priority = "high",
-            width = 2608/8,
-            height = 1552/8,
-            frame_count = 64,
-            line_length = 8,
-            shift = util.by_pixel(32, 7),
-            animation_speed = 0.3,
-            scale = 0.5,
+            {
+              filename = "__space-exploration-graphics-4__/graphics/entity/telescope/telescope.png",
+              priority = "high",
+              width = 2080/8,
+              height = 2128/8,
+              frame_count = 64,
+              line_length = 8,
+              shift = util.by_pixel(6, -19),
+              animation_speed = 0.25,
+              max_advance = 0.25,
+              scale = 0.5,
+            },
+            {
+              draw_as_shadow = true,
+              filename = "__space-exploration-graphics-4__/graphics/entity/telescope/telescope-shadow.png",
+              priority = "high",
+              width = 2608/8,
+              height = 1552/8,
+              frame_count = 64,
+              line_length = 8,
+              shift = util.by_pixel(32, 7),
+              animation_speed = 0.25,
+              max_advance = 0.25,
+              scale = 0.5,
+            },
           },
         },
-      },
+      }}
+      
     },
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
