@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.48
+Date: 2025-08-29
+  Bugfixes:
+    - Blueprint sandbox: Telescopes will no longer crash the game when placed in a blueprint sandbox. They will not produce astronomical data. This is an incomplete fix. https://github.com/nicholasgower/planet-muluna/issues/281
+    - Copied fixed flib library file into Muluna as stopgap until PR for flib is accepted. https://github.com/nicholasgower/planet-muluna/issues/280
+---------------------------------------------------------------------------------------------------
 Version: 2.0.47
 Date: 2025-08-28
   Locale:
