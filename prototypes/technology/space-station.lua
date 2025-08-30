@@ -192,7 +192,7 @@ data:extend{
         type = "technology",
         name = "crusher",
         localised_name = {"entity-name.crusher"},
-        localised_description = {"entity-description.crusher"},
+        localised_description = {"entity-description.muluna-crusher"},
         essential = true,
         unit= {
             count = 500,
@@ -1599,3 +1599,4 @@ if not data.raw["lab"]["biolab"] then
   end
 
 
+data.raw["assembling-machine"]["crusher"].localised_description = {"entity-description.muluna-crusher"}
