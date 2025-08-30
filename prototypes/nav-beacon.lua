@@ -2,7 +2,7 @@ if settings.startup["enable-nav-beacon"].value == true then
     
     
     require("__core__/lualib/util.lua")
-    local flib_bounding_box = require("__flib__/bounding-box")
+    local flib_bounding_box = Muluna.flib_bounding_box
 
 
    
@@ -47,8 +47,10 @@ if settings.startup["enable-nav-beacon"].value == true then
             distribution_effectivity = 0,
             distribution_effectivity_bonus_per_quality_level = 0,
             supply_area_distance = 0,
-            selection_box = flib_bounding_box.resize(radarEntity.selection_box,3),
-            collision_box = flib_bounding_box.resize(radarEntity.collision_box,3),
+            collision_box = {{-3.9, -3.9}, {3.9, 3.9}},
+            selection_box = {{-4, -4}, {4, 4}},
+            --selection_box = flib_bounding_box.resize(radarEntity.selection_box,3),
+            --collision_box = flib_bounding_box.resize(radarEntity.collision_box,3),
             minable = { mining_time = 2, result = "muluna-satellite-radar" },
             fast_replaceable_group = "muluna-satellite-radar",
             energy_per_sector = "1TJ",

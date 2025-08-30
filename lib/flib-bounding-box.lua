@@ -287,7 +287,7 @@ end
 --- @param delta number
 --- @return BoundingBox
 function flib_bounding_box.resize(box, delta)
-  local box = flib_bounding_box.ensure_explicit(box)
+  --local box = flib_bounding_box.ensure_explicit(box)
   if box.left_top then
     return {
       left_top = { x = box.left_top.x - delta, y = box.left_top.y - delta },
