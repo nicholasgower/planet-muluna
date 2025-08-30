@@ -605,6 +605,38 @@ data:extend{
                 type = "unlock-recipe",
                 recipe="controlled-combustion-atmosphere"
             },
+            
+            
+            
+        }
+    },
+    {
+        type = "technology",
+        name = "muluna-steam-crusher",
+        localised_name = {"entity-name.muluna-steam-crusher"},
+        localised_description = {"entity-description.crusher"},
+        prerequisites = {"muluna-advanced-boiler"},
+        research_trigger = {
+            type = "build-entity",
+            entity = "muluna-advanced-boiler",
+        },
+        icons = {
+        {
+            icon = "__muluna-graphics__/graphics/technology/crusher-ai-upscaled.png",
+            icon_size = 256,
+        },  
+        {
+            icon = data.raw["fluid"]["steam"].icon,
+            icon_size=data.raw["fluid"]["steam"].icon_size,
+            --scale=0.3,
+            shift = {45,45},
+            scale=0.75,
+        },
+        
+        },
+        icon = "__muluna-graphics__/graphics/thermal-plant/thermal-plant-icon-big.png",
+        icon_size = 640,
+        effects = {
             {
                 type = "unlock-recipe",
                 recipe = "muluna-steam-crusher",
@@ -1531,7 +1563,6 @@ if settings.startup["muluna-easy-wood-gasification-productivity"].value == true 
 end
 
 if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
-    local boiler = data.raw["technology"]["muluna-advanced-boiler"]
     table.insert(boiler.effects,{
                 type = "unlock-recipe",
                 recipe = "muluna-steam-stone-furnace"
