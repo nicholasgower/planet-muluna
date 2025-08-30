@@ -5,6 +5,7 @@ local rro=Muluna.rro
 
 --replace_object(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform-thruster","space-platform")
 rro.replace(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform","muluna-alice-propellant")
+table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"muluna-steam-crusher")
 table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"wood-gas-processing")
 for _,result in pairs(data.raw["technology"]["space-science-pack"].effects) do
     if result.recipe == "space-science-pack" then
