@@ -183,7 +183,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "crusher"
+            "space-science-pack"
         },
         icon = "__muluna-graphics__/graphics/technology/asteroid-collector(ai-upscaled).png",
         icon_size=256,
