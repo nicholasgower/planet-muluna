@@ -10,10 +10,3 @@ data.raw["recipe"]["crusher"].subgroup = "smelting-machine"
 data.raw["item"]["crusher"].subgroup = "smelting-machine"
 data.raw["assembling-machine"]["crusher"].subgroup = "smelting-machine"
 data.raw["item"]["crusher"].order = "ca[crusher]"
-table.insert(data.raw["technology"]["recycling"].effects,
-    {
-                type = "unlock-recipe",
-                recipe = "muluna-regolith-recycling"
-    }
-
-)

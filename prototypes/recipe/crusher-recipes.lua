@@ -278,7 +278,7 @@ data_tape.ingredients = {
 
 
 
-local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,tree_crushing,regolith_sorting,regolith_recycling}
+local recipes = {anorthite_crushing,alumina_crushing,aluminum_crushing,stone_crushing,aluminum_plate,aluminum_cable,tree_crushing,regolith_sorting}
 if wood_crushing then
     table.insert(recipes,wood_crushing)
 end
