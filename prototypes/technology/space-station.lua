@@ -1563,6 +1563,26 @@ if settings.startup["muluna-easy-wood-gasification-productivity"].value == true 
 end
 
 if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
+    -- data:extend{{
+    --     type = "technology",
+    --     name = "muluna-steam-furnaces",
+    --     effects = {},
+    --     prerequisites = {"muluna-advanced-boiler"},
+    --     research_trigger = {},
+    --     icons = {{
+    --             icon = data.raw["technology"]["advanced-material-processing"].icon,
+    --             icon_size = 256,
+    --         },  
+    --         {
+    --             icon = data.raw["fluid"]["steam"].icon,
+    --             icon_size=data.raw["fluid"]["steam"].icon_size,
+    --             --scale=0.3,
+    --             shift = {45,45},
+    --             scale=0.75,
+    --         }}
+
+    -- }}
+    local boiler = data.raw["technology"]["muluna-steam-crusher"]
     table.insert(boiler.effects,{
                 type = "unlock-recipe",
                 recipe = "muluna-steam-stone-furnace"
