@@ -13,6 +13,20 @@ local function get_telescope_build_limit(force)
 
 end
 
+local function same_surface_properties(surface1,planet)
+    if not planet.surface_properties then return false end
+    for _,property in pairs({"pressure","gravity","temperature","magnetic-field"}) do
+        
+        if (surface1.get_property(property) or prototypes.surface_property[property].default_value) ~= (planet.surface_properties[property] or prototypes.surface_property[property].default_value) then
+            game.print(property .. " " .. planet.name or "nil" .. " " .. tostring(planet.surface_properties[property]) .. tostring(surface1.get_property(property)))
+            game.print(tostring(planet.surface_properties[property]))
+            game.print(tostring(surface1.get_property(property)))
+            return false
+        end
+    end
+    return true
+end
+
 Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     if not storage.telescopes then storage.telescopes = {} end
     local entity = event.entity
@@ -97,10 +111,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             
         elseif string.find(entity.surface.name,"bpsb") then --If surface is a blueprint sandbox
             for _,planet in pairs(prototypes.space_location) do
-                if planet.surface_properties and entity.surface.planet then
-                    if rro.deep_equals(entity.surface.planet,planet) then
-                        recipe_name = "muluna-telescope-observation-" .. planet.name
-                    end
+                if planet.type == "planet" and same_surface_properties(entity.surface,planet) then
+                    recipe_name = "muluna-telescope-observation-" .. planet.name
                 end
             end
 
