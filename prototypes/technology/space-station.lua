@@ -1153,12 +1153,12 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack", "metallic-asteroid-crushing","metallurgic-science-pack","speed-module-3"
+            "interstellar-science-pack", "metallic-asteroid-crushing","metallurgic-science-pack","speed-module-3","crusher"
         },
         icons = {
             {
-                icon = "__muluna-graphics__/graphics/technology/comminution.png",
-                icon_size = 968,
+                icon = "__muluna-graphics__/graphics/technology/crusher-ai-upscaled.png",
+                icon_size = 256
             },  
             {
                 icon = data.raw["item"]["tungsten-plate"].icon,
