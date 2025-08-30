@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.50
+Date: 2025-08-30
+  Balancing:
+    - "Asteroid collector" prerequisite changed to "Space science pack" from "Crusher".
+  Bugfixes:
+    - Blueprint Sandbox: When a sandbox's surface properties match the surface conditions of a telescope data recipe, that recipe will be enabled for the sandbox. If none match, no recipe will be chosen. https://github.com/nicholasgower/planet-muluna/issues/281
+    - Removed custom "Lunar regolith recycling" recipe from the game. https://github.com/nicholasgower/planet-muluna/issues/284
+  Graphics:
+    - Replaced Comminution icon in "Crusher 2" technology icon with upscaled crusher item icon.
+  Locale:
+    - Description of crusher entity and technology changed to reflect that the crusher is an upgrade to the steam crusher.
+  Changes:
+    - Separated steam crusher and steam furnace recipes from "Vacuum boiler" technology into their own technology.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.49
 Date: 2025-08-29
   Graphics:
