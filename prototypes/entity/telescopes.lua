@@ -25,7 +25,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
       working_visualisations = {{
         constant_speed = true,
         always_draw = true,
-        north_animation =
+        animation =
         {
           layers =
           {
@@ -61,6 +61,10 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     },
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
+
+-- for _,animation in pairs({"south_animation","east_animation","west_animation"}) do
+--   telescope.graphics_set.working_visualisations[animation] = telescope.graphics_set.working_visualisations["north_animation"]
+-- end
 
 table.remove(telescope.fluid_boxes,1)
 telescope.fluid_boxes[1].pipe_connections[1].connection_category = "data"
