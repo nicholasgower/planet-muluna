@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.52
+Date: 2025-08-31
+  Changes:
+    - Added four new settings to increase difficulty in the vein of TheSixthRoc's "Space Age Hard Mode".
+---------------------------------------------------------------------------------------------------
 Version: 2.0.51
 Date: 2025-08-30
   Bugfixes:
