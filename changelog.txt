@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.53
+Date: 2025-08-31
+  Compatibility:
+    - Raised required any-planet-start version to 1.1.20.
+  Bugfixes:
+    - Moved parts of APS compatibility patch later in the data pipeline to improve support for mods that depend on vanilla technologies that Muluna start removes.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.52
 Date: 2025-08-31
   Changes:
