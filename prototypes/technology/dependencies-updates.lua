@@ -116,10 +116,12 @@ if not (settings.startup["rocs-hardcore-push-back-logistic-system"] and settings
     -- })
 
     --data.raw["technology"]["logistic-system"].unit.count=300
-
-    rro.remove(data.raw["technology"]["logistic-system"].prerequisites , "space-science-pack")
-    rro.soft_insert(data.raw["technology"]["logistic-system"].prerequisites , "space-platform")
-    rro.remove(data.raw["technology"]["logistic-system"].unit.ingredients, {"space-science-pack", 1})
+    if settings.startup["muluna-hardcore-lock-logistic-system-technology"].value == false then
+        rro.remove(data.raw["technology"]["logistic-system"].prerequisites , "space-science-pack")
+        rro.soft_insert(data.raw["technology"]["logistic-system"].prerequisites , "space-platform")
+        rro.remove(data.raw["technology"]["logistic-system"].unit.ingredients, {"space-science-pack", 1})
+    end
+    
 end
 
 

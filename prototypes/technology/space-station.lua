@@ -1594,6 +1594,68 @@ if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
             
 end
 
+if settings.startup["muluna-hardcore-lock-cargo-drops"].value == true then
+    data:extend{
+        Muluna.rro.merge(
+            PlanetsLib.cargo_drops_technology_base("muluna", "__muluna-graphics__/graphics/moon-icon.png",1482),
+            {
+                unit = {
+                    count = 500,
+                    time = 60,
+                    ingredients = {
+                        {"automation-science-pack", 1},
+                        {"logistic-science-pack", 1},
+                        {"chemical-science-pack", 1},
+                        --{"production-science-pack", 1},
+                        --{"utility-science-pack", 1},
+                        {"space-science-pack", 1},
+                        --{"interstellar-science-pack",1},
+                        --{"agricultural-science-pack",1},
+                        --{"metallurgic-science-pack",1},
+                    }
+                },
+                prerequisites = {"space-science-pack"}
+            }
+        )
+    }
+end
+
+local function add_space(tech) 
+    rro.soft_insert(tech.prerequisites,"space-science-pack")
+    if tech.unit then
+        rro.soft_insert(tech.unit.ingredients,{"space-science-pack",1})
+    
+    else
+        tech.unit = {
+                    count = 100,
+                    time = 60,
+                    ingredients = {
+                        {"automation-science-pack", 1},
+                        {"logistic-science-pack", 1},
+                        --{"chemical-science-pack", 1},
+                        --{"production-science-pack", 1},
+                        --{"utility-science-pack", 1},
+                        {"space-science-pack", 1},
+                        --{"interstellar-science-pack",1},
+                        --{"agricultural-science-pack",1},
+                        --{"metallurgic-science-pack",1},
+                    }
+                }
+        tech.research_trigger = nil
+    end
+
+
+end
+
+if settings.startup["muluna-hardcore-greenhouses-require-space-science"].value == true then
+    add_space(data.raw["technology"]["muluna-greenhouses"])
+    rro.replace(data.raw["technology"]["wood-gas-processing"].prerequisites,"muluna-greenhouses","muluna-wood-cultivation")
+end
+
+if settings.startup["muluna-hardcore-silicon-requires-space-science"].value == true then
+    add_space(data.raw["technology"]["muluna-silicon-processing"])
+end
+
 if not data.raw["lab"]["biolab"] then
     data.raw["technology"]["cryolab"] = nil
   end
