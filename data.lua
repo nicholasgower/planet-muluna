@@ -34,7 +34,12 @@ require("compat.maraxsis")
 require("compat.solar-productivity")
 --if mods["MT-lib"] then require("compat.MT-lib") end
 if mods["any-planet-start"] then
-    APS.add_planet{name = "muluna" , filename = "__planet-muluna__/compat/any-planet-start", technology = "planet-discovery-muluna"}
+    APS.add_planet{
+        name = "muluna" , 
+        filename = "__planet-muluna__/compat/any-planet-start", 
+        fixes_filename = "__planet-muluna__/compat/any-planet-start-final-fixes",
+        technology = "planet-discovery-muluna"
+    }
 end
 
 for _,lab in pairs(data.raw["lab"]) do
