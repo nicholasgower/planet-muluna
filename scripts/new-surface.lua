@@ -109,9 +109,6 @@ local function place_muluna_cargo_pods()
     if mods["moshine"] then
         
     end
-    for i = 1,10 do
-        random_place_entity(muluna,"lunar-rock")
-    end
 
 
     for i = 1,4 do
@@ -170,8 +167,13 @@ function Public.on_new_surface(muluna_index)
                 game.print({"console.muluna-incompatible-aps-setting"})
             end
         end
+        
         if settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == false then
             place_muluna_cargo_pods()  
+        end
+        local muluna = game.planets["muluna"].surface
+        for i = 1,10 do
+            random_place_entity(muluna,"lunar-rock")
         end
         
         
