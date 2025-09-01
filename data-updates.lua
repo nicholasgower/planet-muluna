@@ -788,6 +788,7 @@ require("compat.bob-mods")
 require("compat.transplutonic")
 require("prototypes.technology.technology-updates")
 require("prototypes.overrides.data-cells")
+require("prototypes.overrides.gleba-greenhouse-recipes")
 require("compat.Age-of-Production")
 
 local parent_planet = "nauvis"

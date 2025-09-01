@@ -706,6 +706,20 @@ data:extend{
         }
     },
     {
+        type = "technology", 
+        name = "muluna-gleba-greenhouses",
+        prerequisites = {"muluna-fertilized-greenhouses-vulcanus","overgrowth-soil"},
+        icons = greenhouse_technology_icon(data.raw.planet.gleba.icon,64),
+        research_trigger = {
+            type = "craft-item",
+            item = "wood",
+            count = 40,
+        },
+        effects = {
+            
+        }
+    },
+    {
         type = "technology",
         name = "muluna-gas-venting",
         icons = {

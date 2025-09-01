@@ -72,6 +72,15 @@ function rro.replace(list, objectToRemove, replacementObject)
     if list then
         for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
             if rro.deep_equals(list[i] , objectToRemove) then
+                if type(replacementObject) == "table" then
+                    for j,object in pairs(replacementObject) do
+                        if type(replacementObject[j]) == "function" then --If replacementObject entry is a function, replace the function with the function's return value with other_value as input.
+                            local other_value = list[i][j]
+                            replacementObject[j] = replacementObject[j](other_value)
+                        end
+                    end
+                end
+                
                 if replacementObject ~= nil and not rro.contains(list,replacementObject) then
                     list[i] = replacementObject -- Replace the object
                 else
