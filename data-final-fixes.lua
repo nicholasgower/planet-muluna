@@ -284,16 +284,18 @@ cable_recycling.surface_conditions = {
 
 }
 
-for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
+local function add_oxygen_condition(entity)
     --print(entity.name)
-    if 
+    if  (entity.burner and
+        rro.contains(entity.burner.fuel_categories,"chemical"))
+        or
         entity.energy_source and 
         ((
             entity.energy_source.type == "burner" and
             rro.contains(entity.energy_source.fuel_categories,"chemical") and
             not rro.contains({"car","locomotive"},entity.type) and
             not rro.contains(Muluna.constants.oxygen_restriction_blacklist,entity.name) and
-            not (entity.type == "assembling-machine" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower"))) 
+            not (entity.type == "assembling-machine" or entity.type == "furnace" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower") or rro.contains(entity.crafting_categories,"fuel-processing"))) 
         )
             or
         (
@@ -308,7 +310,17 @@ for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
         })
         
     end
+
 end
+
+
+for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
+    add_oxygen_condition(entity)
+end
+
+-- for _,entity in pairs(data.raw["burner-generator"]) do
+--     add_oxygen_condition(entity)
+-- end
 
 if settings.startup["override-space-connection"].value == true then
   
