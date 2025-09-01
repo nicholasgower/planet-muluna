@@ -53,9 +53,9 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         
     -- end
 
-    if mods["aai-industry"] then
-        error("\n\nAAI Industry is incompatible with Muluna start.\n")
-    end
+    -- if mods["aai-industry"] then
+    --     error("\n\nAAI Industry is incompatible with Muluna start.\n")
+    -- end
     --assert(settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == false,{"console.muluna-incompatible-aps-setting"})
     if data.raw["technology"]["electronics"].research_trigger then
         data.raw["technology"]["electronics"].research_trigger.item="aluminum-plate"
@@ -72,6 +72,20 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         type = "unlock-recipe",
         recipe = "automation-science-pack-muluna",
     })
+    if mods["aai-industry"] then
+        local burner_lab = table.deepcopy(data.raw["recipe"]["burner-lab"])
+        burner_lab.name = "burner-lab-muluna"
+        rro.deep_replace(burner_lab,"copper-plate","aluminum-plate")
+        burner_lab.localised_name = {"recipe-name.x-from-aluminum",{"item-name.burner-lab"}}
+        burner_lab.icons=dual_icon("burner-lab","aluminum-plate")
+        data:extend{burner_lab}
+        rro.soft_insert(data.raw["technology"]["electric-lab"].effects,
+        {
+            type = "unlock-recipe",
+            recipe = burner_lab.name,
+        })
+    end
+
     --rro.replace_name(data.raw["recipe"]["electric-furnace"].ingredients,"advanced-circuit","electronic-circuit")
     --data.raw["recipe"]["electric-furnace"].enabled = true
     --data.raw["recipe"]["electric-mining-drill"].enabled = true
