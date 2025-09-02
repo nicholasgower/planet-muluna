@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.57
+Date: 2025-09-02
+  Bugfixes:
+    - Stopped crash on load with Muluna start without Maraxsis. https://github.com/nicholasgower/planet-muluna/issues/291
+---------------------------------------------------------------------------------------------------
 Version: 2.0.56
 Date: 2025-09-01
   Compatibility:
