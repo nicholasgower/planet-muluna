@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.59
+Date: 2025-09-02
+  Bugfixes:
+    - Game will no longer crash when looking at Muluna before tiles have generated. https://github.com/nicholasgower/planet-muluna/issues/289
+---------------------------------------------------------------------------------------------------
 Version: 2.0.58
 Date: 2025-09-02
   Bugfixes:
