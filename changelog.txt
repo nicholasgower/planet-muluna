@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.61
+Date: 2025-09-02
+  Changes:
+    - Added option to configure the amount of astronomical data required to craft an exploration science pack.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.60
 Date: 2025-09-02
   Changes:
