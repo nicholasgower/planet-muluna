@@ -208,6 +208,16 @@ data:extend{
         maximum_value = 10,
         order = "ce"
       },
+      {
+        type = "double-setting",
+        name = "muluna-balance-exploration-science-data-cost",
+        setting_type = "startup",
+        default_value = 10,
+        minimum_value = 1,
+        maximum_value = 100,
+        order = "cf"
+
+      },
 
     --   {
     --     type = "double-setting",
