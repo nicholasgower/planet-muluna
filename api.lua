@@ -42,6 +42,7 @@ elseif Muluna.stage == "control" then
     Muluna.complete_research = require("lib.notifications").research_technology
 end 
 
+require("lib.table")
 
 
 return Muluna
