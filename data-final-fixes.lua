@@ -35,7 +35,6 @@ end
 require("prototypes.technology.interstellar-technologies")
 require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
-require("prototypes.overrides.telescope-data")
 require("prototypes.final-fixes.telescope-prototype")
 
 --Overrides any mods which add their own techs to space platform thruster as a prereq.
