@@ -73,9 +73,9 @@ local techs_interstellar = {
             --"planet-discovery-lemures",
             
         },
-    fusion_thruster = {
-        "fusion-thruster"
-    }
+    -- fusion_thruster = {
+    --     "fusion-thruster"
+    -- }
     
 }
 
@@ -100,7 +100,7 @@ end
 for _,tech in pairs(data.raw["technology"]) do
 
     local interstellar = 
-        ( -- If is Aquilo-tier discovery technology
+        ( -- If is Aquilo-tier space-related technology
             tech.unit and 
             (
                 (
@@ -111,8 +111,9 @@ for _,tech in pairs(data.raw["technology"]) do
                     ,rro.predicates.equals(true)) >= 2
                     and
                     (
-                        string.find(tech.name,"discovery") or
-                        string.find(tech.name,"thruster")
+                    rro.find_many(tech.name,{"discovery","thruster","asteroid%-collector","asteroid_collector"})
+                        --string.find(tech.name,"discovery") or
+                        --string.find(tech.name,"thruster")
                     )
                 ) or
                 (

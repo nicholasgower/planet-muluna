@@ -159,6 +159,20 @@ function rro.contains(list,object)
     return false
 end
 
+---Check if string.find(string,list[i]) returns a value for any i in list
+function rro.find_many(string,list) 
+    --local contains = false
+    if list == nil then return false end
+    for _,item in pairs(list) do -- Iterate forward
+        if string.find(string,item) then
+            return true
+            
+            end
+            
+    end
+    return false
+end
+
 
 
 ---Adds object to list if it doesn't already exist. 
