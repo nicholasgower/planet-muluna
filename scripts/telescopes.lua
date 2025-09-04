@@ -8,8 +8,12 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=true}
 end
 
-local function get_telescope_build_limit(force)
-    return 1
+local function get_telescope_build_limit(entity)
+    if entity.surface.platform then
+        return nil
+    else
+        return 1
+    end
 
 end
 
@@ -18,9 +22,9 @@ local function same_surface_properties(surface1,planet)
     for _,property in pairs({"pressure","gravity","temperature","magnetic-field"}) do
         
         if (surface1.get_property(property) or prototypes.surface_property[property].default_value) ~= (planet.surface_properties[property] or prototypes.surface_property[property].default_value) then
-            game.print(property .. " " .. planet.name or "nil" .. " " .. tostring(planet.surface_properties[property]) .. tostring(surface1.get_property(property)))
-            game.print(tostring(planet.surface_properties[property]))
-            game.print(tostring(surface1.get_property(property)))
+            --game.print(property .. " " .. planet.name or "nil" .. " " .. tostring(planet.surface_properties[property]) .. tostring(surface1.get_property(property)))
+            --game.print(tostring(planet.surface_properties[property]))
+            --game.print(tostring(surface1.get_property(property)))
             return false
         end
     end
@@ -46,9 +50,9 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     -- end
     local reactor = nil
     if is_heat_assembling_machine then
-        local telescope_build_limit = get_telescope_build_limit(entity.force)
+        local telescope_build_limit = get_telescope_build_limit(entity)
         local count = rro.count(storage.telescopes,function(entry) return entry["assembling-machine"].valid and entry["assembling-machine"].surface == entity.surface end)
-        if count >= telescope_build_limit then --Forbid building if count exceeded.
+        if telescope_build_limit and count >= telescope_build_limit then --Forbid building if count exceeded.
             local position = entity.position
             local surface = entity.surface
             
@@ -100,15 +104,17 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
                     speed = 0.01,
                 }
             else
-                entity.force.print({"",text," ",entity.position})
+                entity.force.print({"",text," ",entity.gps_tag})
             end
             entity.destroy{}
             return 
         end
 
         local recipe_name
+        local lock = true
         if entity.surface.platform then
-            
+            --recipe_name = "muluna-telescope-observation-space-platform"
+            lock = false
         elseif string.find(entity.surface.name,"bpsb") then --If surface is a blueprint sandbox
             for _,planet in pairs(prototypes.space_location) do
                 if planet.type == "planet" and same_surface_properties(entity.surface,planet) then
@@ -123,7 +129,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             entity.set_recipe(recipe_name,"normal")
         end
         
-        entity.recipe_locked = true
+        entity.recipe_locked = lock
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["constant-combinator"],
             position = entity.position,
