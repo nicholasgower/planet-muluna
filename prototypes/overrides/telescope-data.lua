@@ -1,5 +1,22 @@
 local rro = Muluna.rro
 
+local parent_planet = "nauvis"
+
+if mods["any-planet-start"] then
+    local nauvis = data.raw["planet"]["nauvis"]
+    
+    parent_planet = settings.startup["aps-planet"].value
+    --assert(1==2,tostring(parent_planet))
+    local start_planet = settings.startup["aps-planet"].value
+    if parent_planet == "none" or parent_planet =="muluna" then
+        parent_planet = "nauvis"
+    end
+    
+    
+    
+    --local o_parent_planet = data.raw["planet"][parent_planet]
+end
+
 -- Telescope data collection recipes
 for _,space_location in pairs(data.raw["planet"]) do
     print(rro.safe_find(data.raw["mod-data"],{"maraxsis-constants","TRENCH_SURFACE_NAME"}))
@@ -10,7 +27,7 @@ for _,space_location in pairs(data.raw["planet"]) do
              
              
         then
-        local distance_factor = ((Muluna.telescopes.shortest_space_distance("nauvis",space_location.name)))
+        local distance_factor = ((Muluna.telescopes.shortest_space_distance(parent_planet,space_location.name)))
         if distance_factor then
             local recipe = {
                 type = "recipe",
@@ -82,7 +99,7 @@ local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-
 
 )
 
-space_platform_data.results[1].amount = space_platform_data.results[1].amount * 2.5
+space_platform_data.results[1].amount = 100
 
 data:extend{space_platform_data}
 
