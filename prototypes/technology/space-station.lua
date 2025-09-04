@@ -828,6 +828,50 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-space-telescope",
+        unit = {
+            count = 3000,
+            time = 30,
+            ingredients = {
+                    
+            }
+        },
+        ignore_tech_cost_multiplier = true,
+        prerequisites = {
+            "promethium-science-pack",
+            "space-science-pack",
+            --"muluna-nanofoamed-polymers",
+            "utility-science-pack",
+        },
+        icons = {
+            {
+                icon = "__space-exploration-graphics__/graphics/technology/telescope.png",
+                icon_size = 128,
+            },  
+            {
+                icon = data.raw["item"]["promethium-asteroid-chunk"].icon,
+                icon_size=data.raw["item"]["promethium-asteroid-chunk"].icon_size,
+                --scale=0.3,
+                shift = {45,45},
+                scale=0.75,
+            },
+        
+        },
+        --icons = Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope.png",icon_size = 128}},8),
+        --icon = "__muluna-graphics__/graphics/technology/moshine-tech-silicon-cell.png",
+        --icon_size = 128,
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-telescope-observation-space-platform",
+            },
+            -- All telescope observation recipes added in final-fixes
+        },
+        --localised_name={"entity-name.muluna-telescope"},
+        --localised_description={"entity-description.muluna-telescope"}
+    },
+    {
+        type = "technology",
         name = "thruster-oxidizer",
         localised_name = {"fluid-name.thruster-oxidizer"},
         icons = Muluna.img.blur_technology_icon({{icon = data.raw["fluid"]["thruster-oxidizer"].icon, icon_size = 64}},16),

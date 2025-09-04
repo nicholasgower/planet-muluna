@@ -60,5 +60,40 @@ for _,space_location in pairs(data.raw["planet"]) do
         end
     end
 end
+local space_platform = data.raw["surface"]["space-platform"]
+local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-telescope-observation-muluna"]),
+    {
+        name = "muluna-telescope-observation-space-platform",
+        surface_conditions = {
+                    {
+                        property = "gravity",
+                        min = 0,
+                        max = 0,
+                    },
+                },
+        localised_name = "_nil",
+        order = "zz-zzz[muluna-telescope-observation-space-platform]",
+        icons = Muluna.icons.dual_icon("muluna-astronomical-data","space-platform"),
+        results = table.deepcopy(data.raw["recipe"]["muluna-telescope-observation-aquilo"].results) or {{type = "fluid", name = "muluna-astronomical-data",amount = 40}},
+        ingredients = {{type = "item", name = "promethium-asteroid-chunk", amount = 10}}
+    }
+    
+
+
+)
+
+space_platform_data.results[1].amount = space_platform_data.results[1].amount * 2.5
+
+data:extend{space_platform_data}
+
+PlanetsLib.add_science_packs_from_vanilla_lab_to_technology(data.raw["technology"]["muluna-space-telescope"])
+
+if data.raw["technology"]["maraxsis-promethium-productivity"] then
+    rro.soft_insert(data.raw["technology"]["maraxsis-promethium-productivity"].effects, {
+        type = "change-recipe-productivity",
+        recipe = "muluna-telescope-observation-space-platform",
+        change = 0.1
+    })
+end
 
 
