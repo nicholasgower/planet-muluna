@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2025-09-04
+  Compatibility:
+    - APS: Telescope data production rate is now calculated relative to Muluna's parent body, not hardcoded to Nauvis.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2025-09-04
   Features:
