@@ -117,7 +117,7 @@ for _,tech in pairs(data.raw["technology"]) do
                     )
                 ) or
                 (
-                    string.find(tech.name,"aop")
+                    string.find(tech.name,"aop") --Age of production techs
                 )
             )
             

@@ -145,6 +145,13 @@ data:extend{
         order = "ee",
       },
       {
+        type = "bool-setting",
+        name = "muluna-enable-terminus-planet",
+        setting_type = "startup",
+        default_value = false,
+        order = "ef",
+      },
+      {
         type = "int-setting",
         name = "space-science-pack-output",
         setting_type = "startup",

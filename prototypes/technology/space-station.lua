@@ -38,9 +38,11 @@ local function technology_icon_constant_productivity(technology_icon,new_icon_si
   end
 
 
-local function technology_icon_moon_complete(moon_icon, icon_size)
-	icon_size = icon_size or 256
-	local icons = util.technology_icon_constant_planet(moon_icon)
+
+
+local function technology_icon_planet_complete(planet_icon,icon_size)
+    icon_size = icon_size or 256
+	local icons = util.technology_icon_constant_planet(planet_icon)
     icons[3]=icons[2]
     icons[2]=icons[1]
     icons[1] = {
@@ -51,7 +53,7 @@ local function technology_icon_moon_complete(moon_icon, icon_size)
 	icons[2].icon_size = icon_size
     icons[2].scale = 0.8*128/icon_size
     icons[2].shift = {0,10}
-	icons[3].icon = "__PlanetsLib__/graphics/icons/moon-technology-symbol.png"
+	
 	-- End result is an icons object ressembling the following, as of 2.0.37. Future API changes might change this code,
 	-- which is why this function is written to reference the base function instead of copying it by hand.
 	-- local icons = {
@@ -67,6 +69,14 @@ local function technology_icon_moon_complete(moon_icon, icon_size)
 	-- 		floating = true
 	-- 	},
 	-- }
+	return icons
+
+
+end
+
+local function technology_icon_moon_complete(moon_icon, icon_size)
+    local icons = technology_icon_planet_complete(moon_icon,icon_size)
+	icons[3].icon = "__PlanetsLib__/graphics/icons/moon-technology-symbol.png"
 	return icons
 end
 
@@ -1508,6 +1518,35 @@ data:extend{
     -- }
 
 }
+
+if settings.startup["muluna-enable-terminus-planet"].value == true then
+    data:extend{{
+        type = "technology",
+        name = "planet-discovery-terminus",
+        essential = true,
+        research_trigger = {
+            type = "craft-fluid",
+            fluid = "thruster-fuel"
+        },
+        effects = {
+            {
+                type = "unlock-space-location",
+                space_location = "terminus"
+            },
+        },
+        prerequisites = {
+            "promethium-science-pack"
+        },
+        icons = technology_icon_planet_complete("__muluna-graphics__/graphics/technology/pluto.png",256),
+        localised_description={"space-location-description.terminus"},
+        
+        
+    }}
+
+
+
+end
+
 if settings.startup["muluna-easy-wood-gasification-productivity"].value == true or (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") then-- or  then
     local gasification_prod = {
         type = "technology",
