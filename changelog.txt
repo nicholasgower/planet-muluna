@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2025-09-05
+  Compatibility:
+    - Rewrote changes to "space-platform" technology to not delete all effects added by other mods.
+    - SA Galore: All SA Galore recipes added to "space-platform" technology moved to more appropriate technologies. https://github.com/nicholasgower/planet-muluna/issues/294
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2025-09-04
   Compatibility:
