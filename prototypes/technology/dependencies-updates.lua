@@ -76,7 +76,11 @@ local space_platform=data.raw["technology"]["space-platform"]
 if settings.startup["muluna-easy-revert-changes-to-space-platform-technology"].value == true then
 
 else
-    space_platform.effects = {}
+    for _,recipe in pairs({"asteroid-collector","crusher","metallic-asteroid-crushing","oxide-asteroid-crushing","carbonic-asteroid-crushing"}) do
+        rro.remove(space_platform.effects,{type = "unlock-recipe",recipe = recipe})
+    end
+    
+    --space_platform.effects = {}
 end
 -- end
 
