@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 2025-09-06
+  Bugfixes:
+    - Added migration to assist players stuck on finding big lunar rocks due to them not spawning on worlds with spawned cargo pods disabled.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.5
 Date: 2025-09-06
   Locale:
