@@ -66,8 +66,9 @@ steam_proxy.icon_size = 48
 steam_proxy.heat_capacity = "0.2kJ"
 steam_proxy.custom_tooltip_fields = {
     {
-      name = {"description.steam-equivalent"},
-      value = tostring(util.parse_energy(steam_proxy.heat_capacity)/200)
+      name = {"tooltip.steam-equivalent"},
+      value = {"tooltip-value.steam-equivalent",tostring(util.parse_energy(steam_proxy.heat_capacity)/200)}
+      
     }
   }
 
