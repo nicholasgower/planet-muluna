@@ -484,6 +484,7 @@ local diffusion = {
         --icons = data.raw["item"][].icons,
         --allow_productivity = false,
         auto_recycle = false,
+        allow_quality = false,
     }
 if settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true then
     -- table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 0.5,ignored_by_productivity = 1})
