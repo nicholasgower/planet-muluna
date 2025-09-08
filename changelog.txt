@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.8
+Date: 2025-09-08
+  Balancing:
+    - Banned quality modules in diffused plastic recipe.
+    - Banned quality modules in greenhouse recipes. This does not make it impossible to make quality wood from greenhouses, just more difficult.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.7
 Date: 2025-09-08
   Locale:
