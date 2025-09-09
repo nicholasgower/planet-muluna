@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.12
+Date: 2025-09-09
+  Changes:
+    - "Silicon processing technology requires space science" setting removes production science from the technology's requirements.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.11
 Date: 2025-09-09
   Locale:
