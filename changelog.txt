@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.10
+Date: 2025-09-09
+  Bugfixes:
+    - When generating a new surface spawning cargo pods with zero items, the pod will instead contain one item.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.9
 Date: 2025-09-09
   Locale:
