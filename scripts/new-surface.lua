@@ -17,7 +17,9 @@ local function random_place(surface,item_name,item_count)
         entity.position[2] = entity.position[2] + math.random(-8,8) 
     end
     local chest = surface.create_entity(entity)
-    chest.get_output_inventory().insert({name = item_name,count = math.floor(item_count_adjusted) or 1})
+    local amount = math.floor(item_count_adjusted) or 1
+    if amount <= 0 then amount = 1 end
+    chest.get_output_inventory().insert({name = item_name,count = amount})
 end
 
 local function random_place_entity(surface,entity_name)
