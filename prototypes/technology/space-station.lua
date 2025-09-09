@@ -1668,7 +1668,8 @@ local function add_space(tech)
     rro.soft_insert(tech.prerequisites,"space-science-pack")
     if tech.unit then
         rro.soft_insert(tech.unit.ingredients,{"space-science-pack",1})
-    
+        rro.remove(tech.unit.ingredients,{"production-science-pack","_any"})
+        rro.remove(tech.prerequisites,"production-science-pack")
     else
         tech.unit = {
                     count = 100,
