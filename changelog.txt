@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.11
+Date: 2025-09-09
+  Locale:
+    - Settings in the style of TheSixthRoc's Hard Mode are now marked differently from other settings labeled "hard."
+---------------------------------------------------------------------------------------------------
 Version: 2.1.10
 Date: 2025-09-09
   Bugfixes:
