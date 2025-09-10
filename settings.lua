@@ -69,6 +69,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "ai",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -77,6 +78,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "aj",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -85,6 +87,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "ak",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -93,6 +96,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "al",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
