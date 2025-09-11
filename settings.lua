@@ -140,6 +140,15 @@ data:extend{
         default_value = false,
         order = "bf",
       },
+      {
+        type = "bool-setting",
+        name = "muluna-alternative-automation-pack-recipe",
+        --localised_name = {"mod-setting-name.muluna-alternative-automation-pack-recipe"},
+        --localised_description={"mod-setting-des.muluna-alternative-automation-pack-recipe"},
+        setting_type = "startup",
+        default_value = false,
+        order = "bg"
+      },
       
       {
         type = "bool-setting",
