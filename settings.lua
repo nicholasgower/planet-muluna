@@ -140,6 +140,15 @@ data:extend{
         default_value = false,
         order = "bf",
       },
+      {
+        type = "bool-setting",
+        name = "muluna-alternative-automation-pack-recipe",
+        --localised_name = {"mod-setting-name.muluna-alternative-automation-pack-recipe"},
+        --localised_description={"mod-setting-des.muluna-alternative-automation-pack-recipe"},
+        setting_type = "startup",
+        default_value = false,
+        order = "bg"
+      },
       
       {
         type = "bool-setting",
@@ -280,15 +289,6 @@ data:extend{
       setting_type = "runtime-per-user",
       default_value = true,
       order = "ba"
-    },
-    {
-      type = "bool-setting",
-      name = "muluna-alternative-automation-pack-recipe",
-      localised_name = {"mod-setting-name.muluna-alternative-automation-pack-recipe"},
-      localised_description={"mod-setting-name.muluna-alternative-automation-pack-recipe"},
-      setting_type = "startup",
-      default_value = false,
-      order = "za"
     },
     -- {
     --   type = "bool-setting",

@@ -161,7 +161,7 @@ if not (settings.startup["aps-planet"] and settings.startup["aps-planet"].value 
     aluminum_red_science.icons=dual_icon("automation-science-pack","aluminum-plate")
     data:extend({aluminum_red_science})
 
-    rro.soft_insert(data.raw["technology"]["automation-science-pack"].effects,
+    rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects,
     {
         type = "unlock-recipe",
         recipe = "automation-science-pack-muluna",
