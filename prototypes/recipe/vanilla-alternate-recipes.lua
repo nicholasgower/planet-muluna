@@ -135,6 +135,8 @@ local solar_panel = util.merge{data.raw["recipe"]["solar-panel"],
 rro.replace_name(solar_panel.ingredients,"copper-plate","silicon-cell")
 rro.replace_name(solar_panel.ingredients,"steel-plate","aluminum-plate")
 
+
+
 --local recipes = {motor_carbon, aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,aluminum_green_circuit,aluminum_red_circuit, bio_plastic}
 local recipes = {motor_carbon,aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,solar_panel}
 --, ,aluminum_green_circuit,aluminum_red_circuit,
@@ -149,6 +151,22 @@ end
 table.insert(recipes,bio_plastic)
 
 data:extend(recipes)
+
+
+-- Aluminum Automation science pack, only when not already added by the Any Planet Start compat
+if not (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") and settings.startup["muluna-alternative-automation-pack-recipe"].value == true then
+    local aluminum_red_science = table.deepcopy(data.raw["recipe"]["automation-science-pack"])
+    rro.replace_name(aluminum_red_science.ingredients,"copper-plate","aluminum-plate")
+    aluminum_red_science.name="automation-science-pack-muluna"
+    aluminum_red_science.icons=dual_icon("automation-science-pack","aluminum-plate")
+    data:extend({aluminum_red_science})
+
+    rro.soft_insert(data.raw["technology"]["automation-science-pack"].effects,
+    {
+        type = "unlock-recipe",
+        recipe = "automation-science-pack-muluna",
+    })
+end
 
 
 --Productivity technologies 
