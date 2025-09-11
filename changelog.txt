@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.15
+Date: 2025-09-11
+  Changes:
+    - Added optional setting that enables an alternative recipe for the automation science pack that uses aluminum plates. Previously only available in Muluna start. By Vfauth with minor edits by MeteorSwarm. https://github.com/nicholasgower/planet-muluna/issues/298
+---------------------------------------------------------------------------------------------------
 Version: 2.1.14
 Date: 2025-09-10
   Balancing:
