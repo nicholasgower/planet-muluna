@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.17
+Date: 2025-09-11
+  Locale:
+    - Updated French locale(Minus mod setting descriptions) and made minor adjustments to English locale's spelling and formatting(By Vfauth).
+---------------------------------------------------------------------------------------------------
 Version: 2.1.16
 Date: 2025-09-11
   Changes:
