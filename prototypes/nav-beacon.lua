@@ -202,6 +202,7 @@ if settings.startup["enable-nav-beacon"].value == true then
             subgroup = "space-platform",
             order = "q[nav-beacon]",
             energy_required = 20,
+            weight = 1000*kg,
             ingredients =
             {
                 { type = "item", name = "processing-unit", amount = 500 },
