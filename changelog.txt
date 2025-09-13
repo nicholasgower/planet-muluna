@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.21
+Date: 2025-09-13
+  Bugfixes:
+    - Fixed crash when another mod removes surface conditions from Cryogenic plant recipe.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.20
 Date: 2025-09-13
   Balancing:
