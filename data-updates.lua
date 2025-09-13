@@ -136,7 +136,7 @@ end
 
 rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
 
-table.insert(data.raw["recipe"]["cryogenic-plant"].surface_conditions,{property = "is-muluna",min=0,max=0})
+rro.soft_insert(data.raw["recipe"]["cryogenic-plant"].surface_conditions,{property = "is-muluna",min=0,max=0})
     
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
