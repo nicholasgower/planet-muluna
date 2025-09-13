@@ -47,6 +47,7 @@ recycling_turbine.output_fluid_box = util.merge{table.deepcopy(recycling_turbine
         
     }
 }
+recycling_turbine.heating_energy = "75kW"
 if mods["maraxsis"] then
     recycling_turbine.maraxsis_buildability_rules = {water = false, dome = true, coral = false, trench = true, trench_entrance = false, trench_lava = false}
 end
