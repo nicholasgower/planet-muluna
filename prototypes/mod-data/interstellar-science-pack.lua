@@ -26,6 +26,7 @@ local possible_science_packs = --Science pack technologies
     "tiberium-mechanical-research",
     "moshine-tech-ai-trainer",
     "pelagos-science-pack",
+    "carnal-science-pack",
 }
 
 -- Other mods can use the field "muluna_adds_progress_to_exploration_science_pack" to make a technology contribute progress to the exploration science pack.
