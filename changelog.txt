@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.23
+Date: 2025-09-15
+  Compatibility:
+    - Added "Carnal science pack" to the list of science packs that can help unlock nanofoamed polymers.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.22
 Date: 2025-09-14
   Changes:
