@@ -36,6 +36,7 @@ for _, category in pairs({"item", "tool"}) do
                     results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2,ignored_by_stats = 1}},
                     main_product = data_cell.name,
                     energy_required = 5,
+                    allow_quality = false,
                     
                 }
 
@@ -52,6 +53,7 @@ for _, category in pairs({"item", "tool"}) do
                     energy_required = 5,
                     icons = Muluna.icons.dual_icon("muluna-astronomical-data",prototype.name),
                     auto_recycle = false,
+                    allow_quality = false,
                 }
 
                 for _,recipe in pairs({recipe,recipe_empty}) do
