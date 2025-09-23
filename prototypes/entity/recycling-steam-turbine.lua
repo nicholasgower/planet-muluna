@@ -96,7 +96,9 @@ recycling_turbine.input_fluid_box.pipe_covers = pipecoverspictures()
 
 recycling_turbine.factoriopedia_description = nil
 
-
+if helpers.compare_versions(helpers.game_version,"2.0.67") >= 0 then
+    
+end
 
 data:extend{recycling_turbine,cooled_steam}
 
