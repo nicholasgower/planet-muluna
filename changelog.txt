@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.26
+Date: 2025-09-23
+  Bugfixes:
+    - Gas venting recipes now have circuit signals. https://github.com/nicholasgower/planet-muluna/issues/305
+  Locale:
+    - Updated zh-CN locale(By cyx2015s)
+---------------------------------------------------------------------------------------------------
 Version: 2.1.25
 Date: 2025-09-23
   Compatibility:
