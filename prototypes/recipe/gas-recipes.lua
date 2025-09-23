@@ -170,7 +170,8 @@ data:extend{
         --     }
         -- },
         energy_required=0.1,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false
     },
     {
         type = "recipe",
@@ -190,7 +191,8 @@ data:extend{
         --     }
         -- },
         energy_required=0.1,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false
     },
     -- {
     --     type = "recipe",
