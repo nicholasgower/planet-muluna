@@ -259,7 +259,9 @@ for _,signal in pairs(prototypes.virtual_signal) do
     table.insert(platform_list_signals,signal.name)
 end
 local experimental = helpers.compare_versions(helpers.game_version,"2.0.64") >= 0
+local debug = true
 local function get_telescope_combinator_signals(surface,force) --Intended to be memoized with cache resetting every on_nth_tick event
+    if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
     local signals = {}
     local i = 1
     if surface.planet then
@@ -269,20 +271,16 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
         -- Uncommon quality: State of space platform (https://lua-api.factorio.com/latest/defines.html#defines.space_platform_state)
         -- Rare quality: Can leave_current_location (1 or 2) (https://lua-api.factorio.com/latest/classes/LuaSpacePlatform.html#can_leave_current_location)
         local space_platforms = {}
-        if experimental then
-            space_platforms = planet.get_space_platforms(force)
-        else
-            for j,platform in pairs(force.platforms) do
-                if platform.space_location and platform.space_location.name == planet.name then
-                    space_platforms[j] = platform
-                end
-            end
-        end
+        if debug then log("planet.get_space_platforms(" .. force.name .. ")") end
+        space_platforms = planet.get_space_platforms(force)
+        
+        
         for j,space_platform in ipairs(space_platforms) do
             local signal = platform_list_signals[j]
             if signal then
                 signals[i]={value = {type = "virtual",name = signal,quality = "normal"},min= space_platform.index}
                 i = i+1
+                if debug then log("space_platform.state") end
                 signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer(space_platform.state)}
                 i = i+1
                 signals[i]={value = {type = "virtual",name = signal,quality = "rare"},min= bool_to_int(space_platform.can_leave_current_location())}
