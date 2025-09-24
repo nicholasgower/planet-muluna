@@ -93,7 +93,7 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 - Chinese by [cyx2015s](https://github.com/nicholasgower/planet-muluna/issues?q=is%3Apr+author%3Acyx2015s)
 
-- German by [Lucanoria](https://github.com/nicholasgower/planet-muluna/commits?author=Lucanoria)
+- German by MeteorSwarm and [Lucanoria](https://github.com/nicholasgower/planet-muluna/commits?author=Lucanoria)
 
 ## Soundtrack by [FluidNatalie](https://anagramofme.bandcamp.com/)
 
