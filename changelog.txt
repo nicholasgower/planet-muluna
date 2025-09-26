@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.31
+Date: 2025-09-26
+  Changes:
+    - Fully removed legacy space boiler from the game, which has been unplaceable since the creation of the vacuum boiler.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.30
 Date: 2025-09-25
   Locale:
