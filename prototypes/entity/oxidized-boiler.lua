@@ -23,21 +23,21 @@ local numeric_value, suffix = data_util.get_energy_value(water_capacity_str)
 --------------------------------------------------------------------------------
 -- Step 2: Modify "thruster-oxidizer" heat capacity, if it exists
 --------------------------------------------------------------------------------
-local thruster_oxidizer = data.raw["fluid"]["thruster-oxidizer"]
-if thruster_oxidizer then
-  -- For example, dividing water's numeric capacity by 15
-  thruster_oxidizer.heat_capacity = tostring(numeric_value / 15) .. suffix
+-- local thruster_oxidizer = data.raw["fluid"]["thruster-oxidizer"]
+-- if thruster_oxidizer then
+--   -- For example, dividing water's numeric capacity by 15
+--   thruster_oxidizer.heat_capacity = tostring(numeric_value / 15) .. suffix
 
-  -- Optionally set default temperature if you wish:
-  -- thruster_oxidizer.default_temperature = water_fluid.default_temperature or 15
+--   -- Optionally set default temperature if you wish:
+--   -- thruster_oxidizer.default_temperature = water_fluid.default_temperature or 15
 
-  -- If you want to define some unique or additional properties:
-  -- thruster_oxidizer.base_color   = {r=0.2, g=0.5, b=0.8}
-  -- thruster_oxidizer.flow_color   = {r=0.4, g=0.7, b=0.9}
-  -- thruster_oxidizer.fuel_value   = "2MJ"
-else
-  log("Warning: 'thruster-oxidizer' fluid not found. Skipping modifications.")
-end
+--   -- If you want to define some unique or additional properties:
+--   -- thruster_oxidizer.base_color   = {r=0.2, g=0.5, b=0.8}
+--   -- thruster_oxidizer.flow_color   = {r=0.4, g=0.7, b=0.9}
+--   -- thruster_oxidizer.fuel_value   = "2MJ"
+-- else
+--   log("Warning: 'thruster-oxidizer' fluid not found. Skipping modifications.")
+-- end
 
 --------------------------------------------------------------------------------
 -- (Optional) Step 3: Similarly handle "thruster-fuel"
@@ -57,25 +57,25 @@ if not base_boiler then
   return
 end
 
--- Deep copy the table so we don't mutate the original
-local space_boiler = table.deepcopy(base_boiler)
-space_boiler.name = "space-boiler"
-space_boiler.localised_name = {"entity-name.space-boiler-legacy"}
-space_boiler.localised_description = {"entity-description.space-boiler-legacy"}
-space_boiler.surface_conditions = nil  -- Remove any surface restrictions
-space_boiler.energy_consumption = "1.8MW"
-space_boiler.minable.result = "muluna-advanced-boiler"
+-- -- Deep copy the table so we don't mutate the original
+-- local space_boiler = table.deepcopy(base_boiler)
+-- space_boiler.name = "space-boiler"
+-- space_boiler.localised_name = {"entity-name.space-boiler-legacy"}
+-- space_boiler.localised_description = {"entity-description.space-boiler-legacy"}
+-- space_boiler.surface_conditions = nil  -- Remove any surface restrictions
+-- space_boiler.energy_consumption = "1.8MW"
+-- space_boiler.minable.result = "muluna-advanced-boiler"
 
--- Example custom tweak: you could adjust fluid_box filters or effectivity:
--- space_boiler.fluid_box.filter      = "thruster-oxidizer"
--- space_boiler.energy_source.effectivity = 64/60  -- example
+-- -- Example custom tweak: you could adjust fluid_box filters or effectivity:
+-- -- space_boiler.fluid_box.filter      = "thruster-oxidizer"
+-- -- space_boiler.energy_source.effectivity = 64/60  -- example
 
---------------------------------------------------------------------------------
--- Step 5: Final extension into the data stage
---------------------------------------------------------------------------------
-data:extend({
-  space_boiler
-})
+-- --------------------------------------------------------------------------------
+-- -- Step 5: Final extension into the data stage
+-- --------------------------------------------------------------------------------
+-- data:extend({
+--   space_boiler
+-- })
 
 
 --------------------------------------------------------------------------------
