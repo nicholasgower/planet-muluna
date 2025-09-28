@@ -35,7 +35,7 @@ data:extend({
     name = "wood-gas-processing-to-crude-oil",
     icon = "__muluna-graphics__/graphics/wood-gasification/technology/wood-gas-processing-to-crude-oil.png",
     icon_size = 256,
-    prerequisites = {"wood-gas-processing"},
+    prerequisites = {"wood-gas-processing", "production-science-pack"},
     effects =
     {
       {
@@ -59,7 +59,7 @@ data:extend({
     name = "advanced-wood-gas-processing",
     icon = "__muluna-graphics__/graphics/wood-gasification/technology/advanced-wood-gas-processing.png",
     icon_size = 256,
-    prerequisites = {"wood-gas-processing"},
+    prerequisites = {"wood-gas-processing", "production-science-pack", "utility-science-pack"},
     effects =
     {
       {
