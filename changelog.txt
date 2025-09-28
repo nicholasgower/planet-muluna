@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.32
+Date: 2025-09-28
+  Bugfixes:
+    - Advanced wood gasification technologies now require science pack technologies that are required in the tech's unit cost. https://github.com/nicholasgower/planet-muluna/issues/309
+  Graphics:
+    - Fixed improper icon for Vacuum heating tower entity.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.31
 Date: 2025-09-26
   Changes:
