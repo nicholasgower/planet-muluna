@@ -158,6 +158,13 @@ data.raw["technology"]["advanced-wood-gas-processing"].unit = {
         --{"interstellar-science-pack",1},
     }
 }
+
+rro.soft_insert(data.raw["technology"]["advanced-wood-gas-processing"].prerequisites,"production-science-pack")
+rro.soft_insert(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"production-science-pack")
+rro.soft_insert(data.raw["technology"]["advanced-wood-gas-processing"].prerequisites,"space-science-pack")
+rro.soft_insert(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"space-science-pack")
+rro.soft_insert(data.raw["technology"]["advanced-wood-gas-processing"].prerequisites,"utility-science-pack")
+
 data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit = {
     count = 500,
     time = 60,
