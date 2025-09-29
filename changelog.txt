@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.33
+Date: 2025-09-29
+  Compatibility:
+    - "foliax-welcome" technology made a possible prerequisite to nanofoamed polymers.
+  Graphics:
+    - (>=2.0.69) "Nanofoamed polymers" technology given a scripted research trigger and custom trigger icon.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.32
 Date: 2025-09-28
   Bugfixes:
