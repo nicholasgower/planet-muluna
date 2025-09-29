@@ -1,7 +1,7 @@
 
 local pack_conditions = data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data
 local gated_technology = pack_conditions.gated_technology
-
+local scripted_triggers = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
 
 
 for _,pack in pairs(pack_conditions.science_packs) do
@@ -27,6 +27,51 @@ for _,pack in pairs(pack_conditions.science_packs) do
 end
 
 local tech = data.raw["technology"][gated_technology]
+
+if scripted_triggers then
+    tech.research_trigger = {
+            type = "scripted",
+            trigger_description = {"research-trigger.muluna-nanofoamed-polymers",tostring(data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data.required_science_packs)},
+            icons = {
+                {
+                    icon = data.raw["tool"]["metallurgic-science-pack"].icon,
+                    icon_size = data.raw["tool"]["metallurgic-science-pack"].icon_size,
+                    scale = 0.35,
+                    shift = {0,-8},
+                },
+                {
+                    icon = data.raw["tool"]["agricultural-science-pack"].icon,
+                    icon_size = data.raw["tool"]["agricultural-science-pack"].icon_size,
+                    scale = 0.35,
+                    shift = {8,8},
+                },
+                {
+                    icon = data.raw["tool"]["electromagnetic-science-pack"].icon,
+                    icon_size = data.raw["tool"]["electromagnetic-science-pack"].icon_size,
+                    scale = 0.35,
+                    shift = {-8,8},
+                },
+                
+            },
+            icon = data.raw["tool"]["metallurgic-science-pack"].icon,
+            icon_size = data.raw["tool"]["metallurgic-science-pack"].icon_size,
+        }
+    tech.enabled = true
+    tech.visible_when_disabled = false
+    else
+    tech.unit = {
+            count = 1,
+            time = 1,
+            ingredients = {}
+        }
+    tech.enabled = false
+    tech.visible_when_disabled = true
+end
+
+
+
+
+
 tech.localised_description =  {"technology-description.muluna-nanofoamed-polymers",tostring(data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data.required_science_packs)}
 for _,pack in pairs(pack_conditions.science_packs) do
     tech.localised_description = {"",tech.localised_description or {"technology-description."..tech.name},"\n[technology="..pack.."]"}

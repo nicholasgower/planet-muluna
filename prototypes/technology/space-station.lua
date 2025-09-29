@@ -1,5 +1,7 @@
 local rro = Muluna.rro
 
+local scripted_triggers = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
+
 local function technology_icon_constant_productivity(technology_icon,new_icon_size)
     local icon_size = new_icon_size or 256
     local icons =
@@ -1349,11 +1351,6 @@ data:extend{
         },
         enabled = false,
         visible_when_disabled = true,
-        unit = {
-            count = 1,
-            time = 1,
-            ingredients = {}
-        },
         prerequisites = {
             --"kovarex-enrichment-process",
             --"muluna-anorthite-processing",
