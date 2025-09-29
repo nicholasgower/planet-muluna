@@ -72,8 +72,13 @@ end
 
 
 
-tech.localised_description =  {"technology-description.muluna-nanofoamed-polymers",tostring(data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data.required_science_packs)}
+tech.localised_description =  {scripted_triggers and "technology-description.muluna-nanofoamed-polymers-2069" or "technology-description.muluna-nanofoamed-polymers",tostring(data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data.required_science_packs)}
 for _,pack in pairs(pack_conditions.science_packs) do
     tech.localised_description = {"",tech.localised_description or {"technology-description."..tech.name},"\n[technology="..pack.."]"}
     
+end
+
+if scripted_triggers then 
+    tech.research_trigger.trigger_description = tech.localised_description
+    tech.localised_description = {"item-description.muluna-microcellular-plastic"}
 end
