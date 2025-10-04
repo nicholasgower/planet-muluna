@@ -236,7 +236,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                     end end
                                 
                                 else 
-                                    player.remove_alert{entity = beacon}
+                                    player.remove_alert{icon = {type = "item", name = "muluna-satellite-radar"}}
                                 end
                         end
 

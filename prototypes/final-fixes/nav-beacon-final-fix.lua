@@ -41,3 +41,22 @@ if settings.startup["enable-nav-beacon"].value == true then
         end
     end
 end
+
+-- if settings.startup["enable-nav-beacon"].value == true then
+--     local satellite_radars = data.raw["mod-data"]["muluna-satellite-radar"].data
+--     for _,radar_data in pairs(satellite_radars.entities) do
+--         add_quality_tooltip(
+--             {
+--             name = {"tooltip.muluna-satellite-radar-scan-size"},
+--             quality_header = "quality-tooltip.increases",
+--             value = {"tooltip-value.muluna-satellite-radar-scan-size",tostring(radar_data.scan_area)},
+--             order = 1,
+--             quality_expression = {satellite_radars.energy_per_scan_expression,{base = radar_data.energy_per_scan},"quality_level"}
+--             }
+--         )
+--     end
+    
+
+
+
+-- end

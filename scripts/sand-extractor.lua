@@ -43,7 +43,7 @@ function Public.construct_sand_extractor(event)
 
     local surface = player.surface
     if surface.name ~= "muluna" then return end
-    local position = event.cursor_position
+    local position = surface.get_tile(event.cursor_position).position
     local player_position = (player.character or player).position
     local distance = math.sqrt((position.x-player_position.x)^2+(position.y-player_position.y)^2)
     if surface.entity_prototype_collides(drill_name, position, false) then return end
@@ -89,12 +89,13 @@ function Public.construct_sand_extractor(event)
     local offset_height = drill_prototype.tile_height
     if offset_width ~= offset_height then return end 
 
-    local colliding_entities = surface.find_entities_filtered{
-            area= {{position.x-offset_width/2,position.y-offset_height/2},{position.x+offset_width/2,position.y+offset_height/2}},
-            to_be_deconstructed = false,
-        }
-    if #colliding_entities ~= 0 then return end
-    
+    -- local colliding_entities = surface.find_entities_filtered{
+    --         area= {{math.floor(position.x)-offset_width/1.9,math.floor(position.y)-offset_height/1.9},{math.floor(position.x)+offset_width/1.9,math.floor(position.y)+offset_height/1.9}},
+    --         to_be_deconstructed = false,
+    --     }
+    -- if #colliding_entities ~= 0 then return end
+    if not player.can_build_from_cursor{position = position} then return end
+
     local neighboring_belts = rro.get_concatenation(
         surface.find_entities_filtered{
             area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
