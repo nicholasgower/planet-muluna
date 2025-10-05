@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.36
+Date: 2025-10-05
+  Compatibility:
+    - "Arboric science pack" contributes to the discovery of nanofoamed polymers.
+  Bugfixes:
+    - Removed broken reference to helium from old migration script.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.35
 Date: 2025-10-02
   Sounds:
