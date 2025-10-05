@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.37
+Date: 2025-10-05
+  Compatibility:
+    - K2SO: Advanced anorthite crushing icon updated to use K2's silicon icon.
+  Locale:
+    - Alternative name given to "Silicon processing" technology when another mod adds silicon processing earlier in the tech tree, including Brevven's silicon and Krastorio 2 Spaced Out..
+---------------------------------------------------------------------------------------------------
 Version: 2.1.36
 Date: 2025-10-05
   Compatibility:
