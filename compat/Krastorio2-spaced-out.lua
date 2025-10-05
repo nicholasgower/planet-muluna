@@ -12,7 +12,6 @@ if mods["Krastorio2-spaced-out"] then
     table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "kr-rare-metal-ore",amount = 1,probability = 0.025})
 
 
-
-
+    data.raw["technology"]["muluna-silicon-processing"].localised_name = {"technology-name.muluna-silicon-processing-alt"}
 
 end
