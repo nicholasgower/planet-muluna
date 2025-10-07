@@ -548,7 +548,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
                     --item.amount = 20000
                     --item.ignored_by_productivity = 20000
                     table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500*(500/item.amount), fluidbox_index = 3})
-                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=495*(500/item.amount),ignored_by_productivity=495*(500/item.amount),fluidbox_index = 2})
+                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500*(500/item.amount),ignored_by_productivity=500*(500/item.amount),fluidbox_index = 2})
                 end
             end
             --table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500, fluidbox_index = 3})
