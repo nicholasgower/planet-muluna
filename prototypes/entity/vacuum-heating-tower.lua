@@ -3,16 +3,17 @@ local function vacuumheatingtowerpipepictures()
   {
     north =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
+      filename = "__muluna-graphics__/graphics/pipe_covers/long/pipe-NN.png",
       priority = "extra-high",
       width = 71,
       height = 38,
       shift = util.by_pixel(2.25, 13.5),
-      scale = 0.000000000001
+      scale = 0.5,
+      draw_as_shadow = true,
     },
     east =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
+      filename = "__muluna-graphics__/graphics/pipe_covers/cut/pipe-E.png",
       priority = "extra-high",
       width = 42,
       height = 76,
@@ -21,7 +22,7 @@ local function vacuumheatingtowerpipepictures()
     },
     south =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
+      filename = "__muluna-graphics__/graphics/pipe_covers/cut/pipe-S.png",
       priority = "extra-high",
       width = 88,
       height = 61,
@@ -30,7 +31,7 @@ local function vacuumheatingtowerpipepictures()
     },
     west =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
+      filename = "__muluna-graphics__/graphics/pipe_covers/cut/pipe-W.png",
       priority = "extra-high",
       width = 39,
       height = 73,
@@ -171,6 +172,7 @@ heating_boiler = util.merge{heating_boiler,
             heat_picture = apply_heat_pipe_glow(
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-glow", {
                 scale = 0.65,
+                --scale = 0.6,
                 blend_mode = "additive"
             }))
         },
@@ -180,9 +182,11 @@ heating_boiler = util.merge{heating_boiler,
         {
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-main", {
             scale = 0.65
+            --scale = 0.6
             }),
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-shadow", {
             scale = 0.65,
+            --scale = 0.6,
             draw_as_shadow = true
             })
         }
@@ -211,6 +215,7 @@ heating_boiler = util.merge{heating_boiler,
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-working-fire", {
             frame_count = 24,
             scale = 0.65,
+            --scale = 0.6,
             blend_mode = "additive",
             draw_as_glow = true,
             animation_speed = 0.333
@@ -219,6 +224,7 @@ heating_boiler = util.merge{heating_boiler,
             frame_count = 1,
             repeat_count = 24,
             scale = 0.65,
+            --scale = 0.6,
             blend_mode = "additive",
             draw_as_glow = true
             })
