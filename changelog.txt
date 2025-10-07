@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.38
+Date: 2025-10-07
+  Balancing:
+    - Increased output of "Exploration science pack" recipe from 3 science packs to 5. Per-second science output of assembling machines is unchanged.
+    - Reduced cost of low density space platform foundation, reducing the number of LDS from 2 to 1, and raising the number of aluminum plates from 2 to 5.
+    - Reduced nutrient cost of advanced greenhouse recipes from 20 nutrients to 5.
+    - Turned fluoroketone loop in tier 3 greenhouse recipes into a fully closed loop, requiring no constant input.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.37
 Date: 2025-10-05
   Compatibility:
