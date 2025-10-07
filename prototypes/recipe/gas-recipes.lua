@@ -525,7 +525,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
             recipe = table.deepcopy(original_recipe)
             recipe.name = original_recipe.name .. "-nutrients"
             table.insert(greenhouse_recipes_with_nutrients,recipe.name)
-            local nutrients = {type="item",name="nutrients",amount=20}
+            local nutrients = {type="item",name="nutrients",amount=5}
             if mods["fluid-nutrients"] then
                 nutrients["fluidbox_index"] = 4
             end
