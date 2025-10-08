@@ -1,4 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.39
+Date: 2025-10-07
+  Graphics:
+    - Added more subtle pipe covers for the Vacuum heating tower. By Talandar.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.38
+Date: 2025-10-07
+  Balancing:
+    - Increased output of "Exploration science pack" recipe from 3 science packs to 5. Per-second science output of assembling machines is unchanged.
+    - Reduced cost of low density space platform foundation, reducing the number of LDS from 2 to 1, and raising the number of aluminum plates from 2 to 5.
+    - Reduced nutrient cost of advanced greenhouse recipes from 20 nutrients to 5.
+    - Turned fluoroketone loop in tier 3 greenhouse recipes into a fully closed loop, requiring no constant input.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.37
+Date: 2025-10-05
+  Compatibility:
+    - K2SO: Advanced anorthite crushing icon updated to use K2's silicon icon.
+  Locale:
+    - Alternative name given to "Silicon processing" technology when another mod adds silicon processing earlier in the tech tree, including Brevven's silicon and Krastorio 2 Spaced Out..
+---------------------------------------------------------------------------------------------------
+Version: 2.1.36
+Date: 2025-10-05
+  Compatibility:
+    - "Arboric science pack" contributes to the discovery of nanofoamed polymers.
+  Bugfixes:
+    - Removed broken reference to helium from old migration script.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.35
 Date: 2025-10-02
   Sounds:

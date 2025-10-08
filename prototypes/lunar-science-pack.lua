@@ -20,7 +20,7 @@ end
 
 
 i_lunar_pack.name = "interstellar-science-pack"
-i_lunar_pack.default_import_location = "muluna"
+i_lunar_pack.default_import_location = "muluna" 
 i_lunar_pack.icon = "__muluna-graphics__/graphics/icons/space-science-pack.png"
 i_lunar_pack.localised_description = {"item-description.science-pack"}
 
@@ -69,8 +69,8 @@ if true or settings.startup["muluna-old-interstellar-pack-recipe"].value == fals
         {type = "fluid", name = "muluna-astronomical-data", amount = settings.startup["muluna-balance-exploration-science-data-cost"].value,fluidbox_index = 2},
         
     }
-    r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 3}}
-    r_lunar_pack.energy_required = 21
+    r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 5}}
+    r_lunar_pack.energy_required = 35
     --local oxygen = 60*r_lunar_pack.energy_required
     --table.insert(r_lunar_pack.ingredients,{type = "fluid", name = "oxygen", amount = oxygen})
     --table.insert(r_lunar_pack.results,{type = "fluid", name = "carbon-dioxide", amount = oxygen, temperature = 500,ignored_by_productivity = oxygen})

@@ -1,44 +1,4 @@
-local function vacuumheatingtowerpipepictures()
-  return
-  {
-    north =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
-      priority = "extra-high",
-      width = 71,
-      height = 38,
-      shift = util.by_pixel(2.25, 13.5),
-      scale = 0.000000000001
-    },
-    east =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
-      priority = "extra-high",
-      width = 42,
-      height = 76,
-      shift = util.by_pixel(-24.5, 1),
-      scale = 0.5
-    },
-    south =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
-      priority = "extra-high",
-      width = 88,
-      height = 61,
-      shift = util.by_pixel(0, -31.25),
-      scale = 0.5
-    },
-    west =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
-      priority = "extra-high",
-      width = 39,
-      height = 73,
-      shift = util.by_pixel(25.75, 1.25),
-      scale = 0.5
-    }
-  }
-end
+
 
 
 local recipe_category = "muluna-vacuum-heating-tower"
@@ -171,6 +131,7 @@ heating_boiler = util.merge{heating_boiler,
             heat_picture = apply_heat_pipe_glow(
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-glow", {
                 scale = 0.65,
+                --scale = 0.6,
                 blend_mode = "additive"
             }))
         },
@@ -180,9 +141,11 @@ heating_boiler = util.merge{heating_boiler,
         {
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-main", {
             scale = 0.65
+            --scale = 0.6
             }),
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-shadow", {
             scale = 0.65,
+            --scale = 0.6,
             draw_as_shadow = true
             })
         }
@@ -211,6 +174,7 @@ heating_boiler = util.merge{heating_boiler,
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-working-fire", {
             frame_count = 24,
             scale = 0.65,
+            --scale = 0.6,
             blend_mode = "additive",
             draw_as_glow = true,
             animation_speed = 0.333
@@ -219,6 +183,7 @@ heating_boiler = util.merge{heating_boiler,
             frame_count = 1,
             repeat_count = 24,
             scale = 0.65,
+            --scale = 0.6,
             blend_mode = "additive",
             draw_as_glow = true
             })
@@ -266,7 +231,7 @@ heating_boiler.fluid_boxes = {
             {
                 volume = 200,
                 pipe_covers = pipecoverspictures(),
-                pipe_picture = vacuumheatingtowerpipepictures(),
+                pipe_picture = Muluna.pipe_pictures.vacuumheatingtowerpipepictures(),
                 pipe_connections =
                 {
                 {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 1}},
@@ -288,7 +253,7 @@ heating_boiler.fluid_boxes = {
             {
                 volume = 200,
                 pipe_covers = pipecoverspictures(),
-                pipe_picture = vacuumheatingtowerpipepictures(),
+                pipe_picture =  Muluna.pipe_pictures.vacuumheatingtowerpipepictures(),
                 pipe_connections =
                 {
                 {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},

@@ -525,7 +525,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
             recipe = table.deepcopy(original_recipe)
             recipe.name = original_recipe.name .. "-nutrients"
             table.insert(greenhouse_recipes_with_nutrients,recipe.name)
-            local nutrients = {type="item",name="nutrients",amount=20}
+            local nutrients = {type="item",name="nutrients",amount=5}
             if mods["fluid-nutrients"] then
                 nutrients["fluidbox_index"] = 4
             end
@@ -548,7 +548,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
                     --item.amount = 20000
                     --item.ignored_by_productivity = 20000
                     table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500*(500/item.amount), fluidbox_index = 3})
-                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=495*(500/item.amount),ignored_by_productivity=495*(500/item.amount),fluidbox_index = 2})
+                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500*(500/item.amount),ignored_by_productivity=500*(500/item.amount),fluidbox_index = 2})
                 end
             end
             --table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500, fluidbox_index = 3})
