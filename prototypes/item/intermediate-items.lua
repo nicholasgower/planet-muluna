@@ -175,7 +175,7 @@ data:extend{{
         {
             icon = "__muluna-graphics__/graphics/icons/plastic-bar-flipped.png",
             icon_size = 64,
-            tint = {150,150,0,255},
+            tint = {140,140,0,245},
             draw_background = true,
         }
     }
@@ -196,7 +196,7 @@ data:extend{{
         {
             icon = data.raw["item"]["plastic-bar"].icon,
             icon_size = 64,
-            tint = {150,150,0,255},
+            tint = {200,200,0,255},
             draw_background = true,
         }
     }
