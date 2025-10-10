@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.40
+Date: 2025-10-10
+  Graphics:
+    - Nanofoamed polymer items given slightly different tints to make them more visually distinguishable.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.39
 Date: 2025-10-07
   Graphics:
