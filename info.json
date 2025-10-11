@@ -19,7 +19,7 @@
     "enhanced-shadows",
     "space-exploration-graphics-4",
     "space-exploration-graphics",
-    "? Moshine",
+    "? Moshine >=  1.1.1",
     "(?) aai-signal-transmission",
     "(?) orbital-transfer >= 0.2.3",
     "(?) alien-biomes",

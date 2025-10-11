@@ -349,6 +349,11 @@ if data.raw["tool"]["hard-drive"] then
     data.raw["tool"]["hard-drive"].data_capacity = 1000
 end
 
+if data.raw["tool"]["datacell-empty"] then
+    data.raw["tool"]["datacell-empty"].data_capacity = 1000
+end
+
+
 
 -- rro.soft_insert(data.raw["tree"]["tree-01"].flags,"placeable-player")
 
