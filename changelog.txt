@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.42
+Date: 2025-10-11
+  Compatibility:
+    - Added migration to fix compatibility with Moshine and raised version required to 1.1.1.
+    - Hard Muluna: Alternative automation science pack recipe is now force enabled.
+  Bugfixes:
+    - Fixed info.json formatting
+---------------------------------------------------------------------------------------------------
 Version: 2.1.41
 Date: 2025-10-11
   Bugfixes:
