@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.41
+Date: 2025-10-11
+  Bugfixes:
+    - Fixed crash on load when loaded with a combination of mods that deletes Aquilo or otherwise stops Aquilo's data collection recipe from generating. https://github.com/nicholasgower/planet-muluna/issues/316
+---------------------------------------------------------------------------------------------------
 Version: 2.1.40
 Date: 2025-10-10
   Graphics:
