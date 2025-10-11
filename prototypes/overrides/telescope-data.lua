@@ -91,7 +91,7 @@ local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-
         localised_name = "_nil",
         order = "zz-zzz[muluna-telescope-observation-space-platform]",
         icons = Muluna.icons.dual_icon("muluna-astronomical-data","space-platform"),
-        results = table.deepcopy(data.raw["recipe"]["muluna-telescope-observation-aquilo"].results) or {{type = "fluid", name = "muluna-astronomical-data",amount = 40}},
+        results = {{type = "fluid", name = "muluna-astronomical-data",amount = 100}},
         ingredients = {{type = "item", name = "promethium-asteroid-chunk", amount = 10}}
     }
     
@@ -99,7 +99,7 @@ local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-
 
 )
 
-space_platform_data.results[1].amount = 100
+--space_platform_data.results[1].amount = 100
 
 data:extend{space_platform_data}
 
