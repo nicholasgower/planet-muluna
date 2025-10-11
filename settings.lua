@@ -147,7 +147,8 @@ data:extend{
         --localised_description={"mod-setting-des.muluna-alternative-automation-pack-recipe"},
         setting_type = "startup",
         default_value = false,
-        order = "bg"
+        order = "bg",
+        rocs_hard_mode = true,
       },
       
       {
