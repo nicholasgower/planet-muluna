@@ -116,7 +116,7 @@ for _,tech in pairs(data.raw["technology"]) do
                     ,rro.predicates.equals(true)) >= 2
                     and
                     (
-                    rro.find_many(tech.name,{"discovery","thruster","asteroid%-collector","asteroid_collector"})
+                    rro.find_many(tech.name,{"discovery","thruster","asteroid%-collector","asteroid_collector","planet","science%-pack"})
                         --string.find(tech.name,"discovery") or
                         --string.find(tech.name,"thruster")
                     )
