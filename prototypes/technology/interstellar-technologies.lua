@@ -92,7 +92,12 @@ local planets_nexuz = {
 }
 
 local function make_interstellar(tech_name)
-    rro.soft_insert(data.raw["technology"][tech_name].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+    if data.raw["technology"][tech_name].unit then
+        rro.soft_insert(data.raw["technology"][tech_name].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+    end
+    if not data.raw["technology"][tech_name].prerequisites then
+        data.raw["technology"][tech_name].prerequisites = {}
+    end
     rro.soft_insert(data.raw["technology"][tech_name].prerequisites,"interstellar-science-pack") --Add science pack if it doesn't already exist.
 
 end
