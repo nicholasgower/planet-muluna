@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.43
+Date: 2025-10-12
+  Bugfixes:
+    - When a technology is marked to receive the exploration science pack, if the technology uses a trigger instead of science packs to unlock, the game will no longer crash. https://github.com/nicholasgower/planet-muluna/issues/317
+---------------------------------------------------------------------------------------------------
 Version: 2.1.42
 Date: 2025-10-11
   Compatibility:
