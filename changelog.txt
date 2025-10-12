@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.44
+Date: 2025-10-12
+  Compatibility:
+    - Added "planet" and "science-pack" to list of internal name keywords used to detect if an Aquilo-tier technology should receive the exploration science pack.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.43
 Date: 2025-10-12
   Bugfixes:
