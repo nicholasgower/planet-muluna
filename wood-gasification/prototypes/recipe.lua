@@ -29,6 +29,7 @@ data:extend({
     always_show_products = true,
     always_show_made_in = true,
     allow_decomposition = false,
+    allow_productivity=true,
   },
   {
     type = "recipe",
@@ -56,6 +57,7 @@ data:extend({
     always_show_products = true,
     always_show_made_in = true,
     allow_decomposition = false,
+    allow_productivity=true,
   },
   {
     type = "recipe",
@@ -74,6 +76,7 @@ data:extend({
     icon_size = 64,
     subgroup = "muluna-forestry",
     order = "a[fluid-chemistry]-w[crude-oil-from-tar]",
+    allow_productivity=true,
 -- order = "a-w",
     crafting_machine_tint =
     {
