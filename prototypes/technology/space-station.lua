@@ -277,6 +277,7 @@ data:extend{
         type = "technology",
         name = "metallic-asteroid-crushing",
         localised_name = {"recipe-name.metallic-asteroid-crushing"},
+        localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
             entity = "metallic-asteroid-chunk"
@@ -392,6 +393,7 @@ data:extend{
         type = "technology",
         name = "oxide-asteroid-crushing",
         localised_name = {"recipe-name.oxide-asteroid-crushing"},
+        localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
             entity = "oxide-asteroid-chunk"
@@ -1229,6 +1231,7 @@ data:extend{
         type = "technology",
         name = "carbonic-asteroid-crushing",
         localised_name = {"recipe-name.carbonic-asteroid-crushing"},
+        localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
             entity = "carbonic-asteroid-chunk"
