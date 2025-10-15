@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.46
+Date: 2025-10-15
+  Locale:
+    - Added description to asteroid crushing technologies telling users that asteroids can either be crushed in crushers or by hand.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.45
 Date: 2025-10-13
   Balancing:
