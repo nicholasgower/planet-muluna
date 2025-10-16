@@ -45,24 +45,40 @@ end
 
 
 
-for i = 1, 50 do
-    local mining_productivity = data.raw["technology"]["mining-productivity-" .. i]
-    if not mining_productivity then break end
+-- for i = 1, 50 do
+--     local mining_productivity = data.raw["technology"]["mining-productivity-" .. i]
+--     --if not mining_productivity then break end
+--     if mining_productivity then
+--         table.insert(mining_productivity.effects, 
+--         {
+--             type = "change-recipe-productivity",
+--             recipe = "muluna-regolith-digging",
+--             change = 0.1,
+--             hidden = true
+--         })
+--     end
+    
+--     -- {
+--     --     type = "change-recipe-category-productivity",
+--     --     recipe = "ground-digging",
+--     --     change = 0.1,
+--     --     hidden = true
+--     -- }
 
-    table.insert(mining_productivity.effects, 
-    {
-        type = "change-recipe-productivity",
-        recipe = "muluna-regolith-digging",
-        change = 0.1,
-        hidden = true
-    }
-    -- {
-    --     type = "change-recipe-category-productivity",
-    --     recipe = "ground-digging",
-    --     change = 0.1,
-    --     hidden = true
-    -- }
-)
+-- end
+
+for _,tech in pairs(data.raw["technology"]) do
+    local found = rro.find_contains(tech.effects,{type = "mining-drill-productivity-bonus", modifier = "_any"})
+    if found then
+        table.insert(tech.effects, 
+        {
+            type = "change-recipe-productivity",
+            recipe = "muluna-regolith-digging",
+            change = found.modifier,
+            hidden = true
+        })
+    end
+
 end
 
 for _,digger in pairs(Muluna.constants.regolith_drills) do

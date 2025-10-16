@@ -161,6 +161,20 @@ function rro.contains(list,object)
     return false
 end
 
+---More powerful version of contains that returns the found object. This functionality is not added to the original contains to avoid unintended consequences.
+function rro.find_contains(list,object) 
+    --local contains = false
+    if list == nil then return false end
+    for _,item in pairs(list) do -- Iterate forward
+        if rro.deep_equals(item , object) then
+            return item
+            
+            end
+            
+    end
+    return false
+end
+
 ---Check if string.find(string,list[i]) returns a value for any i in list
 function rro.find_many(string,list) 
     --local contains = false
