@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.49
+Date: 2025-10-16
+  Bugfixes:
+    - Rewrote how mining drill productivity bonuses are applied to regolith diggers to improve compatibility with Krastorio 2 and other mods that affect the mining productivity technology.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.48
 Date: 2025-10-16
   Sounds:
