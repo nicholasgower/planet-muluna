@@ -10,7 +10,8 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
     --         volume = 0.7,
     --     }
     -- }
-    -- }  
+    -- } 
+
     local tracks = {
         {
             track_type = "hero-track",
@@ -44,7 +45,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
             
             sound = {
                 filename = "Cryo-Lab",
-                volume = 0.7
+                volume = 1
             }
         },
         {
@@ -63,7 +64,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         {
             sound = {
                 filename = "01010213",
-                volume = 0.7
+                volume = 1
             }
         },
     }
@@ -78,6 +79,8 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         if track.track_type ~= "hero-track" then track.weight = 10 end
         track.sound.filename = "__muluna-graphics__/sound/music-fluidnatalie/" .. track.sound.filename
         if track.track_type == "interlude" then track.sound.filename = track.sound.filename .. "-interlude" end
+        --track.min_speed=0.95
+        --track.max_speed=1.05
         track.sound.filename = track.sound.filename .. ".ogg"
         data:extend{track}
     end
