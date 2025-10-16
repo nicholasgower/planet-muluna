@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.50
+Date: 2025-10-16
+  Compatibility:
+    - Made Assembler-Reskin load before Muluna to fix an issue with Assembler-Reskin overriding Muluna's changes to the Assembling Machine 3. https://github.com/nicholasgower/planet-muluna/issues/319
+---------------------------------------------------------------------------------------------------
 Version: 2.1.49
 Date: 2025-10-16
   Bugfixes:
