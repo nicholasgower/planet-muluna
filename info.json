@@ -51,7 +51,8 @@
     "? Krastorio2-spaced-out",
     "! quality-rocket-parts",
     "(?) QualityEffectsFixed",
-    "(?) space_age_galore >= 1.5.3"
+    "(?) space_age_galore >= 1.5.3",
+    "(?) Assembler-Reskin"
   ],
   "quality_required": true,
   "rail_bridges_required": true,
