@@ -4,7 +4,7 @@
   "description": "○🌐Explore Nauvis' moon of Muluna, and take your first step into space. Revamps the Space Science pack to be crafted on Muluna, and adds a new science pack that allows you to build better space platforms. The surface is devoid of life, but who knows what lurks in the planet's many craters?",
   "author": "MeteorSwarm",
   "homepage": "https://github.com/nicholasgower/planet-muluna",
-  "version": "2.1.50",
+  "version": "2.1.51",
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0.60",

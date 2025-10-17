@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.51
+Date: 2025-10-17
+  Changes:
+    - Muluna start: Removed nonsensical science pack technology prerequisites from Bitumen processing technology.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.50
 Date: 2025-10-16
   Compatibility:
