@@ -91,8 +91,10 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     --data.raw["recipe"]["electric-mining-drill"].enabled = true
     --data.raw["recipe"]["steel"].enabled = true
     
-    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack",1})
-    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"chemical-science-pack",1})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack","_any"})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"chemical-science-pack","_any"})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"production-science-pack","chemical-science-pack")
+    --rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"chemical-science-pack","logistic-science-pack")
     --rro.soft_insert(data.raw["technology"]["steam-power"].prerequisites,"metallic-asteroid-crushing")
     table.insert(data.raw["technology"]["muluna-greenhouses"].prerequisites,"lamp")
     if data.raw["technology"]["steam-power"].prerequisites == nil then
