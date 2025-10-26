@@ -196,26 +196,6 @@ data:extend{
     },
     -- {
     --     type = "recipe",
-    --     name = "hydrogen-venting",
-    --     enabled = false,
-    --     hidden_in_factoriopedia = true,
-    --     icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
-    --     category = "chemistry",
-    --     ingredients = {
-    --         {type = "fluid",name = "hydrogen", amount=54},
-    --     },
-    --     results = {},
-    --     -- surface_conditions = {
-    --     --     {
-    --     --         property = "pressure",
-    --     --         max = 50,
-    --     --     }
-    --     -- },
-    --     energy_required=0.1,
-    --     subgroup="muluna-products"
-    -- },
-    -- {
-    --     type = "recipe",
     --     name = "muluna-atmosphere-separation",
     --     icon = data.raw["item"]["wood"].icon,
     --     category = "chemistry",
@@ -600,4 +580,27 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
         end
     end 
 
+if mods["maraxsis"] then
+    
+    data:extend{{
+        type = "recipe",
+        name = "hydrogen-venting",
+        enabled = false,
+        hidden_in_factoriopedia = true,
+        icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
+        category = "chemistry",
+        ingredients = {
+            {type = "fluid",name = "hydrogen", amount=54},
+        },
+        results = {},
+        -- surface_conditions = {
+        --     {
+        --         property = "pressure",
+        --         max = 50,
+        --     }
+        -- },
+        energy_required=0.1,
+        subgroup="muluna-products"
+    }}
+end
     

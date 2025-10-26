@@ -740,10 +740,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "oxygen-venting"
             },
-            -- {
-            --     type = "unlock-recipe",
-            --     recipe = "hydrogen-venting"
-            -- },
+            mods["maraxsis"] and {
+                type = "unlock-recipe",
+                recipe = "hydrogen-venting"
+            } or nil,
         }
     },
     {
