@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.52
+Date: 2025-10-26
+  Compatibility:
+    - When Maraxsis is installed, chemical plants can void hydrogen, as they did in older versions of Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.51
 Date: 2025-10-17
   Changes:
