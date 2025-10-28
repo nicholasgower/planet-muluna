@@ -56,6 +56,7 @@ carbon_nanotubes_lds.name = "low-density-structure-from-aluminum"
 --carbon_nanotubes_lds.ingredients = {{type = "item", name = "iron-plate", amount = 5}, {type = "item", name = "plastic-bar", amount = 5}, {type = "item", name = "aluminum-plate", amount = 20}}
 --rro.replace(carbon_nanotubes_lds.ingredients, {type = "item", name = "copper-plate", amount = 20},{type = "item", name = "aluminum-plate", amount = 20})
 rro.replace_name(carbon_nanotubes_lds.ingredients,"copper-plate","aluminum-plate")
+rro.replace_name(carbon_nanotubes_lds.ingredients,"bob-aluminium-plate","aluminum-plate")
 carbon_nanotubes_lds.energy_required=30
 carbon_nanotubes_lds.icons = dual_icon("low-density-structure","aluminum-plate")
 carbon_nanotubes_lds.allow_decomposition = false
