@@ -31,6 +31,10 @@ local possible_science_packs = --Science pack technologies
     "arboric-science-pack",
 }
 
+if mods["panglia_planet"] then
+    table.insert(possible_science_packs,"cloning-vat-technology")
+end
+
 -- Other mods can use the field "muluna_adds_progress_to_exploration_science_pack" to make a technology contribute progress to the exploration science pack.
 for _,tech in pairs(data.raw["technology"]) do
     if tech.muluna_adds_progress_to_exploration_science_pack == true then
