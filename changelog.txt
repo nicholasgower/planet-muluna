@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.55
+Date: 2025-10-28
+  Compatibility:
+    - "Compression science" now contributes progress towards Nanofoamed polymers.
+  Bugfixes:
+    - Added a limit to the number of science packs listed in the "Nanofoamed polymers" technology's trigger description to avoid exceeding an engine limitation to the number of locale strings that can be nested in a localised string.
+    - Data ports are no longer given to assembling machines that do not have an electric energy source.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.54
 Date: 2025-10-28
   Compatibility:
