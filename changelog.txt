@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.53
+Date: 2025-10-28
+  Compatibility:
+    - When Panglia is installed, the "Cloning Vat" technology contributes progress towards unlocking nanofoamed polymers.
+  Bugfixes:
+    - Telescopes no longer produce pollution.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.52
 Date: 2025-10-26
   Compatibility:
