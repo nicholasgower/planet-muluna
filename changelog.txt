@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.54
+Date: 2025-10-28
+  Compatibility:
+    - In addition to the "Assembling machine 3," any crafting machine with crafting categories matching an assembling machine with speed above 1.25 and 4 or more module slots will support crafting the Exploration Science Pack.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.53
 Date: 2025-10-28
   Compatibility:
