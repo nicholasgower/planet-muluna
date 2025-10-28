@@ -83,7 +83,7 @@ end
 
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 for _,am3 in pairs(data.raw["assembling-machine"]) do
-    if am3.name == "assembling-machine-3" or rro.contains_all(am3.crafting_categories,{"basic-crafting", "crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 then
+    if am3.name == "assembling-machine-3" or rro.contains_all(am3.crafting_categories,{"basic-crafting", "crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.energy_source.type == "electric" and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 then
         if am3.fluid_boxes then
             table.insert(am3.fluid_boxes, 
 
