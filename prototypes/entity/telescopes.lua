@@ -62,6 +62,8 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
 
+telescope.energy_source.emissions_per_minute={}
+
 -- for _,animation in pairs({"south_animation","east_animation","west_animation"}) do
 --   telescope.graphics_set.working_visualisations[animation] = telescope.graphics_set.working_visualisations["north_animation"]
 -- end
