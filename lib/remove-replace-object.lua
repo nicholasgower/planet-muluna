@@ -161,6 +161,18 @@ function rro.contains(list,object)
     return false
 end
 
+function rro.contains_all(list,object_list)
+    for _,object in pairs(object_list) do
+        if not rro.contains(list,object) then
+            return false
+        end
+    end
+    return true
+
+
+end
+
+
 ---More powerful version of contains that returns the found object. This functionality is not added to the original contains to avoid unintended consequences.
 function rro.find_contains(list,object) 
     --local contains = false
