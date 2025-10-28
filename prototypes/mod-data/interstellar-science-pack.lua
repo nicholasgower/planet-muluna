@@ -29,6 +29,7 @@ local possible_science_packs = --Science pack technologies
     "carnal-science-pack",
     "foliax-welcome",
     "arboric-science-pack",
+    "planetaris-compression-science",
 }
 
 if mods["panglia_planet"] then
