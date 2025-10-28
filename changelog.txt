@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.56
+Date: 2025-10-28
+  Compatibility:
+    - Fixed Bob's overriding of "Aluminum low density structure" recipe. https://github.com/nicholasgower/planet-muluna/issues/324
+---------------------------------------------------------------------------------------------------
 Version: 2.1.55
 Date: 2025-10-28
   Compatibility:
