@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.57
+Date: 2025-11-01
+  Compatibility:
+    - Moved assembler machine fluidbox updates to data-final-fixes and removed optional dependency on Assembler-reskin. https://github.com/nicholasgower/planet-muluna/issues/327
+---------------------------------------------------------------------------------------------------
 Version: 2.1.56
 Date: 2025-10-28
   Compatibility:
