@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.59
+Date: 2025-11-02
+  Bugfixes:
+    - Improved compatibility with mods that add mining drill entities without accompanying items with the same name.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.58
 Date: 2025-11-02
   Bugfixes:
