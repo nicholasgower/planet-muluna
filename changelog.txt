@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.58
+Date: 2025-11-02
+  Bugfixes:
+    - Changed generalized addition of data fluidboxes to assembling machines to work better with machines that have dimensions other than 3x3. https://github.com/nicholasgower/planet-muluna/issues/329 https://github.com/nicholasgower/planet-muluna/issues/326
+---------------------------------------------------------------------------------------------------
 Version: 2.1.57
 Date: 2025-11-01
   Compatibility:
