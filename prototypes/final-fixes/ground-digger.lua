@@ -89,7 +89,7 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     rro.soft_insert(original_drill.custom_tooltip_fields,{name = {"tooltip.digging-result-drill-on-X","[planet=muluna]"},value = "[item=muluna-lunar-regolith]"})
     extractor.type = "assembling-machine"
     extractor.crafting_categories = {"ground-digging"}
-    extractor.placeable_by = {item = extractor.name, count = 1}
+    extractor.placeable_by = data.raw["item"][extractor.name] and {item = extractor.name, count = 1} or nil
     extractor.localised_name = {"entity-name.x-ground-digger",extractor.localised_name or {"entity-name." .. extractor.name}}
     extractor.localised_description = {"recipe-description.muluna-regolith-digging"}
     --extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
