@@ -22,6 +22,11 @@ if mods["Krastorio2-spaced-out"] then
         advanced_anorthite.icons[3].icon_size = silicon.icon_size
         advanced_anorthite.icons[4].icon_size = silicon.icon_size
     end
-    
+    rro.remove(data.raw["technology"]["muluna-oxygen"].effects,{
+                type = "unlock-recipe",
+                recipe = "muluna-oxygen-from-oxidizer"
+            })
+    data.raw["technology"]["muluna-wood-cultivation"].research_trigger.amount = 10
+
     table.insert(Muluna.constants.cargo_drop_spawn_imports,"__planet-muluna__.scripts.cargo-drop-spawns.kr-electrolysis-plant")
 end
