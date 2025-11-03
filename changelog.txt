@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.61
+Date: 2025-11-03
+  Compatibility:
+    - Added a mod-data object(Muluna.constants.cargo_drop_spawn_imports) allowing other mods to add spawned cargo drops to Muluna when new surfaces are generated.
+    - K2SO: Electrolysis plants will spawn on newly created Muluna surfaces.
+    - K2SO: Muluna recipes using gases will have gas quantities divided by ten, and other recipes with these gases normally modified by Muluna will not be modified.
+    - K2SO: Muluna's "Thruster oxidizer separation" recipe is removed.
+  Bugfixes:
+    - "Thruster oxidizer separation" recipe ignogres productivity effects.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.60
 Date: 2025-11-02
   Locale:
