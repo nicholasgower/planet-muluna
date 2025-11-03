@@ -23,4 +23,5 @@ if mods["Krastorio2-spaced-out"] then
         advanced_anorthite.icons[4].icon_size = silicon.icon_size
     end
     
+    table.insert(Muluna.constants.cargo_drop_spawn_imports,"__planet-muluna__.scripts.cargo-drop-spawns.kr-electrolysis-plant")
 end

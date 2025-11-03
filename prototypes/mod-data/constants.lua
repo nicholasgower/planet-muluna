@@ -1,2 +1,4 @@
 Muluna.constants.oxygen_per_MJ = 10000
 Muluna.constants.oxygen_restriction_blacklist = {"cerys-radiative-tower"} --List of entities that should not have their surface conditions changed to require oxygen.
+
+Muluna.constants.cargo_drop_spawn_imports = {}

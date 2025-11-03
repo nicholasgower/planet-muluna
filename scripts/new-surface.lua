@@ -6,6 +6,23 @@ local spawn_distance = 128
 
 local cargo_drop_radius = settings.startup["muluna-balance-fulgoran-cargo-drop-radius"].value
 local item_multiplier = settings.startup["muluna-balance-fulgoran-cargo-drop-item-multiplier"].value
+
+
+local modded_cargo_drop_spawns_imports = Muluna.constants.cargo_drop_spawn_imports
+local modded_cargo_drop_spawns = {}
+
+for _,import in pairs(modded_cargo_drop_spawns_imports) do
+    local imported = require(import)
+    if type(imported[1]) == "table" then
+        for _,entry in pairs(imported) do
+            table.insert(modded_cargo_drop_spawns,entry)
+        end
+    else
+        table.insert(modded_cargo_drop_spawns,imported)
+    end
+    
+end
+
 local function random_place(surface,item_name,item_count)
     local item_count_adjusted = item_count * item_multiplier
     --if item_count == nil then item_count = 1 end
@@ -87,6 +104,13 @@ local function place_muluna_cargo_pods()
     end
     for i = 1,math.random(3,7) do
         random_place(muluna,"spoilage",math.random(20,50)+math.random(20,50))
+    end
+
+    for _,spawn in pairs(modded_cargo_drop_spawns) do
+        --local spawn = require(spawn_import)
+        for i = 1,spawn.pod_count() do
+            random_place(muluna,spawn.item,spawn.item_quantity())
+        end
     end
     local mods = script.active_mods
     local mod_list = { --A bunch of items from various mods to make it seem like many years ago, an ancient Fulgoran ship dropped a bunch of cargo in this area.
