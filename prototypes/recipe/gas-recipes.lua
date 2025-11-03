@@ -449,7 +449,10 @@ local oxygen_from_oxidizer = {
     }
 }
 
-data:extend{oxygen_from_oxidizer}
+if not mods["Krastorio2-spaced-out"] then
+    data:extend{oxygen_from_oxidizer}
+end
+
 
 local diffusion = {
         type = "recipe",
