@@ -190,7 +190,8 @@ ice_ore.stages =
 }
 
 local ice_ore_particle = table.deepcopy(data.raw["optimized-particle"]["copper-ore-particle"])
-
+ice_ore_particle.name = "carbonic-asteroid-chunk-particle"
+Muluna.rro.deep_replace(ice_ore,"copper-ore-particle","carbonic-asteroid-chunk-particle")
 ice_ore_particle.pictures = {
     {
       filename = "__muluna-graphics__/graphics/particle/ice-ore-particle/ice-ore-particle-1.png",
