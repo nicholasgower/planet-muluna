@@ -70,6 +70,8 @@ local recipe = {
             }
         },
         main_product = "muluna-heat",
+        subgroup = "environmental-protection",
+        order = "e[muluna-vacuum-heating]",
     }
 
 data:extend{steam_proxy,recipe}
