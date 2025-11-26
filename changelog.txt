@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.63
+Date: 2025-11-26
+  Bugfixes:
+    - Fixed graphical issue where hand-mining copper ore patches produced blue particles intended for carbonic asteroid chunk patches.
+    - Fixed issue with telescope icon getting overridden by other mods modifying assembling machine sprites.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.62
 Date: 2025-11-26
   Compatibility:
