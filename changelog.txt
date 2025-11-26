@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.62
+Date: 2025-11-26
+  Compatibility:
+    - "Athletic science pack"(Rabbasca) and "Linox Supercomputer"(Linox) now contribute to the discovery of Nanofoamed polymers.
+    - Added "Heat assembling machine" custom entity type to list of entity types in defines.prototypes.entity to fix the fact that the vacuum heating tower does not allow rocket fuel when Maraxsis is installed.
+  Changes:
+    - Changed category of "Vacuum heating tower" heating recipe to have the same subgroup as the Vacuum heating tower.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.61
 Date: 2025-11-03
   Compatibility:
