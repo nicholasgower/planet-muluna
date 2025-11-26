@@ -21,6 +21,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     },
     icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
     icon_size = 64,
+    icons = "_nil",
     graphics_set = {
       working_visualisations = {{
         constant_speed = true,
