@@ -278,3 +278,4 @@ heating_boiler.fluid_boxes = {
 
 -- heating_boiler.type = "heat-assembling-machine"
 data:extend{heating_boiler}
+defines.prototypes.entity["heat-assembling-machine"] = 0
