@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.65
+Date: 2025-11-27
+  Bugfixes:
+    - Gave recipe for "molten aluminum" a unique recipe order.
+    - Made regolith diggers easier to place.
+    - Removed all mentions of radiation from tile descriptions.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.64
 Date: 2025-11-26
   Compatibility:
