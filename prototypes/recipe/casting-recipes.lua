@@ -109,6 +109,7 @@ data.raw["fluid"]["molten-aluminum"].base_color = {0.7,0.7,0.7}
 data.raw["fluid"]["molten-aluminum"].flow_color = {0.7,0.7,0.7}
 data.raw["recipe"]["molten-aluminum"].icons = melting_icon(data.raw["fluid"]["molten-aluminum"].icon,data.raw["item"]["alumina"].icon)
 data.raw["recipe"]["molten-aluminum"].localised_name = {"recipe-name.molten-aluminum"}
+data.raw["recipe"]["molten-aluminum"].order = "b[new-fluid]-b[vulcanus]-ba[molten-aluminum]"
 data.raw["recipe"]["casting-aluminum-cable"].icons = dual_icon("copper-cable","molten-aluminum") --{
 
     -- {
