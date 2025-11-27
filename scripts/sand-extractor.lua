@@ -87,22 +87,23 @@ function Public.construct_sand_extractor(event)
     --this check allows them to exist in mod-data without crashing.
     local offset_width = drill_prototype.tile_width
     local offset_height = drill_prototype.tile_height
+    local margin = 0.5
     if offset_width ~= offset_height then return end 
 
     local colliding_entities = surface.find_entities_filtered{
-            area= {{position.x-offset_width/2,position.y-offset_height/2},{position.x+offset_width/2,position.y+offset_height/2}},
+            area= {{position.x-offset_width/2+margin,position.y-offset_height/2+margin},{position.x+offset_width/2-margin,position.y+offset_height/2-margin}},
             to_be_deconstructed = false,
         }
     if #colliding_entities ~= 0 then return end
     
     local neighboring_belts = rro.get_concatenation(
         surface.find_entities_filtered{
-            area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
+            area= {{position.x-offset_width+margin,position.y-offset_height+margin},{position.x+offset_width-margin,position.y+offset_height-margin}}, 
             type = {"transport-belt","underground-belt","splitter","container"},
             --ghost_type = {"transport-belt","underground-belt","splitter","container"},
         },
         surface.find_entities_filtered{
-            area= {{position.x-offset_width,position.y-offset_height},{position.x+offset_width,position.y+offset_height}}, 
+            area= {{position.x-offset_width+margin,position.y-offset_height+margin},{position.x+offset_width-margin,position.y+offset_height-margin}}, 
             --type = {"entity-ghost"},
             ghost_type = {"transport-belt","underground-belt","splitter","container"},
         }
