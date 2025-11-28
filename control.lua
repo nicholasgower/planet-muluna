@@ -87,7 +87,7 @@ script.on_configuration_changed(function()
     for _,force in pairs(game.forces) do
         local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
         local interstellar_pack_name = data.gated_technology
-        force.technologies[interstellar_pack_name].researched = false
+        --force.technologies[interstellar_pack_name].researched = false
         interstellar_science_pack.update_interstellar_pack(force,false)
     end
     storage.players_on_muluna = {}
