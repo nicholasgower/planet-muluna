@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.66
+Date: 2025-11-28
+  Bugfixes:
+    - Fixed the constant highlighting of the nanofoamed polymer recipes after they have been researched.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.65
 Date: 2025-11-27
   Bugfixes:
