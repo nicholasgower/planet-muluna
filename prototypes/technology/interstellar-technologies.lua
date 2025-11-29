@@ -59,6 +59,11 @@ local techs_interstellar = {
         {
             "planet-discovery-vesta"
         },
+    ["muria"] = 
+        {
+            "weapon-shooting-speed-7",
+            "weapon-shooting-speed-8",
+        },
     other = 
         {
             "promethium-science-pack",
