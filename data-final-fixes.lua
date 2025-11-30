@@ -294,7 +294,8 @@ local function add_oxygen_condition(entity)
             rro.contains(entity.energy_source.fuel_categories,"chemical") and
             not rro.contains({"car","locomotive"},entity.type) and
             not rro.contains(Muluna.constants.oxygen_restriction_blacklist,entity.name) and
-            not (entity.type == "assembling-machine" or entity.type == "furnace" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower") or rro.contains(entity.crafting_categories,"fuel-processing"))) 
+            --not (entity.type == "assembling-machine" or entity.type == "furnace" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower") or rro.contains(entity.crafting_categories,"fuel-processing"))) 
+            not ((entity.type == "assembling-machine" or entity.type == "heat-assembling-machine" or entity.type == "furnace") and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower") or rro.contains(entity.crafting_categories,"fuel-processing")))
         )
             or
         (
