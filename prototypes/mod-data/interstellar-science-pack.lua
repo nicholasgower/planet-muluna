@@ -31,7 +31,8 @@ local possible_science_packs = --Science pack technologies
     "arboric-science-pack",
     "planetaris-compression-science",
     "athletic-science-pack",
-    "linox-technology_linox-supercomputer"
+    "linox-technology_linox-supercomputer",
+    "lead-and-gold-tech"
 }
 
 if mods["panglia_planet"] then
