@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.70
+Date: 2025-12-24
+  Bugfixes:
+    - Fully commented out vestigal code.
+    - Regolith miners can be placed on top of cliff remains and other corpses. https://github.com/nicholasgower/planet-muluna/issues/332
+---------------------------------------------------------------------------------------------------
 Version: 2.1.69
 Date: 2025-12-05
   Compatibility:
