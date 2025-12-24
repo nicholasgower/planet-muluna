@@ -94,6 +94,7 @@ function Public.construct_sand_extractor(event)
             area= {{position.x-offset_width/2+margin,position.y-offset_height/2+margin},{position.x+offset_width/2-margin,position.y+offset_height/2-margin}},
             to_be_deconstructed = false,
         }
+    rro.replace(colliding_entities,function(entry) return entry.type == "corpse" end,nil)
     if #colliding_entities ~= 0 then return end
     
     local neighboring_belts = rro.get_concatenation(
