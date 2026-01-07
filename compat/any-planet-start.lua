@@ -45,6 +45,7 @@ end
 if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then
     for control_name,control in pairs(data.raw["autoplace-control"]) do
         if not rro.contains(table.keys(data.raw["planet"]["muluna"].map_gen_settings.autoplace_controls),control_name) then
+            if not control.order then control.order = "" end
             control.order = "ab" .. control.order
         end
     end
