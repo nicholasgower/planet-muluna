@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.71
+Date: 2026-01-07
+  Compatibility:
+    - Crushing Industry: Alternative recipe for optical fiber added that uses aluminum plates instead of copper plates. Recycling recipe also added that only works on Muluna. https://github.com/nicholasgower/planet-muluna/issues/344
+  Bugfixes:
+    - Muluna start: Fixed crash on load with Khemia. https://github.com/nicholasgower/planet-muluna/issues/345
+---------------------------------------------------------------------------------------------------
 Version: 2.1.70
 Date: 2025-12-24
   Bugfixes:
