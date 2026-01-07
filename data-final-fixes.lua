@@ -256,32 +256,42 @@ for _,entity in pairs(flib_prototypes.all("entity")) do
 end
 
 --Recycling recipe fixes
+local recipes_to_fix = Muluna.constants.recycling_recipes_to_fix
 
-local cable_recycling = table.deepcopy(data.raw["recipe"]["copper-cable-recycling"])
-local cable_recycling_muluna = table.deepcopy(cable_recycling)
-cable_recycling_muluna.name = cable_recycling.name .. "-muluna"
-cable_recycling_muluna.results[1].name = "aluminum-plate"
-cable_recycling_muluna.surface_conditions = {
-    {
-        property = "is-muluna",
-        min = 1,
-        max = 1,
-    },
-    -- {
-    --     property = "oxygen",
-    --     min = 0,
-    --     max = 0,
-    -- }
-}
 
-cable_recycling.surface_conditions = {
-    {
-        property = "is-muluna",
-        min = 0,
-        max = 0,
-    },
 
-}
+for _,recipe_name in pairs(recipes_to_fix) do
+    local recipe = table.deepcopy(data.raw["recipe"][recipe_name .. "-recycling"])
+    local recipe_muluna = table.deepcopy(recipe)
+    recipe_muluna.name = recipe.name .. "-muluna"
+    recipe_muluna.results[1].name = "aluminum-plate"
+    if not recipe_muluna.surface_conditions then recipe_muluna.surface_conditions = {} end
+    if not recipe.surface_conditions then recipe.surface_conditions = {} end
+    table.insert(recipe_muluna.surface_conditions ,
+        {
+            property = "is-muluna",
+            min = 1,
+            max = 1,
+        }
+        -- {
+        --     property = "oxygen",
+        --     min = 0,
+        --     max = 0,
+        -- }
+    )
+
+    table.insert(recipe.surface_conditions ,
+        {
+            property = "is-muluna",
+            min = 0,
+            max = 0,
+        }
+
+    )
+
+    data:extend{recipe_muluna,recipe}
+end
+
 
 local function add_oxygen_condition(entity)
     --print(entity.name)
@@ -340,7 +350,7 @@ if settings.startup["override-space-connection"].value == true then
 end
 
 
-data:extend{cable_recycling_muluna,cable_recycling}
+
 
 if data.raw["container"]["bottomless-chest"] then --If version >= 2.0.57
     for _,quality in pairs(data.raw["quality"]) do

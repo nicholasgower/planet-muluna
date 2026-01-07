@@ -181,36 +181,41 @@ if data.raw["technology"]["low-density-structure-productivity"] then
 ) 
 end
 
-
+local recipes_to_replace = {}
 
 if mods["Krastorio2-spaced-out"] then
-    local recipes = {
-        "kr-automation-core",
-        --"kr-electrolysis-plant"
-    }
-    for i,recipe_name in ipairs(recipes) do
+    table.insert(recipes_to_replace,"kr-automation-core")
+    
+end
+    
+if mods["crushing-industry"] then
+    table.insert(recipes_to_replace,"optical-fiber")
+end
+
+for i,recipe_name in ipairs(recipes_to_replace) do
         local recipe = data.raw["recipe"][recipe_name]
+        rro.soft_insert(Muluna.constants.recycling_recipes_to_fix,recipe_name)
         local new_recipe = table.deepcopy(recipe)
         new_recipe.name = recipe.name .. "-from-aluminum"
         new_recipe.icons = dual_icon(recipe.name,"aluminum-plate")
         new_recipe.localised_name={"recipe-name.x-from-aluminum",{"item-name."..recipe.name}}
         new_recipe.allow_decomposition = false
         new_recipe.allow_as_intermediate = false
+        new_recipe.auto_recycle = false
         for _,ingredient in pairs(new_recipe.ingredients) do
             if ingredient.name == "copper-plate" then
                 ingredient.name = "aluminum-plate"
             end
         end
         rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects, 
-        {
-            type = "unlock-recipe",
-            recipe = new_recipe.name
-        }
-    )
+            {
+                type = "unlock-recipe",
+                recipe = new_recipe.name
+            }
+        )
+        
         data:extend{new_recipe}
     end
-end
-    
 
 
 
