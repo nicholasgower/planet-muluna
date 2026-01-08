@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.72
+Date: 2026-01-08
+  Bugfixes:
+    - Fixed crash when loading with Crushing Industries but with Optical Fiber disabled. https://github.com/nicholasgower/planet-muluna/issues/346
+---------------------------------------------------------------------------------------------------
 Version: 2.1.71
 Date: 2026-01-07
   Compatibility:
