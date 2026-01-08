@@ -188,7 +188,7 @@ if mods["Krastorio2-spaced-out"] then
     
 end
     
-if mods["crushing-industry"] then
+if mods["crushing-industry"] and settings.startup["crushing-industry-optical-fiber"].value == true then
     table.insert(recipes_to_replace,"optical-fiber")
 end
 
