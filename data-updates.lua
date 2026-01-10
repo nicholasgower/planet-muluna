@@ -724,14 +724,14 @@ end
 local function multiply_ingredients(recipe,ingredient,multiplier)
     if recipe.ingredients then
         for _,item in pairs(recipe.ingredients) do
-            if item.name == ingredient then
+            if item.name == ingredient and item.amount then
                 item.amount = item.amount*multiplier
             end
         end
     end
     if recipe.results then
         for _,item in pairs(recipe.results) do
-            if item.name == ingredient then
+            if item.name == ingredient and item.amount then
                 item.amount = item.amount*multiplier
             end
         end
