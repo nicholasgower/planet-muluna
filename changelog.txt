@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.73
+Date: 2026-01-10
+  Bugfixes:
+    - Added null value check when recipes containing gas fluids without amounts attached. https://github.com/nicholasgower/planet-muluna/issues/347
+---------------------------------------------------------------------------------------------------
 Version: 2.1.72
 Date: 2026-01-08
   Bugfixes:
