@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.75
+Date: 2026-04-03
+  Compatibility:
+    - Added some additional science pack technologies from newer planet mods to the list of technologies that can contribute progress towards unlocking the exploration science pack.
+  Bugfixes:
+    - Corrected prerequisites of "Advanced space research" technology. https://github.com/nicholasgower/planet-muluna/issues/369
+    - Telescope limit changed to be "per force per surface" rather than only "per surface." https://github.com/nicholasgower/planet-muluna/issues/360
+---------------------------------------------------------------------------------------------------
 Version: 2.1.74
 Date: 2026-02-05
   Compatibility:
