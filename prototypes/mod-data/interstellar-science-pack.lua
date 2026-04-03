@@ -33,7 +33,9 @@ local possible_science_packs = --Science pack technologies
     "athletic-science-pack",
     "linox-technology_linox-supercomputer",
     "lead-and-gold-tech",
-    "s6x-void-science-pack"
+    "s6x-void-science-pack",
+    "apicultural-science-pack",
+    "vanadium-science-pack",
 }
 
 if mods["panglia_planet"] then
