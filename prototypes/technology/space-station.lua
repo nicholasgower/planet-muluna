@@ -1141,7 +1141,7 @@ data:extend{
     {
         type = "technology",
         name = "advanced-space-science-pack",
-        prerequisites = {"interstellar-science-pack","space-science-pack","production-science-pack","utility-science-pack"},
+        prerequisites = {"interstellar-science-pack","space-science-pack","production-science-pack","utility-science-pack","agricultural-science-pack","electromagnetic-science-pack"},
         icons = {
             {
                 icon = data.raw["technology"]["space-science-pack"].icon,
