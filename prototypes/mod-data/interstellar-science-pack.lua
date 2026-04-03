@@ -36,6 +36,8 @@ local possible_science_packs = --Science pack technologies
     "s6x-void-science-pack",
     "apicultural-science-pack",
     "vanadium-science-pack",
+    "planet-crucible-science-pack",
+    "planetaris-bioengineering-science-pack"
 }
 
 if mods["panglia_planet"] then
