@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.76
+Date: 2026-04-08
+  Bugfixes:
+    - Fixed crash on placing telescopes with robots. https://github.com/nicholasgower/planet-muluna/issues/371[#issuecomment](https://github.com/nicholasgower/planet-muluna/issues/issuecomment)-4200204112
+---------------------------------------------------------------------------------------------------
 Version: 2.1.75
 Date: 2026-04-03
   Compatibility:
