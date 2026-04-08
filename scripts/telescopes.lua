@@ -51,9 +51,18 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     local reactor = nil
     if is_heat_assembling_machine then
         local telescope_build_limit = get_telescope_build_limit(entity)
-        local builder_force_index = game.players[event.player_index].force.index
+        local builder
+        if event.player_index then
+            builder = game.players[event.player_index]
+        elseif event.robot then
+            builder = event.robot
+        else
+            error("Ghost telescope placed by entity that is neither a player nor robot.")
+        end
+        
+        local builder_force_index = builder.force.index
         local count = rro.count(
-            storage.telescopes,function(entry) 
+                storage.telescopes,function(entry) 
                 return entry["assembling-machine"].valid and 
                 entry["assembling-machine"].surface == entity.surface and 
                 entry["assembling-machine"].force.index == builder_force_index end)
