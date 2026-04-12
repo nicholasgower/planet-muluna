@@ -37,7 +37,7 @@ local function delete_tech(deleted_tech,new_tech)
     data.raw["technology"][deleted_tech] = nil
     
     for _,technology in pairs(data.raw["technology"]) do
-        rro.remove(technology.prerequisites,deleted_tech)
+        rro.replace(technology.prerequisites,deleted_tech,new_tech)
     end
 end
 
@@ -154,4 +154,10 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         end
             
     end
-  end
+    if mods["Krastorio2-spaced-out"] then
+        delete_tech("kr-advanced-chemistry","muluna-oxygen")
+        data.raw["technology"]["kr-fluid-excess-handling"].prerequisites = {"muluna-gas-venting"}
+        data.raw["technology"]["kr-fluid-excess-handling"].research_trigger = {type = "craft-item",item="iron-plate"}
+        data.raw["technology"]["kr-fluid-excess-handling"].unit = nil
+    end
+end
