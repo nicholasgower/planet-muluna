@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.77
+Date: 2026-04-12
+  Compatibility:
+    - Fixed the inability to unlock water separation when playing Krastorio 2 with Muluna Start. https://github.com/nicholasgower/planet-muluna/issues/370
+---------------------------------------------------------------------------------------------------
 Version: 2.1.76
 Date: 2026-04-08
   Bugfixes:
