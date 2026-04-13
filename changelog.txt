@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.78
+Date: 2026-04-13
+  Bugfixes:
+    - Placing telescopes on space platforms no longer crash the game. https://github.com/nicholasgower/planet-muluna/issues/373
+---------------------------------------------------------------------------------------------------
 Version: 2.1.77
 Date: 2026-04-12
   Compatibility:
