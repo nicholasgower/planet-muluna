@@ -56,6 +56,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             builder = game.players[event.player_index]
         elseif event.robot then
             builder = event.robot
+        elseif event.platform then
+            builder = event.platform
         else
             error("Ghost telescope placed by entity that is neither a player nor robot.")
         end
