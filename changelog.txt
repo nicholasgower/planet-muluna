@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.79
+Date: 2026-05-02
+  Bugfixes:
+    - Fixed crash on load with Enriched Industry. https://mods.factorio.com/mod/enriching-industry/discussion/693c8f91190dcc14469fd5bf, https://mods.factorio.com/mod/enriching-industry/discussion/697e0fc1f1e0b252904be1c0e, https://github.com/nicholasgower/planet-muluna/issues/379, and https://github.com/nicholasgower/planet-muluna/issues/343 (Thank you stef77stef!)
+---------------------------------------------------------------------------------------------------
 Version: 2.1.78
 Date: 2026-04-13
   Bugfixes:
