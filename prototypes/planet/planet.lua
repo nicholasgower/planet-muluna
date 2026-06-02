@@ -438,7 +438,7 @@ end
 if mods["any-planet-start"] then
   local nauvis = data.raw["planet"]["nauvis"]
   
-  parent_planet = settings.startup["aps-planet"].value
+  local parent_planet = settings.startup["aps-planet"].value
   --assert(1==2,tostring(parent_planet))
   local start_planet = settings.startup["aps-planet"].value
   if parent_planet == "none" or parent_planet =="muluna" then

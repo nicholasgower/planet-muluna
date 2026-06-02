@@ -69,11 +69,19 @@ end
 
 ---Replaces object in list with another object
 function rro.replace(list, objectToRemove, replacementObject) 
+    if replacementObject == nil then
+        error("Use rro.remove instead of rro.replace.")
+    end
     if list then
         for i = #list, 1, -1 do -- Iterate backward to avoid index shifting
             if rro.deep_equals(list[i] , objectToRemove) then
-                if replacementObject ~= nil and not rro.contains(list,replacementObject) then
-                    list[i] = replacementObject -- Replace the object
+                if replacementObject ~= nil then
+                    if type(replacementObject) == "function" then
+                        list[i] = replacementObject(table.deepcopy(list[i]))
+                    else
+                        list[i] = replacementObject -- Replace the object
+                    end
+                    
                 else
                     table.remove(list, i) -- Remove the object if no replacement is provided
                 end
