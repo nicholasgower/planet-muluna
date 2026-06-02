@@ -258,6 +258,8 @@ rocket_part_muluna.localised_name = {"item-name.rocket-part"}
 
 PlanetsLib.assign_rocket_part_recipe("muluna",rocket_part_muluna.name)
 PlanetsLib.assign_rocket_part_recipe("cerys",rocket_part_muluna.name)
+PlanetsLib.assign_rocket_part_recipe("lignumis",rocket_part_muluna.name)
+PlanetsLib.assign_rocket_part_recipe("eneas",rocket_part_muluna.name)
 -- data.raw["recipe"]["rocket-part"].surface_conditions = {
 --     {property = "gravity",
 --     min = 5.01,
