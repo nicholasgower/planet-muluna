@@ -299,7 +299,7 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
         end
         
         for j,space_platform in ipairs(space_platforms) do
-            local signal = platform_list_signals[j]
+            local signal = platform_list_signals[j+3]
             if signal then
                 signals[i]={value = {type = "virtual",name = signal,quality = "normal"},min= space_platform.index}
                 i = i+1
