@@ -4,6 +4,8 @@ local rro = Muluna.rro
 -- Data stage: To allow other mods to propogate changes from this code to their mod's technologies.
 -- Data-updates stage: To add science packs to technologies that might not exist by this mod's data stage.
 
+local old_aop = mods["Age-of-Production"] and helpers.compare_versions(mods["Age-of-Production"],"2.0.0") == -1
+local new_aop = mods["Age-of-Production"] and helpers.compare_versions(mods["Age-of-Production"],"2.0.0") >= 0
 
 local techs_interstellar = {
     ["planet-discovery"] = 
@@ -81,7 +83,12 @@ local techs_interstellar = {
     -- fusion_thruster = {
     --     "fusion-thruster"
     -- }
-    
+    aop = new_aop and 
+        {
+            "aop-quantum-machinery",
+
+        } 
+        or nil,
 }
 
 
@@ -107,6 +114,8 @@ local function make_interstellar(tech_name)
 
 end
 
+
+
 for _,tech in pairs(data.raw["technology"]) do
 
     local interstellar = 
@@ -127,7 +136,12 @@ for _,tech in pairs(data.raw["technology"]) do
                     )
                 ) or
                 (
-                    string.find(tech.name,"aop")
+                    old_aop and string.find(tech.name,"aop")
+                ) or
+                (
+                  new_aop and (
+                    rro.contains(tech.unit.ingredients,{"aop-quantistic-science-pack","_any"})
+                  )
                 )
             )
             
