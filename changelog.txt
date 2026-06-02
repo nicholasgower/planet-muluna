@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.80
+Date: 2026-06-02
+  Balancing:
+    - Halved rocket costs on Lignumis and Eneas. https://github.com/nicholasgower/planet-muluna/issues/391
+  Compatibility:
+    - Added several new planetary science packs to the list of science packs that contribute progress to the exploration science pack.
+    - Adjusted Muluna's handling of Age of Production's technologies to greatly limit the presence of the Exploration science pack. These changes only exist when AoP >=2.0.0 is loaded. https://github.com/nicholasgower/planet-muluna/issues/393
+    - Lignumis: Removed space science pack prerequisites from Production and Utility science pack technologies. https://github.com/nicholasgower/planet-muluna/issues/356
+    - Moved most cargo drop spawn code to mod-data to make it easier for other mods to remove cargo drops. When another mod removes an item, Muluna will display a warning on generating Muluna's surface. This warning can be removed by developers by removing the relevant spawn file from Muluna.constants.cargo_drop_spawn_imports. https://github.com/nicholasgower/planet-muluna/issues/388
+  Bugfixes:
+    - Changed "Plastic from cellulose" recipe to better tolerate changes from other mods such as Crushing Industry Tweaks. https://github.com/nicholasgower/planet-muluna/issues/384
+    - Fixed telescope surface signal generator to not produce unusable signals. https://github.com/nicholasgower/planet-muluna/issues/377
+  Locale:
+    - Updated polish locale(By S3BA). https://mods.factorio.com/mod/muluna-utility-constants/discussion/69fc72cf4fa120a3d0fb0ae9
+---------------------------------------------------------------------------------------------------
 Version: 2.1.79
 Date: 2026-05-02
   Bugfixes:
