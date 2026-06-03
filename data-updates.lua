@@ -66,7 +66,10 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     
 
     rocket_prod.max_level=nil
-    rro.remove(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1})
+    rro.remove(rocket_prod.unit.ingredients,{"cryogenic-science-pack","_any"})
+    if mods["Age-of-Production"] then
+        rro.remove(rocket_prod.unit.ingredients,{"aop-thermal-science-pack","_any"})
+    end
     rro.soft_insert(rocket_prod.unit.ingredients,{"space-science-pack",1})
     rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
     rocket_prod.unit.count=250
@@ -80,6 +83,11 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         "agricultural-science-pack",
         "electromagnetic-science-pack",
     }
+    -- local science_pack_aop = {
+    --     "aop-thermal-science-pack",
+    --     "aop-forestry-science-pack",
+    --     "aop-petrochemical-science-pack",
+    -- }
     local planet_name = {
         "vulcanus",
         "gleba",
