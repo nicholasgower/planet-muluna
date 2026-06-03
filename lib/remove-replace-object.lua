@@ -67,8 +67,12 @@ function rro.remove(list, objectToRemove)
     end
 end
 
+function rro.replace_no_duplicates(list, objectToRemove, replacementObject)
+    rro.replace(list, objectToRemove, replacementObject,true) 
+end
+
 ---Replaces object in list with another object
-function rro.replace(list, objectToRemove, replacementObject) 
+function rro.replace(list, objectToRemove, replacementObject,no_duplicates) 
     if replacementObject == nil then
         error("Use rro.remove instead of rro.replace.")
     end
@@ -78,10 +82,12 @@ function rro.replace(list, objectToRemove, replacementObject)
                 if replacementObject ~= nil then
                     if type(replacementObject) == "function" then
                         list[i] = replacementObject(table.deepcopy(list[i]))
+                    elseif rro.contains(list, replacementObject) and no_duplicates then
+                        table.remove(list, i) -- Remove the object if the replacement is already in the list, to avoid duplicates
                     else
                         list[i] = replacementObject -- Replace the object
                     end
-                    
+
                 else
                     table.remove(list, i) -- Remove the object if no replacement is provided
                 end
