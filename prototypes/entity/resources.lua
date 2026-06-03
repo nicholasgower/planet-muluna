@@ -153,6 +153,8 @@ metal_ore.name = "metallic-asteroid-chunk"
 carbon_ore.name = "carbonic-asteroid-chunk"
 ice_ore.name = "oxide-asteroid-chunk"
 helium.name = "helium"
+ice_ore.factoriopedia_simulation ={ init = make_resource("oxide-asteroid-chunk") }
+
 
 metal_ore.icon = data.raw["item"]["metallic-asteroid-chunk"].icon
 carbon_ore.icon = data.raw["item"]["carbonic-asteroid-chunk"].icon
@@ -384,6 +386,8 @@ local anorthite=resource(
 anorthite.minable.result= "anorthite-chunk"
 anorthite.minable.mining_time = 10
 anorthite.autoplace.control="anorthite-chunk"
+anorthite.factoriopedia_simulation ={ init = make_resource("anorthite-chunk") }
+string.gsub(anorthite.factoriopedia_simulation.init,"oxide%-asteroid%-chunk","anorthite-chunk")
 anorthite.icons=nil
 anorthite.icon="__muluna-graphics__/graphics/icons/anorthite-chunk.png"
 anorthite.stages =
