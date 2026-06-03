@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.81
+Date: 2026-06-03
+  Bugfixes:
+    - Fixed crash on placing regolith miner. https://github.com/nicholasgower/planet-muluna/issues/394
+---------------------------------------------------------------------------------------------------
 Version: 2.1.80
 Date: 2026-06-02
   Balancing:
