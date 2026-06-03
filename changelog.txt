@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.82
+Date: 2026-06-03
+  Compatibility:
+    - AoP: Muluna Greenhouses can be crafted in Lumber mills.
+    - AoP: Muluna's wood crushing recipes now work on AoP's Lumber Mill.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.81
 Date: 2026-06-03
   Bugfixes:
