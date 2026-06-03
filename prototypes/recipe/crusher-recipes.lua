@@ -196,6 +196,10 @@ wood_crushing.results = {{type = "item", name = "wood", amount = 1,ignored_by_pr
 wood_crushing.ingredients = {{type = "item",name = "wood",amount = 1}}
 wood_crushing.energy_required = 0.5
 
+if mods["Age-of-Production"] then
+    wood_crushing.additional_categories = {"woodworking"}
+end
+
 wood_crushing.icons=crushing_icon(data.raw.item["wood"].icon,data.raw.item["wood"].icon_size)
 wood_crushing.order="b-aa-c"
 
