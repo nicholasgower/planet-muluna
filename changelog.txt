@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.83
+Date: 2026-06-03
+  Compatibility:
+    - Added incompatibility flag for "Biological Machines: Planet Wit" due to contradictory ideas.
+  Bugfixes:
+    - Gave anorthite and oxide asteroid chunks proper Factoriopedia previews. https://github.com/nicholasgower/planet-muluna/issues/366
+---------------------------------------------------------------------------------------------------
 Version: 2.1.82
 Date: 2026-06-03
   Compatibility:
