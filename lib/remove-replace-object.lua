@@ -78,10 +78,12 @@ function rro.replace(list, objectToRemove, replacementObject)
                 if replacementObject ~= nil then
                     if type(replacementObject) == "function" then
                         list[i] = replacementObject(table.deepcopy(list[i]))
+                    elseif rro.contains(list, replacementObject) then
+                        table.remove(list, i) -- Remove the object if the replacement is already in the list, to avoid duplicates
                     else
                         list[i] = replacementObject -- Replace the object
                     end
-                    
+
                 else
                     table.remove(list, i) -- Remove the object if no replacement is provided
                 end
