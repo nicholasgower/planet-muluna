@@ -57,7 +57,7 @@ crusher_2.name = "crusher-2"
 --space_boiler.place_result = "space-boiler"
 crusher_2.localised_name = {"",{"item-name.crusher"}," 2"}
 crusher_2.ingredients = {
-    {type = "item",name = "tungsten-plate",amount = 10},
+    {type = "item",name = Muluna.constants.names["tungsten-plate"],amount = 10},
     {type = "item",name = "uranium-238",amount = 2},
     {type = "item",name = "aluminum-plate",amount = 10},
     {type = "item",name = "speed-module-3",amount = 1},
@@ -223,7 +223,7 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
         },
         {
             type = "item",
-            name = "tungsten-plate",
+            name = Muluna.constants.names["tungsten-plate"],
             amount = 10,
         },
         {

@@ -1209,8 +1209,8 @@ data:extend{
                 icon_size = 256
             },  
             {
-                icon = data.raw["item"]["tungsten-plate"].icon,
-                icon_size=data.raw["item"]["tungsten-plate"].icon_size,
+                icon = data.raw["item"]["tungsten-plate"].icon or  "__space-age__/graphics/icons/tungsten-plate.png",
+                icon_size=data.raw["item"]["tungsten-plate"].icon_size or 64,
                 --scale=0.3,
                 shift = {45,45},
                 scale=0.75,
