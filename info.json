@@ -52,7 +52,8 @@
     "! quality-rocket-parts",
     "(?) QualityEffectsFixed",
     "(?) space_age_galore >= 1.5.3",
-    "! biological-machines-planet-wit"
+    "! biological-machines-planet-wit",
+    "(?) orbital-cannon >= 0.10.1"
   ],
   "quality_required": true,
   "rail_bridges_required": true,

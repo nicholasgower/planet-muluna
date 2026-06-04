@@ -456,6 +456,23 @@ local muluna_connection = {
   --asteroid_spawn_definitions = asteroid_spawn_definitions_connection
 }
 
+if mods["orbital-cannon"] then
+    data:extend{{
+        type = "orbital-cannon-link",
+        name = "nauvis-muluna",
+        source = parent_planet,
+        target = "muluna",
+        link_type = "transport",
+    },
+    {
+        type = "orbital-cannon-link",
+        name = "muluna-nauvis",
+        source = "muluna",
+        target = parent_planet,
+        link_type = "transport",
+    }}
+end
+
 
 
 
