@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.85
+Date: 2026-06-04
+  Bugfixes:
+    - Added fallback icon when Tungsten plate icon can't be found. https://github.com/nicholasgower/planet-muluna/issues/397
+---------------------------------------------------------------------------------------------------
 Version: 2.1.84
 Date: 2026-06-03
   Bugfixes:
