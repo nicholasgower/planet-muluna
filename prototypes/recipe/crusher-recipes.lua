@@ -263,7 +263,7 @@ if settings.startup["muluna-hardcore-classic-wood-gasification"].value == false 
 end
 
 local regolith_recycling = table.deepcopy(regolith_sorting)
-local recycling_lib = require("__quality__.prototypes.recycling")
+local recycling_lib = require("__quality__.prototypes.recycling") --mods["recycler"]
 
 regolith_recycling.name = "muluna-regolith-recycling"
 regolith_recycling.category = "recycling"

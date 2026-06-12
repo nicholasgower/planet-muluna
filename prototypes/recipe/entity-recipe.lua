@@ -243,7 +243,7 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
         },
         {
             type = "item",
-            name = "quality-module-3",
+            name = mods["quality"] and "quality-module-3" or "productivity-module-3",
             amount = 1,
         },
     }

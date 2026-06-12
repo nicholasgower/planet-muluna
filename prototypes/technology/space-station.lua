@@ -1387,7 +1387,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack","quality-module-3"
+            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack",mods["quality"] and "quality-module-3" or nil
         },
         effects = {
             {
