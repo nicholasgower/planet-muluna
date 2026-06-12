@@ -304,8 +304,8 @@ data:extend{
     -- },
 
 }
---isV20 is an undocumented global variable indicating if the game version is 2.0.X or not. Space casinos are getting nerfed in 2.1, so this setting is obsolete when 2.1 comes out.
-if isV20 then 
+--Space casinos are getting nerfed in 2.1, so this setting is obsolete when Factorio 2.1 comes out.
+if helpers.compare_versions(helpers.game_version,"2.1.0") < 0 then 
   data:extend{{
         type = "bool-setting",
         name = "muluna-hardcore-remove-space-casino",
@@ -313,7 +313,7 @@ if isV20 then
         default_value = false,
         order = "ah",
   }} 
-    end
+end
 
 
 if mods["any-planet-start"] then
