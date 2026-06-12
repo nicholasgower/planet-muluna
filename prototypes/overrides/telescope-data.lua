@@ -1,7 +1,7 @@
 local rro = Muluna.rro
 
 local parent_planet = "nauvis"
-
+assert(data.raw["planet"]["muluna"])
 if mods["any-planet-start"] then
     local nauvis = data.raw["planet"]["nauvis"]
     
@@ -78,7 +78,7 @@ for _,space_location in pairs(data.raw["planet"]) do
     end
 end
 local space_platform = data.raw["surface"]["space-platform"]
-local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-telescope-observation-muluna"]),
+local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-telescope-observation-".. parent_planet] ),
     {
         name = "muluna-telescope-observation-space-platform",
         surface_conditions = {

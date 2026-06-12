@@ -361,6 +361,6 @@ end
 
 require("prototypes.custom-prototypes.final-fixes.heat-assembling-machine-final-fix")
 
-for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
-    print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
-end
+-- for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
+--     print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
+-- end
