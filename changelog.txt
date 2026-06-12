@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.87
+Date: 2026-06-12
+  Compatibility:
+    - Added incompatibility flag for Krastorio2 SO Void. https://github.com/nicholasgower/planet-muluna/issues/382
+    - Changes made to better accommodate mods that 'delete' Nauvis. https://github.com/nicholasgower/planet-muluna/issues/382
+    - Made small changes to code referencing quality to decouple Muluna from quality in preparation for Factorio 2.1.
+  Changes:
+    - When Factorio version >= 2.1.0, "Remove space casino" setting is removed from options.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.86
 Date: 2026-06-04
   Bugfixes:
