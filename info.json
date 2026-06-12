@@ -53,7 +53,8 @@
     "! quality-rocket-parts",
     "(?) QualityEffectsFixed",
     "(?) space_age_galore >= 1.5.3",
-    "! biological-machines-planet-wit"
+    "! biological-machines-planet-wit",
+    "! k2so-void"
   ],
   "quality_required": false,
   "rail_bridges_required": true,
