@@ -927,7 +927,7 @@ if settings.startup["muluna-easy-simple-wood-gasification"]["value"] == true the
     end
 end
 
-if settings.startup["muluna-hardcore-remove-space-casino"].value == true then
+if settings.startup["muluna-hardcore-remove-space-casino"] and settings.startup["muluna-hardcore-remove-space-casino"].value == true then
     for _,recipe in pairs(data.raw["recipe"]) do
         if string.find(recipe.name,"asteroid%-reprocessing") then
             recipe.allow_quality = false

@@ -1,3 +1,7 @@
+-- for key,func in pairs(_G) do
+--   print(key,type(func) ~= "function" and func or nil)
+-- end
+--error(serpent.block(_G))
 require("wood-gasification.settings")
 data:extend{
     {
@@ -55,13 +59,6 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "ag",
-      },
-      {
-        type = "bool-setting",
-        name = "muluna-hardcore-remove-space-casino",
-        setting_type = "startup",
-        default_value = false,
-        order = "ah",
       },
       {
         type = "bool-setting",
@@ -307,6 +304,17 @@ data:extend{
     -- },
 
 }
+--isV20 is an undocumented global variable indicating if the game version is 2.0.X or not. Space casinos are getting nerfed in 2.1, so this setting is obsolete when 2.1 comes out.
+if isV20 then 
+  data:extend{{
+        type = "bool-setting",
+        name = "muluna-hardcore-remove-space-casino",
+        setting_type = "startup",
+        default_value = false,
+        order = "ah",
+  }} 
+    end
+
 
 if mods["any-planet-start"] then
   APS.add_choice("muluna")
