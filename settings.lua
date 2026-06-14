@@ -147,6 +147,15 @@ data:extend{
         order = "bg",
         rocs_hard_mode = true,
       },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-alternative-battery-recipe",
+        --localised_name = {"mod-setting-name.muluna-alternative-automation-pack-recipe"},
+        --localised_description={"mod-setting-des.muluna-alternative-automation-pack-recipe"},
+        setting_type = "startup",
+        default_value = false,
+        order = "bga",
+      },
       
       {
         type = "bool-setting",

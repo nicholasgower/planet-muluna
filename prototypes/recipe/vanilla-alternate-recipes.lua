@@ -137,22 +137,10 @@ rro.replace_name(solar_panel.ingredients,"copper-plate","silicon-cell")
 rro.replace_name(solar_panel.ingredients,"steel-plate","aluminum-plate")
 
 
--- Battery from aluminum instead of copper.
--- The accumulator is assembled from batteries, and the vanilla battery uses a
--- copper electrode. Aluminum electrodes work just as well in a sulfuric-acid
--- cell, so on Muluna batteries can be crafted from abundant aluminum with no
--- copper needed.
-local aluminum_battery = table.deepcopy(data.raw["recipe"]["battery"])
-aluminum_battery.name = "battery-from-aluminum"
-rro.replace_name(aluminum_battery.ingredients,"copper-plate","aluminum-plate")
-aluminum_battery.icons = dual_icon("battery","aluminum-plate")
-aluminum_battery.localised_name = {"recipe-name.x-from-aluminum",{"item-name.battery"}}
-aluminum_battery.allow_decomposition = false
-
 
 
 --local recipes = {motor_carbon, aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,aluminum_green_circuit,aluminum_red_circuit, bio_plastic}
-local recipes = {motor_carbon,aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,solar_panel,aluminum_battery}
+local recipes = {motor_carbon,aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,solar_panel}
 --, ,aluminum_green_circuit,aluminum_red_circuit,
 for _,recipe in pairs(recipes) do
     if recipe.subgroup ~= data.raw["item"]["solar-panel"].subgroup then
@@ -166,12 +154,30 @@ table.insert(recipes,bio_plastic)
 
 data:extend(recipes)
 
--- Unlock the aluminum battery alongside the other aluminum-processing recipes.
-rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects,
-{
-    type = "unlock-recipe",
-    recipe = "battery-from-aluminum",
-})
+if settings.startup["muluna-easy-alternative-battery-recipe"].value == true then
+    -- Battery from aluminum instead of copper.
+    -- The accumulator is assembled from batteries, and the vanilla battery uses a
+    -- copper electrode. Aluminum electrodes work just as well in a sulfuric-acid
+    -- cell, so on Muluna batteries can be crafted from abundant aluminum with no
+    -- copper needed.
+    local aluminum_battery = table.deepcopy(data.raw["recipe"]["battery"])
+    aluminum_battery.name = "muluna-battery-from-aluminum"
+    rro.replace_name(aluminum_battery.ingredients,"copper-plate","aluminum-plate")
+    aluminum_battery.icons = dual_icon("battery","aluminum-plate")
+    aluminum_battery.localised_name = {"recipe-name.x-from-aluminum",{"item-name.battery"}}
+    aluminum_battery.allow_decomposition = false
+
+    aluminum_battery.hide_from_signal_gui = false
+    aluminum_battery.auto_recycle = false
+    -- Unlock the aluminum battery alongside the other aluminum-processing recipes.
+    rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects,
+    {
+        type = "unlock-recipe",
+        recipe = "muluna-battery-from-aluminum",
+    })
+    
+    data:extend{aluminum_battery}
+end
 
 
 -- Aluminum Automation science pack, only when not already added by the Any Planet Start compat
