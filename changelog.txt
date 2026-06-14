@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.88
+Date: 2026-06-14
+  Locale:
+    - Changed "Removed space casino" setting's Russian locale to reduce confusion. https://github.com/nicholasgower/planet-muluna/issues/401[#issuecomment](https://github.com/nicholasgower/planet-muluna/issues/issuecomment)-4702555409
+  Changes:
+    - Added optional aluminum-based battery recipe, disabled by default. (Thank you Ivan Cheremisin!)
+---------------------------------------------------------------------------------------------------
 Version: 2.1.87
 Date: 2026-06-12
   Compatibility:
