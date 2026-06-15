@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.89
+Date: 2026-06-15
+  Optimizations:
+    - Eliminated performance loss from placing entities not targeted by Muluna in on_placed scripts. Changes in this update could also improve Maraxsis performance if ported over.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.88
 Date: 2026-06-14
   Locale:
