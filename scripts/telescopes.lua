@@ -30,7 +30,11 @@ local function same_surface_properties(surface1,planet)
     end
     return true
 end
-
+local telescope_filters = {}
+for entity_name,machine in pairs(heat_assembling_machines) do
+    table.insert(telescope_filters,{filter = "name", name = entity_name})
+    table.insert(telescope_filters,{filter = "ghost_name", name = entity_name})
+end
 Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     if not storage.telescopes then storage.telescopes = {} end
     local entity = event.entity
@@ -167,7 +171,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     end
 
 
-end
+end,
+telescope_filters
 )
 
 
@@ -222,7 +227,8 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         -- }
     end
 
-end)
+end,
+telescope_filters)
 
 Muluna.events.on_event({defines.events.on_player_rotated_entity}, function(event)
 

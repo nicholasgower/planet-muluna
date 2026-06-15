@@ -7,7 +7,13 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=false}
     entity.rotate{reverse=true}
 end
-
+local heat_assembler_filters = {}
+for entity_name,machine in pairs(heat_assembling_machines) do
+    table.insert(heat_assembler_filters,{filter = "name", name =  machine["assembling-machine"]})
+    table.insert(heat_assembler_filters,{filter = "ghost_name", name =  machine["assembling-machine"]})
+    table.insert(heat_assembler_filters,{filter = "name", name = machine["reactor"]})
+    table.insert(heat_assembler_filters,{filter = "ghost_name", name = machine["reactor"]})
+end
 Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     
     local entity = event.entity
@@ -42,7 +48,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     end
 
 
-end
+end,
+heat_assembler_filters
 )
 
 
@@ -97,7 +104,8 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         -- }
     end
 
-end)
+end,
+heat_assembler_filters)
 
 local function register_for_deconstruction_events(entity_name,entity_storage) --Assumes that upgrades are done to upgrade quality, not entity type
 
