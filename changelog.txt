@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.90
+Date: 2026-06-17
+  Bugfixes:
+    - Fixed crash on removing a planet mod while a satellite radar is orbiting said planet.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.89
 Date: 2026-06-15
   Optimizations:
