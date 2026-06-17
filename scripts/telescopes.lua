@@ -363,12 +363,17 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
             if combinator.valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
+                    local cached_signals = telescope.cached_signals or {} 
                     local signals = get_telescope_combinator_signals(combinator.surface,combinator.force)
-                    combinator_behavior.remove_section(1)
-                    local section = combinator_behavior.add_section()
-                    for i,signal in ipairs(signals) do
-                        section.set_slot(i,signal)
+                    if not rro.deep_equals(signals,cached_signals) then
+                        combinator_behavior.remove_section(1)
+                        local section = combinator_behavior.add_section()
+                        for i,signal in ipairs(signals) do
+                            section.set_slot(i,signal)
+                        end
                     end
+                    
+                    telescope.cached_signals = signals
                 end
             end
     end
