@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.92
+Date: 2026-06-17
+  Locale:
+    - Improved description of telescope combinator to describe the meaning of platform state.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.91
 Date: 2026-06-17
   Optimizations:
