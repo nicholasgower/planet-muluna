@@ -42,6 +42,27 @@ local function init_storage_nav_beacons()
     
 end
 
+local function update_space_platform_beacon(platformBeacon,platform)
+    if platformBeacon.valid == true then
+            storage.nav_surfaces[platformBeacon.unit_number] = platform.space_location --this can be nil, which is acceptable
+        else
+            storage.beaconed_platforms[platform.index] = nil
+        end
+
+
+end
+
+local function update_space_platform(platform)
+    --only track platforms with a nav beacon
+    local platformBeacon = storage.beaconed_platforms[platform.index]
+    if platformBeacon ~= nil then
+        update_space_platform_beacon(platformBeacon,platform)
+        
+    end
+
+
+end
+
 local function reset_storage_nav_beacons() 
     -- storage = {
     --     ---@type table<int, LuaEntity>
@@ -72,6 +93,12 @@ local function reset_storage_nav_beacons()
 
         --Search space platforms for nav beacons already placed
         --Register those beacons using existing functions.
+        for _,force in pairs(game.forces) do
+            
+            for _,platform in pairs(force.platforms) do 
+                update_space_platform(platform)
+            end
+        end
 end
 
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
@@ -164,18 +191,12 @@ local function destroyed_nav_beacon(entity)
     end
 end
 
+
+
+
 ---@param e on_space_platform_changed_state
 Muluna.events.on_event(defines.events.on_space_platform_changed_state, function(e)
-    --only track platforms with a nav beacon
-    local platformBeacon = storage.beaconed_platforms[e.platform.index]
-    if platformBeacon ~= nil then
-        if platformBeacon.valid == true then
-            storage.nav_surfaces[platformBeacon.unit_number] = e.platform.space_location --this can be nil, which is acceptable
-        else
-            storage.beaconed_platforms[e.platform.index] = nil
-        end
-        
-    end
+    update_space_platform(e.platform)
 end)
 
 local filter_built = {
@@ -207,6 +228,13 @@ if settings.startup["enable-nav-beacon"].value == true then
                         local enough_light = false
                         --game.print(serpent.block(storage.nav_surfaces))
                         for beacon_id,nav_surface in pairs(storage.nav_surfaces) do
+                            if storage.nav_beacons[beacon_id] and not nav_surface.valid then --If a surface is removed via mod uninstallation, update the space platform.
+                                --storage.nav_surfaces[beacon_id] = nil
+                                local beacon = storage.nav_beacons[beacon_id] 
+                                if beacon then update_space_platform_beacon(beacon,beacon.surface.platform) end
+                                goto on_to_the_next
+                            
+                            end
                                 if nav_surface.name == player.surface.name then
                                     local beacon = storage.nav_beacons[beacon_id] 
 
@@ -238,6 +266,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                 else 
                                     player.remove_alert{entity = beacon}
                                 end
+                            ::on_to_the_next::
                         end
 
                         if navSat ~= nil then
