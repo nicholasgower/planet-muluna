@@ -311,5 +311,16 @@ function rro.count(table,predicate)
 
 end
 
+--Returns keys of table
+function rro.keys(table)
+    local out = {}
+    local n = 0
+    for key,value in pairs(table) do
+        n=n+1
+        out[n] = key
+    end
+
+
+end
 
 return rro
