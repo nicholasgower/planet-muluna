@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.94
+Date: 2026-06-20
+  Balancing:
+    - K2SO: Reduced the cost of the first four rocket part productivity technologies by removing the advanced tech card.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.93
 Date: 2026-06-18
   Locale:
