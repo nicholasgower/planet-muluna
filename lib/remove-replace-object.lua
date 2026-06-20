@@ -320,7 +320,7 @@ function rro.keys(table)
         out[n] = key
     end
 
-
+    return out
 end
 
 return rro

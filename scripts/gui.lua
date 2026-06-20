@@ -14,8 +14,8 @@ for i,tab in pairs({telescope_keys,heat_assembling_machine_keys}) do
         element_table = Muluna.constants.heat_assembling_machines
         field = "reactor"
     end
-    for j,key in pairs(tab) do
-        element_table[j] = key[field]
+    for j,key in pairs(element_table) do
+        tab[j] = key[field]
     end
 end
 Muluna.events.on_event(defines.events.on_gui_opened, function(event)
@@ -28,6 +28,10 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     local localised_title
     local localised_button
     game.print(entity_name)
+    game.print(serpent.block(telescope_keys))
+    game.print(serpent.block(telescope_combinator_keys))
+    game.print(serpent.block(heat_assembling_machine_keys))
+    game.print(serpent.block(heat_element_keys))
     if rro.contains(telescope_keys,entity_name) then
         local telescope_data = storage.telescopes
         other_entity_button = true
