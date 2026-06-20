@@ -70,6 +70,9 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     if mods["Age-of-Production"] then
         rro.remove(rocket_prod.unit.ingredients,{"aop-thermal-science-pack","_any"})
     end
+    if mods["Krastorio2-spaced-out"] then
+        rro.remove(rocket_prod.unit.ingredients,{"kr-advanced-tech-card","_any"})
+    end
     rro.soft_insert(rocket_prod.unit.ingredients,{"space-science-pack",1})
     rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
     rocket_prod.unit.count=250
@@ -125,6 +128,9 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         rro.replace(tech.prerequisites,"space-science-pack",science_pack[i])
         --table.insert(tech.prerequisites,pack)
         table.insert(tech.unit.ingredients,{science_pack[i],1})
+        if mods["Krastorio2-spaced-out"] then
+            rro.soft_insert(tech.unit.ingredients,{"kr-advanced-tech-card",1})
+        end
         tech.prerequisites={"rocket-part-productivity-4",science_pack[i]}
         tech.unit.count=1000
 
