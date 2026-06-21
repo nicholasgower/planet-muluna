@@ -208,7 +208,7 @@ end)
 Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(event)
     local checkbox = event.element
 
-    if not checkbox.name == "muluna-satellite-radar-enable-checkbox" then return end
+    if not (checkbox.name and checkbox.name == "muluna-satellite-radar-enable-checkbox") then return end
     local player = game.players[event.player_index]
     local radar = player.opened --The currently selected entity (Satellite Radar)
     storage.nav_beacons_other[radar.unit_number].gui.enabled = checkbox.state
