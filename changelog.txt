@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2026-06-21
+  Features:
+    - Added GUI to Satellite Radar, allowing automatic scans to be disabled and adding a button to change views to the planet the satellite radar is orbiting.
+    - Added GUI to telescope and Vacuum heating tower to make switching between entity and sub-entities easier.
+  Changes:
+    - Reduced selector box size of telescope and vacuum heating tower to make sub-entities easier to click on.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.94
 Date: 2026-06-20
   Balancing:
