@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2026-06-21
+  Bugfixes:
+    - Added additional check to code governing checkbox on satellite radar to reduce the chance of a crash. https://github.com/nicholasgower/planet-muluna/issues/406
+---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 2026-06-21
   Features:
