@@ -56,11 +56,31 @@ local function init_storage()
     storage.players_on_muluna = {}
     storage.telescopes = {} 
 end
-
+local interstellar_science_pack = require("scripts.interstellar-science-pack")
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
 
     init_storage() 
-
+    storage.walking_tick_rates = {}
+    for _,force in pairs(game.forces) do
+        local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
+        local interstellar_pack_name = data.gated_technology
+        --force.technologies[interstellar_pack_name].researched = false
+        interstellar_science_pack.update_interstellar_pack(force,false)
+    end
+    storage.players_on_muluna = {}
+    for i,player in pairs(game.players) do
+        if player.surface.name == "muluna" then
+            storage.players_on_muluna[i] = {player=player}
+        end
+    end
+    if not storage.telescopes then storage.telescopes = {} end 
+    if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
+    for i,radar in pairs(storage.nav_beacons) do
+        if not storage.nav_beacons_other[i] then
+            storage.nav_beacons_other[i] = {gui = {enabled = true}}
+        end
+        
+    end
 
 end)
 
@@ -78,28 +98,14 @@ end
 
 )
 
-local interstellar_science_pack = require("scripts.interstellar-science-pack")
+
 
 
 
 script.on_event(defines.events.on_research_finished, function(event) interstellar_science_pack.update_interstellar_pack(event.research.force) end)
-script.on_configuration_changed(function()
-    storage.walking_tick_rates = {}
-    for _,force in pairs(game.forces) do
-        local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
-        local interstellar_pack_name = data.gated_technology
-        --force.technologies[interstellar_pack_name].researched = false
-        interstellar_science_pack.update_interstellar_pack(force,false)
-    end
-    storage.players_on_muluna = {}
-    for i,player in pairs(game.players) do
-        if player.surface.name == "muluna" then
-            storage.players_on_muluna[i] = {player=player}
-        end
-    end
-    if not storage.telescopes then storage.telescopes = {} end 
-    if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
-end
-)
+-- script.on_configuration_changed(function()
+    
+-- end
+-- )
 
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end

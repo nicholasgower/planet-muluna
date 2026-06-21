@@ -248,9 +248,11 @@ if settings.startup["enable-nav-beacon"].value == true then
 
                                         end
                                     if not storage.nav_beacons_other then 
-                                    storage.nav_beacons_other = {}
-                                    storage.nav_beacons_other[beacon_id] = {}
-                                end
+                                        storage.nav_beacons_other = {}
+                                    end
+                                    if not storage.nav_beacons_other[beacon_id] then 
+                                        storage.nav_beacons_other[beacon_id] = {}
+                                    end
                                     
                                     if not storage.nav_beacons_other[beacon_id].gui then storage.nav_beacons_other[beacon_id].gui = {enabled = true} end
                                     
