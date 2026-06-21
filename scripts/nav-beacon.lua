@@ -1,6 +1,7 @@
 local debug_mode = false
 local DT = "[NavBeacon] "
 local radar_data 
+local rro = Muluna.rro
 if settings.startup["enable-nav-beacon"].value == true then
     radar_data = prototypes.mod_data["muluna-satellite-radar"].data
 end
@@ -35,9 +36,13 @@ local function init_storage_nav_beacons()
     if storage.beacon_electric_interfaces == nil then
         storage.beacon_electric_interfaces = {}
     end
-    
-    storage.has_nav_beacons = #storage.nav_beacons > 0
-    
+    if rro.deep_equals(storage.nav_beacons,{}) then
+        storage.has_nav_beacons = false
+    else
+        storage.has_nav_beacons = true
+    end
+    --storage.has_nav_beacons = #storage.nav_beacons > 0
+    --print("has_nav_beacon " .. storage.has_nav_beacons)
 
     
 end
@@ -218,6 +223,7 @@ if settings.startup["enable-nav-beacon"].value == true then
     Muluna.events.on_nth_tick(settings.startup["nav-beacon-update-ticks"].value, function(event)
         --profiler_1.reset()
         --if event.tick % settings.startup["nav-beacon-update-ticks"].value ~= 0 then return end
+        --game.print("test")
             if not storage.has_nav_beacons == true then return end
                 for _,player in pairs(game.players) do
                     if player.controller_type == defines.controllers.remote then
@@ -278,7 +284,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                 end
                             ::on_to_the_next::
                         end
-
+                        --game.print(serpent.block(navSat))
                         if navSat ~= nil and (storage.nav_beacons_other[navSat.unit_number].gui.enabled == true) then
                             --local multiplier = 1/(1+0.3*navSat.quality.level)
                             local energy_cost = util.parse_energy(tostring(helpers.evaluate_expression(radar_data.energy_per_scan_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})) .. "MJ")
