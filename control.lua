@@ -32,6 +32,7 @@ require("scripts.nav-beacon")
 require("scripts.walking_particles")
 require("scripts.heat-assembling-machine")
 require("scripts.telescopes")
+require("scripts.gui")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
@@ -97,6 +98,7 @@ script.on_configuration_changed(function()
         end
     end
     if not storage.telescopes then storage.telescopes = {} end 
+    if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
 end
 )
 

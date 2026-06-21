@@ -247,13 +247,21 @@ if settings.startup["enable-nav-beacon"].value == true then
                                         reset_storage_nav_beacons() break 
 
                                         end
+                                    if not storage.nav_beacons_other then 
+                                    storage.nav_beacons_other = {}
+                                    storage.nav_beacons_other[beacon_id] = {}
+                                end
+                                    
+                                    if not storage.nav_beacons_other[beacon_id].gui then storage.nav_beacons_other[beacon_id].gui = {enabled = true} end
+                                    
                                     --game.print(beacon)
                                     if beacon ~= nil then if beacon.force == player.force then
                                             navSat = beacon
                                             if display_beacon_alert then
+                                                local enabled = storage.nav_beacons_other[navSat.unit_number].gui.enabled
                                                 player.add_custom_alert(beacon,
                                                     {type = "item", name = "muluna-satellite-radar"},
-                                                    {"alert.nav-beacon-available",{"space-location-name."..player.surface.name}},
+                                                    {enabled and "alert.nav-beacon-available" or "alert.nav-beacon-available-disabled",{"space-location-name."..player.surface.name}},
                                                     false
                                                 )
                                             end
@@ -269,7 +277,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                             ::on_to_the_next::
                         end
 
-                        if navSat ~= nil then
+                        if navSat ~= nil and (storage.nav_beacons_other[navSat.unit_number].gui.enabled == true) then
                             --local multiplier = 1/(1+0.3*navSat.quality.level)
                             local energy_cost = util.parse_energy(tostring(helpers.evaluate_expression(radar_data.energy_per_scan_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})) .. "MJ")
                             if navSat.energy >= energy_cost then
