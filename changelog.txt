@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2026-06-21
+  Bugfixes:
+    - Fixed on_configuration_changed code to fix problems related to loading existing saves.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.1
 Date: 2026-06-21
   Bugfixes:
