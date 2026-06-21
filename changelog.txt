@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 2026-06-21
+  Bugfixes:
+    - Fixed that satellite radars were disabled on each time save was loaded under a new configuration. https://github.com/nicholasgower/planet-muluna/issues/407
+---------------------------------------------------------------------------------------------------
 Version: 2.2.2
 Date: 2026-06-21
   Bugfixes:
