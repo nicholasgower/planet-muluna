@@ -123,12 +123,15 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                 caption = localised_button,
                 state = enabled,
             })
-            local goto_planet_button = frame.add({
-                type = "button",
-                name = "muluna-goto-button-" .. button_name,
-                caption = {"muluna-gui.satellite-radar-look-at",{"space-location-name." .. storage.nav_surfaces[selected.unit_number].name},storage.nav_surfaces[selected.unit_number].name},
+            if storage.nav_surfaces[selected.unit_number] then
+                local goto_planet_button = frame.add({
+                    type = "button",
+                    name = "muluna-goto-button-" .. button_name,
+                    caption = {"muluna-gui.satellite-radar-look-at",{"space-location-name." .. storage.nav_surfaces[selected.unit_number].name},storage.nav_surfaces[selected.unit_number].name},
                 
-            })
+                })
+            end
+            
         end
         -- local content_frame = frame.add({
 		-- 	type = "frame",
