@@ -98,6 +98,7 @@ script.on_configuration_changed(function()
         end
     end
     if not storage.telescopes then storage.telescopes = {} end 
+    if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
 end
 )
 
