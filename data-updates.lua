@@ -785,7 +785,7 @@ local subgroup_blacklist = {
 if not mods["Krastorio2-spaced-out"] then
     for _,gas in pairs(gases) do
         for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
-            if not (rro.contains(recipe_blacklist,recipe.name) or rro.contains(category_blacklist,recipe.category) or rro.contains(subgroup_blacklist,recipe.subgroup)) then
+            if not (rro.contains(recipe_blacklist,recipe.name) or rro.contains_any(category_blacklist,recipe.categories) or rro.contains(subgroup_blacklist,recipe.subgroup)) then
                 multiply_ingredients(recipe,gas,10)
             end
             
@@ -795,7 +795,7 @@ if not mods["Krastorio2-spaced-out"] then
 else
     for _,gas in pairs(gases) do
         for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
-            if not (not (rro.contains(recipe_blacklist,recipe.name) or rro.contains(category_blacklist,recipe.category) or rro.contains(subgroup_blacklist,recipe.subgroup))) then
+            if not (not (rro.contains(recipe_blacklist,recipe.name) or rro.contains_any(category_blacklist,recipe.categories) or rro.contains(subgroup_blacklist,recipe.subgroup))) then
                 multiply_ingredients(recipe,gas,0.10)
             end
             
