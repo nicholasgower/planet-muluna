@@ -197,7 +197,7 @@ wood_crushing.ingredients = {{type = "item",name = "wood",amount = 1}}
 wood_crushing.energy_required = 0.5
 
 if mods["Age-of-Production"] then
-    wood_crushing.additional_categories = {"woodworking"}
+    rro.soft_insert(wood_crushing.categories ,"woodworking")
 end
 
 wood_crushing.icons=crushing_icon(data.raw.item["wood"].icon,data.raw.item["wood"].icon_size)
@@ -218,9 +218,9 @@ local regolith_sorting = {
     name = "muluna-regolith-sorting",
     group = "space",
     subgroup = "space-crushing",
-    category = data.raw["recipe"]["oxide-asteroid-crushing"].category,
+    categories = data.raw["recipe"]["oxide-asteroid-crushing"].categories,
     order = "h[muluna-regolith-sorting]",
-    --additional_categories = {"recycling"},
+    --categories = {"recycling"},
     auto_recycle = false,
     allow_decomposition = false,
     allow_as_intermediate = false,

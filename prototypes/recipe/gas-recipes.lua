@@ -363,8 +363,7 @@ data:extend{
         type = "recipe",
         name = "muluna-microcellular-plastic",
         enabled = false,
-        categories = {"chemistry-or-cryogenics"},
-        additional_categories = {mods["maraxsis"] and "maraxsis-hydro-plant" or nil},
+        categories = {"chemistry-or-cryogenics",mods["maraxsis"] and "maraxsis-hydro-plant" or nil},
         ingredients = {
             {type = "item",name = "muluna-diffused-plastic", amount = 1},
             {type = "fluid",name = "steam", amount = 25}
