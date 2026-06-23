@@ -58,6 +58,16 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         localised_button = {"muluna-gui.telescope-goto-button"}
         other_entity = storage.telescopes
         button_name = "telescope-unit"
+        if not storage.telescopes[entity.unit_number] then
+            local position = entity.position
+            local combinators = entity.surface.find_entities_filtered{area = {{position.x-1,position.y -1}, {position.x+1,position.y + 1}}, name = "muluna-telescope-combinator"}
+                    local combinator = combinators[1]
+                    storage.telescopes[entity.unit_number] = {
+                        ["assembling-machine"] = entity,
+                        ["constant-combinator"] = combinator,
+                        ["constant-combinator-control-behavior"] = combinator.get_control_behavior()
+                    }
+        end
     elseif rro.contains(Muluna.constants.telescopes,function(other) return entity_name == other["constant-combinator"] end ) then
         local telescope_data = storage.telescopes
         other_entity_button = true

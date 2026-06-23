@@ -76,6 +76,8 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
         end
     end
     if not storage.telescopes then storage.telescopes = {} end 
+    
+    
     if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
     for i,radar in pairs(storage.nav_beacons) do
         if not storage.nav_beacons_other[i] then
