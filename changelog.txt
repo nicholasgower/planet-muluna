@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+Date: 2026-06-23
+  Bugfixes:
+    - Fixed the fact that telescope internal storage was being reset on loading existing saves.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.4
 Date: 2026-06-21
   Bugfixes:
