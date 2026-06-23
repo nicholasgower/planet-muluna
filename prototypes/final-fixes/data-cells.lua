@@ -88,7 +88,7 @@ for _,am3 in pairs(data.raw["assembling-machine"]) do
                     type = "recipe-category",
                     name = "crafting-with-fluid-and-data",
                     order = "a[fluid]-b[data]",
-                    category = "intermediate-products",
+                    categories = {"intermediate-products"},
                 }
             }
 

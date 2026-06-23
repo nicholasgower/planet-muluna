@@ -266,7 +266,7 @@ local regolith_recycling = table.deepcopy(regolith_sorting)
 local recycling_lib = require("__quality__.prototypes.recycling") --mods["recycler"]
 
 regolith_recycling.name = "muluna-regolith-recycling"
-regolith_recycling.category = "recycling"
+regolith_recycling.categories = {"recycling"}
 regolith_recycling.energy_required = regolith_sorting.energy_required / 4
 regolith_recycling.results[3].probability = 0.02
 regolith_recycling.icons = generate_recycling_recipe_icons_from_item(data.raw.item["muluna-lunar-regolith"])
@@ -305,7 +305,7 @@ if not data.raw["recipe"]["silicon-cell"] then
 data:extend{{ --Moshine recipe
     type = "recipe",
     name = "silicon-cell",
-    category = "electronics",
+    categories = {"electronics"},
     energy_required = 2,
     ingredients =
     {
@@ -324,7 +324,7 @@ if not data.raw["recipe"]["silicon-carbide"] then
 data:extend{{ --Moshine recipe
     type = "recipe",
     name = "silicon-carbide",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     energy_required = 8,
     ingredients =
     {
@@ -342,7 +342,7 @@ end
 data:extend{{
     type = "recipe",
     name = "muluna-basic-hard-drive",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     ingredients = {
         {type = "item", name = "iron-plate",amount = 1},
         {type = "item", name = "plastic-bar", amount = 5},

@@ -5,7 +5,7 @@
     -- {
     --   type = "recipe",
     --   name = "yumako-seed-greenhouse",
-    --   category = "R-greenhouse",
+    --   categories = {"R-greenhouse"},
     --   subgroup = "agriculture-processes",
     --   order = "a[2-yumako]",
     --   localised_name = {"", {"entity-name.E-greenhouse"}, " ", {"item-name.yumako-seed"}},
@@ -27,7 +27,7 @@
     -- {
     --   type = "recipe",
     --   name = "jellynut-seed-greenhouse",
-    --   category = "R-greenhouse",
+    --   categories = {"R-greenhouse"},
     --   subgroup = "agriculture-processes",
     --   order = "a[3-jellynut]",
     --   localised_name = {"", {"entity-name.E-greenhouse"}, " ", {"item-name.jellynut-seed"}},
@@ -49,7 +49,7 @@
     -- {
     --   type = "recipe",
     --   name = "wood-seed-greenhouse",
-    --   category = "R-greenhouse",
+    --   categories = {"R-greenhouse"},
     --   subgroup = "agriculture-processes",
     --   order = "a[1-wood]",
     --   localised_name = {"", {"entity-name.E-greenhouse"}, " ", {"item-name.tree-seed"}},

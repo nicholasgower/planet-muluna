@@ -68,7 +68,7 @@ carbon_nanotubes_lds.surface_conditions = {{
 }}
 carbon_nanotubes_lds.auto_recycle=false
 local landfill_crushed_stone=table.deepcopy(data.raw["recipe"]["landfill"])
---landfill_crushed_stone.category="crafting-with-fluid"
+--landfill_crushed_stone.categories = {"crafting-with-fluid"}
 local stone_cost = landfill_crushed_stone.ingredients[1].amount
 landfill_crushed_stone.ingredients = {{type = "item",name = "stone-crushed",amount = math.ceil(40/50*stone_cost)},{type = "item",name = "concrete",amount = math.ceil(5/50*stone_cost)}}
 landfill_crushed_stone.name="landfill-stone-crushed"

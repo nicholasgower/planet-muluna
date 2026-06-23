@@ -3,7 +3,7 @@ data:extend({
   {
     type = "recipe",
     name = "wood-gasification",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 5,
     ingredients = {
@@ -34,7 +34,7 @@ data:extend({
   {
     type = "recipe",
     name = "solid-fuel-from-tar",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 5,
     ingredients = {
@@ -62,7 +62,7 @@ data:extend({
   {
     type = "recipe",
     name = "crude-oil-from-tar",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 5,
     ingredients = {
@@ -91,7 +91,7 @@ data:extend({
   {
     type = "recipe",
     name = "advanced-wood-gasification",
-    category = "oil-processing",
+    categories = {"oil-processing"},
     enabled = false,
     energy_required = 10,
     ingredients =
@@ -120,7 +120,7 @@ data:extend({
 --   {
 --     type = "recipe",
 --     name = "catalyzed-wood-gasification",
---     category = "oil-processing",
+--     categories = {"oil-processing"},
 --     enabled = false,
 --     energy_required = 10,
 --     ingredients =
@@ -148,7 +148,7 @@ data:extend({
 --   {
 --     type = "recipe",
 --     name = "alumina-catalyst",
---     category = "oil-processing",
+--     categories = {"oil-processing"},
 --     enabled = false,
 --     energy_required = 10,
 --     ingredients =
@@ -176,7 +176,7 @@ data:extend({
 --   {
 --     type = "recipe",
 --     name = "alumina-catalyst-cleaning",
---     category = "oil-processing",
+--     categories = {"oil-processing"},
 --     enabled = false,
 --     energy_required = 10,
 --     ingredients =
@@ -220,7 +220,7 @@ data:extend({
   -- {
   --   type = "recipe",
   --   name = "wood-greenhouse",
-  --   category = "R-greenhouse",
+  --   categories = {"R-greenhouse"},
   --   enabled = false,
   --   show_amount_in_title = true,
   --   energy_required = 20 / settings.startup["greenhouse-output-pr-sec-wood"].value,

@@ -27,7 +27,7 @@ for _, category in pairs({"item", "tool"}) do
                     type = "recipe",
                     name = data_cell.name,
                     localised_name = data_cell.localised_name,
-                    category = "crafting-with-fluid-and-data",
+                    categories = {"crafting-with-fluid-and-data"},
                     enabled = false,
                     ingredients = { 
                         {type = "item",name = prototype.name, amount = 1,ignored_by_stats = 1},
@@ -44,7 +44,7 @@ for _, category in pairs({"item", "tool"}) do
                     type = "recipe",
                     name = recipe.name .. "-empty",
                     localised_name = {"recipe-name.muluna-load-data-from-X",{"item-name."..name}},
-                    category = "crafting-with-fluid-and-data",
+                    categories = {"crafting-with-fluid-and-data"},
                     subgroup = "muluna-telescope",
                     order = data_cell.order .. "a",
                     enabled = false,

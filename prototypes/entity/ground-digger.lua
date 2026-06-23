@@ -8,7 +8,7 @@ data:extend {{
 data:extend {{
     type = "recipe",
     name = "muluna-regolith-digging",
-    category = "ground-digging",
+    categories = {"ground-digging"},
     energy_required = 2.5,
     ingredients = {},
     results = {

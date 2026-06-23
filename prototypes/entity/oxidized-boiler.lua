@@ -102,7 +102,7 @@ local space_boiler_category = {
 local recipe_time = 6
 local space_boiling = {
   type = "recipe",
-  category = "double-boiler",
+  categories = {"double-boiler"},
   name = "advanced-water-boiling",
   icons = dual_icon("steam","oxygen"),
   --icon = data.raw["fluid"]["steam"].icon,
@@ -160,7 +160,7 @@ local space_boiling_atmosphere = util.merge{space_boiling,{
 
 local space_melting = {
   type = "recipe",
-  category = "double-boiler",
+  categories = {"double-boiler"},
   hide_from_signal_gui = false,
   name = "advanced-water-melting-oxygen",
   icons = {

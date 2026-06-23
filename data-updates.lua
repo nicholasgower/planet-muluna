@@ -891,7 +891,7 @@ if settings.startup["muluna-easy-vanilla-advanced-thruster-fuel-costs"].value ==
 end
 
 data.raw["recipe"]["wood-processing"].surface_conditions = nil
-data.raw["recipe"]["wood-processing"].category = "crafting"
+data.raw["recipe"]["wood-processing"].categories = {"crafting"}
 
 require("compat.orbital-transfer")
 require("compat.visible-planets")

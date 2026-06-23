@@ -21,7 +21,7 @@ if data.raw["recipe"]["maraxsis-atmosphere"] == nil then
         type = "recipe",
         name = "maraxsis-atmosphere",
         localised_name={"fluid.maraxsis-atmosphere"},
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 10,
         ingredients = {},
         results = {
@@ -49,7 +49,7 @@ data:extend {{
     type = "recipe",
     name = "atmosphere-oxygen-separation",
     localised_name={"fluid-name.oxygen"},
-    category = "chemistry",
+    categories = {"chemistry"},
     energy_required = 10,
     ingredients = {
         {type = "fluid", name = "maraxsis-atmosphere", amount = 1000, temperature = 25}
@@ -123,7 +123,7 @@ end
 -- data:extend {{
 --     type = "recipe",
 --     name = "maraxsis-liquid-atmosphere",
---     category = "cryogenics",
+--     categories = {"cryogenics"},
 --     energy_required = 10,
 --     ingredients = {
 --         {type = "fluid", name = "maraxsis-atmosphere", amount = 100},
@@ -148,7 +148,7 @@ end
 -- data:extend {{
 --     type = "recipe",
 --     name = "maraxsis-liquid-atmosphere-decompression",
---     category = "maraxsis-hydro-plant",
+--     categories = {"maraxsis-hydro-plant"},
 --     energy_required = 9,
 --     ingredients = {
 --         {type = "fluid", name = "maraxsis-liquid-atmosphere", amount = 1}

@@ -5,7 +5,7 @@
 --     type = "recipe",
 --     name = "muluna-tree-growth-greenhouse-11x11",
 --     enabled = false,
---     category = "muluna-greenhouse-11x11",
+--     categories = {"muluna-greenhouse-11x11"},
 --     icons = dual_icon("wood","carbon-dioxide"),
 --     ingredients = {
 --         {type = "item",name = "tree-seed", amount=seeds}, --Reminder: 1 tree seed = 2 wood
@@ -25,7 +25,7 @@
 --     type = "recipe",
 --     name = "muluna-tree-growth-greenhouse-water-saving-10x10",
 --     enabled = false,
---     category = "greenhouse-10x10",
+--     categories = {"greenhouse-10x10"},
 --     icons = dual_icon("wood","transport-belt"),
 --     ingredients = {
 --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
@@ -44,7 +44,7 @@
 --     type = "recipe",
 --     name = "muluna-tree-growth-greenhouse-quick-10x10",
 --     enabled = false,
---     category = "greenhouse-10x10",
+--     categories = {"greenhouse-10x10"},
 --     icons = dual_icon("wood","express-transport-belt"),
 --     ingredients = {
 --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood

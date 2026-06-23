@@ -32,7 +32,7 @@ for _,space_location in pairs(data.raw["planet"]) do
             local recipe = {
                 type = "recipe",
                 name = "muluna-telescope-observation-" .. space_location.name,
-                category = "muluna-telescope",
+                categories = {"muluna-telescope"},
                 energy_required = 6,
                 ingredients = {},
                 results = {{type = "fluid", name = "muluna-astronomical-data",amount = 10 + math.floor(distance_factor)/1500}},

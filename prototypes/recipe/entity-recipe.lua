@@ -74,7 +74,7 @@ if true or data.raw["recipe"]["biolab"] then
     local cryolab = table.deepcopy(data.raw["recipe"]["biolab"])
 
     cryolab.name="cryolab"
-    cryolab.category="cryogenics"
+    cryolab.categories = {"cryogenics"}
     --cryolab.recipe_group="production"
     --cryolab.subgroup="production-machine"
 
@@ -152,7 +152,7 @@ end
 local greenhouse_wood = util.merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
     {
         name = "muluna-greenhouse-wood",
-        category = "crafting",
+        categories = {"crafting"},
         icons = {
             {
                 icon = "__muluna-graphics__/graphics/greenhouse/sprites/greenhouse-icon.png",
@@ -249,7 +249,7 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
     }
 }
 }
-recycling_turbine.category = "crafting"
+recycling_turbine.categories = {"crafting"}
 recycling_turbine.surface_conditions = nil
 recycling_turbine.factoriopedia_description = nil
 
