@@ -355,7 +355,7 @@ local muluna=
     },
     surface_render_parameters = {
       shadow_opacity = 0.9,
-      space_dust_foreground = data.raw["space-platform-hub"]["space-platform-hub"].surface_render_parameters.space_dust_foreground
+      space_dust_foreground = data.raw["planet"]["nauvis"].platform_surface_render_parameters.space_dust_foreground
       -- clouds = util.merge{nauvis.surface_render_parameters.clouds,
       --                     opacity_at_day = 0.9,
       --                     opacity_at_night = 0.9,
