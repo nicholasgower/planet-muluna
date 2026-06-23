@@ -484,7 +484,7 @@ end
 
     local steps = 20
     for i = 1,steps,1 do
-        table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 1/steps,percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
+        table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, shared_probability = { min = (i-1)/steps, max = i/steps },percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
     end
 
 
