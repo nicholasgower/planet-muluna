@@ -174,6 +174,17 @@ function rro.contains(list,object)
     end
     return false
 end
+--Checks if any objects in one list exist in another list.
+function rro.contains_any(list1,list2)
+    for _,object in pairs(list1) do
+        if rro.contains(list,object) then
+            return true
+        end
+    end
+    return false
+
+
+end
 
 function rro.contains_all(list,object_list)
     for _,object in pairs(object_list) do
