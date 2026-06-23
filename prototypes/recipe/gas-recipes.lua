@@ -363,7 +363,7 @@ data:extend{
         type = "recipe",
         name = "muluna-microcellular-plastic",
         enabled = false,
-        categories = {"chemistry-or-cryogenics",mods["maraxsis"] and "maraxsis-hydro-plant" or nil},
+        categories = {"chemistry","cryogenics",mods["maraxsis"] and "maraxsis-hydro-plant" or nil},
         ingredients = {
             {type = "item",name = "muluna-diffused-plastic", amount = 1},
             {type = "fluid",name = "steam", amount = 25}
@@ -380,7 +380,7 @@ data:extend{
         type = "recipe",
         name = "muluna-steam-condensation",
         enabled = false,
-        categories = {"chemistry-or-cryogenics"},
+        categories = {"chemistry","cryogenics"},
         subgroup="muluna-products",
         icons = dual_icon("water","cooled-steam"),
         ingredients = {
@@ -444,7 +444,7 @@ local oxygen_from_oxidizer = {
             type = "fluid",
             name = "water",
             amount = 100/divider/probability,
-            probability = probability,
+            independent_probability = probability,
             ignored_by_productivity=100/divider/probability,
         }
     }
@@ -459,7 +459,7 @@ local diffusion = {
         type = "recipe",
         name = "muluna-diffused-plastic",
         enabled = false,
-        categories = {"chemistry-or-cryogenics"},
+        categories = {"chemistry","cryogenics"},
         ingredients = {
             {type = "item",name = "plastic-bar", amount = 1},
             {type = "fluid",name = "carbon-dioxide", amount = 10}

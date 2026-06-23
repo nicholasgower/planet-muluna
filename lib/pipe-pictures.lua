@@ -6,7 +6,7 @@ function Public.vacuumheatingtowerpipepictures()
   {
     north =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
       priority = "extra-high",
       width = 71,
       height = 38,
@@ -15,7 +15,7 @@ function Public.vacuumheatingtowerpipepictures()
     },
     east =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
       priority = "extra-high",
       width = 42,
       height = 76,
@@ -24,7 +24,7 @@ function Public.vacuumheatingtowerpipepictures()
     },
     south =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
       priority = "extra-high",
       width = 88,
       height = 61,
@@ -33,7 +33,7 @@ function Public.vacuumheatingtowerpipepictures()
     },
     west =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
       priority = "extra-high",
       width = 39,
       height = 73,
@@ -48,7 +48,7 @@ function Public.greenhouse_pipe_pictures()
   {
     north =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
       priority = "extra-high",
       width = 71,
       height = 38,
@@ -57,7 +57,7 @@ function Public.greenhouse_pipe_pictures()
     },
     east =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
       priority = "extra-high",
       width = 42,
       height = 76,
@@ -66,7 +66,7 @@ function Public.greenhouse_pipe_pictures()
     },
     south =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
       priority = "extra-high",
       width = 88,
       height = 61,
@@ -75,7 +75,7 @@ function Public.greenhouse_pipe_pictures()
     },
     west =
     {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
+      filename = "__muluna-graphics__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
       priority = "extra-high",
       width = 39,
       height = 73,

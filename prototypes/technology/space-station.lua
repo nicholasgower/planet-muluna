@@ -280,7 +280,7 @@ data:extend{
         localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
-            entity = "metallic-asteroid-chunk"
+            entities = {"metallic-asteroid-chunk"}
         },
         --localised_name = {"item-name.crusher"},
         --localised_description = {"entity-description.crusher"},
@@ -396,7 +396,7 @@ data:extend{
         localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
-            entity = "oxide-asteroid-chunk"
+            entities = {"oxide-asteroid-chunk"}
         },
         effects = {
             {
@@ -424,7 +424,7 @@ data:extend{
         name = "muluna-anorthite-processing",
         research_trigger = {
             type = "mine-entity",
-            entity = "anorthite-chunk"
+            entities = {"anorthite-chunk"}
         },
         effects = {
             {
@@ -677,7 +677,7 @@ data:extend{
             },
             {
                 type = "unlock-recipe",
-                recipe="wood-processing"
+                recipe="tree-seed"
             },
             
             
@@ -1234,7 +1234,7 @@ data:extend{
         localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
-            entity = "carbonic-asteroid-chunk"
+            entities = {"carbonic-asteroid-chunk"}
         },
         prerequisites = {
             "planet-discovery-muluna"

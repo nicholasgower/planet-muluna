@@ -443,7 +443,7 @@ if not(mods["maraxsis"]) then
     } do
         local recipe = data.raw.recipe[recipe]
         recipe.hidden_in_factoriopedia = false
-        recipe.category = category
+        recipe.categories = {category}
         recipe.subgroup = "maraxsis-atmosphere-barreling"
     end
     data.raw.recipe["empty-maraxsis-atmosphere-barrel"].results[1].temperature = 25
@@ -890,8 +890,8 @@ if settings.startup["muluna-easy-vanilla-advanced-thruster-fuel-costs"].value ==
     data.raw["recipe"]["advanced-thruster-oxidizer"].results[1].amount = 1000
 end
 
-data.raw["recipe"]["wood-processing"].surface_conditions = nil
-data.raw["recipe"]["wood-processing"].categories = {"crafting"}
+data.raw["recipe"]["tree-seed"].surface_conditions = nil
+data.raw["recipe"]["tree-seed"].categories = {"crafting"}
 
 require("compat.orbital-transfer")
 require("compat.visible-planets")

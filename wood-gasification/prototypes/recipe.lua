@@ -13,7 +13,7 @@ data:extend({
     results = {
       {type="fluid", name="petroleum-gas", amount=20},
       {type="fluid", name="tar", amount=8},
-      {type="item", name="alumina-crushed", amount=1,probability = 0.9,ignored_by_productivity=1},
+      {type="item", name="alumina-crushed", amount=1,independent_probability = 0.9,ignored_by_productivity=1},
     },
     icon = "__muluna-graphics__/graphics/wood-gasification/icon/wood-gasification.png",
     icon_size = 64,
@@ -105,7 +105,7 @@ data:extend({
       {type="fluid", name="heavy-oil", amount=15},
       {type="fluid", name="light-oil", amount=15},
       {type="fluid", name="petroleum-gas", amount=30},
-      {type="item", name="alumina-crushed", amount=1,probability = 0.9,ignored_by_productivity=1},
+      {type="item", name="alumina-crushed", amount=1,independent_probability = 0.9,ignored_by_productivity=1},
     },
     auto_recycle = false,
     icon = "__muluna-graphics__/graphics/wood-gasification/icon/advanced-wood-gasification.png",

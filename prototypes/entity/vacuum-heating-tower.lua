@@ -46,7 +46,7 @@ local recipe = {
         type = "recipe",
         enabled = false,
         name = "muluna-vacuum-heating",
-        category = recipe_category,
+        categories = {recipe_category},
         energy_required = energy_required,
         ingredients = {
             {

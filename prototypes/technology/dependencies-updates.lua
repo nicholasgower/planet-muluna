@@ -143,7 +143,7 @@ data.raw["recipe"]["advanced-wood-gasification"].allow_productivity = true
 data.raw["technology"]["wood-gas-processing"].unit = nil
 data.raw["technology"]["wood-gas-processing"].research_trigger = {
     type="mine-entity",
-    entity="lunar-rock"
+    entities={"lunar-rock"}
 }
 data.raw["technology"]["advanced-wood-gas-processing"].unit = {
     count = 500,
