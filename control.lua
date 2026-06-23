@@ -61,7 +61,7 @@ end
 local interstellar_science_pack = require("scripts.interstellar-science-pack")
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
 
-    init_storage() 
+    --init_storage() 
     storage.walking_tick_rates = {}
     for _,force in pairs(game.forces) do
         local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
