@@ -5,9 +5,9 @@
   "author": "MeteorSwarm",
   "homepage": "https://github.com/nicholasgower/planet-muluna",
   "version": "2.2.7",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
-    "base >= 2.0.60",
+    "base >= 2.1.7",
     "space-age",
     "? quality",
     "PlanetsLib >= 1.12.0",
