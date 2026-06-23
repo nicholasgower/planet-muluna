@@ -174,10 +174,11 @@ function rro.contains(list,object)
     end
     return false
 end
+
 --Checks if any objects in one list exist in another list.
 function rro.contains_any(list1,list2)
     for _,object in pairs(list1) do
-        if rro.contains(list,object) then
+        if rro.contains(list1,object) then
             return true
         end
     end
