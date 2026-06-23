@@ -54,7 +54,9 @@ require("scripts.gui")
 
 local function init_storage() 
     storage.players_on_muluna = {}
-    storage.telescopes = {} 
+    if not storage.telescopes then 
+        storage.telescopes = {} 
+    end
 end
 local interstellar_science_pack = require("scripts.interstellar-science-pack")
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
