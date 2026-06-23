@@ -345,12 +345,12 @@ data:extend{{
   }}
 end
 
-if data.raw["tool"]["hard-drive"] then
-    data.raw["tool"]["hard-drive"].data_capacity = 1000
+if data.raw["item"]["hard-drive"] then
+    data.raw["item"]["hard-drive"].data_capacity = 1000
 end
 
-if data.raw["tool"]["datacell-empty"] then
-    data.raw["tool"]["datacell-empty"].data_capacity = 1000
+if data.raw["item"]["datacell-empty"] then
+    data.raw["item"]["datacell-empty"].data_capacity = 1000
 end
 
 

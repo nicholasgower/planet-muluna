@@ -361,7 +361,7 @@ else
 end
 
 
-for _,pack in pairs(data.raw["tool"]) do
+for _,pack in pairs(data.raw["item"]) do
     local recipe = data.raw["recipe"][pack.name]
     if recipe then
         if recipe.surface_conditions == nil then
@@ -488,12 +488,12 @@ for _,planet in pairs(data.raw["planet"]) do
 
 rro.soft_insert(data.raw["technology"]["planet-discovery-aquilo"].prerequisites,"interstellar-science-pack")
 --table.insert(data.raw["technology"]["promethium-science-pack"].prerequisites,"interstellar-science-pack")
---data.raw["tool"]["space-science-pack"].localised_name = {"item-name."}
+--data.raw["item"]["space-science-pack"].localised_name = {"item-name."}
 --data.raw["technology"]["space-science-pack"].localised_name = {"item-name.lunar-science-pack"}
 --data.raw["technology"]["space-science-pack"].localised_description = {"technology-description.lunar-science-pack"}
 
 
-data.raw["tool"]["space-science-pack"].icons = nil
+data.raw["item"]["space-science-pack"].icons = nil
 
 
 
@@ -697,12 +697,12 @@ data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condit
 
 require("prototypes.mod-data.interstellar-science-pack")
 
-if data.raw["tool"]["alien-science-pack"] then
-    data.raw["tool"]["alien-science-pack"].order="fa[alien-science-pack]"
+if data.raw["item"]["alien-science-pack"] then
+    data.raw["item"]["alien-science-pack"].order="fa[alien-science-pack]"
 end
 
-if data.raw["tool"]["electrochemical-science-pack"] then
-    data.raw["tool"]["electrochemical-science-pack"].order="iz[electrochemical-science-pack]"
+if data.raw["item"]["electrochemical-science-pack"] then
+    data.raw["item"]["electrochemical-science-pack"].order="iz[electrochemical-science-pack]"
 end
 
 if data.raw.planet["lignumis"] == nil then
@@ -841,7 +841,7 @@ require("prototypes.technology.interstellar-technologies")
 
 
 local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["space-science-pack"])
-data.raw["recipe"]["space-science-pack"].order = data.raw["tool"]["space-science-pack"].order .. "-2"
+data.raw["recipe"]["space-science-pack"].order = data.raw["item"]["space-science-pack"].order .. "-2"
 data.raw["recipe"]["space-science-pack"].surface_conditions = {
     {
         property = "gravity",

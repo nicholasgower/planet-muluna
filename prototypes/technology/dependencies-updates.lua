@@ -247,7 +247,7 @@ for _,item in pairs(muluna_imports) do
 end
 
 
-data.raw["tool"]["space-science-pack"].default_import_location = "muluna"
+data.raw["item"]["space-science-pack"].default_import_location = "muluna"
 
 data.raw["item"]["copper-cable"].localised_name = {"item-name.copper-cable"}
 

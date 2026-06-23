@@ -10,7 +10,7 @@ for _,pack in pairs(pack_conditions.science_packs) do
                 type = "nothing",
                 icons = {
                     {icon= "__muluna-graphics__/graphics/icons/green-rectangle.png", icon_size = 64},
-                    {icon = data.raw["tool"]["interstellar-science-pack"].icon, shift = {0,0}, scale = 0.375},
+                    {icon = data.raw["item"]["interstellar-science-pack"].icon, shift = {0,0}, scale = 0.375},
                     {
                         icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-recipe-productivity.png",
                         icon_size = 64,
@@ -34,27 +34,27 @@ if scripted_triggers then
             trigger_description = {"research-trigger.muluna-nanofoamed-polymers",tostring(data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data.required_science_packs)},
             icons = {
                 {
-                    icon = data.raw["tool"]["metallurgic-science-pack"].icon,
-                    icon_size = data.raw["tool"]["metallurgic-science-pack"].icon_size,
+                    icon = data.raw["item"]["metallurgic-science-pack"].icon,
+                    icon_size = data.raw["item"]["metallurgic-science-pack"].icon_size,
                     scale = 0.35,
                     shift = {0,-8},
                 },
                 {
-                    icon = data.raw["tool"]["agricultural-science-pack"].icon,
-                    icon_size = data.raw["tool"]["agricultural-science-pack"].icon_size,
+                    icon = data.raw["item"]["agricultural-science-pack"].icon,
+                    icon_size = data.raw["item"]["agricultural-science-pack"].icon_size,
                     scale = 0.35,
                     shift = {8,8},
                 },
                 {
-                    icon = data.raw["tool"]["electromagnetic-science-pack"].icon,
-                    icon_size = data.raw["tool"]["electromagnetic-science-pack"].icon_size,
+                    icon = data.raw["item"]["electromagnetic-science-pack"].icon,
+                    icon_size = data.raw["item"]["electromagnetic-science-pack"].icon_size,
                     scale = 0.35,
                     shift = {-8,8},
                 },
                 
             },
-            icon = data.raw["tool"]["metallurgic-science-pack"].icon,
-            icon_size = data.raw["tool"]["metallurgic-science-pack"].icon_size,
+            icon = data.raw["item"]["metallurgic-science-pack"].icon,
+            icon_size = data.raw["item"]["metallurgic-science-pack"].icon_size,
         }
     tech.enabled = true
     tech.visible_when_disabled = false

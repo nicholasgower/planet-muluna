@@ -2,7 +2,7 @@ local rro = Muluna.rro
 
 local dual_icon = require("lib.dual-item-icon").dual_icon
 --local  = Muluna.rro
-local i_lunar_pack = table.deepcopy(data.raw["tool"]["space-science-pack"])
+local i_lunar_pack = table.deepcopy(data.raw["item"]["space-science-pack"])
 
 local r_lunar_pack = table.deepcopy(data.raw["recipe"]["space-science-pack"])
 
@@ -49,8 +49,8 @@ t_lunar_pack.icon = "__muluna-graphics__/graphics/technology/space-science-pack.
 t_lunar_pack.visible_when_disabled = true
 
 i_lunar_pack.order = "j[interstellar-science-pack]"
-if data.raw["tool"]["hydraulic-science-pack"] then
-    data.raw["tool"]["hydraulic-science-pack"].order = data.raw["tool"]["hydraulic-science-pack"].order .. "a"
+if data.raw["item"]["hydraulic-science-pack"] then
+    data.raw["item"]["hydraulic-science-pack"].order = data.raw["item"]["hydraulic-science-pack"].order .. "a"
 end
 
 

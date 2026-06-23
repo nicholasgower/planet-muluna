@@ -1,5 +1,5 @@
 local rro = Muluna.rro
-if data.raw["tool"]["electrochemical-science-pack"] then
+if data.raw["item"]["electrochemical-science-pack"] then
     local electrochemical_techs = {
         
         --infinite = {"thruster-fuel-productivity"}
