@@ -420,7 +420,7 @@ muluna.orientation = nil
 
 local bot_power = 0.2
 
-muluna.surface_properties["gravity"] = muluna.surface_properties["pressure"]/100*bot_power
+muluna.surface_properties["gravity"] =  2 --muluna.surface_properties["pressure"]/100*bot_power
 
 muluna.surface_properties["robot-energy-usage"] = bot_power
 

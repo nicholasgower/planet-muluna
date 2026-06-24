@@ -166,16 +166,16 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == true then
     data.raw["technology"]["rocket-part-productivity"] = nil
 end
 
-rro.replace(data.raw["cargo-landing-pad"]["cargo-landing-pad"].surface_conditions,
-    {
-        property = "gravity",
-        min = 1,
-    },
-    {
-        property = "gravity",
-        min = 0.1,
-    }
-)
+-- rro.replace(data.raw["cargo-landing-pad"]["cargo-landing-pad"].surface_conditions,
+--     {
+--         property = "gravity",
+--         min = 1,
+--     },
+--     {
+--         property = "gravity",
+--         min = 0.1,
+--     }
+-- )
 
 
 
@@ -263,7 +263,7 @@ local rocket_part_muluna = table.deepcopy(data.raw["recipe"]["rocket-part"])
 rocket_part_muluna.name = "rocket-part-muluna"
 rocket_part_muluna.surface_conditions = {
     {property = "gravity",
-    max = 5,
+    max = 2,
     }   
 }
 
@@ -329,8 +329,8 @@ for _, silo in pairs(data.raw["rocket-silo"]) do
 end
 data.raw.recipe["space-science-pack"].surface_conditions = {
     {property = "gravity",
-    min = 0.1,
-    max = 0.1,
+    min = 2,
+    max = 2,
     },
     {property = "oxygen",
     min = 0,
@@ -669,13 +669,13 @@ require("compat.orbital-ion-cannon")
 require("compat.lignumis")
 
 
-local one_gravity_condition =
-{
-  {
-    property = "gravity",
-    min = 0.1
-  }
-}
+-- local one_gravity_condition =
+-- {
+--   {
+--     property = "gravity",
+--     min = 0.1
+--   }
+-- }
 
 if not (settings.startup["muluna-easy-revert-changes-to-space-platform-technology"].value == true) then
     rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
@@ -692,7 +692,7 @@ if not (settings.startup["muluna-easy-revert-changes-to-space-platform-technolog
     )
 end
 
-data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
+--data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
 
 
 require("prototypes.mod-data.interstellar-science-pack")

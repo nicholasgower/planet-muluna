@@ -227,33 +227,33 @@ if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then 
 end
 local flib_prototypes = require("__flib__.prototypes")
 -- Train gravity conditions: All train-related entities with min gravity <=1 will be further lowered to 0.1
-for _,entity in pairs(flib_prototypes.all("entity")) do
-    --print(entity.name)
-    if 
-        rro.contains({
-            "car","locomotive","cargo-wagon",
-            "fluid-wagon","train-stop","artillery-wagon",
-            "rail-signal","rail-chain-signal","curved-rail-b",
-            "curved-rail-a","half-diagonal-rail","straight-rail",
-            "rail-ramp","elevated-straight-rail","elevated-half-diagonal-rail",
-            "elevated-curved-rail-a","elevated-curved-rail-b",
-            "rail-support","car","spider-vehicle","cargo-landing-pad"
-            },
+-- for _,entity in pairs(flib_prototypes.all("entity")) do
+--     --print(entity.name)
+--     if 
+--         rro.contains({
+--             "car","locomotive","cargo-wagon",
+--             "fluid-wagon","train-stop","artillery-wagon",
+--             "rail-signal","rail-chain-signal","curved-rail-b",
+--             "curved-rail-a","half-diagonal-rail","straight-rail",
+--             "rail-ramp","elevated-straight-rail","elevated-half-diagonal-rail",
+--             "elevated-curved-rail-a","elevated-curved-rail-b",
+--             "rail-support","car","spider-vehicle","cargo-landing-pad"
+--             },
         
-            entity.type)
-        and
+--             entity.type)
+--         and
             
-        (entity.surface_conditions and rro.contains(entity.surface_conditions,{property="gravity",min=rro.predicates.compare("<=",1)}))
+--         (entity.surface_conditions and rro.contains(entity.surface_conditions,{property="gravity",min=rro.predicates.compare("<=",1)}))
         
-    then
-        --print("Burner energy source in " .. entity.name)
-        PlanetsLib.relax_surface_conditions(entity, {
-            property = "gravity",
-	        min = 0.1,
-        })
+--     then
+--         --print("Burner energy source in " .. entity.name)
+--         PlanetsLib.relax_surface_conditions(entity, {
+--             property = "gravity",
+-- 	        min = 0.1,
+--         })
         
-    end
-end
+--     end
+-- end
 
 --Recycling recipe fixes
 local recipes_to_fix = Muluna.constants.recycling_recipes_to_fix
