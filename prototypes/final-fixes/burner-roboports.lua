@@ -134,6 +134,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
             }
             data:extend{refueler}
             roboport_data["refueler"] = refueler.name
+            roboport_data["roboport"] = roboport.name
             roboport.energy_source.input_flow_limit = "0W"
         
         end
