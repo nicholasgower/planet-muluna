@@ -105,7 +105,7 @@ anorthite_crushing.icons = {
 
 }
 anorthite_crushing.order="b-a-d"
-anorthite_crushing.results = {{type = "item",name = "alumina",amount = 20},{type = "item", name = "anorthite-chunk", amount = 1, independent_probability = 0.2}}
+anorthite_crushing.results = {{type = "item",name = "alumina",amount = 20},{type = "item", name = "anorthite-chunk", amount = 1, independent_probability = 0.3}}
 anorthite_crushing.ingredients = {{type = "item",name = "anorthite-chunk",amount = 1}}
 
 -- anorthite_crushing.surface_conditions={
@@ -128,7 +128,7 @@ local advanced_anorthite_crushing = util.merge{table.deepcopy(anorthite_crushing
 
 }
 
-advanced_anorthite_crushing.results = {{type = "item",name = "alumina",amount = 10},{type = "item",name = "silicon",amount = 4},{type = "item", name = "anorthite-chunk", amount = 1, independent_probability = 0.05}}
+advanced_anorthite_crushing.results = {{type = "item",name = "alumina",amount = 10},{type = "item",name = "silicon",amount = 4},{type = "item", name = "anorthite-chunk", amount = 1, independent_probability = 0.1}}
 advanced_anorthite_crushing.hide_from_signal_gui = false
 
 data:extend{advanced_anorthite_crushing}
