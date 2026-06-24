@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.8
+Date: 2026-06-24
+  Balancing:
+    - Adjusted output of anorthite crushing recipes to remain in line with vanilla asteroid crushing recipes.
+    - Each "diffused plastic" craft will now produce exactly one plastic bar.
+  Compatibility:
+    - Raised required Factorio version to 2.1.
+    - Removed dependency on "Muluna utility constants."
+---------------------------------------------------------------------------------------------------
 Version: 2.2.7
 Date: 2026-06-23
   Bugfixes:
