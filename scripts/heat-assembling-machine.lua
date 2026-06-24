@@ -43,7 +43,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
-        reactor.fluidbox.add_linked_connection(1,entity,1) 
+        reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.heat_assembling_machines then storage.heat_assembling_machines = {} end
         storage.heat_assembling_machines[entity.unit_number] = {["assembling-machine"]=entity,["reactor"] = reactor}
