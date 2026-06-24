@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.10
+Date: 2026-06-24
+  Changes:
+    - Changed Muluna's "gravity" surface condition to 2 m/s and removed all code changing the minimum gravity of entities from 1 to 0.1.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.9
 Date: 2026-06-24
   Bugfixes:
