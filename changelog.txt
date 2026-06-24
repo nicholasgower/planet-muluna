@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.9
+Date: 2026-06-24
+  Bugfixes:
+    - Restored robot energy usage to the 2.0.X value using the new "robot-energy-usage" surface property.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.8
 Date: 2026-06-24
   Balancing:
