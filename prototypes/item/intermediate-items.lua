@@ -353,7 +353,7 @@ if data.raw["item"]["datacell-empty"] then
     data.raw["item"]["datacell-empty"].data_capacity = 1000
 end
 
-if data.raw["tool"]["datacell-empty"] then
+if data.raw["tool"] and data.raw["tool"]["datacell-empty"] then
     data.raw["tool"]["datacell-empty"].data_capacity = 1000
 end
 
