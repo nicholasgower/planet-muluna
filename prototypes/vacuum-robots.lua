@@ -32,5 +32,17 @@ data:extend {
         type = "item",
         name = "muluna-vacuum-flying-robot-frame",
         
-    })
+    }),
+    rro.merge(data.raw["recipe"]["flying-robot-frame"]{
+        type = "recipe",
+        name = "muluna-vacuum-flying-robot-frame",
+        ingredients = {
+            {type = "item", name = "steel-plate", count = 1},
+            {type = "item", name = "iron-pipe", count = 2},
+            {type = "item", name = "electronic-circuit", count = 3},
+            {type = "item", name = "engine-unit", count = 1}
+        
+        },
+        results = {{type = "item", name = "muluna-vacuum-flying-robot-frame", count = 1}}
+    }),
 }
