@@ -26,3 +26,11 @@ for _,robot_name in pairs(Muluna.constants.robot_names) do
     data:extend(prototypes)
     
 end
+
+data:extend {
+    rro.merge(data.raw["item"]["flying-robot-frame"]{
+        type = "item",
+        name = "muluna-vacuum-flying-robot-frame",
+        
+    })
+}
