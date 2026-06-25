@@ -29,8 +29,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     end
     local reactor = nil
     if is_heat_assembling_machine then
-        if not storage.active_vacuum_roboports then storage.active_vacuum_roboports = {} end
-        storage.active_vacuum_roboports[heat_assembling_machine_data["roboport"].unit_number] = heat_assembling_machine_data["roboport"]
+        if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
+        storage.active_burner_roboports[entity.unit_number] = entity
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["refueler"],
             position = entity.position,
@@ -107,6 +107,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         --     snap_to_grid = true,
         -- }
     end
+    storage.active_burner_roboports[entity.unit_number] = nil
 
 end,
 heat_assembler_filters)
@@ -142,12 +143,12 @@ end
 
 -- 5000 MJ / 2000 MW
 
-local cutoff_energy_high = 0.9 --If energy % is greater/equal than this, stop updating
-local cutoff_energy_low = 0.5 --If energy % is lower than this, start updating
+local cutoff_energy_high = 0.8 --If energy % is greater/equal than this, stop updating
+local cutoff_energy_low = 0.3 --If energy % is lower than this, start updating
 
 local discharge_time_max = 1200 -- Shortest possible time to fully discharge a normal roboport (in ticks)
 local dischange_time_threshold = discharge_time_max * (cutoff_energy_high-cutoff_energy_low)
-local long_update_tolerance = 4/3 --Higher tolerance is less performant, but less likely to create UX complaints
+local long_update_tolerance = 2 --Higher tolerance is less performant, but less likely to create UX complaints
 local long_update_period = dischange_time_threshold / long_update_tolerance --During long update, roboport's energy value is checked to see if they need more energy.
 
 
@@ -168,7 +169,7 @@ Muluna.events.on_nth_tick(long_update_period, function()
         local energy_percent = calc_energy_percent(roboport)
 
         if energy_percent <= cutoff_energy_low then
-            storage.active_vacuum_roboports[key] = roboport 
+            storage.active_burner_roboports[key] = roboport 
             local refueler = storage.burner_roboports[key]["refueler"]
             refueler.disabled_by_script = false --Turns on refueler
         end
@@ -181,19 +182,21 @@ end)
 
 Muluna.events.on_nth_tick(short_update_period, function() 
 
-    for key,entity_table in pairs(storage.active_vacuum_roboports) do
-        local roboport = entity_table["roboport"]
+    for key,roboport in pairs(storage.active_burner_roboports) do
+        --local roboport = entity_table["roboport"]
         local energy_percent = calc_energy_percent(roboport)
         local refueler = storage.burner_roboports[key]["refueler"]
 
         --Destroy fluid and add energy to roboport
-        local fluids = fluids.get_fluid_contents()
-        local fluid_removed = refueler.clear_fluid(4) --Not sure if this is the right fluid index
+        local fluids = refueler.get_fluid_contents()
+        game.print(serpent.block(fluids))
+        local fluid_removed = refueler.clear_fluid(3) --Not sure if this is the right fluid index
+        local fluid_removed_amount = fluid_removed and fluid_removed.amount
         local energy_value = 0.1 * 1000000
-        local delta_energy = fluid_removed * energy_value
-        roboport.energy = roboport.energy + delta_energy
-        if energy_percent >= cutoff_energy_high then
-            storage.active_vacuum_roboports[key] = nil --Deactivates roboport
+        local delta_energy = (fluid_removed_amount or 0) * energy_value
+        roboport.energy = (roboport.energy or 0) + delta_energy
+        if calc_energy_percent(roboport) >= cutoff_energy_high then
+            storage.active_burner_roboports[key] = nil --Deactivates roboport
             refueler.disabled_by_script = true --Turns off refueler
             -- Add status
         end

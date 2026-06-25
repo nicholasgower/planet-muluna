@@ -15,7 +15,7 @@ data:extend{
         categories = {"muluna-vacuum-roboport"},
         name = "vacuum-roboport-refuel-muluna",
         ingredients = {{type = "fluid",name = "thruster-oxidizer", amount = fluid_per_craft*2,fluidbox_index = 1,optional_fluidbox_indexes = {2}}},
-        results = {{type = "fluid",name = "muluna-roboport-energy", amount = fluid_per_craft*1}},
+        results = {{type = "fluid",name = "muluna-roboport-energy", amount = fluid_per_craft*1, fluidbox_multiplier = 100}},
         icon = "__base__/graphics/icons/signal/signal-battery-full.png",
         icon_size = 64,
         energy_required = fluid_per_craft*MJ_per_fluid/roboport_power_MW,
