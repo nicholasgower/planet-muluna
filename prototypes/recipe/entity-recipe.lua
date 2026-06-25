@@ -146,7 +146,8 @@ greenhouse.ingredients = {
 }
 
 if mods["Age-of-Production"] then
-    rro.soft_insert(greenhouse.categories "woodworking")
+    greenhouse.categories = greenhouse.categories or {"crafting"}
+    rro.soft_insert(greenhouse.categories, "woodworking")
 end
 
 local greenhouse_wood = util.merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
