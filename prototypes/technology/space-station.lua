@@ -503,6 +503,36 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "aluminum-crushing",
             },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-vacuum-flying-robot-frame",
+            }
+        }
+    },
+    {
+        type = "technology",
+        name = "muluna-vacuum-roboport",
+        localised_name = {"entity-name.muluna-vacuum-roboport"},
+        localised_description = {"entity-name.muluna-vacuum-roboport"},
+        prerequisites = {"muluna-aluminum-processing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
+        research_trigger = {
+            type = "craft-item",
+            item = "muluna-vacuum-flying-robot-frame",
+            count = 5,
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-vacuum-roboport",
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-vacuum-logistic-robot",
+            },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-vacuum-construction-robot",
+            },
         }
     },
     {
