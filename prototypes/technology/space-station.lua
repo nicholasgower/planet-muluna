@@ -515,6 +515,7 @@ data:extend{
         localised_name = {"entity-name.muluna-vacuum-roboport"},
         localised_description = {"entity-name.muluna-vacuum-roboport"},
         prerequisites = {"muluna-aluminum-processing","carbonic-asteroid-crushing","oxide-asteroid-crushing","construction-robotics"},
+        icon = data.raw["technology"]["logistic-robotics"].icon,
         research_trigger = {
             type = "craft-item",
             item = "muluna-vacuum-flying-robot-frame",

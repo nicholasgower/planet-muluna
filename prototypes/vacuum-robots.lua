@@ -18,7 +18,7 @@ for _,robot_name in pairs(Muluna.constants.robot_names) do
         end
         if prototype.type == "recipe" then
             rro.replace(prototype.ingredients,{type = "item" , name = "flying-robot-frame", amount = "_any"},
-                                                {type = "item" , name = "muluna-vacuum-flying-robot-frame", amount = function(other) return other end})
+                                                {type = "item" , name = "muluna-vacuum-flying-robot-frame", amount = 1})
             
         end
     end
@@ -37,12 +37,24 @@ data:extend {
         type = "recipe",
         name = "muluna-vacuum-flying-robot-frame",
         ingredients = {
-            {type = "item", name = "steel-plate", count = 1},
-            {type = "item", name = "iron-pipe", count = 2},
-            {type = "item", name = "electronic-circuit", count = 3},
-            {type = "item", name = "engine-unit", count = 1}
+            {type = "item", name = "steel-plate",  amount = 1},
+            {type = "item", name = "pipe",  amount = 2},
+            {type = "item", name = "electronic-circuit",  amount = 3},
+            {type = "item", name = "engine-unit",  amount = 1}
         
         },
-        results = {{type = "item", name = "muluna-vacuum-flying-robot-frame", count = 1}}
+        results = {{type = "item", name = "muluna-vacuum-flying-robot-frame", amount = 1}},
+    }),
+    rro.merge(data.raw["recipe"]["roboport"],{
+        type = "recipe",
+        name = "muluna-vacuum-roboport",
+        ingredients = {
+            {type = "item", name = "advanced-circuit",  amount = 45},
+            {type = "item", name = "steel-plate",  amount = 45},
+            {type = "item", name = "iron-gear-wheel",  amount = 45},
+            --{type = "item", name = "engine-unit",  amount = 1}
+        
+        },
+        results = {{type = "item", name = "muluna-vacuum-flying-robot-frame", amount = 1}},
     }),
 }
