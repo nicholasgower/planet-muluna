@@ -10,8 +10,8 @@ local planet_backdrop = {
     planet_normal =
         {
             filename = "__muluna-graphics__/graphics/planet/normal-map-high-intensity.png",
-            width = 2048,
-            height = 1024
+            width = 4096,
+            height = 2024
         },
     surface_normal_intensity = 0.2,
         
