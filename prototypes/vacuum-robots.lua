@@ -6,7 +6,7 @@ for _,robot_name in pairs(Muluna.constants.robot_names) do
     local item = table.deepcopy(data.raw["item"][robot_name])
     local prototypes = {recipe,robot,item}
     for _,prototype in pairs(prototypes) do
-        rro.deep_replace(prototype,robot_name,replacement_name)
+        rro.deep_replace(prototype,robot_name,replacement_name,false,{"type"})
         if prototype.type == "construction-robot" or prototype.type == "logistic-robot" then
             prototype.surface_conditions = {
                 {
@@ -28,12 +28,12 @@ for _,robot_name in pairs(Muluna.constants.robot_names) do
 end
 
 data:extend {
-    rro.merge(data.raw["item"]["flying-robot-frame"]{
+    rro.merge(data.raw["item"]["flying-robot-frame"],{
         type = "item",
         name = "muluna-vacuum-flying-robot-frame",
         
     }),
-    rro.merge(data.raw["recipe"]["flying-robot-frame"]{
+    rro.merge(data.raw["recipe"]["flying-robot-frame"],{
         type = "recipe",
         name = "muluna-vacuum-flying-robot-frame",
         ingredients = {
