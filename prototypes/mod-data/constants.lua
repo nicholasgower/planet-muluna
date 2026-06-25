@@ -39,3 +39,6 @@ Muluna.constants.cargo_drop_rare_drops = {
 }
 
 Muluna.constants.recycling_recipes_to_fix = {"copper-cable"}
+
+
+Muluna.constants.robot_names = {"construction-robot","logistic-robot"}
