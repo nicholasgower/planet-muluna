@@ -14,7 +14,7 @@ local possible_plant_list = {
     --["coralmium-cluster"] = "coralmium", --I'd like to eventually add support for more plants, but I don't understand the nuances of these modded plants at this time.
     -- ["boompuff-plant"] = "boompuff-spore",
     -- ["demolisher-pupae"] = 
-}
+} 
 
 
 
