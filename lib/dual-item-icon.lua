@@ -26,6 +26,9 @@ function Public.dual_icon(item_1,item_2,item_3)
     if data.raw["fluid"][item_1] then type_1 = "fluid" end
     if data.raw["fluid"][item_2] then type_2 = "fluid" end
     if data.raw["fluid"][item_3] then type_3 = "fluid" end
+    if data.raw["capsule"][item_1] then type_1 = "capsule" end
+    if data.raw["capsule"][item_2] then type_2 = "capsule" end
+    if data.raw["capsule"][item_3] then type_3 = "capsule" end
     if data.raw["tool"] then
         if data.raw["tool"][item_1] then type_1 = "tool" end
         if data.raw["tool"][item_2] then type_2 = "tool" end

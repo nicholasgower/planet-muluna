@@ -741,6 +741,33 @@ data:extend{
         }
     },
     {
+        type = "technology", 
+        name = "muluna-gleba-greenhouses",
+        prerequisites = {"muluna-fertilized-greenhouses-vulcanus","overgrowth-soil","promethium-science-pack"},
+        icons = greenhouse_technology_icon(data.raw.planet.gleba.icon,64),
+        unit = {
+            count = 5000,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
+                {"space-science-pack", 1},
+                {"metallurgic-science-pack", 1},
+                {"agricultural-science-pack", 1},
+                {"cryogenic-science-pack", 1},
+                {"electromagnetic-science-pack", 1},
+                {"interstellar-science-pack",1},
+                {"promethium-science-pack",1}
+            }
+        },
+        effects = {
+            
+        }
+    },
+    {
         type = "technology",
         name = "muluna-gas-venting",
         icons = {
@@ -866,7 +893,7 @@ data:extend{
         name = "muluna-space-telescope",
         unit = {
             count = 3000,
-            time = 30,
+            time = 60,
             ingredients = {
                     
             }

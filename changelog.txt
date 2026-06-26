@@ -1,4 +1,35 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2026-06-26
+  Features:
+    - Added late-game greenhouse recipes for Gleba crops.
+    - Added late-game greenhouse recipes for Gleba plants.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.16
+Date: 2026-06-26
+  Bugfixes:
+    - Updated compatibility code for K2SO. The current version to K2SO still crashes with Muluna. Additional work is required from the developer of K2SO.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.15
+Date: 2026-06-25
+  Graphics:
+    - Changed normal map of platform backdrop.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.14
+Date: 2026-06-25
+  Bugfixes:
+    - Fixed crash on load with "Age of Production." Thank you Danbopes on Discord!
+---------------------------------------------------------------------------------------------------
+Version: 2.2.13
+Date: 2026-06-25
+  Graphics:
+    - Muluna is now visible on space platforms orbiting Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.12
+Date: 2026-06-25
+  Graphics:
+    - Raised required Muluna Graphics version.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.11
 Date: 2026-06-24
   Bugfixes:
