@@ -152,7 +152,7 @@ local long_update_tolerance = 2 --Higher tolerance is less performant, but less 
 local long_update_period = dischange_time_threshold / long_update_tolerance --During long update, roboport's energy value is checked to see if they need more energy.
 
 
-local short_update_period = 180 --Arbitrary choice that should be less than the time to half-fill the energy fluid buffer
+local short_update_period = 30 --Arbitrary choice that should be less than the time to half-fill the energy fluid buffer
 
 local function calc_energy_percent(roboport) 
     
@@ -188,8 +188,8 @@ Muluna.events.on_nth_tick(short_update_period, function()
         local refueler = storage.burner_roboports[key]["refueler"]
 
         --Destroy fluid and add energy to roboport
-        local fluids = refueler.get_fluid_contents()
-        game.print(serpent.block(fluids))
+        --local fluids = refueler.get_fluid_contents()
+        --game.print(serpent.block(fluids))
         local fluid_removed = refueler.clear_fluid(3) --Not sure if this is the right fluid index
         local fluid_removed_amount = fluid_removed and fluid_removed.amount
         local energy_value = 0.1 * 1000000

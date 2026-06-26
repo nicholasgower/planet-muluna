@@ -73,6 +73,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
             local refueler = {
                 type = "assembling-machine",
                 name = roboport.name .. "-refueler",
+                quality_affects_energy_usage = true,
                 selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,-0.4),
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
                 crafting_categories = {"muluna-vacuum-roboport"},
