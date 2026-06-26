@@ -189,7 +189,7 @@ data:extend{{
     weight = 2 * kg,
     subgroup = "muluna-products",
     order = "c[muluna-microfoamed-plastic]",
-    spoil_ticks =  7*60,
+    spoil_ticks =  10.5*60,
     spoil_result = "plastic-bar",
     icons = {
         
