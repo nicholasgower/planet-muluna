@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.16
+Date: 2026-06-26
+  Bugfixes:
+    - Updated compatibility code for K2SO. The current version to K2SO still crashes with Muluna. Additional work is required from the developer of K2SO.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.15
 Date: 2026-06-25
   Graphics:
