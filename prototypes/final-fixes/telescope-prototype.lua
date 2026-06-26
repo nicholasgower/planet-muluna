@@ -18,7 +18,8 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
         )
         telescope_combinator.selection_box = flib_bounding_box.resize(entity.selection_box,0.0)
         telescope_combinator.selection_priority=49 --Default is 50
-        entity.selection_box = flib_bounding_box.resize(entity.selection_box,-0.2)
+        telescope_combinator.factoriopedia_description={"entity-factoriopedia-description.muluna-telescope-combinator"}
+        entity.selection_box = flib_bounding_box.resize(entity.selection_box,-0.4)
         Muluna.constants.telescopes[entity.name] = {
             ["assembling-machine"] = entity.name,
             ["constant-combinator"] = telescope_combinator.name,

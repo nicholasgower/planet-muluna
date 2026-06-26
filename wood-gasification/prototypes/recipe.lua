@@ -3,7 +3,7 @@ data:extend({
   {
     type = "recipe",
     name = "wood-gasification",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 5,
     ingredients = {
@@ -13,7 +13,7 @@ data:extend({
     results = {
       {type="fluid", name="petroleum-gas", amount=20},
       {type="fluid", name="tar", amount=8},
-      {type="item", name="alumina-crushed", amount=1,probability = 0.9,ignored_by_productivity=1},
+      {type="item", name="alumina-crushed", amount=1,independent_probability = 0.9,ignored_by_productivity=1},
     },
     icon = "__muluna-graphics__/graphics/wood-gasification/icon/wood-gasification.png",
     icon_size = 64,
@@ -29,11 +29,12 @@ data:extend({
     always_show_products = true,
     always_show_made_in = true,
     allow_decomposition = false,
+    allow_productivity=true,
   },
   {
     type = "recipe",
     name = "solid-fuel-from-tar",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 5,
     ingredients = {
@@ -56,11 +57,12 @@ data:extend({
     always_show_products = true,
     always_show_made_in = true,
     allow_decomposition = false,
+    allow_productivity=true,
   },
   {
     type = "recipe",
     name = "crude-oil-from-tar",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 5,
     ingredients = {
@@ -74,6 +76,7 @@ data:extend({
     icon_size = 64,
     subgroup = "muluna-forestry",
     order = "a[fluid-chemistry]-w[crude-oil-from-tar]",
+    allow_productivity=true,
 -- order = "a-w",
     crafting_machine_tint =
     {
@@ -88,7 +91,7 @@ data:extend({
   {
     type = "recipe",
     name = "advanced-wood-gasification",
-    category = "oil-processing",
+    categories = {"oil-processing"},
     enabled = false,
     energy_required = 10,
     ingredients =
@@ -102,7 +105,7 @@ data:extend({
       {type="fluid", name="heavy-oil", amount=15},
       {type="fluid", name="light-oil", amount=15},
       {type="fluid", name="petroleum-gas", amount=30},
-      {type="item", name="alumina-crushed", amount=1,probability = 0.9,ignored_by_productivity=1},
+      {type="item", name="alumina-crushed", amount=1,independent_probability = 0.9,ignored_by_productivity=1},
     },
     auto_recycle = false,
     icon = "__muluna-graphics__/graphics/wood-gasification/icon/advanced-wood-gasification.png",
@@ -117,7 +120,7 @@ data:extend({
 --   {
 --     type = "recipe",
 --     name = "catalyzed-wood-gasification",
---     category = "oil-processing",
+--     categories = {"oil-processing"},
 --     enabled = false,
 --     energy_required = 10,
 --     ingredients =
@@ -145,7 +148,7 @@ data:extend({
 --   {
 --     type = "recipe",
 --     name = "alumina-catalyst",
---     category = "oil-processing",
+--     categories = {"oil-processing"},
 --     enabled = false,
 --     energy_required = 10,
 --     ingredients =
@@ -173,7 +176,7 @@ data:extend({
 --   {
 --     type = "recipe",
 --     name = "alumina-catalyst-cleaning",
---     category = "oil-processing",
+--     categories = {"oil-processing"},
 --     enabled = false,
 --     energy_required = 10,
 --     ingredients =
@@ -217,7 +220,7 @@ data:extend({
   -- {
   --   type = "recipe",
   --   name = "wood-greenhouse",
-  --   category = "R-greenhouse",
+  --   categories = {"R-greenhouse"},
   --   enabled = false,
   --   show_amount_in_title = true,
   --   energy_required = 20 / settings.startup["greenhouse-output-pr-sec-wood"].value,

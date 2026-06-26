@@ -184,6 +184,7 @@ local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-m
         order = "a[muluna-telescope]",
         icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
         icon_size = 64,
+        icons = "_nil",
         default_import_location = "muluna",
     }
 

@@ -1,4 +1,673 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.16
+Date: 2026-06-26
+  Bugfixes:
+    - Updated compatibility code for K2SO. The current version to K2SO still crashes with Muluna. Additional work is required from the developer of K2SO.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.15
+Date: 2026-06-25
+  Graphics:
+    - Changed normal map of platform backdrop.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.14
+Date: 2026-06-25
+  Bugfixes:
+    - Fixed crash on load with "Age of Production." Thank you Danbopes on Discord!
+---------------------------------------------------------------------------------------------------
+Version: 2.2.13
+Date: 2026-06-25
+  Graphics:
+    - Muluna is now visible on space platforms orbiting Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.12
+Date: 2026-06-25
+  Graphics:
+    - Raised required Muluna Graphics version.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.11
+Date: 2026-06-24
+  Bugfixes:
+    - Fixed crash on load when no tool prototypes are defined.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.10
+Date: 2026-06-24
+  Changes:
+    - Changed Muluna's "gravity" surface condition to 2 m/s and removed all code changing the minimum gravity of entities from 1 to 0.1.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.9
+Date: 2026-06-24
+  Bugfixes:
+    - Restored robot energy usage to the 2.0.X value using the new "robot-energy-usage" surface property.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.8
+Date: 2026-06-24
+  Balancing:
+    - Adjusted output of anorthite crushing recipes to remain in line with vanilla asteroid crushing recipes.
+    - Each "diffused plastic" craft will now produce exactly one plastic bar.
+  Compatibility:
+    - Raised required Factorio version to 2.1.
+    - Removed dependency on "Muluna utility constants."
+---------------------------------------------------------------------------------------------------
+Version: 2.2.7
+Date: 2026-06-23
+  Bugfixes:
+    - Added migration to fix telescopes broken when saving a game on Muluna version 2.2.4.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.6
+Date: 2026-06-23
+  Bugfixes:
+    - Removed init_storage from code where it was unnecessary.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+Date: 2026-06-23
+  Bugfixes:
+    - Fixed the fact that telescope internal storage was being reset on loading existing saves.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+Date: 2026-06-21
+  Bugfixes:
+    - Fixed crash on opening satellite radar in transit between planets. https://github.com/nicholasgower/planet-muluna/issues/407
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 2026-06-21
+  Bugfixes:
+    - Fixed that satellite radars were disabled on each time save was loaded under a new configuration. https://github.com/nicholasgower/planet-muluna/issues/407
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2026-06-21
+  Bugfixes:
+    - Fixed on_configuration_changed code to fix problems related to loading existing saves.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2026-06-21
+  Bugfixes:
+    - Added additional check to code governing checkbox on satellite radar to reduce the chance of a crash. https://github.com/nicholasgower/planet-muluna/issues/406
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2026-06-21
+  Features:
+    - Added GUI to Satellite Radar, allowing automatic scans to be disabled and adding a button to change views to the planet the satellite radar is orbiting.
+    - Added GUI to telescope and Vacuum heating tower to make switching between entity and sub-entities easier.
+  Changes:
+    - Reduced selector box size of telescope and vacuum heating tower to make sub-entities easier to click on.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.94
+Date: 2026-06-20
+  Balancing:
+    - K2SO: Reduced the cost of the first four rocket part productivity technologies by removing the advanced tech card.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.93
+Date: 2026-06-18
+  Locale:
+    - Updated czech locale(By Vagonek).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.92
+Date: 2026-06-17
+  Locale:
+    - Improved description of telescope combinator to describe the meaning of platform state.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.91
+Date: 2026-06-17
+  Optimizations:
+    - Improved performance of telescope combinators.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.90
+Date: 2026-06-17
+  Bugfixes:
+    - Fixed crash on removing a planet mod while a satellite radar is orbiting said planet.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.89
+Date: 2026-06-15
+  Optimizations:
+    - Eliminated performance loss from placing entities not targeted by Muluna in on_placed scripts. Changes in this update could also improve Maraxsis performance if ported over.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.88
+Date: 2026-06-14
+  Locale:
+    - Changed "Removed space casino" setting's Russian locale to reduce confusion. https://github.com/nicholasgower/planet-muluna/issues/401[#issuecomment](https://github.com/nicholasgower/planet-muluna/issues/issuecomment)-4702555409
+  Changes:
+    - Added optional aluminum-based battery recipe, disabled by default. (Thank you Ivan Cheremisin!)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.87
+Date: 2026-06-12
+  Compatibility:
+    - Added incompatibility flag for Krastorio2 SO Void. https://github.com/nicholasgower/planet-muluna/issues/382
+    - Changes made to better accommodate mods that 'delete' Nauvis. https://github.com/nicholasgower/planet-muluna/issues/382
+    - Made small changes to code referencing quality to decouple Muluna from quality in preparation for Factorio 2.1.
+  Changes:
+    - When Factorio version >= 2.1.0, "Remove space casino" setting is removed from options.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.86
+Date: 2026-06-04
+  Bugfixes:
+    - Reverted scope error that broke Any Planet Start compatibility. https://github.com/nicholasgower/planet-muluna/issues/398
+---------------------------------------------------------------------------------------------------
+Version: 2.1.85
+Date: 2026-06-04
+  Bugfixes:
+    - Added fallback icon when Tungsten plate icon can't be found. https://github.com/nicholasgower/planet-muluna/issues/397
+---------------------------------------------------------------------------------------------------
+Version: 2.1.84
+Date: 2026-06-03
+  Bugfixes:
+    - Fixed crash with Interstellar Travel caused by rro.replace creating duplicate prerequisites. rro.replace now removes the old entry when the replacement already exists in the list.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.83
+Date: 2026-06-03
+  Compatibility:
+    - Added incompatibility flag for "Biological Machines: Planet Wit" due to contradictory ideas.
+  Bugfixes:
+    - Gave anorthite and oxide asteroid chunks proper Factoriopedia previews. https://github.com/nicholasgower/planet-muluna/issues/366
+---------------------------------------------------------------------------------------------------
+Version: 2.1.82
+Date: 2026-06-03
+  Compatibility:
+    - AoP: Muluna Greenhouses can be crafted in Lumber mills.
+    - AoP: Muluna's wood crushing recipes now work on AoP's Lumber Mill.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.81
+Date: 2026-06-03
+  Bugfixes:
+    - Fixed crash on placing regolith miner. https://github.com/nicholasgower/planet-muluna/issues/394
+---------------------------------------------------------------------------------------------------
+Version: 2.1.80
+Date: 2026-06-02
+  Balancing:
+    - Halved rocket costs on Lignumis and Eneas. https://github.com/nicholasgower/planet-muluna/issues/391
+  Compatibility:
+    - Added several new planetary science packs to the list of science packs that contribute progress to the exploration science pack.
+    - Adjusted Muluna's handling of Age of Production's technologies to greatly limit the presence of the Exploration science pack. These changes only exist when AoP >=2.0.0 is loaded. https://github.com/nicholasgower/planet-muluna/issues/393
+    - Lignumis: Removed space science pack prerequisites from Production and Utility science pack technologies. https://github.com/nicholasgower/planet-muluna/issues/356
+    - Moved most cargo drop spawn code to mod-data to make it easier for other mods to remove cargo drops. When another mod removes an item, Muluna will display a warning on generating Muluna's surface. This warning can be removed by developers by removing the relevant spawn file from Muluna.constants.cargo_drop_spawn_imports. https://github.com/nicholasgower/planet-muluna/issues/388
+  Bugfixes:
+    - Changed "Plastic from cellulose" recipe to better tolerate changes from other mods such as Crushing Industry Tweaks. https://github.com/nicholasgower/planet-muluna/issues/384
+    - Fixed telescope surface signal generator to not produce unusable signals. https://github.com/nicholasgower/planet-muluna/issues/377
+  Locale:
+    - Updated polish locale(By S3BA). https://mods.factorio.com/mod/muluna-utility-constants/discussion/69fc72cf4fa120a3d0fb0ae9
+---------------------------------------------------------------------------------------------------
+Version: 2.1.79
+Date: 2026-05-02
+  Bugfixes:
+    - Fixed crash on load with Enriched Industry. https://mods.factorio.com/mod/enriching-industry/discussion/693c8f91190dcc14469fd5bf, https://mods.factorio.com/mod/enriching-industry/discussion/697e0fc1f1e0b252904be1c0e, https://github.com/nicholasgower/planet-muluna/issues/379, and https://github.com/nicholasgower/planet-muluna/issues/343 (Thank you stef77stef!)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.78
+Date: 2026-04-13
+  Bugfixes:
+    - Placing telescopes on space platforms no longer crash the game. https://github.com/nicholasgower/planet-muluna/issues/373
+---------------------------------------------------------------------------------------------------
+Version: 2.1.77
+Date: 2026-04-12
+  Compatibility:
+    - Fixed the inability to unlock water separation when playing Krastorio 2 with Muluna Start. https://github.com/nicholasgower/planet-muluna/issues/370
+---------------------------------------------------------------------------------------------------
+Version: 2.1.76
+Date: 2026-04-08
+  Bugfixes:
+    - Fixed crash on placing telescopes with robots. https://github.com/nicholasgower/planet-muluna/issues/371[#issuecomment](https://github.com/nicholasgower/planet-muluna/issues/issuecomment)-4200204112
+---------------------------------------------------------------------------------------------------
+Version: 2.1.75
+Date: 2026-04-03
+  Compatibility:
+    - Added some additional science pack technologies from newer planet mods to the list of technologies that can contribute progress towards unlocking the exploration science pack.
+  Bugfixes:
+    - Corrected prerequisites of "Advanced space research" technology. https://github.com/nicholasgower/planet-muluna/issues/369
+    - Telescope limit changed to be "per force per surface" rather than only "per surface." https://github.com/nicholasgower/planet-muluna/issues/360
+---------------------------------------------------------------------------------------------------
+Version: 2.1.74
+Date: 2026-02-05
+  Compatibility:
+    - Added compatibility with Voidcraft.
+  Bugfixes:
+    - The recycling steam turbine no longer copies the "next_upgrade" field from the fusion turbine generator.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.73
+Date: 2026-01-10
+  Bugfixes:
+    - Added null value check when recipes containing gas fluids without amounts attached. https://github.com/nicholasgower/planet-muluna/issues/347
+---------------------------------------------------------------------------------------------------
+Version: 2.1.72
+Date: 2026-01-08
+  Bugfixes:
+    - Fixed crash when loading with Crushing Industries but with Optical Fiber disabled. https://github.com/nicholasgower/planet-muluna/issues/346
+---------------------------------------------------------------------------------------------------
+Version: 2.1.71
+Date: 2026-01-07
+  Compatibility:
+    - Crushing Industry: Alternative recipe for optical fiber added that uses aluminum plates instead of copper plates. Recycling recipe also added that only works on Muluna. https://github.com/nicholasgower/planet-muluna/issues/344
+  Bugfixes:
+    - Muluna start: Fixed crash on load with Khemia. https://github.com/nicholasgower/planet-muluna/issues/345
+---------------------------------------------------------------------------------------------------
+Version: 2.1.70
+Date: 2025-12-24
+  Bugfixes:
+    - Fully commented out vestigal code.
+    - Regolith miners can be placed on top of cliff remains and other corpses. https://github.com/nicholasgower/planet-muluna/issues/332
+---------------------------------------------------------------------------------------------------
+Version: 2.1.69
+Date: 2025-12-05
+  Compatibility:
+    - Added compatibility with Khemia.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.68
+Date: 2025-11-30
+  Bugfixes:
+    - Fixed issue with Vacuum Heating Tower being unplaceable on Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.67
+Date: 2025-11-29
+  Compatibility:
+    - Muria: Weapon shooting speed 7/8 technologies now require exploration science.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.66
+Date: 2025-11-28
+  Bugfixes:
+    - Fixed the constant highlighting of the nanofoamed polymer recipes after they have been researched.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.65
+Date: 2025-11-27
+  Bugfixes:
+    - Gave recipe for "molten aluminum" a unique recipe order.
+    - Made regolith diggers easier to place.
+    - Removed all mentions of radiation from tile descriptions.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.64
+Date: 2025-11-26
+  Compatibility:
+    - Disabled compatibility code for "modules-t4".
+---------------------------------------------------------------------------------------------------
+Version: 2.1.63
+Date: 2025-11-26
+  Bugfixes:
+    - Fixed graphical issue where hand-mining copper ore patches produced blue particles intended for carbonic asteroid chunk patches.
+    - Fixed issue with telescope icon getting overridden by other mods modifying assembling machine sprites.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.62
+Date: 2025-11-26
+  Compatibility:
+    - "Athletic science pack"(Rabbasca) and "Linox Supercomputer"(Linox) now contribute to the discovery of Nanofoamed polymers.
+    - Added "Heat assembling machine" custom entity type to list of entity types in defines.prototypes.entity to fix the fact that the vacuum heating tower does not allow rocket fuel when Maraxsis is installed.
+  Changes:
+    - Changed category of "Vacuum heating tower" heating recipe to have the same subgroup as the Vacuum heating tower.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.61
+Date: 2025-11-03
+  Compatibility:
+    - Added a mod-data object(Muluna.constants.cargo_drop_spawn_imports) allowing other mods to add spawned cargo drops to Muluna when new surfaces are generated.
+    - K2SO: Electrolysis plants will spawn on newly created Muluna surfaces.
+    - K2SO: Muluna recipes using gases will have gas quantities divided by ten, and other recipes with these gases normally modified by Muluna will not be modified.
+    - K2SO: Muluna's "Thruster oxidizer separation" recipe is removed.
+  Bugfixes:
+    - "Thruster oxidizer separation" recipe ignogres productivity effects.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.60
+Date: 2025-11-02
+  Locale:
+    - Updated Russian locale(By Astorin).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.59
+Date: 2025-11-02
+  Bugfixes:
+    - Improved compatibility with mods that add mining drill entities without accompanying items with the same name.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.58
+Date: 2025-11-02
+  Bugfixes:
+    - Changed generalized addition of data fluidboxes to assembling machines to work better with machines that have dimensions other than 3x3. https://github.com/nicholasgower/planet-muluna/issues/329 https://github.com/nicholasgower/planet-muluna/issues/326
+---------------------------------------------------------------------------------------------------
+Version: 2.1.57
+Date: 2025-11-01
+  Compatibility:
+    - Moved assembler machine fluidbox updates to data-final-fixes and removed optional dependency on Assembler-reskin. https://github.com/nicholasgower/planet-muluna/issues/327
+---------------------------------------------------------------------------------------------------
+Version: 2.1.56
+Date: 2025-10-28
+  Compatibility:
+    - Fixed Bob's overriding of "Aluminum low density structure" recipe. https://github.com/nicholasgower/planet-muluna/issues/324
+---------------------------------------------------------------------------------------------------
+Version: 2.1.55
+Date: 2025-10-28
+  Compatibility:
+    - "Compression science" now contributes progress towards Nanofoamed polymers.
+  Bugfixes:
+    - Added a limit to the number of science packs listed in the "Nanofoamed polymers" technology's trigger description to avoid exceeding an engine limitation to the number of locale strings that can be nested in a localised string.
+    - Data ports are no longer given to assembling machines that do not have an electric energy source.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.54
+Date: 2025-10-28
+  Compatibility:
+    - In addition to the "Assembling machine 3," any crafting machine with crafting categories matching an assembling machine with speed above 1.25 and 4 or more module slots will support crafting the Exploration Science Pack.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.53
+Date: 2025-10-28
+  Compatibility:
+    - When Panglia is installed, the "Cloning Vat" technology contributes progress towards unlocking nanofoamed polymers.
+  Bugfixes:
+    - Telescopes no longer produce pollution.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.52
+Date: 2025-10-26
+  Compatibility:
+    - When Maraxsis is installed, chemical plants can void hydrogen, as they did in older versions of Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.51
+Date: 2025-10-17
+  Changes:
+    - Muluna start: Removed nonsensical science pack technology prerequisites from Bitumen processing technology.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.50
+Date: 2025-10-16
+  Compatibility:
+    - Made Assembler-Reskin load before Muluna to fix an issue with Assembler-Reskin overriding Muluna's changes to the Assembling Machine 3. https://github.com/nicholasgower/planet-muluna/issues/319
+---------------------------------------------------------------------------------------------------
+Version: 2.1.49
+Date: 2025-10-16
+  Bugfixes:
+    - Rewrote how mining drill productivity bonuses are applied to regolith diggers to improve compatibility with Krastorio 2 and other mods that affect the mining productivity technology.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.48
+Date: 2025-10-16
+  Sounds:
+    - Adjusted the volume of some quieter tracks in Muluna's OST.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.47
+Date: 2025-10-16
+  Locale:
+    - Corrected some locale name strings that were not in proper sentence case.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.46
+Date: 2025-10-15
+  Locale:
+    - Added description to asteroid crushing technologies telling users that asteroids can either be crushed in crushers or by hand.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.45
+Date: 2025-10-13
+  Balancing:
+    - Bitumen recipes from Wood gasification now allow productivity modules.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.44
+Date: 2025-10-12
+  Compatibility:
+    - Added "planet" and "science-pack" to list of internal name keywords used to detect if an Aquilo-tier technology should receive the exploration science pack.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.43
+Date: 2025-10-12
+  Bugfixes:
+    - When a technology is marked to receive the exploration science pack, if the technology uses a trigger instead of science packs to unlock, the game will no longer crash. https://github.com/nicholasgower/planet-muluna/issues/317
+---------------------------------------------------------------------------------------------------
+Version: 2.1.42
+Date: 2025-10-11
+  Compatibility:
+    - Added migration to fix compatibility with Moshine and raised version required to 1.1.1.
+    - Hard Muluna: Alternative automation science pack recipe is now force enabled.
+  Bugfixes:
+    - Fixed info.json formatting
+---------------------------------------------------------------------------------------------------
+Version: 2.1.41
+Date: 2025-10-11
+  Bugfixes:
+    - Fixed crash on load when loaded with a combination of mods that deletes Aquilo or otherwise stops Aquilo's data collection recipe from generating. https://github.com/nicholasgower/planet-muluna/issues/316
+---------------------------------------------------------------------------------------------------
+Version: 2.1.40
+Date: 2025-10-10
+  Graphics:
+    - Nanofoamed polymer items given slightly different tints to make them more visually distinguishable.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.39
+Date: 2025-10-07
+  Graphics:
+    - Added more subtle pipe covers for the Vacuum heating tower. By Talandar.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.38
+Date: 2025-10-07
+  Balancing:
+    - Increased output of "Exploration science pack" recipe from 3 science packs to 5. Per-second science output of assembling machines is unchanged.
+    - Reduced cost of low density space platform foundation, reducing the number of LDS from 2 to 1, and raising the number of aluminum plates from 2 to 5.
+    - Reduced nutrient cost of advanced greenhouse recipes from 20 nutrients to 5.
+    - Turned fluoroketone loop in tier 3 greenhouse recipes into a fully closed loop, requiring no constant input.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.37
+Date: 2025-10-05
+  Compatibility:
+    - K2SO: Advanced anorthite crushing icon updated to use K2's silicon icon.
+  Locale:
+    - Alternative name given to "Silicon processing" technology when another mod adds silicon processing earlier in the tech tree, including Brevven's silicon and Krastorio 2 Spaced Out..
+---------------------------------------------------------------------------------------------------
+Version: 2.1.36
+Date: 2025-10-05
+  Compatibility:
+    - "Arboric science pack" contributes to the discovery of nanofoamed polymers.
+  Bugfixes:
+    - Removed broken reference to helium from old migration script.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.35
+Date: 2025-10-02
+  Sounds:
+    - Raised volume of Muluna tracks from 0.5 to 0.7.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.34
+Date: 2025-10-01
+  Locale:
+    - Updated Russian locale(By Astorin).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.33
+Date: 2025-09-29
+  Compatibility:
+    - "foliax-welcome" technology made a possible prerequisite to nanofoamed polymers.
+  Graphics:
+    - (>=2.0.69) "Nanofoamed polymers" technology given a scripted research trigger and custom trigger icon.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.32
+Date: 2025-09-28
+  Bugfixes:
+    - Advanced wood gasification technologies now require science pack technologies that are required in the tech's unit cost. https://github.com/nicholasgower/planet-muluna/issues/309
+  Graphics:
+    - Fixed improper icon for Vacuum heating tower entity.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.31
+Date: 2025-09-26
+  Changes:
+    - Fully removed legacy space boiler from the game, which has been unplaceable since the creation of the vacuum boiler.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.30
+Date: 2025-09-25
+  Locale:
+    - Additional updates to German locale(By MeteorSwarm).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.29
+Date: 2025-09-24
+  Locale:
+    - Removed some unused locale keys from the English locale.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.28
+Date: 2025-09-24
+  Locale:
+    - Partially updated German locale(By MeteorSwarm).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.27
+Date: 2025-09-23
+  Locale:
+    - Updated cs locale(By Vagonek).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.26
+Date: 2025-09-23
+  Bugfixes:
+    - Gas venting recipes now have circuit signals. https://github.com/nicholasgower/planet-muluna/issues/305
+  Locale:
+    - Updated zh-CN locale(By cyx2015s)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.25
+Date: 2025-09-23
+  Compatibility:
+    - "Microcellular plastic bar" recipe is available on Maraxsis' Hydro plant when Maraxsis is installed.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.24
+Date: 2025-09-15
+  Balancing:
+    - Banned quality modules in astronomical data transfer recipes.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.23
+Date: 2025-09-15
+  Compatibility:
+    - Added "Carnal science pack" to the list of science packs that can help unlock nanofoamed polymers.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.22
+Date: 2025-09-14
+  Changes:
+    - Changed filename of migration to fix filename issue when cloning git repo on Windows.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.21
+Date: 2025-09-13
+  Bugfixes:
+    - Fixed crash when another mod removes surface conditions from Cryogenic plant recipe.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.20
+Date: 2025-09-13
+  Balancing:
+    - Added heat dissipation value(75 kW) to Condenser turbine.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.19
+Date: 2025-09-12
+  Bugfixes:
+    - Moved satellite radar weight to correct prototype.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.18
+Date: 2025-09-12
+  Balancing:
+    - Changed weight of satellite radar item to 1000 kg.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.17
+Date: 2025-09-11
+  Locale:
+    - Updated French locale(Minus mod setting descriptions) and made minor adjustments to English locale's spelling and formatting(By Vfauth).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.16
+Date: 2025-09-11
+  Changes:
+    - Null update.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.15
+Date: 2025-09-11
+  Changes:
+    - Added optional setting that enables an alternative recipe for the automation science pack that uses aluminum plates. Previously only available in Muluna start. By Vfauth with minor edits by MeteorSwarm. https://github.com/nicholasgower/planet-muluna/issues/298
+---------------------------------------------------------------------------------------------------
+Version: 2.1.14
+Date: 2025-09-10
+  Balancing:
+    - When Cerys is installed, Cryogenic plants are no longer craftable on Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.13
+Date: 2025-09-10
+  Changes:
+    - Added a hidden field to settings intended to be enabled by "Hard Muluna."
+---------------------------------------------------------------------------------------------------
+Version: 2.1.12
+Date: 2025-09-09
+  Changes:
+    - "Silicon processing technology requires space science" setting removes production science from the technology's requirements.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.11
+Date: 2025-09-09
+  Locale:
+    - Settings in the style of TheSixthRoc's Hard Mode are now marked differently from other settings labeled "hard."
+---------------------------------------------------------------------------------------------------
+Version: 2.1.10
+Date: 2025-09-09
+  Bugfixes:
+    - When generating a new surface spawning cargo pods with zero items, the pod will instead contain one item.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.9
+Date: 2025-09-09
+  Locale:
+    - Updated Czech locale(By Vagonek).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.8
+Date: 2025-09-08
+  Balancing:
+    - Banned quality modules in diffused plastic recipe.
+    - Banned quality modules in greenhouse recipes. This does not make it impossible to make quality wood from greenhouses, just more difficult.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2025-09-08
+  Locale:
+    - Added missing locale to "heat" fluid's "steam equivalent" field.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 2025-09-06
+  Bugfixes:
+    - Added migration to assist players stuck on finding big lunar rocks due to them not spawning on worlds with spawned cargo pods disabled.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.5
+Date: 2025-09-06
+  Locale:
+    - Updated Russian locale(By Astorin).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2025-09-05
+  Graphics:
+    - Raised required muluna-graphics version.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2025-09-05
+  Changes:
+    - Added achievement for visiting Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2025-09-05
+  Compatibility:
+    - Rewrote changes to "space-platform" technology to not delete all effects added by other mods.
+    - SA Galore: All SA Galore recipes added to "space-platform" technology moved to more appropriate technologies. https://github.com/nicholasgower/planet-muluna/issues/294
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2025-09-04
+  Compatibility:
+    - APS: Telescope data production rate is now calculated relative to Muluna's parent body, not hardcoded to Nauvis.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2025-09-04
+  Features:
+    - Added "Shattered planet observation" recipe, a late-game telescope recipe that allows the generation of astronomical data from promethium chunks. Intended as a scale-able method of producing astronomical data for megabases.
+  Balancing:
+    - Raised power consumption of telescope to 10MW when producing astronomical data.
+    - Space platforms now allow the placement of an unlimited number of telescopes.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.62
+Date: 2025-09-03
+  Compatibility:
+    - Asteroid collector technologies that require 2/3 vanilla planetary science packs to unlock will also require exploration science packs.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.61
+Date: 2025-09-02
+  Changes:
+    - Added option to configure the amount of astronomical data required to craft an exploration science pack.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.60
+Date: 2025-09-02
+  Changes:
+    - Cryolabs produce no pollution if Biolabs produce no pollution.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.59
+Date: 2025-09-02
+  Bugfixes:
+    - Game will no longer crash when looking at Muluna before tiles have generated. https://github.com/nicholasgower/planet-muluna/issues/289
+---------------------------------------------------------------------------------------------------
+Version: 2.0.58
+Date: 2025-09-02
+  Bugfixes:
+    - Moved telescope recipe data calculations from data-final-fixes to data-updates.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.57
+Date: 2025-09-02
+  Bugfixes:
+    - Stopped crash on load with Muluna start without Maraxsis. https://github.com/nicholasgower/planet-muluna/issues/291
+---------------------------------------------------------------------------------------------------
+Version: 2.0.56
+Date: 2025-09-01
+  Compatibility:
+    - Muluna start and AAI Industry are now officially compatible with each other.
+  Bugfixes:
+    - AAI Industry: Fuel processors now work on Muluna, and burner turbine now do not.
+    - When spawned cargo pods are disabled, scripted rock spawns will still trigger.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.55
 Date: 2025-08-31
   Bugfixes:

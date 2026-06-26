@@ -131,8 +131,8 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
                             end
                         end
                         
-                        
-                        if player.physical_vehicle or surface.get_tile(player.position).hidden_tile or character_is_flying then return end
+                        local player_tile = surface.get_tile(player.position)
+                        if player.physical_vehicle or (player_tile.valid and player_tile.hidden_tile) or character_is_flying then return end
                             
                             local player_position
 

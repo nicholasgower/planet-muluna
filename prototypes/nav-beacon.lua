@@ -33,7 +33,7 @@ if settings.startup["enable-nav-beacon"].value == true then
         }
     })
     navBeaconItem.order = navBeaconItem.order .. "-z"
-
+    navBeaconItem.weight = 1000*kg
 
     radarEntity.pictures = nil
     ---@type RadarPrototype

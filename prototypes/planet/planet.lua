@@ -353,9 +353,12 @@ local muluna=
           scale = 0.25*o_parent_planet.magnitude/(nauvis.magnitude),
         }
     },
+    platform_surface_render_parameters = {
+      platform_backdrop = require("planet-appearance-21")
+    },
     surface_render_parameters = {
       shadow_opacity = 0.9,
-      space_dust_foreground = data.raw["space-platform-hub"]["space-platform-hub"].surface_render_parameters.space_dust_foreground
+      space_dust_foreground = data.raw["planet"]["nauvis"].platform_surface_render_parameters.space_dust_foreground,
       -- clouds = util.merge{nauvis.surface_render_parameters.clouds,
       --                     opacity_at_day = 0.9,
       --                     opacity_at_night = 0.9,
@@ -391,6 +394,9 @@ local muluna=
       --   shape_warp_weight = 0.4,
       --   detail_sample_morph_duration = 0,
       -- }
+      
+
+      
     },
     platform_procession_set =
     {
@@ -420,7 +426,9 @@ muluna.orientation = nil
 
 local bot_power = 0.2
 
-muluna.surface_properties["gravity"] = muluna.surface_properties["pressure"]/100*bot_power
+muluna.surface_properties["gravity"] =  2 --muluna.surface_properties["pressure"]/100*bot_power
+
+muluna.surface_properties["robot-energy-usage"] = bot_power
 
 if settings.startup["PlanetsLib-enable-temperature"].value == true then
   muluna.surface_properties["temperature"] = 264

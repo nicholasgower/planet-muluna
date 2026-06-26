@@ -57,14 +57,14 @@ crusher_2.name = "crusher-2"
 --space_boiler.place_result = "space-boiler"
 crusher_2.localised_name = {"",{"item-name.crusher"}," 2"}
 crusher_2.ingredients = {
-    {type = "item",name = "tungsten-plate",amount = 10},
+    {type = "item",name = Muluna.constants.names["tungsten-plate"],amount = 10},
     {type = "item",name = "uranium-238",amount = 2},
     {type = "item",name = "aluminum-plate",amount = 10},
     {type = "item",name = "speed-module-3",amount = 1},
     {type = "item",name = "crusher",amount = 1}
 }
 if settings.startup["muluna-hardcore-restrict-crusher"].value == true then
-    crusher_2.surface_conditions = {{property = "oxygen", max = 0, min = 0},{property = "gravity", max = 0.1, min = 0.1}}
+    crusher_2.surface_conditions = {{property = "oxygen", max = 0, min = 0},{property = "gravity", max = 2, min = 2}}
     
 end
 crusher_2.results = {{type = "item",name = "crusher-2",amount = 1}}
@@ -74,7 +74,7 @@ if true or data.raw["recipe"]["biolab"] then
     local cryolab = table.deepcopy(data.raw["recipe"]["biolab"])
 
     cryolab.name="cryolab"
-    cryolab.category="cryogenics"
+    cryolab.categories = {"cryogenics"}
     --cryolab.recipe_group="production"
     --cryolab.subgroup="production-machine"
 
@@ -145,10 +145,15 @@ greenhouse.ingredients = {
     {type = "item", name = "chemical-plant", amount = 5},
 }
 
+if mods["Age-of-Production"] then
+    greenhouse.categories = greenhouse.categories or {"crafting"}
+    rro.soft_insert(greenhouse.categories, "woodworking")
+end
+
 local greenhouse_wood = util.merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
     {
         name = "muluna-greenhouse-wood",
-        category = "crafting",
+        categories = {"crafting"},
         icons = {
             {
                 icon = "__muluna-graphics__/graphics/greenhouse/sprites/greenhouse-icon.png",
@@ -192,13 +197,13 @@ local low_density_space_platform_foundation = util.merge{table.deepcopy(data.raw
         {
             type = "item",
             name = "aluminum-plate",
-            amount = 2,
+            amount = 5,
         },
         {type = "item", name = "muluna-microcellular-plastic", amount = 5},
         {
             type = "item",
             name = "low-density-structure",
-            amount = 2,
+            amount = 1,
         },
         
     }
@@ -219,7 +224,7 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
         },
         {
             type = "item",
-            name = "tungsten-plate",
+            name = Muluna.constants.names["tungsten-plate"],
             amount = 10,
         },
         {
@@ -239,13 +244,13 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-g
         },
         {
             type = "item",
-            name = "quality-module-3",
+            name = mods["quality"] and "quality-module-3" or "productivity-module-3",
             amount = 1,
         },
     }
 }
 }
-recycling_turbine.category = "crafting"
+recycling_turbine.categories = {"crafting"}
 recycling_turbine.surface_conditions = nil
 recycling_turbine.factoriopedia_description = nil
 

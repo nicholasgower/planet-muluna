@@ -53,6 +53,10 @@ if mods["bzzirconium"] then
     table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "zircon",amount = 1,probability = 0.05})
 end
 
+if mods["bzsilicon"] then
+    data.raw["technology"]["muluna-silicon-processing"].localised_name = {"technology-name.muluna-silicon-processing-alt"}
+end
+
 local function move_recipe(recipe,tech,tech_new) 
     rro.remove(data.raw.technology[tech].effects,{type = "unlock-recipe", recipe = recipe})
     table.insert(data.raw.technology[tech_new].effects,{type = "unlock-recipe", recipe = recipe})

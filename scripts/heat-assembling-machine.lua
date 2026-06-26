@@ -7,7 +7,13 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=false}
     entity.rotate{reverse=true}
 end
-
+local heat_assembler_filters = {}
+for entity_name,machine in pairs(heat_assembling_machines) do
+    table.insert(heat_assembler_filters,{filter = "name", name =  machine["assembling-machine"]})
+    table.insert(heat_assembler_filters,{filter = "ghost_name", name =  machine["assembling-machine"]})
+    table.insert(heat_assembler_filters,{filter = "name", name = machine["reactor"]})
+    table.insert(heat_assembler_filters,{filter = "ghost_name", name = machine["reactor"]})
+end
 Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     
     local entity = event.entity
@@ -34,15 +40,18 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
+        --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
+        --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
-        reactor.fluidbox.add_linked_connection(1,entity,1) 
+        reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.heat_assembling_machines then storage.heat_assembling_machines = {} end
         storage.heat_assembling_machines[entity.unit_number] = {["assembling-machine"]=entity,["reactor"] = reactor}
     end
 
 
-end
+end,
+heat_assembler_filters
 )
 
 
@@ -97,7 +106,8 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         -- }
     end
 
-end)
+end,
+heat_assembler_filters)
 
 local function register_for_deconstruction_events(entity_name,entity_storage) --Assumes that upgrades are done to upgrade quality, not entity type
 

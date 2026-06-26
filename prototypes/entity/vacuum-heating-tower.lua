@@ -1,44 +1,4 @@
-local function vacuumheatingtowerpipepictures()
-  return
-  {
-    north =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-N.png",
-      priority = "extra-high",
-      width = 71,
-      height = 38,
-      shift = util.by_pixel(2.25, 13.5),
-      scale = 0.000000000001
-    },
-    east =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-E.png",
-      priority = "extra-high",
-      width = 42,
-      height = 76,
-      shift = util.by_pixel(-24.5, 1),
-      scale = 0.5
-    },
-    south =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-S.png",
-      priority = "extra-high",
-      width = 88,
-      height = 61,
-      shift = util.by_pixel(0, -31.25),
-      scale = 0.5
-    },
-    west =
-    {
-      filename = "__base__/graphics/entity/assembling-machine-3/assembling-machine-3-pipe-W.png",
-      priority = "extra-high",
-      width = 39,
-      height = 73,
-      shift = util.by_pixel(25.75, 1.25),
-      scale = 0.5
-    }
-  }
-end
+
 
 
 local recipe_category = "muluna-vacuum-heating-tower"
@@ -66,8 +26,9 @@ steam_proxy.icon_size = 48
 steam_proxy.heat_capacity = "0.2kJ"
 steam_proxy.custom_tooltip_fields = {
     {
-      name = {"description.steam-equivalent"},
-      value = tostring(util.parse_energy(steam_proxy.heat_capacity)/200)
+      name = {"tooltip.steam-equivalent"},
+      value = {"tooltip-value.steam-equivalent",tostring(util.parse_energy(steam_proxy.heat_capacity)/200)}
+      
     }
   }
 
@@ -85,7 +46,7 @@ local recipe = {
         type = "recipe",
         enabled = false,
         name = "muluna-vacuum-heating",
-        category = recipe_category,
+        categories = {recipe_category},
         energy_required = energy_required,
         ingredients = {
             {
@@ -109,6 +70,8 @@ local recipe = {
             }
         },
         main_product = "muluna-heat",
+        subgroup = "environmental-protection",
+        order = "e[muluna-vacuum-heating]",
     }
 
 data:extend{steam_proxy,recipe}
@@ -118,8 +81,9 @@ local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-adv
 local heating_tower = data.raw["reactor"]["heating-tower"]
 
 
-heating_tower.icon = data.raw["item"]["muluna-vacuum-heating-tower"].icon
-heating_tower.icon_size = data.raw["item"]["muluna-vacuum-heating-tower"].icon_size
+heating_boiler.icons = data.raw["item"]["muluna-vacuum-heating-tower"].icons
+--heating_tower.icon = nil
+--heating_tower.icon_size = data.raw["item"]["muluna-vacuum-heating-tower"].icon_size
 
 heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"
@@ -169,6 +133,7 @@ heating_boiler = util.merge{heating_boiler,
             heat_picture = apply_heat_pipe_glow(
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-glow", {
                 scale = 0.65,
+                --scale = 0.6,
                 blend_mode = "additive"
             }))
         },
@@ -178,9 +143,11 @@ heating_boiler = util.merge{heating_boiler,
         {
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-main", {
             scale = 0.65
+            --scale = 0.6
             }),
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-shadow", {
             scale = 0.65,
+            --scale = 0.6,
             draw_as_shadow = true
             })
         }
@@ -209,6 +176,7 @@ heating_boiler = util.merge{heating_boiler,
             util.sprite_load("__space-age__/graphics/entity/heating-tower/heating-tower-working-fire", {
             frame_count = 24,
             scale = 0.65,
+            --scale = 0.6,
             blend_mode = "additive",
             draw_as_glow = true,
             animation_speed = 0.333
@@ -217,6 +185,7 @@ heating_boiler = util.merge{heating_boiler,
             frame_count = 1,
             repeat_count = 24,
             scale = 0.65,
+            --scale = 0.6,
             blend_mode = "additive",
             draw_as_glow = true
             })
@@ -264,7 +233,7 @@ heating_boiler.fluid_boxes = {
             {
                 volume = 200,
                 pipe_covers = pipecoverspictures(),
-                pipe_picture = vacuumheatingtowerpipepictures(),
+                pipe_picture = Muluna.pipe_pictures.vacuumheatingtowerpipepictures(),
                 pipe_connections =
                 {
                 {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, 1}},
@@ -286,7 +255,7 @@ heating_boiler.fluid_boxes = {
             {
                 volume = 200,
                 pipe_covers = pipecoverspictures(),
-                pipe_picture = vacuumheatingtowerpipepictures(),
+                pipe_picture =  Muluna.pipe_pictures.vacuumheatingtowerpipepictures(),
                 pipe_connections =
                 {
                 {flow_direction = "input-output", direction = defines.direction.west, position = {-1.0, -1}},
@@ -311,3 +280,4 @@ heating_boiler.fluid_boxes = {
 
 -- heating_boiler.type = "heat-assembling-machine"
 data:extend{heating_boiler}
+defines.prototypes.entity["heat-assembling-machine"] = 0

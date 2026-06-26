@@ -66,7 +66,13 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
     
 
     rocket_prod.max_level=nil
-    rro.remove(rocket_prod.unit.ingredients,{"cryogenic-science-pack",1})
+    rro.remove(rocket_prod.unit.ingredients,{"cryogenic-science-pack","_any"})
+    if mods["Age-of-Production"] then
+        rro.remove(rocket_prod.unit.ingredients,{"aop-thermal-science-pack","_any"})
+    end
+    if mods["Krastorio2-spaced-out"] then
+        rro.remove(rocket_prod.unit.ingredients,{"kr-advanced-tech-card","_any"})
+    end
     rro.soft_insert(rocket_prod.unit.ingredients,{"space-science-pack",1})
     rro.replace(rocket_prod.prerequisites,"cryogenic-science-pack","space-science-pack")
     rocket_prod.unit.count=250
@@ -80,6 +86,11 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         "agricultural-science-pack",
         "electromagnetic-science-pack",
     }
+    -- local science_pack_aop = {
+    --     "aop-thermal-science-pack",
+    --     "aop-forestry-science-pack",
+    --     "aop-petrochemical-science-pack",
+    -- }
     local planet_name = {
         "vulcanus",
         "gleba",
@@ -117,6 +128,9 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         rro.replace(tech.prerequisites,"space-science-pack",science_pack[i])
         --table.insert(tech.prerequisites,pack)
         table.insert(tech.unit.ingredients,{science_pack[i],1})
+        if mods["Krastorio2-spaced-out"] then
+            rro.soft_insert(tech.unit.ingredients,{"kr-advanced-tech-card",1})
+        end
         tech.prerequisites={"rocket-part-productivity-4",science_pack[i]}
         tech.unit.count=1000
 
@@ -135,7 +149,8 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
 end
 
 rocket_prod_aquilo.name="rocket-part-productivity-aquilo"
-    
+
+rro.soft_insert(data.raw["recipe"]["cryogenic-plant"].surface_conditions,{property = "is-muluna",min=0,max=0})
     
 rocket_prod_aquilo.localised_name={"technology-name.rocket-part-productivity"}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
@@ -151,16 +166,16 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == true then
     data.raw["technology"]["rocket-part-productivity"] = nil
 end
 
-rro.replace(data.raw["cargo-landing-pad"]["cargo-landing-pad"].surface_conditions,
-    {
-        property = "gravity",
-        min = 1,
-    },
-    {
-        property = "gravity",
-        min = 0.1,
-    }
-)
+-- rro.replace(data.raw["cargo-landing-pad"]["cargo-landing-pad"].surface_conditions,
+--     {
+--         property = "gravity",
+--         min = 1,
+--     },
+--     {
+--         property = "gravity",
+--         min = 0.1,
+--     }
+-- )
 
 
 
@@ -248,7 +263,7 @@ local rocket_part_muluna = table.deepcopy(data.raw["recipe"]["rocket-part"])
 rocket_part_muluna.name = "rocket-part-muluna"
 rocket_part_muluna.surface_conditions = {
     {property = "gravity",
-    max = 5,
+    max = 2,
     }   
 }
 
@@ -257,6 +272,8 @@ rocket_part_muluna.localised_name = {"item-name.rocket-part"}
 
 PlanetsLib.assign_rocket_part_recipe("muluna",rocket_part_muluna.name)
 PlanetsLib.assign_rocket_part_recipe("cerys",rocket_part_muluna.name)
+PlanetsLib.assign_rocket_part_recipe("lignumis",rocket_part_muluna.name)
+PlanetsLib.assign_rocket_part_recipe("eneas",rocket_part_muluna.name)
 -- data.raw["recipe"]["rocket-part"].surface_conditions = {
 --     {property = "gravity",
 --     min = 5.01,
@@ -312,8 +329,8 @@ for _, silo in pairs(data.raw["rocket-silo"]) do
 end
 data.raw.recipe["space-science-pack"].surface_conditions = {
     {property = "gravity",
-    min = 0.1,
-    max = 0.1,
+    min = 2,
+    max = 2,
     },
     {property = "oxygen",
     min = 0,
@@ -344,7 +361,7 @@ else
 end
 
 
-for _,pack in pairs(data.raw["tool"]) do
+for _,pack in pairs(data.raw["item"]) do
     local recipe = data.raw["recipe"][pack.name]
     if recipe then
         if recipe.surface_conditions == nil then
@@ -426,7 +443,7 @@ if not(mods["maraxsis"]) then
     } do
         local recipe = data.raw.recipe[recipe]
         recipe.hidden_in_factoriopedia = false
-        recipe.category = category
+        recipe.categories = {category}
         recipe.subgroup = "maraxsis-atmosphere-barreling"
     end
     data.raw.recipe["empty-maraxsis-atmosphere-barrel"].results[1].temperature = 25
@@ -471,12 +488,12 @@ for _,planet in pairs(data.raw["planet"]) do
 
 rro.soft_insert(data.raw["technology"]["planet-discovery-aquilo"].prerequisites,"interstellar-science-pack")
 --table.insert(data.raw["technology"]["promethium-science-pack"].prerequisites,"interstellar-science-pack")
---data.raw["tool"]["space-science-pack"].localised_name = {"item-name."}
+--data.raw["item"]["space-science-pack"].localised_name = {"item-name."}
 --data.raw["technology"]["space-science-pack"].localised_name = {"item-name.lunar-science-pack"}
 --data.raw["technology"]["space-science-pack"].localised_description = {"technology-description.lunar-science-pack"}
 
 
-data.raw["tool"]["space-science-pack"].icons = nil
+data.raw["item"]["space-science-pack"].icons = nil
 
 
 
@@ -652,13 +669,13 @@ require("compat.orbital-ion-cannon")
 require("compat.lignumis")
 
 
-local one_gravity_condition =
-{
-  {
-    property = "gravity",
-    min = 0.1
-  }
-}
+-- local one_gravity_condition =
+-- {
+--   {
+--     property = "gravity",
+--     min = 0.1
+--   }
+-- }
 
 if not (settings.startup["muluna-easy-revert-changes-to-space-platform-technology"].value == true) then
     rro.remove(data.raw["technology"]["space-platform-thruster"].effects,
@@ -675,17 +692,17 @@ if not (settings.startup["muluna-easy-revert-changes-to-space-platform-technolog
     )
 end
 
-data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
+--data.raw["spider-vehicle"]["spidertron"].surface_conditions = one_gravity_condition
 
 
 require("prototypes.mod-data.interstellar-science-pack")
 
-if data.raw["tool"]["alien-science-pack"] then
-    data.raw["tool"]["alien-science-pack"].order="fa[alien-science-pack]"
+if data.raw["item"]["alien-science-pack"] then
+    data.raw["item"]["alien-science-pack"].order="fa[alien-science-pack]"
 end
 
-if data.raw["tool"]["electrochemical-science-pack"] then
-    data.raw["tool"]["electrochemical-science-pack"].order="iz[electrochemical-science-pack]"
+if data.raw["item"]["electrochemical-science-pack"] then
+    data.raw["item"]["electrochemical-science-pack"].order="iz[electrochemical-science-pack]"
 end
 
 if data.raw.planet["lignumis"] == nil then
@@ -723,14 +740,14 @@ end
 local function multiply_ingredients(recipe,ingredient,multiplier)
     if recipe.ingredients then
         for _,item in pairs(recipe.ingredients) do
-            if item.name == ingredient then
+            if item.name == ingredient and item.amount then
                 item.amount = item.amount*multiplier
             end
         end
     end
     if recipe.results then
         for _,item in pairs(recipe.results) do
-            if item.name == ingredient then
+            if item.name == ingredient and item.amount then
                 item.amount = item.amount*multiplier
             end
         end
@@ -765,16 +782,28 @@ local subgroup_blacklist = {
     "muluna-products"
 }
 
-
-for _,gas in pairs(gases) do
-    for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
-        if not (rro.contains(recipe_blacklist,recipe.name) or rro.contains(category_blacklist,recipe.category) or rro.contains(subgroup_blacklist,recipe.subgroup)) then
-            multiply_ingredients(recipe,gas,10)
+if not mods["Krastorio2-spaced-out"] then
+    for _,gas in pairs(gases) do
+        for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
+            if not (rro.contains(recipe_blacklist,recipe.name) or rro.contains_any(category_blacklist,recipe.categories) or rro.contains(subgroup_blacklist,recipe.subgroup)) then
+                multiply_ingredients(recipe,gas,10)
+            end
+            
         end
         
     end
-    
+else
+    for _,gas in pairs(gases) do
+        for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
+            if not (not (rro.contains(recipe_blacklist,recipe.name) or rro.contains_any(category_blacklist,recipe.categories) or rro.contains(subgroup_blacklist,recipe.subgroup))) then
+                multiply_ingredients(recipe,gas,0.10)
+            end
+            
+        end
+        
+    end
 end
+
 
 
 require("compat.modules-t4")
@@ -789,6 +818,7 @@ require("compat.transplutonic")
 require("prototypes.technology.technology-updates")
 require("prototypes.overrides.data-cells")
 require("prototypes.overrides.gleba-greenhouse-recipes")
+require("prototypes.overrides.telescope-data")
 require("compat.Age-of-Production")
 
 local parent_planet = "nauvis"
@@ -812,7 +842,7 @@ require("prototypes.technology.interstellar-technologies")
 
 
 local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["space-science-pack"])
-data.raw["recipe"]["space-science-pack"].order = data.raw["tool"]["space-science-pack"].order .. "-2"
+data.raw["recipe"]["space-science-pack"].order = data.raw["item"]["space-science-pack"].order .. "-2"
 data.raw["recipe"]["space-science-pack"].surface_conditions = {
     {
         property = "gravity",
@@ -861,8 +891,8 @@ if settings.startup["muluna-easy-vanilla-advanced-thruster-fuel-costs"].value ==
     data.raw["recipe"]["advanced-thruster-oxidizer"].results[1].amount = 1000
 end
 
-data.raw["recipe"]["wood-processing"].surface_conditions = nil
-data.raw["recipe"]["wood-processing"].category = "crafting"
+data.raw["recipe"]["tree-seed"].surface_conditions = nil
+data.raw["recipe"]["tree-seed"].categories = {"crafting"}
 
 require("compat.orbital-transfer")
 require("compat.visible-planets")
@@ -904,7 +934,7 @@ if settings.startup["muluna-easy-simple-wood-gasification"]["value"] == true the
     end
 end
 
-if settings.startup["muluna-hardcore-remove-space-casino"].value == true then
+if settings.startup["muluna-hardcore-remove-space-casino"] and settings.startup["muluna-hardcore-remove-space-casino"].value == true then
     for _,recipe in pairs(data.raw["recipe"]) do
         if string.find(recipe.name,"asteroid%-reprocessing") then
             recipe.allow_quality = false

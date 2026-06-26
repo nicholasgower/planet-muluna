@@ -23,7 +23,7 @@ data:extend{
         type = "recipe",
         name = "muluna-tree-growth-greenhouse",
         enabled = false,
-        category = "muluna-greenhouse",
+        categories = {"muluna-greenhouse"},
         icons = dual_icon("muluna-sapling","carbon-dioxide"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
@@ -37,6 +37,7 @@ data:extend{
         energy_required=5*60,
         subgroup="muluna-forestry",
         max_productivity = 3,
+        allow_quality = false,
         auto_recycle=false,
         allow_productivity = true,
         hide_from_signal_gui = false,
@@ -51,7 +52,7 @@ data:extend{
     --     type = "recipe",
     --     name = "muluna-sapling-growth-greenhouse",
     --     enabled = false,
-    --     category = "muluna-greenhouse",
+    --     categories = {"muluna-greenhouse"},
     --     --icons = dual_icon("muluna-sapling","carbon-dioxide"),
     --     ingredients = {
     --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
@@ -80,7 +81,8 @@ data:extend{
         type = "recipe",
         name = "muluna-tree-growth-greenhouse-water-saving",
         enabled = false,
-        category = "muluna-greenhouse",
+        allow_quality = false,
+        categories = {"muluna-greenhouse"},
         icons = dual_icon("muluna-sapling","water"),
         ingredients = {
             {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
@@ -109,7 +111,7 @@ data:extend{
     --     type = "recipe",
     --     name = "muluna-tree-growth-greenhouse-quick",
     --     enabled = false,
-    --     category = "muluna-greenhouse",
+    --     categories = {"muluna-greenhouse"},
     --     icons = dual_icon("wood","express-transport-belt"),
     --     ingredients = {
     --         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
@@ -139,7 +141,7 @@ data:extend{
     --     icons = dual_icon("oxygen","hydrogen"),
     --     --icon = "__muluna-graphics__/graphics/icons/maraxsis-water.png",
     --     --icon_size = 64,
-    --     category = "chemistry",
+    --     categories = {"chemistry"},
     --     ingredients = {
     --         {type = "fluid",name = "water", amount=30},
     --     },
@@ -156,7 +158,7 @@ data:extend{
         enabled = false,
         hidden_in_factoriopedia = true,
         icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/oxygen.png", icon_size = 64}}),
-        category = "chemistry",
+        categories = {"chemistry"},
         ingredients = {
             {type = "fluid",name = "oxygen", amount=54},
         },
@@ -168,7 +170,8 @@ data:extend{
         --     }
         -- },
         energy_required=0.1,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false
     },
     {
         type = "recipe",
@@ -176,7 +179,7 @@ data:extend{
         enabled = false,
         hidden_in_factoriopedia = true,
         icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/molecule-carbon-dioxide.png", icon_size = 64}}),
-        category = "chemistry",
+        categories = {"chemistry"},
         ingredients = {
             {type = "fluid",name = "carbon-dioxide", amount=54},
         },
@@ -188,33 +191,14 @@ data:extend{
         --     }
         -- },
         energy_required=0.1,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false
     },
-    -- {
-    --     type = "recipe",
-    --     name = "hydrogen-venting",
-    --     enabled = false,
-    --     hidden_in_factoriopedia = true,
-    --     icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
-    --     category = "chemistry",
-    --     ingredients = {
-    --         {type = "fluid",name = "hydrogen", amount=54},
-    --     },
-    --     results = {},
-    --     -- surface_conditions = {
-    --     --     {
-    --     --         property = "pressure",
-    --     --         max = 50,
-    --     --     }
-    --     -- },
-    --     energy_required=0.1,
-    --     subgroup="muluna-products"
-    -- },
     -- {
     --     type = "recipe",
     --     name = "muluna-atmosphere-separation",
     --     icon = data.raw["item"]["wood"].icon,
-    --     category = "chemistry",
+    --     categories = {"chemistry"},
     --     ingredients = {
     --         {type = "item",name = "atmosphere", amount=100}
     --     },
@@ -232,7 +216,7 @@ data:extend{
         enabled = false,
         icon = "__muluna-graphics__/graphics/icons/molecule-carbon-dioxide.png",
         icon_size = 64,
-        category = "double-boiler",
+        categories = {"double-boiler"},
         ingredients = {
             --{type = "item",name = "carbon", amount=1},
             {type = "fluid",name = "oxygen", amount=10}
@@ -249,7 +233,7 @@ data:extend{
         type = "recipe",
         name = "carbon-dioxide",
         localised_name={"fluid-name.carbon-dioxide"},
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 10,
         ingredients = {},
         results = {
@@ -272,7 +256,7 @@ data:extend{
         icons = dual_icon("carbon-dioxide","maraxsis-atmosphere"),
         --icon = "__muluna-graphics__/graphics/icons/molecule-carbon-dioxide.png",
         --icon_size = 64,
-        category = "double-boiler",
+        categories = {"double-boiler"},
         ingredients = {
             --{type = "item",name = "carbon", amount=1},
             {type = "fluid",name = "maraxsis-atmosphere", amount=50}
@@ -306,7 +290,7 @@ data:extend{
     --     },
     --     --icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
     --     --icon_size = 64,
-    --     category = "chemistry",
+    --     categories = {"chemistry"},
     --     ingredients = {
     --         {type = "fluid",name = "helium", amount=1000}
     --     },
@@ -346,7 +330,7 @@ data:extend{
     --         },
            
     -- },
-    --     category = "chemistry",
+    --     categories = {"chemistry"},
     --     ingredients = {
     --         {type = "fluid",name = "helium-4", amount=60},
     --         {type = "fluid",name = "helium-3", amount=400}
@@ -361,7 +345,7 @@ data:extend{
     -- },
     {
         type = "recipe",
-        category = "chemistry",
+        categories = {"chemistry"},
         enabled = false,
         name = "cellulose",
         ingredients = {
@@ -379,7 +363,7 @@ data:extend{
         type = "recipe",
         name = "muluna-microcellular-plastic",
         enabled = false,
-        category = "chemistry-or-cryogenics",
+        categories = {"chemistry","cryogenics",mods["maraxsis"] and "maraxsis-hydro-plant" or nil},
         ingredients = {
             {type = "item",name = "muluna-diffused-plastic", amount = 1},
             {type = "fluid",name = "steam", amount = 25}
@@ -396,7 +380,7 @@ data:extend{
         type = "recipe",
         name = "muluna-steam-condensation",
         enabled = false,
-        category = "chemistry-or-cryogenics",
+        categories = {"chemistry","cryogenics"},
         subgroup="muluna-products",
         icons = dual_icon("water","cooled-steam"),
         ingredients = {
@@ -411,7 +395,7 @@ data:extend{
 
     -- {
     --     type = "recipe",
-    --     category = "chemistry",
+    --     categories = {"chemistry"},
     --     name = "heavy-oil-cellulose",
     --     ingredients = {
     --         {type = "item",name = "cellulose", amount=40},
@@ -438,7 +422,7 @@ local oxygen_from_oxidizer = {
     type = "recipe",
     name = "muluna-oxygen-from-oxidizer",
     enabled = false,
-    category = "chemistry",
+    categories = {"chemistry"},
     icons = dual_icon("oxygen","thruster-oxidizer"),
     energy_required = 0.1,
     subgroup="muluna-products",
@@ -454,23 +438,28 @@ local oxygen_from_oxidizer = {
             type = "fluid",
             name = "oxygen",
             amount = 4000/divider,
+            ignored_by_productivity=4000/divider,
         },
         {
             type = "fluid",
             name = "water",
             amount = 100/divider/probability,
-            probability = probability,
+            independent_probability = probability,
+            ignored_by_productivity=100/divider/probability,
         }
     }
 }
 
-data:extend{oxygen_from_oxidizer}
+if not mods["Krastorio2-spaced-out"] then
+    data:extend{oxygen_from_oxidizer}
+end
+
 
 local diffusion = {
         type = "recipe",
         name = "muluna-diffused-plastic",
         enabled = false,
-        category = "chemistry-or-cryogenics",
+        categories = {"chemistry","cryogenics"},
         ingredients = {
             {type = "item",name = "plastic-bar", amount = 1},
             {type = "fluid",name = "carbon-dioxide", amount = 10}
@@ -484,6 +473,7 @@ local diffusion = {
         --icons = data.raw["item"][].icons,
         --allow_productivity = false,
         auto_recycle = false,
+        allow_quality = false,
     }
 if settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true then
     -- table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 0.5,ignored_by_productivity = 1})
@@ -493,7 +483,7 @@ end
 
     local steps = 20
     for i = 1,steps,1 do
-        table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 1/steps,percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
+        table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, shared_probability = { min = (i-1)/steps, max = i/steps },percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
     end
 
 
@@ -519,7 +509,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
             recipe = table.deepcopy(original_recipe)
             recipe.name = original_recipe.name .. "-nutrients"
             table.insert(greenhouse_recipes_with_nutrients,recipe.name)
-            local nutrients = {type="item",name="nutrients",amount=20}
+            local nutrients = {type="item",name="nutrients",amount=5}
             if mods["fluid-nutrients"] then
                 nutrients["fluidbox_index"] = 4
             end
@@ -542,7 +532,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
                     --item.amount = 20000
                     --item.ignored_by_productivity = 20000
                     table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500*(500/item.amount), fluidbox_index = 3})
-                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=495*(500/item.amount),ignored_by_productivity=495*(500/item.amount),fluidbox_index = 2})
+                    table.insert(recipe_vulcanus.results,{type = "fluid",name = "fluoroketone-hot", amount=500*(500/item.amount),ignored_by_productivity=500*(500/item.amount),fluidbox_index = 2})
                 end
             end
             --table.insert(recipe_vulcanus.ingredients,{type = "fluid",name = "fluoroketone-cold", amount=500, fluidbox_index = 3})
@@ -594,4 +584,27 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
         end
     end 
 
+if mods["maraxsis"] then
+    
+    data:extend{{
+        type = "recipe",
+        name = "hydrogen-venting",
+        enabled = false,
+        hidden_in_factoriopedia = true,
+        icons = generate_void_icons({{icon = "__muluna-graphics__/graphics/icons/hydrogen.png", icon_size = 64}}),
+        categories = {"chemistry"},
+        ingredients = {
+            {type = "fluid",name = "hydrogen", amount=54},
+        },
+        results = {},
+        -- surface_conditions = {
+        --     {
+        --         property = "pressure",
+        --         max = 50,
+        --     }
+        -- },
+        energy_required=0.1,
+        subgroup="muluna-products"
+    }}
+end
     

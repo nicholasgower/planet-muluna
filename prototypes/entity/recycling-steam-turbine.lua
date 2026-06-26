@@ -3,7 +3,7 @@ local rro = Muluna.rro
 local turbine =data.raw["generator"]["steam-turbine"]
 local fusion_generator = data.raw["fusion-generator"]["fusion-generator"]
 
-local recycling_turbine=util.merge{table.deepcopy(fusion_generator),
+local recycling_turbine=rro.merge(table.deepcopy(fusion_generator),
 
     {
         name = "muluna-cycling-steam-turbine",
@@ -12,9 +12,10 @@ local recycling_turbine=util.merge{table.deepcopy(fusion_generator),
         selection_box = {{-1.5, -3.5}, {1.5, 3.5}},
         icon = "__muluna-graphics__/graphics/icons/advanced-steam-turbine.png",
         icon_size = 64,
+        next_upgrade = "_nil"
     }
 
-}
+)
 
 recycling_turbine.input_fluid_box = util.merge{table.deepcopy(recycling_turbine.input_fluid_box),
     {
@@ -47,6 +48,7 @@ recycling_turbine.output_fluid_box = util.merge{table.deepcopy(recycling_turbine
         
     }
 }
+recycling_turbine.heating_energy = "75kW"
 if mods["maraxsis"] then
     recycling_turbine.maraxsis_buildability_rules = {water = false, dome = true, coral = false, trench = true, trench_entrance = false, trench_lava = false}
 end
@@ -95,7 +97,9 @@ recycling_turbine.input_fluid_box.pipe_covers = pipecoverspictures()
 
 recycling_turbine.factoriopedia_description = nil
 
-
+if helpers.compare_versions(helpers.game_version,"2.0.67") >= 0 then
+    
+end
 
 data:extend{recycling_turbine,cooled_steam}
 

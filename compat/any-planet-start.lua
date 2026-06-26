@@ -37,7 +37,7 @@ local function delete_tech(deleted_tech,new_tech)
     data.raw["technology"][deleted_tech] = nil
     
     for _,technology in pairs(data.raw["technology"]) do
-        rro.remove(technology.prerequisites,deleted_tech)
+        rro.replace(technology.prerequisites,deleted_tech,new_tech)
     end
 end
 
@@ -45,6 +45,7 @@ end
 if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then
     for control_name,control in pairs(data.raw["autoplace-control"]) do
         if not rro.contains(table.keys(data.raw["planet"]["muluna"].map_gen_settings.autoplace_controls),control_name) then
+            if not control.order then control.order = "" end
             control.order = "ab" .. control.order
         end
     end
@@ -53,9 +54,9 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         
     -- end
 
-    if mods["aai-industry"] then
-        error("\n\nAAI Industry is incompatible with Muluna start.\n")
-    end
+    -- if mods["aai-industry"] then
+    --     error("\n\nAAI Industry is incompatible with Muluna start.\n")
+    -- end
     --assert(settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == false,{"console.muluna-incompatible-aps-setting"})
     if data.raw["technology"]["electronics"].research_trigger then
         data.raw["technology"]["electronics"].research_trigger.item="aluminum-plate"
@@ -72,13 +73,29 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         type = "unlock-recipe",
         recipe = "automation-science-pack-muluna",
     })
+    if mods["aai-industry"] then
+        local burner_lab = table.deepcopy(data.raw["recipe"]["burner-lab"])
+        burner_lab.name = "burner-lab-muluna"
+        rro.deep_replace(burner_lab,"copper-plate","aluminum-plate")
+        burner_lab.localised_name = {"recipe-name.x-from-aluminum",{"item-name.burner-lab"}}
+        burner_lab.icons=dual_icon("burner-lab","aluminum-plate")
+        data:extend{burner_lab}
+        rro.soft_insert(data.raw["technology"]["electric-lab"].effects,
+        {
+            type = "unlock-recipe",
+            recipe = burner_lab.name,
+        })
+    end
+
     --rro.replace_name(data.raw["recipe"]["electric-furnace"].ingredients,"advanced-circuit","electronic-circuit")
     --data.raw["recipe"]["electric-furnace"].enabled = true
     --data.raw["recipe"]["electric-mining-drill"].enabled = true
     --data.raw["recipe"]["steel"].enabled = true
     
-    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack",1})
-    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"chemical-science-pack",1})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack","_any"})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"chemical-science-pack","_any"})
+    rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"production-science-pack","chemical-science-pack")
+    --rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"chemical-science-pack","logistic-science-pack")
     --rro.soft_insert(data.raw["technology"]["steam-power"].prerequisites,"metallic-asteroid-crushing")
     table.insert(data.raw["technology"]["muluna-greenhouses"].prerequisites,"lamp")
     if data.raw["technology"]["steam-power"].prerequisites == nil then
@@ -137,4 +154,10 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         end
             
     end
-  end
+    if mods["Krastorio2-spaced-out"] then
+        delete_tech("kr-advanced-chemistry","muluna-oxygen")
+        data.raw["technology"]["kr-fluid-excess-handling"].prerequisites = {"muluna-gas-venting"}
+        data.raw["technology"]["kr-fluid-excess-handling"].research_trigger = {type = "craft-item",item="iron-plate"}
+        data.raw["technology"]["kr-fluid-excess-handling"].unit = nil
+    end
+end

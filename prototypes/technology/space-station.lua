@@ -1,5 +1,7 @@
 local rro = Muluna.rro
 
+local scripted_triggers = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
+
 local function technology_icon_constant_productivity(technology_icon,new_icon_size)
     local icon_size = new_icon_size or 256
     local icons =
@@ -275,9 +277,10 @@ data:extend{
         type = "technology",
         name = "metallic-asteroid-crushing",
         localised_name = {"recipe-name.metallic-asteroid-crushing"},
+        localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
-            entity = "metallic-asteroid-chunk"
+            entities = {"metallic-asteroid-chunk"}
         },
         --localised_name = {"item-name.crusher"},
         --localised_description = {"entity-description.crusher"},
@@ -390,9 +393,10 @@ data:extend{
         type = "technology",
         name = "oxide-asteroid-crushing",
         localised_name = {"recipe-name.oxide-asteroid-crushing"},
+        localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
-            entity = "oxide-asteroid-chunk"
+            entities = {"oxide-asteroid-chunk"}
         },
         effects = {
             {
@@ -420,7 +424,7 @@ data:extend{
         name = "muluna-anorthite-processing",
         research_trigger = {
             type = "mine-entity",
-            entity = "anorthite-chunk"
+            entities = {"anorthite-chunk"}
         },
         effects = {
             {
@@ -673,7 +677,7 @@ data:extend{
             },
             {
                 type = "unlock-recipe",
-                recipe="wood-processing"
+                recipe="tree-seed"
             },
             
             
@@ -750,10 +754,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "oxygen-venting"
             },
-            -- {
-            --     type = "unlock-recipe",
-            --     recipe = "hydrogen-venting"
-            -- },
+            mods["maraxsis"] and {
+                type = "unlock-recipe",
+                recipe = "hydrogen-venting"
+            } or nil,
         }
     },
     {
@@ -839,6 +843,50 @@ data:extend{
         },
         localised_name={"entity-name.muluna-telescope"},
         localised_description={"entity-description.muluna-telescope"}
+    },
+    {
+        type = "technology",
+        name = "muluna-space-telescope",
+        unit = {
+            count = 3000,
+            time = 30,
+            ingredients = {
+                    
+            }
+        },
+        ignore_tech_cost_multiplier = true,
+        prerequisites = {
+            "promethium-science-pack",
+            "space-science-pack",
+            --"muluna-nanofoamed-polymers",
+            "utility-science-pack",
+        },
+        icons = {
+            {
+                icon = "__space-exploration-graphics__/graphics/technology/telescope.png",
+                icon_size = 128,
+            },  
+            {
+                icon = data.raw["item"]["promethium-asteroid-chunk"].icon,
+                icon_size=data.raw["item"]["promethium-asteroid-chunk"].icon_size,
+                --scale=0.3,
+                shift = {45,45},
+                scale=0.75,
+            },
+        
+        },
+        --icons = Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope.png",icon_size = 128}},8),
+        --icon = "__muluna-graphics__/graphics/technology/moshine-tech-silicon-cell.png",
+        --icon_size = 128,
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-telescope-observation-space-platform",
+            },
+            -- All telescope observation recipes added in final-fixes
+        },
+        --localised_name={"entity-name.muluna-telescope"},
+        --localised_description={"entity-description.muluna-telescope"}
     },
     {
         type = "technology",
@@ -1107,7 +1155,7 @@ data:extend{
     {
         type = "technology",
         name = "advanced-space-science-pack",
-        prerequisites = {"interstellar-science-pack","space-science-pack","production-science-pack","utility-science-pack"},
+        prerequisites = {"interstellar-science-pack","space-science-pack","production-science-pack","utility-science-pack","agricultural-science-pack","electromagnetic-science-pack"},
         icons = {
             {
                 icon = data.raw["technology"]["space-science-pack"].icon,
@@ -1175,8 +1223,8 @@ data:extend{
                 icon_size = 256
             },  
             {
-                icon = data.raw["item"]["tungsten-plate"].icon,
-                icon_size=data.raw["item"]["tungsten-plate"].icon_size,
+                icon = data.raw["item"]["tungsten-plate"].icon or  "__space-age__/graphics/icons/tungsten-plate.png",
+                icon_size=data.raw["item"]["tungsten-plate"].icon_size or 64,
                 --scale=0.3,
                 shift = {45,45},
                 scale=0.75,
@@ -1197,9 +1245,10 @@ data:extend{
         type = "technology",
         name = "carbonic-asteroid-crushing",
         localised_name = {"recipe-name.carbonic-asteroid-crushing"},
+        localised_description={"technology-description.x-asteroid-crushing"},
         research_trigger = {
             type = "mine-entity",
-            entity = "carbonic-asteroid-chunk"
+            entities = {"carbonic-asteroid-chunk"}
         },
         prerequisites = {
             "planet-discovery-muluna"
@@ -1319,11 +1368,6 @@ data:extend{
         },
         enabled = false,
         visible_when_disabled = true,
-        unit = {
-            count = 1,
-            time = 1,
-            ingredients = {}
-        },
         prerequisites = {
             --"kovarex-enrichment-process",
             --"muluna-anorthite-processing",
@@ -1357,7 +1401,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack","quality-module-3"
+            "interstellar-science-pack","electromagnetic-science-pack","metallurgic-science-pack",mods["quality"] and "quality-module-3" or nil
         },
         effects = {
             {
@@ -1638,7 +1682,8 @@ local function add_space(tech)
     rro.soft_insert(tech.prerequisites,"space-science-pack")
     if tech.unit then
         rro.soft_insert(tech.unit.ingredients,{"space-science-pack",1})
-    
+        rro.remove(tech.unit.ingredients,{"production-science-pack","_any"})
+        rro.remove(tech.prerequisites,"production-science-pack")
     else
         tech.unit = {
                     count = 100,

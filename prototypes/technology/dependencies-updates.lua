@@ -76,7 +76,11 @@ local space_platform=data.raw["technology"]["space-platform"]
 if settings.startup["muluna-easy-revert-changes-to-space-platform-technology"].value == true then
 
 else
-    space_platform.effects = {}
+    for _,recipe in pairs({"asteroid-collector","crusher","metallic-asteroid-crushing","oxide-asteroid-crushing","carbonic-asteroid-crushing"}) do
+        rro.remove(space_platform.effects,{type = "unlock-recipe",recipe = recipe})
+    end
+    
+    --space_platform.effects = {}
 end
 -- end
 
@@ -139,7 +143,7 @@ data.raw["recipe"]["advanced-wood-gasification"].allow_productivity = true
 data.raw["technology"]["wood-gas-processing"].unit = nil
 data.raw["technology"]["wood-gas-processing"].research_trigger = {
     type="mine-entity",
-    entity="lunar-rock"
+    entities={"lunar-rock"}
 }
 data.raw["technology"]["advanced-wood-gas-processing"].unit = {
     count = 500,
@@ -154,6 +158,13 @@ data.raw["technology"]["advanced-wood-gas-processing"].unit = {
         --{"interstellar-science-pack",1},
     }
 }
+
+rro.soft_insert(data.raw["technology"]["advanced-wood-gas-processing"].prerequisites,"production-science-pack")
+rro.soft_insert(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"production-science-pack")
+rro.soft_insert(data.raw["technology"]["advanced-wood-gas-processing"].prerequisites,"space-science-pack")
+rro.soft_insert(data.raw["technology"]["wood-gas-processing-to-crude-oil"].prerequisites,"space-science-pack")
+rro.soft_insert(data.raw["technology"]["advanced-wood-gas-processing"].prerequisites,"utility-science-pack")
+
 data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit = {
     count = 500,
     time = 60,
@@ -236,7 +247,7 @@ for _,item in pairs(muluna_imports) do
 end
 
 
-data.raw["tool"]["space-science-pack"].default_import_location = "muluna"
+data.raw["item"]["space-science-pack"].default_import_location = "muluna"
 
 data.raw["item"]["copper-cable"].localised_name = {"item-name.copper-cable"}
 
@@ -244,14 +255,14 @@ data.raw["item"]["copper-cable"].localised_name = {"item-name.copper-cable"}
 rro.soft_insert(data.raw["technology"]["coal-liquefaction"].effects, {type = "unlock-recipe", recipe = "coal-synthesis"})
 
 if settings.startup["muluna-hardcore-restrict-crusher"].value == true then
-    data.raw["recipe"]["crusher"].surface_conditions = {{property = "oxygen", max = 0, min = 0},{property = "gravity", max = 0.1, min = 0.1}}
+    data.raw["recipe"]["crusher"].surface_conditions = {{property = "oxygen", max = 0, min = 0},{property = "gravity", max = 2, min = 2}}
     table.insert(data.raw["recipe"]["crusher"].ingredients, {type = "item", name = "aluminum-plate", amount = 10})
     data.raw["item"]["crusher"].default_import_location = "muluna"
 end
 
 
 if settings.startup["muluna-hardcore-restrict-asteroid-collector"].value == true then
-    data.raw["recipe"]["asteroid-collector"].surface_conditions = {{property = "oxygen", max = 0, min = 0},{property = "gravity", max = 0.1, min = 0.1}}
+    data.raw["recipe"]["asteroid-collector"].surface_conditions = {{property = "oxygen", max = 0, min = 0},{property = "gravity", max = 2, min = 2}}
     table.insert(data.raw["recipe"]["asteroid-collector"].ingredients, {type = "item", name = "aluminum-plate", amount = 10})
     data.raw["item"]["asteroid-collector"].default_import_location = "muluna"
 end

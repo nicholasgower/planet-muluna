@@ -13,14 +13,14 @@ local function dynamic_interstellar_pack_icon(pack1,pack2)
             icon_size = 256,
         },
         {
-            icon = data.raw["tool"][pack1].icon or data.raw["tool"]["interstellar-science-pack"].icon,
-            icon_size = data.raw["tool"][pack1].icon_size or data.raw["tool"]["interstellar-science-pack"].icon_size,
+            icon = data.raw["item"][pack1].icon or data.raw["item"]["interstellar-science-pack"].icon,
+            icon_size = data.raw["item"][pack1].icon_size or data.raw["item"]["interstellar-science-pack"].icon_size,
             shift = {35,-35},
             scale=0.75,
         },
         {
-            icon = data.raw["tool"][pack2].icon or data.raw["tool"]["interstellar-science-pack"].icon,
-            icon_size=data.raw["tool"][pack2].icon_size or data.raw["tool"]["interstellar-science-pack"].icon_size,
+            icon = data.raw["item"][pack2].icon or data.raw["item"]["interstellar-science-pack"].icon,
+            icon_size=data.raw["item"][pack2].icon_size or data.raw["item"]["interstellar-science-pack"].icon_size,
             --scale=0.3,
             shift = {-35,-35},
             scale=0.75,
@@ -89,9 +89,9 @@ local special_cases = {
 
 
 for _,pack in pairs(possible_science_packs) do 
-    if data.raw["tool"][pack] then
+    if data.raw["item"][pack] then
         table.insert(science_packs,pack)
-    elseif data.raw["tool"][special_cases[pack]] then
+    elseif data.raw["item"][special_cases[pack]] then
         table.insert(science_packs,special_cases[pack])
     end
 end

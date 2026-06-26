@@ -8,8 +8,12 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=true}
 end
 
-local function get_telescope_build_limit(force)
-    return 1
+local function get_telescope_build_limit(entity)
+    if entity.surface.platform then
+        return nil
+    else
+        return 1
+    end
 
 end
 
@@ -18,15 +22,19 @@ local function same_surface_properties(surface1,planet)
     for _,property in pairs({"pressure","gravity","temperature","magnetic-field"}) do
         
         if (surface1.get_property(property) or prototypes.surface_property[property].default_value) ~= (planet.surface_properties[property] or prototypes.surface_property[property].default_value) then
-            game.print(property .. " " .. planet.name or "nil" .. " " .. tostring(planet.surface_properties[property]) .. tostring(surface1.get_property(property)))
-            game.print(tostring(planet.surface_properties[property]))
-            game.print(tostring(surface1.get_property(property)))
+            --game.print(property .. " " .. planet.name or "nil" .. " " .. tostring(planet.surface_properties[property]) .. tostring(surface1.get_property(property)))
+            --game.print(tostring(planet.surface_properties[property]))
+            --game.print(tostring(surface1.get_property(property)))
             return false
         end
     end
     return true
 end
-
+local telescope_filters = {}
+for entity_name,machine in pairs(heat_assembling_machines) do
+    table.insert(telescope_filters,{filter = "name", name = entity_name})
+    table.insert(telescope_filters,{filter = "ghost_name", name = entity_name})
+end
 Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     if not storage.telescopes then storage.telescopes = {} end
     local entity = event.entity
@@ -46,9 +54,25 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     -- end
     local reactor = nil
     if is_heat_assembling_machine then
-        local telescope_build_limit = get_telescope_build_limit(entity.force)
-        local count = rro.count(storage.telescopes,function(entry) return entry["assembling-machine"].valid and entry["assembling-machine"].surface == entity.surface end)
-        if count >= telescope_build_limit then --Forbid building if count exceeded.
+        local telescope_build_limit = get_telescope_build_limit(entity)
+        local builder
+        if event.player_index then
+            builder = game.players[event.player_index]
+        elseif event.robot then
+            builder = event.robot
+        elseif event.platform then
+            builder = event.platform
+        else
+            error("Ghost telescope placed by entity that is neither a player nor robot.")
+        end
+        
+        local builder_force_index = builder.force.index
+        local count = rro.count(
+                storage.telescopes,function(entry) 
+                return entry["assembling-machine"].valid and 
+                entry["assembling-machine"].surface == entity.surface and 
+                entry["assembling-machine"].force.index == builder_force_index end)
+        if telescope_build_limit and count >= telescope_build_limit then --Forbid building if count exceeded.
             local position = entity.position
             local surface = entity.surface
             
@@ -100,15 +124,17 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
                     speed = 0.01,
                 }
             else
-                entity.force.print({"",text," ",entity.position})
+                entity.force.print({"",text," ",entity.gps_tag})
             end
             entity.destroy{}
             return 
         end
 
         local recipe_name
+        local lock = true
         if entity.surface.platform then
-            
+            --recipe_name = "muluna-telescope-observation-space-platform"
+            lock = false
         elseif string.find(entity.surface.name,"bpsb") then --If surface is a blueprint sandbox
             for _,planet in pairs(prototypes.space_location) do
                 if planet.type == "planet" and same_surface_properties(entity.surface,planet) then
@@ -123,7 +149,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             entity.set_recipe(recipe_name,"normal")
         end
         
-        entity.recipe_locked = true
+        entity.recipe_locked = lock
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["constant-combinator"],
             position = entity.position,
@@ -138,14 +164,15 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         local control_behavior = reactor.get_control_behavior()
         control_behavior.enabled = false
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
-        reactor.fluidbox.add_linked_connection(1,entity,1) 
+        reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         
         storage.telescopes[entity.unit_number] = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior}
     end
 
 
-end
+end,
+telescope_filters
 )
 
 
@@ -200,7 +227,8 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         -- }
     end
 
-end)
+end,
+telescope_filters)
 
 Muluna.events.on_event({defines.events.on_player_rotated_entity}, function(event)
 
@@ -252,8 +280,10 @@ local platform_list_signals = {}
 for _,signal in pairs(prototypes.virtual_signal) do
     table.insert(platform_list_signals,signal.name)
 end
-local experimental = helpers.compare_versions(helpers.game_version,"2.0.64") >= 0
+local experimental = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
+local debug = false
 local function get_telescope_combinator_signals(surface,force) --Intended to be memoized with cache resetting every on_nth_tick event
+    if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
     local signals = {}
     local i = 1
     if surface.planet then
@@ -264,6 +294,7 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
         -- Rare quality: Can leave_current_location (1 or 2) (https://lua-api.factorio.com/latest/classes/LuaSpacePlatform.html#can_leave_current_location)
         local space_platforms = {}
         if experimental then
+            if debug then log("planet.get_space_platforms(" .. force.name .. ")") end
             space_platforms = planet.get_space_platforms(force)
         else
             for j,platform in pairs(force.platforms) do
@@ -272,11 +303,13 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
                 end
             end
         end
+        
         for j,space_platform in ipairs(space_platforms) do
-            local signal = platform_list_signals[j]
+            local signal = platform_list_signals[j+3]
             if signal then
                 signals[i]={value = {type = "virtual",name = signal,quality = "normal"},min= space_platform.index}
                 i = i+1
+                if debug then log("space_platform.state") end
                 signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer(space_platform.state)}
                 i = i+1
                 signals[i]={value = {type = "virtual",name = signal,quality = "rare"},min= bool_to_int(space_platform.can_leave_current_location())}
@@ -330,12 +363,17 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
             if combinator.valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
+                    local cached_signals = telescope.cached_signals or {} 
                     local signals = get_telescope_combinator_signals(combinator.surface,combinator.force)
-                    combinator_behavior.remove_section(1)
-                    local section = combinator_behavior.add_section()
-                    for i,signal in ipairs(signals) do
-                        section.set_slot(i,signal)
+                    if not rro.deep_equals(signals,cached_signals) then
+                        combinator_behavior.remove_section(1)
+                        local section = combinator_behavior.add_section()
+                        for i,signal in ipairs(signals) do
+                            section.set_slot(i,signal)
+                        end
                     end
+                    
+                    telescope.cached_signals = signals
                 end
             end
     end

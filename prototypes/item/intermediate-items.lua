@@ -175,7 +175,7 @@ data:extend{{
         {
             icon = "__muluna-graphics__/graphics/icons/plastic-bar-flipped.png",
             icon_size = 64,
-            tint = {150,150,0,255},
+            tint = {140,140,0,245},
             draw_background = true,
         }
     }
@@ -196,7 +196,7 @@ data:extend{{
         {
             icon = data.raw["item"]["plastic-bar"].icon,
             icon_size = 64,
-            tint = {150,150,0,255},
+            tint = {200,200,0,255},
             draw_background = true,
         }
     }
@@ -345,9 +345,19 @@ data:extend{{
   }}
 end
 
-if data.raw["tool"]["hard-drive"] then
-    data.raw["tool"]["hard-drive"].data_capacity = 1000
+if data.raw["item"]["hard-drive"] then
+    data.raw["item"]["hard-drive"].data_capacity = 1000
 end
+
+if data.raw["item"]["datacell-empty"] then
+    data.raw["item"]["datacell-empty"].data_capacity = 1000
+end
+
+if data.raw["tool"] and data.raw["tool"]["datacell-empty"] then
+    data.raw["tool"]["datacell-empty"].data_capacity = 1000
+end
+
+
 
 
 -- rro.soft_insert(data.raw["tree"]["tree-01"].flags,"placeable-player")

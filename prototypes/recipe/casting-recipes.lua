@@ -7,6 +7,7 @@ local function replace_metal(old_string)
     
     new_string = string.gsub(new_string,old_metal,new_metal,1)
     if new_string == "crushed-aluminum-ore" then new_string = "alumina-crushed" end
+    if new_string == "ei-enriched-aluminum-ore" then new_string = "alumina-crushed" end
     if new_string == "aluminum-ore" then new_string = "alumina" end
     if new_string == "aluminum-cable" then new_string = "copper-cable" end
     return new_string
@@ -43,7 +44,7 @@ end
 local old_recipes = 
 
 {
-    "molten-copper",
+    "copper-ore-melting",
     "casting-copper",
     "casting-copper-cable",
     "casting-low-density-structure"
@@ -54,8 +55,8 @@ for _,recipe_name in pairs(old_recipes) do
     if data.raw["recipe"][recipe_name] then
         recipe = data.raw["recipe"][recipe_name]
     end
-    
-    if recipe.category == "metallurgy" then
+    assert(data.raw["recipe"][recipe_name],recipe)
+    if rro.contains(recipe.categories,"metallurgy") then
         local new_recipe = table.deepcopy(recipe)
         new_recipe.hide_from_signal_gui = false
         if string.find(new_recipe.name, old_metal) then
@@ -84,31 +85,35 @@ for _,recipe_name in pairs(old_recipes) do
                     recipe = new_recipe.name
                 }
                 )
+            else
         end
     end
 
     
-        if data.raw["fluid"][recipe_name] then
-            local new_fluid = table.deepcopy(data.raw["fluid"][recipe_name])
+        
+end
+
+if data.raw["fluid"]["molten-copper"] then
+            local new_fluid = table.deepcopy(data.raw["fluid"]["molten-copper"])
             if string.find(new_fluid.name,old_metal) then
                 new_fluid.name = replace_metal(new_fluid.name)
             else
-                new_fluid.name = new_fluid.name .. "-" .. new_metal
+                new_fluid.name = "molten-aluminum"
             end
             data:extend{new_fluid}
         end
-end
 
 data.raw["fluid"]["molten-aluminum"].icon = "__muluna-graphics__/graphics/icons/molten-aluminum.png"
 data.raw["fluid"]["molten-aluminum"].order = "b[new-fluid]-b[vulcanus]-ba[molten-aluminum]"
 data.raw["recipe"]["casting-aluminum"].order = "b[casting]-ba[casting-aluminum]"
 data.raw["recipe"]["casting-low-density-structure-aluminum"].order = "b[casting]-fa[low-density-structure]"
 data.raw["recipe"]["casting-aluminum-cable"].order = "b[casting]-ha[casting-aluminum-cable]"
-table.insert(data.raw["recipe"]["molten-aluminum"].results,{type = "fluid", name = "oxygen", amount = 750})
+table.insert(data.raw["recipe"]["aluminum-ore-melting"].results,{type = "fluid", name = "oxygen", amount = 750})
 data.raw["fluid"]["molten-aluminum"].base_color = {0.7,0.7,0.7}
 data.raw["fluid"]["molten-aluminum"].flow_color = {0.7,0.7,0.7}
-data.raw["recipe"]["molten-aluminum"].icons = melting_icon(data.raw["fluid"]["molten-aluminum"].icon,data.raw["item"]["alumina"].icon)
-data.raw["recipe"]["molten-aluminum"].localised_name = {"recipe-name.molten-aluminum"}
+data.raw["recipe"]["aluminum-ore-melting"].icons = melting_icon(data.raw["fluid"]["molten-aluminum"].icon,data.raw["item"]["alumina"].icon)
+data.raw["recipe"]["aluminum-ore-melting"].localised_name = {"recipe-name.molten-aluminum"}
+data.raw["recipe"]["aluminum-ore-melting"].order = "b[new-fluid]-b[vulcanus]-ba[molten-aluminum]"
 data.raw["recipe"]["casting-aluminum-cable"].icons = dual_icon("copper-cable","molten-aluminum") --{
 
     -- {

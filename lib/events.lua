@@ -10,24 +10,49 @@ Public.on_event = function(event, f,filters)
 	for _, event in pairs(type(event) == "table" and event or {event}) do
 		event = tostring(event)
 		events[event] = events[event] or {}
-		table.insert(events[event], f)
+		table.insert(events[event], {cached_function = f,filters = filters})
 	end
 end
 
 Public.on_nth_tick = function(event, f)
 	events[event] = events[event] or {}
-	table.insert(events[event], f)
+	table.insert(events[event], {cached_function = f,filters = nil})
 end
 
-local function one_function_from_many(functions)
+local function one_function_from_many(functions,event_handler)
 	local l = #functions
-	if l == 1 then return functions[1] end
-
-	return function(arg)
-		for i = 1, l do
-			functions[i](arg)
+	if l == 1 then return {functions[1].cached_function,functions[1].filters} end
+	local filters = {}
+	local every_function_has_filter = true
+	local some_functions_have_filters = false
+	for _,func in pairs(functions) do
+		local force_or = true --First rule of every filter must be "or" to properly work with filters from other events.
+		if func.filters then
+			some_functions_have_filters = true
+			for _,filter in pairs(func.filters) do
+				if force_or then
+					filter.mode = "or"
+					force_or = false
+				end
+				table.insert(filters,filter)
+			end
+		else
+			every_function_has_filter = false --If not all functions of a type has a filter, none can work properly.
 		end
+		
 	end
+	if some_functions_have_filters and not every_function_has_filter then
+		error("Some, but not all events with event type ".. event_handler.." have a filter!\n" .. serpent.block(functions))
+	end
+	return {function(arg)
+		for i = 1, l do
+			local func_to_run = functions[i].cached_function
+			func_to_run(arg)
+		end
+	end,
+	every_function_has_filter and filters or nil
+
+	}
 end
 
 local powers_of_two = {}
@@ -40,14 +65,18 @@ Public.finalize_events = function()
 	if finalized then error("Events already finalized") end
 	local i = 0
 	for event, functions in pairs(events) do
-		local f = one_function_from_many(functions)
+		local func_and_filter = one_function_from_many(functions,event)
+		local f = func_and_filter[1]
+		local filter = func_and_filter[2]
 		if type(event) == "number" then
 			script.on_nth_tick(event, f)
 		elseif event == Public.events.on_init() then
 			script.on_init(f)
 			script.on_configuration_changed(f)
-		else
+		elseif event == tonumber(defines.events.on_biter_base_built) then
 			script.on_event(tonumber(event) or event, f)
+		else
+			script.on_event(tonumber(event) or event, f,filter)
 		end
 		i = i + 1
 	end
@@ -144,7 +173,7 @@ Public.events = {
 			defines.events.script_raised_built,
 			defines.events.script_raised_revive,
 			defines.events.on_space_platform_built_entity,
-			defines.events.on_biter_base_built
+			--defines.events.on_biter_base_built
 		}
 	end,
 	--- Called after the results of an entity being mined are collected just before the entity is destroyed. [...]

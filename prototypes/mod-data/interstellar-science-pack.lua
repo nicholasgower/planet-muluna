@@ -26,7 +26,28 @@ local possible_science_packs = --Science pack technologies
     "tiberium-mechanical-research",
     "moshine-tech-ai-trainer",
     "pelagos-science-pack",
+    "carnal-science-pack",
+    "foliax-welcome",
+    "arboric-science-pack",
+    "planetaris-compression-science",
+    "athletic-science-pack",
+    "linox-technology_linox-supercomputer",
+    "lead-and-gold-tech",
+    "s6x-void-science-pack",
+    "apicultural-science-pack",
+    "vanadium-science-pack",
+    "planet-crucible-science-pack",
+    "planetaris-bioengineering-science-pack",
+    "velora-science-pack",
+    "halo-science-pack",
+    "abacayba_ominous_science_pack_tech",
+    "environment-research-center",
+    "s6x-iridescent-science-pack",
 }
+
+if mods["panglia_planet"] then
+    table.insert(possible_science_packs,"cloning-vat-technology")
+end
 
 -- Other mods can use the field "muluna_adds_progress_to_exploration_science_pack" to make a technology contribute progress to the exploration science pack.
 for _,tech in pairs(data.raw["technology"]) do

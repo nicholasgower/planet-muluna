@@ -6,6 +6,23 @@ local spawn_distance = 128
 
 local cargo_drop_radius = settings.startup["muluna-balance-fulgoran-cargo-drop-radius"].value
 local item_multiplier = settings.startup["muluna-balance-fulgoran-cargo-drop-item-multiplier"].value
+
+
+local modded_cargo_drop_spawns_imports = Muluna.constants.cargo_drop_spawn_imports
+local modded_cargo_drop_spawns = {}
+
+for _,import in pairs(modded_cargo_drop_spawns_imports) do
+    local imported = require(import)
+    if type(imported[1]) == "table" then
+        for _,entry in pairs(imported) do
+            table.insert(modded_cargo_drop_spawns,entry)
+        end
+    else
+        table.insert(modded_cargo_drop_spawns,imported)
+    end
+    
+end
+
 local function random_place(surface,item_name,item_count)
     local item_count_adjusted = item_count * item_multiplier
     --if item_count == nil then item_count = 1 end
@@ -17,7 +34,9 @@ local function random_place(surface,item_name,item_count)
         entity.position[2] = entity.position[2] + math.random(-8,8) 
     end
     local chest = surface.create_entity(entity)
-    chest.get_output_inventory().insert({name = item_name,count = math.floor(item_count_adjusted) or 1})
+    local amount = math.floor(item_count_adjusted) or 1
+    if amount <= 0 then amount = 1 end
+    chest.get_output_inventory().insert({name = item_name,count = amount})
 end
 
 local function random_place_entity(surface,entity_name)
@@ -38,67 +57,22 @@ local function place_muluna_cargo_pods()
     -- game.print("Muluna created")
     local muluna = game.planets["muluna"].surface
         
-    -- for i = 1,math.random(3,5) do
-    --     random_place(muluna,"steam-crusher",math.random(3,5))
-    -- end
-    for i = 1,math.random(3,5) do
-        random_place(muluna,"engine-unit",math.random(5,10)+math.random(5,10))
-    end
-    for i = 1,math.random(3,5) do
-        random_place(muluna,"steel-plate",math.random(5,10)+math.random(5,10))
-    end
-    for i = 1,math.random(3,5) do
-        random_place(muluna,"plastic-bar",math.random(20,40))
-    end
-    for i = 1,math.random(2,4) do
-        random_place(muluna,"electric-furnace",math.random(3,5))
-    end
-    for i = 1,math.random(2,4) do
-        random_place(muluna,"electric-mining-drill",math.random(3,6))
-    end
-    for i = 1,math.random(1,2) do
-        random_place(muluna,"pipe",math.random(20,40))
-    end
-    for i = 1,2 do
-        random_place(muluna,"pipe-to-ground",math.random(4,10))
-    end
-    for i = 1,math.random(2,4) do
-        random_place(muluna,"chemical-plant",math.random(3,6))
-    end
-    for i = 1,math.random(1,3) do
-        random_place(muluna,"solar-panel",math.random(3,10))
-    end
-    for i = 1,math.random(1,3) do
-        random_place(muluna,"medium-electric-pole",math.random(3,10))
-    end
-    for i = 1,1 do
-        random_place(muluna,"tungsten-plate",math.random(2,5)+math.random(2,5))
-    end
-    for i = 1,2 do
-        random_place(muluna,"holmium-plate",math.random(2,5)+math.random(2,5))
-    end
-    for i = 1,2 do
-        random_place(muluna,"superconductor",math.random(2,5)+math.random(2,5))
-    end
-    for i = 1,1 do
-        random_place(muluna,"carbon-fiber",math.random(2,5)+math.random(2,5))
-    end
-    for i = 1,math.random(3,7) do
-        random_place(muluna,"spoilage",math.random(20,50)+math.random(20,50))
+    
+    for _,spawn in pairs(modded_cargo_drop_spawns) do
+        --local spawn = require(spawn_import)
+        for i = 1,spawn.pod_count() do
+            if prototypes.get_item_filtered{{filter = "name",name = spawn.item}} then
+                random_place(muluna,spawn.item,spawn.item_quantity())
+            else
+                game.print("Warning: Muluna tried to spawn item ".. item ..", but it was removed by another mod.")
+            end
+            
+        end
     end
     local mods = script.active_mods
-    local mod_list = { --A bunch of items from various mods to make it seem like many years ago, an ancient Fulgoran ship dropped a bunch of cargo in this area.
-        moshine = "moshine-tech-magnet",
-        maraxsis = "maraxsis-wyrm-specimen",
-        corrundum = "platinum-plate",
-        secretas = "gold-plate",
-        tenebris = "quartz-crystal",
-        ["tenebris-prime"] = "quartz-crystal",
-        --janus = "janus-shiftite-alpha",
-        castra = "nickel-plate",
-        ["dea-dia-system"] = "fossil",
-        terrapalus = "palusium-plate"
-    }
+    local mod_list = Muluna.constants.cargo_drop_rare_drops --A bunch of items from various mods to make it seem like many years ago, an ancient Fulgoran ship dropped a bunch of cargo in this area.
+        
+    
     for mod,item in pairs(mod_list) do
         if mods[mod] and math.random(1,10)>3 then
             for i = 1,1 do
@@ -109,17 +83,9 @@ local function place_muluna_cargo_pods()
     if mods["moshine"] then
         
     end
-    for i = 1,10 do
-        random_place_entity(muluna,"lunar-rock")
-    end
 
 
-    for i = 1,4 do
-        random_place(muluna,"tree-seed",math.random(2,6)+math.random(3,7))
-    end
-    for i = 1,1 do
-        random_place(muluna,"wood",math.random(5,12)+math.random(5,13))
-    end
+    
     local random_chance_table = {
         {"foundry",2,1},
         {"electromagnetic-plant",4,1},
@@ -170,8 +136,13 @@ function Public.on_new_surface(muluna_index)
                 game.print({"console.muluna-incompatible-aps-setting"})
             end
         end
+        
         if settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == false then
             place_muluna_cargo_pods()  
+        end
+        local muluna = game.planets["muluna"].surface
+        for i = 1,10 do
+            random_place_entity(muluna,"lunar-rock")
         end
         
         

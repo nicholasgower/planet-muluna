@@ -1,7 +1,7 @@
 local rro = Muluna.rro
 for _,tech in pairs(data.raw["technology"]) do
     if tech.prerequisites then
-        rro.replace(tech.prerequisites,"space-platform-thruster","space-science-pack")
+        rro.replace_no_duplicates(tech.prerequisites,"space-platform-thruster","space-science-pack")
     end
     
 end

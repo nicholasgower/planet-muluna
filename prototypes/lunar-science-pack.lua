@@ -2,7 +2,7 @@ local rro = Muluna.rro
 
 local dual_icon = require("lib.dual-item-icon").dual_icon
 --local  = Muluna.rro
-local i_lunar_pack = table.deepcopy(data.raw["tool"]["space-science-pack"])
+local i_lunar_pack = table.deepcopy(data.raw["item"]["space-science-pack"])
 
 local r_lunar_pack = table.deepcopy(data.raw["recipe"]["space-science-pack"])
 
@@ -20,7 +20,7 @@ end
 
 
 i_lunar_pack.name = "interstellar-science-pack"
-i_lunar_pack.default_import_location = "muluna"
+i_lunar_pack.default_import_location = "muluna" 
 i_lunar_pack.icon = "__muluna-graphics__/graphics/icons/space-science-pack.png"
 i_lunar_pack.localised_description = {"item-description.science-pack"}
 
@@ -49,28 +49,28 @@ t_lunar_pack.icon = "__muluna-graphics__/graphics/technology/space-science-pack.
 t_lunar_pack.visible_when_disabled = true
 
 i_lunar_pack.order = "j[interstellar-science-pack]"
-if data.raw["tool"]["hydraulic-science-pack"] then
-    data.raw["tool"]["hydraulic-science-pack"].order = data.raw["tool"]["hydraulic-science-pack"].order .. "a"
+if data.raw["item"]["hydraulic-science-pack"] then
+    data.raw["item"]["hydraulic-science-pack"].order = data.raw["item"]["hydraulic-science-pack"].order .. "a"
 end
 
 
 
 r_lunar_pack.main_product = "interstellar-science-pack"
-r_lunar_pack.category = "crafting-with-fluid-and-data"
+r_lunar_pack.categories = {"crafting-with-fluid-and-data"}
 
 
 if true or settings.startup["muluna-old-interstellar-pack-recipe"].value == false then
-    --r_lunar_pack.category = "double-boiler"
+    --r_lunar_pack.categories = {"double-boiler"}
     r_lunar_pack.ingredients = {
         --{type = "fluid", name = "helium", amount = 100},
         {type = "item", name = "rocket-fuel", amount = 1},
         {type = "item", name = "low-density-space-platform-foundation", amount = 2},
         {type = "item", name = "muluna-steam-crusher", amount = 1},
-        {type = "fluid", name = "muluna-astronomical-data", amount = 10,fluidbox_index = 2},
+        {type = "fluid", name = "muluna-astronomical-data", amount = settings.startup["muluna-balance-exploration-science-data-cost"].value,fluidbox_index = 2},
         
     }
-    r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 3}}
-    r_lunar_pack.energy_required = 21
+    r_lunar_pack.results = {{type = "item", name = "interstellar-science-pack", amount = 5}}
+    r_lunar_pack.energy_required = 35
     --local oxygen = 60*r_lunar_pack.energy_required
     --table.insert(r_lunar_pack.ingredients,{type = "fluid", name = "oxygen", amount = oxygen})
     --table.insert(r_lunar_pack.results,{type = "fluid", name = "carbon-dioxide", amount = oxygen, temperature = 500,ignored_by_productivity = oxygen})

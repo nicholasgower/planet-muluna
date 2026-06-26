@@ -35,7 +35,6 @@ end
 require("prototypes.technology.interstellar-technologies")
 require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
-require("prototypes.overrides.telescope-data")
 require("prototypes.final-fixes.telescope-prototype")
 
 --Overrides any mods which add their own techs to space platform thruster as a prereq.
@@ -219,7 +218,7 @@ require("prototypes.final-fixes.interstellar-science-pack")
 --require("prototypes.entity.vanilla-entity-shadows")
 if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then --Removed vanilla/wood-gasification recipes from tree seeding, then deletes the tech if no other mods add recipes to the tech.
 --Technologies that have this tech as a prerequisite are moved to having agricultural science pack as the prerequisite.
-    --rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-processing"})
+    --rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "tree-seed"})
     rro.remove(data.raw["technology"]["tree-seeding"].effects, {type = "unlock-recipe", recipe = "wood-seed-greenhouse"})
     -- if #data.raw["technology"]["tree-seeding"].effects == 0 then
     --     delete_tech("tree-seeding","agricultural-science-pack")
@@ -228,72 +227,85 @@ if data.raw["technology"]["tree-seeding"] and not data.raw.planet.lignumis then 
 end
 local flib_prototypes = require("__flib__.prototypes")
 -- Train gravity conditions: All train-related entities with min gravity <=1 will be further lowered to 0.1
-for _,entity in pairs(flib_prototypes.all("entity")) do
-    --print(entity.name)
-    if 
-        rro.contains({
-            "car","locomotive","cargo-wagon",
-            "fluid-wagon","train-stop","artillery-wagon",
-            "rail-signal","rail-chain-signal","curved-rail-b",
-            "curved-rail-a","half-diagonal-rail","straight-rail",
-            "rail-ramp","elevated-straight-rail","elevated-half-diagonal-rail",
-            "elevated-curved-rail-a","elevated-curved-rail-b",
-            "rail-support","car","spider-vehicle","cargo-landing-pad"
-            },
+-- for _,entity in pairs(flib_prototypes.all("entity")) do
+--     --print(entity.name)
+--     if 
+--         rro.contains({
+--             "car","locomotive","cargo-wagon",
+--             "fluid-wagon","train-stop","artillery-wagon",
+--             "rail-signal","rail-chain-signal","curved-rail-b",
+--             "curved-rail-a","half-diagonal-rail","straight-rail",
+--             "rail-ramp","elevated-straight-rail","elevated-half-diagonal-rail",
+--             "elevated-curved-rail-a","elevated-curved-rail-b",
+--             "rail-support","car","spider-vehicle","cargo-landing-pad"
+--             },
         
-            entity.type)
-        and
+--             entity.type)
+--         and
             
-        (entity.surface_conditions and rro.contains(entity.surface_conditions,{property="gravity",min=rro.predicates.compare("<=",1)}))
+--         (entity.surface_conditions and rro.contains(entity.surface_conditions,{property="gravity",min=rro.predicates.compare("<=",1)}))
         
-    then
-        --print("Burner energy source in " .. entity.name)
-        PlanetsLib.relax_surface_conditions(entity, {
-            property = "gravity",
-	        min = 0.1,
-        })
+--     then
+--         --print("Burner energy source in " .. entity.name)
+--         PlanetsLib.relax_surface_conditions(entity, {
+--             property = "gravity",
+-- 	        min = 0.1,
+--         })
         
-    end
-end
+--     end
+-- end
 
 --Recycling recipe fixes
+local recipes_to_fix = Muluna.constants.recycling_recipes_to_fix
 
-local cable_recycling = table.deepcopy(data.raw["recipe"]["copper-cable-recycling"])
-local cable_recycling_muluna = table.deepcopy(cable_recycling)
-cable_recycling_muluna.name = cable_recycling.name .. "-muluna"
-cable_recycling_muluna.results[1].name = "aluminum-plate"
-cable_recycling_muluna.surface_conditions = {
-    {
-        property = "is-muluna",
-        min = 1,
-        max = 1,
-    },
-    -- {
-    --     property = "oxygen",
-    --     min = 0,
-    --     max = 0,
-    -- }
-}
 
-cable_recycling.surface_conditions = {
-    {
-        property = "is-muluna",
-        min = 0,
-        max = 0,
-    },
 
-}
+for _,recipe_name in pairs(recipes_to_fix) do
+    local recipe = table.deepcopy(data.raw["recipe"][recipe_name .. "-recycling"])
+    local recipe_muluna = table.deepcopy(recipe)
+    recipe_muluna.name = recipe.name .. "-muluna"
+    recipe_muluna.results[1].name = "aluminum-plate"
+    if not recipe_muluna.surface_conditions then recipe_muluna.surface_conditions = {} end
+    if not recipe.surface_conditions then recipe.surface_conditions = {} end
+    table.insert(recipe_muluna.surface_conditions ,
+        {
+            property = "is-muluna",
+            min = 1,
+            max = 1,
+        }
+        -- {
+        --     property = "oxygen",
+        --     min = 0,
+        --     max = 0,
+        -- }
+    )
 
-for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
+    table.insert(recipe.surface_conditions ,
+        {
+            property = "is-muluna",
+            min = 0,
+            max = 0,
+        }
+
+    )
+
+    data:extend{recipe_muluna,recipe}
+end
+
+
+local function add_oxygen_condition(entity)
     --print(entity.name)
-    if 
+    if  (entity.burner and
+        rro.contains(entity.burner.fuel_categories,"chemical"))
+        or
         entity.energy_source and 
         ((
             entity.energy_source.type == "burner" and
             rro.contains(entity.energy_source.fuel_categories,"chemical") and
             not rro.contains({"car","locomotive"},entity.type) and
             not rro.contains(Muluna.constants.oxygen_restriction_blacklist,entity.name) and
-            not (entity.type == "assembling-machine" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower"))) 
+            --not (entity.type == "assembling-machine" or entity.type == "furnace" and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower") or rro.contains(entity.crafting_categories,"fuel-processing"))) 
+            not ((entity.type == "assembling-machine" or entity.type == "heat-assembling-machine" or entity.type == "furnace") and (rro.contains(entity.crafting_categories,"double-boiler") or rro.contains(entity.crafting_categories,"muluna-vacuum-heating-tower") or rro.contains(entity.crafting_categories,"fuel-processing")))
         )
             or
         (
@@ -308,7 +320,17 @@ for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
         })
         
     end
+
 end
+
+
+for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
+    add_oxygen_condition(entity)
+end
+
+-- for _,entity in pairs(data.raw["burner-generator"]) do
+--     add_oxygen_condition(entity)
+-- end
 
 if settings.startup["override-space-connection"].value == true then
   
@@ -328,7 +350,7 @@ if settings.startup["override-space-connection"].value == true then
 end
 
 
-data:extend{cable_recycling_muluna,cable_recycling}
+
 
 if data.raw["container"]["bottomless-chest"] then --If version >= 2.0.57
     for _,quality in pairs(data.raw["quality"]) do
@@ -339,6 +361,6 @@ end
 
 require("prototypes.custom-prototypes.final-fixes.heat-assembling-machine-final-fix")
 
-for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
-    print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
-end
+-- for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
+--     print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
+-- end

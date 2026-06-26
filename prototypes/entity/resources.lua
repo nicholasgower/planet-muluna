@@ -153,6 +153,8 @@ metal_ore.name = "metallic-asteroid-chunk"
 carbon_ore.name = "carbonic-asteroid-chunk"
 ice_ore.name = "oxide-asteroid-chunk"
 helium.name = "helium"
+ice_ore.factoriopedia_simulation ={ init = make_resource("oxide-asteroid-chunk") }
+
 
 metal_ore.icon = data.raw["item"]["metallic-asteroid-chunk"].icon
 carbon_ore.icon = data.raw["item"]["carbonic-asteroid-chunk"].icon
@@ -190,7 +192,8 @@ ice_ore.stages =
 }
 
 local ice_ore_particle = table.deepcopy(data.raw["optimized-particle"]["copper-ore-particle"])
-
+ice_ore_particle.name = "carbonic-asteroid-chunk-particle"
+Muluna.rro.deep_replace(ice_ore,"copper-ore-particle","carbonic-asteroid-chunk-particle")
 ice_ore_particle.pictures = {
     {
       filename = "__muluna-graphics__/graphics/particle/ice-ore-particle/ice-ore-particle-1.png",
@@ -383,6 +386,8 @@ local anorthite=resource(
 anorthite.minable.result= "anorthite-chunk"
 anorthite.minable.mining_time = 10
 anorthite.autoplace.control="anorthite-chunk"
+anorthite.factoriopedia_simulation ={ init = make_resource("anorthite-chunk") }
+string.gsub(anorthite.factoriopedia_simulation.init,"oxide%-asteroid%-chunk","anorthite-chunk")
 anorthite.icons=nil
 anorthite.icon="__muluna-graphics__/graphics/icons/anorthite-chunk.png"
 anorthite.stages =

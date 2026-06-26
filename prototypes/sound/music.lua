@@ -7,63 +7,64 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
     --     planet = "muluna",
     --     sound = {
     --         filename = "__muluna-graphics__/sound/music/1 - Sandy Boys Beth Cohen's [aiqbWEikr4w].ogg",
-    --         volume = 0.5,
+    --         volume = 0.7,
     --     }
     -- }
-    -- }  
+    -- } 
+
     local tracks = {
         {
             track_type = "hero-track",
             sound = {
                 filename = "Anthem",
-                volume = 0.5
+                volume = 0.7
             }
         },
         {
             track_type = "interlude",
             sound = {
                 filename = "Storm",
-                volume = 0.5
+                volume = 0.7
             }
         },
         {
             track_type = "interlude",
             sound = {
                 filename = "Muluna-33",
-                volume = 0.5
+                volume = 0.7
             }
         },
         {
             track_type = "interlude",
             sound = {
                 filename = "Handcrafted",
-                volume = 0.5
+                volume = 0.7
             }
         },
         {
             
             sound = {
                 filename = "Cryo-Lab",
-                volume = 0.5
+                volume = 1
             }
         },
         {
             
             sound = {
                 filename = "Eclipse",
-                volume = 0.5
+                volume = 0.7
             }
         },
         {
             sound = {
                 filename = "Factory-FourFour",
-                volume = 0.5
+                volume = 0.7
             }
         },
         {
             sound = {
                 filename = "01010213",
-                volume = 0.5
+                volume = 1
             }
         },
     }
@@ -78,6 +79,8 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         if track.track_type ~= "hero-track" then track.weight = 10 end
         track.sound.filename = "__muluna-graphics__/sound/music-fluidnatalie/" .. track.sound.filename
         if track.track_type == "interlude" then track.sound.filename = track.sound.filename .. "-interlude" end
+        --track.min_speed=0.95
+        --track.max_speed=1.05
         track.sound.filename = track.sound.filename .. ".ogg"
         data:extend{track}
     end

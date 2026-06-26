@@ -9,7 +9,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     crafting_categories = {"muluna-telescope"},
     selection_box = Muluna.flib_bounding_box.from_dimensions({0,0},3,3),
     collision_box = Muluna.flib_bounding_box.from_dimensions({0,0},3-0.5,3-0.5),
-    energy_usage = "2MW",
+    energy_usage = "10MW",
     --energy_source = table.deepcopy(data.raw["assembling-machine-3"].energy_source),
     effect_receiver = "_nil",
     --per_surface_limit = 1, --Custom field: Number of telescopes per surface
@@ -21,6 +21,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     },
     icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
     icon_size = 64,
+    icons = "_nil",
     graphics_set = {
       working_visualisations = {{
         constant_speed = true,
@@ -61,6 +62,8 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     },
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
+
+telescope.energy_source.emissions_per_minute={}
 
 -- for _,animation in pairs({"south_animation","east_animation","west_animation"}) do
 --   telescope.graphics_set.working_visualisations[animation] = telescope.graphics_set.working_visualisations["north_animation"]

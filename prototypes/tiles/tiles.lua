@@ -20,7 +20,7 @@ muluna_dirt_base.custom_tooltip_fields = {
   }
 }
 muluna_dirt_base.absorptions_per_second={
-    radiation = 0.01/60
+    --radiation = 0.01/60
   }
 local color={
     {55,55,65},
@@ -91,7 +91,7 @@ for i = 1,3,1 do
   )
   --muluna_dirt.effect = "space"
   muluna_dirt.absorptions_per_second={
-    radiation = 0.01/60
+    --radiation = 0.01/60
   }
   muluna_dirt.layer=25+i
   muluna_dirt.map_color=color_sand[i]

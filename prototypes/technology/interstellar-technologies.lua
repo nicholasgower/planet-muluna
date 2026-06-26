@@ -4,6 +4,8 @@ local rro = Muluna.rro
 -- Data stage: To allow other mods to propogate changes from this code to their mod's technologies.
 -- Data-updates stage: To add science packs to technologies that might not exist by this mod's data stage.
 
+local old_aop = mods["Age-of-Production"] and helpers.compare_versions(mods["Age-of-Production"],"2.0.0") == -1
+local new_aop = mods["Age-of-Production"] and helpers.compare_versions(mods["Age-of-Production"],"2.0.0") >= 0
 
 local techs_interstellar = {
     ["planet-discovery"] = 
@@ -59,6 +61,11 @@ local techs_interstellar = {
         {
             "planet-discovery-vesta"
         },
+    ["muria"] = 
+        {
+            "weapon-shooting-speed-7",
+            "weapon-shooting-speed-8",
+        },
     other = 
         {
             "promethium-science-pack",
@@ -73,10 +80,15 @@ local techs_interstellar = {
             --"planet-discovery-lemures",
             
         },
-    fusion_thruster = {
-        "fusion-thruster"
-    }
-    
+    -- fusion_thruster = {
+    --     "fusion-thruster"
+    -- }
+    aop = new_aop and 
+        {
+            "aop-quantum-machinery",
+
+        } 
+        or nil,
 }
 
 
@@ -92,15 +104,22 @@ local planets_nexuz = {
 }
 
 local function make_interstellar(tech_name)
-    rro.soft_insert(data.raw["technology"][tech_name].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+    if data.raw["technology"][tech_name].unit then
+        rro.soft_insert(data.raw["technology"][tech_name].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+    end
+    if not data.raw["technology"][tech_name].prerequisites then
+        data.raw["technology"][tech_name].prerequisites = {}
+    end
     rro.soft_insert(data.raw["technology"][tech_name].prerequisites,"interstellar-science-pack") --Add science pack if it doesn't already exist.
 
 end
 
+
+
 for _,tech in pairs(data.raw["technology"]) do
 
     local interstellar = 
-        ( -- If is Aquilo-tier discovery technology
+        ( -- If is Aquilo-tier space-related technology
             tech.unit and 
             (
                 (
@@ -111,12 +130,18 @@ for _,tech in pairs(data.raw["technology"]) do
                     ,rro.predicates.equals(true)) >= 2
                     and
                     (
-                        string.find(tech.name,"discovery") or
-                        string.find(tech.name,"thruster")
+                    rro.find_many(tech.name,{"discovery","thruster","asteroid%-collector","asteroid_collector","planet","science%-pack"})
+                        --string.find(tech.name,"discovery") or
+                        --string.find(tech.name,"thruster")
                     )
                 ) or
                 (
-                    string.find(tech.name,"aop")
+                    old_aop and string.find(tech.name,"aop")
+                ) or
+                (
+                  new_aop and (
+                    rro.contains(tech.unit.ingredients,{"aop-quantistic-science-pack","_any"})
+                  )
                 )
             )
             

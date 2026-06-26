@@ -1,5 +1,22 @@
 local rro = Muluna.rro
 
+local parent_planet = "nauvis"
+assert(data.raw["planet"]["muluna"])
+if mods["any-planet-start"] then
+    local nauvis = data.raw["planet"]["nauvis"]
+    
+    parent_planet = settings.startup["aps-planet"].value
+    --assert(1==2,tostring(parent_planet))
+    local start_planet = settings.startup["aps-planet"].value
+    if parent_planet == "none" or parent_planet =="muluna" then
+        parent_planet = "nauvis"
+    end
+    
+    
+    
+    --local o_parent_planet = data.raw["planet"][parent_planet]
+end
+
 -- Telescope data collection recipes
 for _,space_location in pairs(data.raw["planet"]) do
     print(rro.safe_find(data.raw["mod-data"],{"maraxsis-constants","TRENCH_SURFACE_NAME"}))
@@ -10,12 +27,12 @@ for _,space_location in pairs(data.raw["planet"]) do
              
              
         then
-        local distance_factor = ((Muluna.telescopes.shortest_space_distance("nauvis",space_location.name)))
+        local distance_factor = ((Muluna.telescopes.shortest_space_distance(parent_planet,space_location.name)))
         if distance_factor then
             local recipe = {
                 type = "recipe",
                 name = "muluna-telescope-observation-" .. space_location.name,
-                category = "muluna-telescope",
+                categories = {"muluna-telescope"},
                 energy_required = 6,
                 ingredients = {},
                 results = {{type = "fluid", name = "muluna-astronomical-data",amount = 10 + math.floor(distance_factor)/1500}},
@@ -59,6 +76,41 @@ for _,space_location in pairs(data.raw["planet"]) do
             data:extend{recipe}
         end
     end
+end
+local space_platform = data.raw["surface"]["space-platform"]
+local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-telescope-observation-".. parent_planet] ),
+    {
+        name = "muluna-telescope-observation-space-platform",
+        surface_conditions = {
+                    {
+                        property = "gravity",
+                        min = 0,
+                        max = 0,
+                    },
+                },
+        localised_name = "_nil",
+        order = "zz-zzz[muluna-telescope-observation-space-platform]",
+        icons = Muluna.icons.dual_icon("muluna-astronomical-data","space-platform"),
+        results = {{type = "fluid", name = "muluna-astronomical-data",amount = 100}},
+        ingredients = {{type = "item", name = "promethium-asteroid-chunk", amount = 10}}
+    }
+    
+
+
+)
+
+--space_platform_data.results[1].amount = 100
+
+data:extend{space_platform_data}
+
+PlanetsLib.add_science_packs_from_vanilla_lab_to_technology(data.raw["technology"]["muluna-space-telescope"])
+
+if data.raw["technology"]["maraxsis-promethium-productivity"] then
+    rro.soft_insert(data.raw["technology"]["maraxsis-promethium-productivity"].effects, {
+        type = "change-recipe-productivity",
+        recipe = "muluna-telescope-observation-space-platform",
+        change = 0.1
+    })
 end
 
 

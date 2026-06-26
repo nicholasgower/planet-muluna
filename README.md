@@ -81,7 +81,7 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 - [K2SO](https://mods.factorio.com/mod/Krastorio2-spaced-out)
 
-## Locales
+## Locales listed by completeness
 
 - English by MeteorSwarm(Fully supported)
 
@@ -89,11 +89,11 @@ Crushers can now be placed on any surface, and in addition to their vanilla reci
 
 - Czech by [Vagonek](https://github.com/nicholasgower/planet-muluna/issues?q=is%3Apr+author%3Avagonek)
 
+- French by [vfauth](https://github.com/nicholasgower/planet-muluna/commits?author=vfauth) and [Fr-Dae](https://github.com/nicholasgower/planet-muluna/commits?author=Fr-Dae)
+
 - Chinese by [cyx2015s](https://github.com/nicholasgower/planet-muluna/issues?q=is%3Apr+author%3Acyx2015s)
 
-- French by [Fr-Dae](https://github.com/nicholasgower/planet-muluna/commits?author=Fr-Dae)
-
-- German by [Lucanoria](https://github.com/nicholasgower/planet-muluna/commits?author=Lucanoria)
+- German by MeteorSwarm and [Lucanoria](https://github.com/nicholasgower/planet-muluna/commits?author=Lucanoria)
 
 ## Soundtrack by [FluidNatalie](https://anagramofme.bandcamp.com/)
 

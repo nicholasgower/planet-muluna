@@ -59,7 +59,7 @@ if data.raw["heat-assembling-machine"] then
         reactor.neighbour_bonus = 0 or reactor.neighbour_bonus
         reactor.selection_box = flib_bounding_box.resize(assembler.selection_box,0.0)
         reactor.selection_priority=49 --Default is 50
-        assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.2)
+        assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.4)
         reactor.circuit_connector = table.deepcopy(assembler.circuit_connector)
         reactor.default_temperature_signal = data.raw["reactor"]["heating-tower"].default_temperature_signal
         for _,connector in pairs(reactor.circuit_connector) do

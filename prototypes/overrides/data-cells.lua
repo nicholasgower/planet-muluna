@@ -27,7 +27,7 @@ for _, category in pairs({"item", "tool"}) do
                     type = "recipe",
                     name = data_cell.name,
                     localised_name = data_cell.localised_name,
-                    category = "crafting-with-fluid-and-data",
+                    categories = {"crafting-with-fluid-and-data"},
                     enabled = false,
                     ingredients = { 
                         {type = "item",name = prototype.name, amount = 1,ignored_by_stats = 1},
@@ -36,6 +36,7 @@ for _, category in pairs({"item", "tool"}) do
                     results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2,ignored_by_stats = 1}},
                     main_product = data_cell.name,
                     energy_required = 5,
+                    allow_quality = false,
                     
                 }
 
@@ -43,7 +44,7 @@ for _, category in pairs({"item", "tool"}) do
                     type = "recipe",
                     name = recipe.name .. "-empty",
                     localised_name = {"recipe-name.muluna-load-data-from-X",{"item-name."..name}},
-                    category = "crafting-with-fluid-and-data",
+                    categories = {"crafting-with-fluid-and-data"},
                     subgroup = "muluna-telescope",
                     order = data_cell.order .. "a",
                     enabled = false,
@@ -52,6 +53,7 @@ for _, category in pairs({"item", "tool"}) do
                     energy_required = 5,
                     icons = Muluna.icons.dual_icon("muluna-astronomical-data",prototype.name),
                     auto_recycle = false,
+                    allow_quality = false,
                 }
 
                 for _,recipe in pairs({recipe,recipe_empty}) do
@@ -77,64 +79,8 @@ end
 
 
 
--- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
+
+
+
 local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
-
-
--- for _,recipe in pairs(data.raw["recipe"]) do
---     if rro.contains(am3.crafting_categories,recipe.category) then
---         for _,input in pairs({recipe.ingredients,recipe.results}) do
---             if rro.count(input,function(entry) return entry.type == "fluid" end) == 1 then
---                 for _,recipe in pairs(input) do
---                     if recipe.type == "fluid" then
---                         recipe.fluidbox_index = 1
---                     end
---                 end
---             end
---         end
---     end
-
--- end
-
-
-
-if am3 and am3.fluid_boxes then
-    table.insert(am3.fluid_boxes, 
-
-    {
-        production_type = "input",
-        --pipe_picture = assembler3pipepictures(),
-        --pipe_covers = pipecoverspictures(),
-        volume = 1000,
-        pipe_connections = {{ flow_direction="input", direction = defines.direction.east, position = {1, 0} , connection_category = "data"}},
-        secondary_draw_orders = { north = -1 },
-        connection_category = "data",
-        filter = "muluna-astronomical-data",
-      }
-)
-    table.insert(am3.fluid_boxes, 
-        {
-        production_type = "output",
-        --pipe_picture = assembler3pipepictures(),
-        --pipe_covers = pipecoverspictures(),
-        volume = 1000,
-        pipe_connections = {{ flow_direction="output", direction = defines.direction.west, position = {-1, 0} , connection_category = "data"}},
-        secondary_draw_orders = { north = -1 },
-        connection_category = "data",
-        filter = "muluna-astronomical-data",
-      }
-    )
-    table.insert(am3.crafting_categories, "crafting-with-fluid-and-data")
-    data:extend {
-
-        {
-            type = "recipe-category",
-            name = "crafting-with-fluid-and-data",
-            order = "a[fluid]-b[data]",
-            category = "intermediate-products",
-        }
-    }
-
-end
-
 

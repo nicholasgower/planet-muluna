@@ -1,3 +1,6 @@
+local assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local assembler2pipepictures = assembler_pictures.assembler3pipepictures
+
 if true then
     for _,name in pairs({"steel-furnace","stone-furnace","crusher"}) do
 
@@ -47,7 +50,7 @@ if true then
                     { flow_direction = "input-output", direction = defines.direction.east, position = {0.59, -0.5}},
                     { flow_direction = "input-output", direction = defines.direction.west, position = {-0.59, -0.5}}
                 },
-                pipe_picture = assembler2pipepictures(),
+                pipe_picture = assembler2pipepictures,
                 pipe_covers = pipecoverspictures(),
             }
         }

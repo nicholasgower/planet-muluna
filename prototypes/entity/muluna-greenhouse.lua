@@ -26,7 +26,7 @@ local greenhouse = {
     dying_explosion = "chemical-plant-explosion",
     impact_category = "metal-large",
     match_animation_speed_to_activity = false,
-    mode = "output-to-separate-pipe",
+    --mode = "output-to-separate-pipe",
     
     --working_sound = base_boiler.working_sound,
     --open_sound = base_boiler.open_sound,

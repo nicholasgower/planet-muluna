@@ -1,3 +1,7 @@
+-- for key,func in pairs(_G) do
+--   print(key,type(func) ~= "function" and func or nil)
+-- end
+--error(serpent.block(_G))
 require("wood-gasification.settings")
 data:extend{
     {
@@ -58,17 +62,11 @@ data:extend{
       },
       {
         type = "bool-setting",
-        name = "muluna-hardcore-remove-space-casino",
-        setting_type = "startup",
-        default_value = false,
-        order = "ah",
-      },
-      {
-        type = "bool-setting",
         name = "muluna-hardcore-lock-cargo-drops",
         setting_type = "startup",
         default_value = false,
         order = "ai",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -77,6 +75,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "aj",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -85,6 +84,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "ak",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -93,6 +93,7 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "al",
+        rocs_hard_mode = true,
       },
       {
         type = "bool-setting",
@@ -135,6 +136,25 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "bf",
+      },
+      {
+        type = "bool-setting",
+        name = "muluna-alternative-automation-pack-recipe",
+        --localised_name = {"mod-setting-name.muluna-alternative-automation-pack-recipe"},
+        --localised_description={"mod-setting-des.muluna-alternative-automation-pack-recipe"},
+        setting_type = "startup",
+        default_value = false,
+        order = "bg",
+        rocs_hard_mode = true,
+      },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-alternative-battery-recipe",
+        --localised_name = {"mod-setting-name.muluna-alternative-automation-pack-recipe"},
+        --localised_description={"mod-setting-des.muluna-alternative-automation-pack-recipe"},
+        setting_type = "startup",
+        default_value = false,
+        order = "bga",
       },
       
       {
@@ -207,6 +227,16 @@ data:extend{
         minimum_value = 0,
         maximum_value = 10,
         order = "ce"
+      },
+      {
+        type = "double-setting",
+        name = "muluna-balance-exploration-science-data-cost",
+        setting_type = "startup",
+        default_value = 10,
+        minimum_value = 1,
+        maximum_value = 100,
+        order = "cf"
+
       },
 
     --   {
@@ -283,6 +313,17 @@ data:extend{
     -- },
 
 }
+--Space casinos are getting nerfed in 2.1, so this setting is obsolete when Factorio 2.1 comes out.
+if helpers.compare_versions(helpers.game_version,"2.1.0") < 0 then 
+  data:extend{{
+        type = "bool-setting",
+        name = "muluna-hardcore-remove-space-casino",
+        setting_type = "startup",
+        default_value = false,
+        order = "ah",
+  }} 
+end
+
 
 if mods["any-planet-start"] then
   APS.add_choice("muluna")

@@ -56,6 +56,7 @@ carbon_nanotubes_lds.name = "low-density-structure-from-aluminum"
 --carbon_nanotubes_lds.ingredients = {{type = "item", name = "iron-plate", amount = 5}, {type = "item", name = "plastic-bar", amount = 5}, {type = "item", name = "aluminum-plate", amount = 20}}
 --rro.replace(carbon_nanotubes_lds.ingredients, {type = "item", name = "copper-plate", amount = 20},{type = "item", name = "aluminum-plate", amount = 20})
 rro.replace_name(carbon_nanotubes_lds.ingredients,"copper-plate","aluminum-plate")
+rro.replace_name(carbon_nanotubes_lds.ingredients,"bob-aluminium-plate","aluminum-plate")
 carbon_nanotubes_lds.energy_required=30
 carbon_nanotubes_lds.icons = dual_icon("low-density-structure","aluminum-plate")
 carbon_nanotubes_lds.allow_decomposition = false
@@ -67,7 +68,7 @@ carbon_nanotubes_lds.surface_conditions = {{
 }}
 carbon_nanotubes_lds.auto_recycle=false
 local landfill_crushed_stone=table.deepcopy(data.raw["recipe"]["landfill"])
---landfill_crushed_stone.category="crafting-with-fluid"
+--landfill_crushed_stone.categories = {"crafting-with-fluid"}
 local stone_cost = landfill_crushed_stone.ingredients[1].amount
 landfill_crushed_stone.ingredients = {{type = "item",name = "stone-crushed",amount = math.ceil(40/50*stone_cost)},{type = "item",name = "concrete",amount = math.ceil(5/50*stone_cost)}}
 landfill_crushed_stone.name="landfill-stone-crushed"
@@ -108,13 +109,13 @@ bio_plastic.allow_decomposition = false
 bio_plastic.name = "plastic-from-wood"
 bio_plastic.subgroup = "muluna-forestry"
 bio_plastic.icons = dual_icon("plastic-bar","cellulose")
-rro.replace(bio_plastic.ingredients,{type = "item",name = "coal",amount = 1},{type = "item",name = "cellulose",amount = 4})
-rro.replace(bio_plastic.ingredients,{type = "item",name = "carbon-black",amount = 1},{type = "item",name = "cellulose",amount = 4})
-rro.replace(bio_plastic.ingredients,{type = "item",name = "crushed-coal",amount = 2},{type = "item",name = "cellulose",amount = 3})
-rro.replace(bio_plastic.ingredients,{type = "item",name = "crushed-coal",amount = 3},{type = "item",name = "cellulose",amount = 4})
-rro.replace(bio_plastic.ingredients,{type = "item",name = "resin",amount = 1},{type = "item",name = "cellulose",amount = 4}) --Wooden industries
-rro.replace(bio_plastic.ingredients,{type = "item",name = "resin",amount = 2},{type = "item",name = "cellulose",amount = 4})
-rro.replace(bio_plastic.ingredients,{type = "fluid",name = "petroleum-gas",amount = 15},{type = "fluid",name = "petroleum-gas",amount = 20})
+rro.replace(bio_plastic.ingredients,{type = "item",name = "coal",amount = "_any"},function(other) return {type = "item",name = "cellulose",amount = other.amount*4} end)
+rro.replace(bio_plastic.ingredients,{type = "item",name = "carbon-black",amount = "_any"},function(other) return {type = "item",name = "cellulose",amount = other.amount * 4} end)
+rro.replace(bio_plastic.ingredients,{type = "item",name = "crushed-coal",amount = "_any"},function(other) return {type = "item",name = "cellulose",amount = other.amount + 1} end)
+--rro.replace(bio_plastic.ingredients,{type = "item",name = "crushed-coal",amount = 3},{type = "item",name = "cellulose",amount = 4})
+rro.replace(bio_plastic.ingredients,{type = "item",name = "resin",amount = "_any"},{type = "item",name = "cellulose",amount = 4}) --Wooden industries
+--rro.replace(bio_plastic.ingredients,{type = "item",name = "resin",amount = 2},{type = "item",name = "cellulose",amount = 4})
+rro.replace(bio_plastic.ingredients,{type = "fluid",name = "petroleum-gas",amount = "_any"},function(other) return {type = "fluid",name = "petroleum-gas",amount = 15} end)
 
 --fixed bio_plastic
 rro.remove(bio_plastic.ingredients,{type = "fluid",name = "organotins",amount = 5})
@@ -135,6 +136,9 @@ local solar_panel = util.merge{data.raw["recipe"]["solar-panel"],
 rro.replace_name(solar_panel.ingredients,"copper-plate","silicon-cell")
 rro.replace_name(solar_panel.ingredients,"steel-plate","aluminum-plate")
 
+
+
+
 --local recipes = {motor_carbon, aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,aluminum_green_circuit,aluminum_red_circuit, bio_plastic}
 local recipes = {motor_carbon,aluminum_rocket_fuel, carbon_nanotubes_lds, landfill_crushed_stone, bricks_crushed_stone,solar_panel}
 --, ,aluminum_green_circuit,aluminum_red_circuit,
@@ -150,6 +154,47 @@ table.insert(recipes,bio_plastic)
 
 data:extend(recipes)
 
+if settings.startup["muluna-easy-alternative-battery-recipe"].value == true then
+    -- Battery from aluminum instead of copper.
+    -- The accumulator is assembled from batteries, and the vanilla battery uses a
+    -- copper electrode. Aluminum electrodes work just as well in a sulfuric-acid
+    -- cell, so on Muluna batteries can be crafted from abundant aluminum with no
+    -- copper needed.
+    local aluminum_battery = table.deepcopy(data.raw["recipe"]["battery"])
+    aluminum_battery.name = "muluna-battery-from-aluminum"
+    rro.replace_name(aluminum_battery.ingredients,"copper-plate","aluminum-plate")
+    aluminum_battery.icons = dual_icon("battery","aluminum-plate")
+    aluminum_battery.localised_name = {"recipe-name.x-from-aluminum",{"item-name.battery"}}
+    aluminum_battery.allow_decomposition = false
+
+    aluminum_battery.hide_from_signal_gui = false
+    aluminum_battery.auto_recycle = false
+    -- Unlock the aluminum battery alongside the other aluminum-processing recipes.
+    rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects,
+    {
+        type = "unlock-recipe",
+        recipe = "muluna-battery-from-aluminum",
+    })
+    
+    data:extend{aluminum_battery}
+end
+
+
+-- Aluminum Automation science pack, only when not already added by the Any Planet Start compat
+if not (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") and settings.startup["muluna-alternative-automation-pack-recipe"].value == true then
+    local aluminum_red_science = table.deepcopy(data.raw["recipe"]["automation-science-pack"])
+    rro.replace_name(aluminum_red_science.ingredients,"copper-plate","aluminum-plate")
+    aluminum_red_science.name="automation-science-pack-muluna"
+    aluminum_red_science.icons=dual_icon("automation-science-pack","aluminum-plate")
+    data:extend({aluminum_red_science})
+
+    rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects,
+    {
+        type = "unlock-recipe",
+        recipe = "automation-science-pack-muluna",
+    })
+end
+
 
 --Productivity technologies 
 if data.raw["technology"]["low-density-structure-productivity"] then
@@ -162,36 +207,41 @@ if data.raw["technology"]["low-density-structure-productivity"] then
 ) 
 end
 
-
+local recipes_to_replace = {}
 
 if mods["Krastorio2-spaced-out"] then
-    local recipes = {
-        "kr-automation-core",
-        --"kr-electrolysis-plant"
-    }
-    for i,recipe_name in ipairs(recipes) do
+    table.insert(recipes_to_replace,"kr-automation-core")
+    
+end
+    
+if mods["crushing-industry"] and settings.startup["crushing-industry-optical-fiber"].value == true then
+    table.insert(recipes_to_replace,"optical-fiber")
+end
+
+for i,recipe_name in ipairs(recipes_to_replace) do
         local recipe = data.raw["recipe"][recipe_name]
+        rro.soft_insert(Muluna.constants.recycling_recipes_to_fix,recipe_name)
         local new_recipe = table.deepcopy(recipe)
         new_recipe.name = recipe.name .. "-from-aluminum"
         new_recipe.icons = dual_icon(recipe.name,"aluminum-plate")
         new_recipe.localised_name={"recipe-name.x-from-aluminum",{"item-name."..recipe.name}}
         new_recipe.allow_decomposition = false
         new_recipe.allow_as_intermediate = false
+        new_recipe.auto_recycle = false
         for _,ingredient in pairs(new_recipe.ingredients) do
             if ingredient.name == "copper-plate" then
                 ingredient.name = "aluminum-plate"
             end
         end
         rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects, 
-        {
-            type = "unlock-recipe",
-            recipe = new_recipe.name
-        }
-    )
+            {
+                type = "unlock-recipe",
+                recipe = new_recipe.name
+            }
+        )
+        
         data:extend{new_recipe}
     end
-end
-    
 
 
 
