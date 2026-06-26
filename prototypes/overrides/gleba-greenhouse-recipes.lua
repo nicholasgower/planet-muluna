@@ -85,7 +85,7 @@ for plant,fruit in pairs(plant_list) do
                 -- name = recipe.name == "muluna-tree-growth-greenhouse-vulcanus" and "muluna-greenhouse-growth-" .. fruit
                 --     or recipe.name == "muluna-greenhouse-water-saving-vulcanus" and "muluna-greenhouse-growth-water-saving" .. fruit,
                 icons = dual_icon(fruit,"fluoroketone-cold",third_icon),
-                category = recipe_category.name
+                categories = {recipe_category.name}
             }
         )
         if i == 1 then
