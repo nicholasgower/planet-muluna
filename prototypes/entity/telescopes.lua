@@ -19,10 +19,10 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
         result = "muluna-telescope",
         amount = 1,
     },
-    icon = "__space-exploration-graphics__/graphics/icons/telescope.png",
+    icon = mods["space-exploration-graphics"] and "__space-exploration-graphics__/graphics/icons/telescope.png" or data.raw["radar"]["radar"].icon,
     icon_size = 64,
     icons = "_nil",
-    graphics_set = {
+    graphics_set = mods["space-exploration-graphics-4"] and {
       working_visualisations = {{
         constant_speed = true,
         always_draw = true,
@@ -59,7 +59,7 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
         },
       }}
       
-    },
+    } or nil,
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
 
