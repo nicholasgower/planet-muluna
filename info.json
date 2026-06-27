@@ -61,5 +61,6 @@
   "spoiling_required": true,
   "freezing_required": true,
   "segmented_units_required": true,
-  "expansion_shaders_required": true
+  "expansion_shaders_required": true,
+  "skipInfoValidation":true
 }
