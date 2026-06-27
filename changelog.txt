@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2026-06-27
+  Graphics:
+    - space-exploration-graphics mods are now recommended. When either mod is not loaded, prototypes using Space exploration graphics use placeholder assets, and temporary instructions on how to use SE graphics with 2.1 are printed on game start.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.3
 Date: 2026-06-26
   Bugfixes:
