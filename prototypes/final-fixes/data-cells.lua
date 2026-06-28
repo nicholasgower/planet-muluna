@@ -5,7 +5,7 @@ local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
 
 
 for _,recipe in pairs(data.raw["recipe"]) do
-    if recipe.category == "crafting-with-fluid"  then
+    if rro.contains(recipe.categories, "crafting-with-fluid")  then
         for _,input in pairs({recipe.ingredients,recipe.results}) do
             local i = 1
             if rro.count(input,function(entry) return entry.type == "fluid" end) == 1 then

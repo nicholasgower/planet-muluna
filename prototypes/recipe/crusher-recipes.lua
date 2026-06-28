@@ -74,7 +74,7 @@ end
 -- New icons
 
 table.insert(data.raw["character"]["character"].crafting_categories,
-data.raw["recipe"]["oxide-asteroid-crushing"].category  
+data.raw["recipe"]["oxide-asteroid-crushing"].categories[1]  
 
 )
 if mods["crushing-industry"] then
