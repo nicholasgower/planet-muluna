@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+Date: 2026-06-28
+  Bugfixes:
+    - Sealed Greenhouses and assembling machines using can be mirrored in 2.1. https://github.com/nicholasgower/planet-muluna/issues/413
+---------------------------------------------------------------------------------------------------
 Version: 2.3.4
 Date: 2026-06-27
   Graphics:
