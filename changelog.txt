@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.7
+Date: 2026-06-28
+  Bugfixes:
+    - Data unloading recipes use "ignored_by_productivity."
+    - Fixed some stray references to "category", a field removed in 2.1.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.6
 Date: 2026-06-28
   Compatibility:
