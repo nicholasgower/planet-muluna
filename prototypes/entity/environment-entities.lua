@@ -11,11 +11,15 @@ local function extend_lunar_rock(copied_entity,results)
       sprite.tint = tint
   end
 
-  lunar_rock.icons = {{icon = lunar_rock.icon, icon_size = lunar_rock.icon_size, tint = tint}}
+  --lunar_rock.icons = {{icon = lunar_rock.icon, icon_size = lunar_rock.icon_size, tint = tint}}
   if copied_entity == "big-rock" then
     lunar_rock.name = "lunar-rock"
+    lunar_rock.icon = "__muluna-graphics__/graphics/icons/muluna-big-rock.png"
   else
     lunar_rock.name = "lunar-" .. lunar_rock.name
+  end
+  if copied_entity == "huge-rock" then
+    lunar_rock.icon = "__muluna-graphics__/graphics/icons/muluna-huge-rock.png"
   end
   
   if lunar_rock.minable then
