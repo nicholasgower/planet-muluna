@@ -966,6 +966,10 @@ data:extend{
             {
                 type="unlock-recipe",
                 recipe="rocket-part-muluna"
+            },
+            {
+                type = "unlock-travel-to-space-platforms",
+                modifier = true
             }
         },
         prerequisites = {
