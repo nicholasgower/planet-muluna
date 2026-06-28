@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.8
+Date: 2026-06-28
+  Graphics:
+    - Lunar rock entity icons are now correctly colored. https://github.com/nicholasgower/planet-muluna/issues/399
+---------------------------------------------------------------------------------------------------
 Version: 2.3.7
 Date: 2026-06-28
   Bugfixes:
