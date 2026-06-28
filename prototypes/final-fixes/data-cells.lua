@@ -53,7 +53,7 @@ for _,am3 in pairs(data.raw["assembling-machine"]) do
                 end
                 table.insert(am3.fluid_boxes,box)
             end
-
+            am3.use_mirroring=true
             
 
         --     table.insert(am3.fluid_boxes, 

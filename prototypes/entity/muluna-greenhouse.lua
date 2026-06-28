@@ -55,6 +55,7 @@ local greenhouse = {
     collision_box = {{-width/2+gap, -height/2+gap}, {width/2-gap, height/2-gap}},
     selection_box = {{-width/2, -height/2}, {width/2, height/2}},
     burning_cooldown = 20,
+    use_mirroring=true,
     --fire_flicker_enabled = true,
     --fire_glow_flicker_enabled = true,
     --damaged_trigger_effect = hit_effects.entity(),
