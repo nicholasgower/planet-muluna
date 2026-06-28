@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.6
+Date: 2026-06-28
+  Compatibility:
+    - Added data ports to "Age of Production" Advanced assembling machine. Requires an update to AoP that changes the Advanced assembling machine's fluidboxes. https://github.com/nicholasgower/planet-muluna/issues/378
+---------------------------------------------------------------------------------------------------
 Version: 2.3.5
 Date: 2026-06-28
   Bugfixes:
