@@ -50,11 +50,10 @@ data:extend{
         name="muluna-vacuum-roboport",
     }
 }    
-
 for _,roboport in pairs(data.raw["roboport"]) do
     if true or roboport.is_vacuum_roboport then
         vacuum_roboports[roboport.name] = {}
-        roboport_data = vacuum_roboports[roboport.name]
+        local roboport_data = vacuum_roboports[roboport.name]
         if roboport.energy_source.type == "electric" then
             roboport_data.fuel_input_limit = data_util.get_energy_value(roboport.energy_source.input_flow_limit)
             
@@ -77,6 +76,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,-0.4),
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
                 crafting_categories = {"muluna-vacuum-roboport"},
+                use_mirroring=true,
                 allowed_effects = {},
                 fluid_boxes = {
                     

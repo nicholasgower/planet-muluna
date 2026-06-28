@@ -8,7 +8,7 @@ local function move_entity_to_bottom_layer(entity)
     entity.rotate{reverse=true}
 end
 local heat_assembler_filters = {}
-for entity_name,machine in pairs(heat_assembling_machines) do
+for entity_name,machine in pairs(heat_assembling_machines or {}) do
     table.insert(heat_assembler_filters,{filter = "name", name =  machine["roboport"]})
     table.insert(heat_assembler_filters,{filter = "ghost_name", name =  machine["roboport"]})
     table.insert(heat_assembler_filters,{filter = "name", name = machine["refueler"]})
@@ -42,10 +42,12 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
+        reactor.set_recipe("vacuum-roboport-refuel-muluna","normal")
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         reactor.add_fluid_box_linked_connection(1,entity,1) 
+        reactor.recipe_locked = true
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.burner_roboports then storage.burner_roboports = {} end
         storage.burner_roboports[entity.unit_number] = {["roboport"]=entity,["refueler"] = reactor}
