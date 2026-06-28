@@ -28,7 +28,7 @@ if data.raw["furnace"]["basic-crusher"] and not mods["crushing-industry"] then
             table.insert(data.raw["assembling-machine"][crusher].crafting_categories,"basic-crushing")
         end
     for _,recipe in pairs(data.raw["recipe"]) do
-        if recipe.category == "basic-crushing" then
+        if rro.contains(recipe.categories,"basic-crushing") then
             if recipe.energy_required then
                 recipe.energy_required = recipe.energy_required / 8
             else
