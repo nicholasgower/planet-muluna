@@ -330,7 +330,7 @@ local muluna=
     localised_description={"planetslib-templates.moon-description",{"space-location-description.muluna"},"[planet="..parent_planet.."]"},
     surface_properties = {
         ["solar-power"] = 200,
-        ["pressure"] = 50,
+        ["pressure"] = 3,
         ["magnetic-field"] = 0.01,
         ["day-night-cycle"] = nauvis.surface_properties["day-night-cycle"],
         ["is-muluna"] = 1,
