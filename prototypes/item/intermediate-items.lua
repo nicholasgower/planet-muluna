@@ -191,6 +191,7 @@ data:extend{{
     order = "c[muluna-microfoamed-plastic]",
     spoil_ticks =  10.5*60,
     spoil_result = "plastic-bar",
+    spoil_quality_change = -1,
     icons = {
         
         {

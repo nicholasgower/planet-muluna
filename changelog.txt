@@ -1,4 +1,60 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.11
+Date: 2026-06-28
+  Graphics:
+    - Remarked Space Exploration Graphics as required, now that updated versions for 2.1 are available.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.10
+Date: 2026-06-28
+  Bugfixes:
+    - "Moon discovery Muluna" now unlocks travelling to space platforms. https://github.com/nicholasgower/planet-muluna/issues/414
+---------------------------------------------------------------------------------------------------
+Version: 2.3.9
+Date: 2026-06-28
+  Bugfixes:
+    - Fixed stray reference to "category" in brevven compatibility code.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.8
+Date: 2026-06-28
+  Graphics:
+    - Lunar rock entity icons are now correctly colored. https://github.com/nicholasgower/planet-muluna/issues/399
+---------------------------------------------------------------------------------------------------
+Version: 2.3.7
+Date: 2026-06-28
+  Bugfixes:
+    - Data unloading recipes use "ignored_by_productivity."
+    - Fixed some stray references to "category", a field removed in 2.1.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.6
+Date: 2026-06-28
+  Compatibility:
+    - Added data ports to "Age of Production" Advanced assembling machine. Requires an update to AoP that changes the Advanced assembling machine's fluidboxes. https://github.com/nicholasgower/planet-muluna/issues/378
+---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+Date: 2026-06-28
+  Bugfixes:
+    - Sealed Greenhouses and assembling machines using can be mirrored in 2.1. https://github.com/nicholasgower/planet-muluna/issues/413
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2026-06-27
+  Graphics:
+    - space-exploration-graphics mods are now recommended. When either mod is not loaded, prototypes using Space exploration graphics use placeholder assets, and temporary instructions on how to use SE graphics with 2.1 are printed on game start.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2026-06-26
+  Bugfixes:
+    - muluna-easy-simple-nanofoamed-polymers setting for factorio 2.1
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2026-06-26
+  Balancing:
+    - Diffused plastic bars now lose one level of quality on spoil.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2026-06-26
+  Balancing:
+    - Increased spoiling time of diffused plastic from 7 seconds to 10.5 seconds.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.0
 Date: 2026-06-26
   Features:

@@ -26,7 +26,7 @@ if settings.startup["enable-nav-beacon"].value == true then
             place_result = "muluna-satellite-radar",
             subgroup = "space-platform",
             order = "q[nav-beacon]",
-            icon = "__space-exploration-graphics__/graphics/icons/telescope-radio.png",
+            icon = mods["space-exploration-graphics"] and "__space-exploration-graphics__/graphics/icons/telescope-radio.png" or nil,
             localised_description = { "item-description.muluna-satellite-radar"},
             icon_size = 64,
             stack_size = 10,
@@ -117,9 +117,9 @@ if settings.startup["enable-nav-beacon"].value == true then
                 discharge_cooldown = 64,
                 charge_animation_is_looped = true,
                 picture = {
-                    layers = {
+                    layers = mods["space-exploration-graphics-4"] and {
                         {
-                            filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio.png",
+                            filename =  "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio.png",
                             priority = "high",
                             width = 4688/8,
                             height = 5440/8,
@@ -144,10 +144,13 @@ if settings.startup["enable-nav-beacon"].value == true then
                             shift = util.by_pixel(25*8/9, 19*8/9),
                             scale = 0.5*8/9,
                         }
-                    },
+                    }
+                    or
+                    data.raw.accumulator.accumulator.chargable_graphics.picture.layers
+                    ,
                 },
                 charge_animation = {
-                    layers = {
+                    layers = mods["space-exploration-graphics-4"] and {
                         {
                             filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio.png",
                             priority = "high",
@@ -175,7 +178,8 @@ if settings.startup["enable-nav-beacon"].value == true then
                             repeat_count = 1,
                             animation_speed = 0.25,
                         }
-                    }
+                    } or
+                    data.raw.accumulator.accumulator.chargable_graphics.charge_animation.layers
                 }
                 
             }
@@ -251,7 +255,8 @@ if settings.startup["enable-nav-beacon"].value == true then
                 },
                 time = 30
             },
-            icons = Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope-radio.png",icon_size = 128}},32)
+            icons = mods["space-exploration-graphics"] and Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope-radio.png",icon_size = 128}},32)
+                    or {{icon = data.raw["technology"]["radar"].icon, icon_size = data.raw["technology"]["radar"].icon_size}}
         }
     })
     

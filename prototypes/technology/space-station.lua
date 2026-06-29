@@ -863,7 +863,14 @@ data:extend{
             --"muluna-nanofoamed-polymers",
             "utility-science-pack",
         },
-        icons = Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope.png",icon_size = 128}},8),
+        icons = mods["space-exploration-graphics"] and Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/telescope.png",icon_size = 128}},8)
+        or {
+            {
+                icon =  data.raw["technology"]["radar"].icon,
+                icon_size = data.raw["technology"]["radar"].icon_size,
+            }
+        }
+        ,
         --icon = "__muluna-graphics__/graphics/technology/moshine-tech-silicon-cell.png",
         --icon_size = 128,
         effects = {
@@ -906,9 +913,12 @@ data:extend{
             "utility-science-pack",
         },
         icons = {
-            {
-                icon = "__space-exploration-graphics__/graphics/technology/telescope.png",
+           mods["space-exploration-graphics"] and {
+                icon =  "__space-exploration-graphics__/graphics/technology/telescope.png",
                 icon_size = 128,
+            } or {
+                icon =  data.raw["technology"]["radar"].icon,
+                icon_size = data.raw["technology"]["radar"].icon_size,
             },  
             {
                 icon = data.raw["item"]["promethium-asteroid-chunk"].icon,
@@ -987,6 +997,10 @@ data:extend{
             {
                 type="unlock-recipe",
                 recipe="rocket-part-muluna"
+            },
+            {
+                type = "unlock-travel-to-space-platforms",
+                modifier = true
             }
         },
         prerequisites = {

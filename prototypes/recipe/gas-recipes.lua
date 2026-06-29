@@ -475,20 +475,22 @@ local diffusion = {
         auto_recycle = false,
         allow_quality = false,
     }
-if settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true then
-    -- table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, probability = 0.5,ignored_by_productivity = 1})
-    -- table.insert(diffusion.results,{type = "item",name = "plastic-bar", amount = 1, probability = 0.5,ignored_by_productivity = 1})
-    diffusion.reset_freshness_on_craft = true
-end  
 
     local steps = 20
     for i = 1,steps,1 do
-        table.insert(diffusion.results,{type = "item",name = "muluna-diffused-plastic", amount = 1, shared_probability = { min = (i-1)/steps, max = i/steps },percent_spoiled = (i-1)/steps,ignored_by_productivity = 1})
+        table.insert(diffusion.results,{
+            type = "item",
+            name = "muluna-diffused-plastic",
+            amount = 1,
+            shared_probability = {
+                min = (i-1)/steps,
+                max = i/steps
+            },
+            percent_spoiled = (i-1)/steps,
+            ignored_by_productivity = 1,
+            reset_freshness_on_craft = settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true,
+        })
     end
-
-
-
-
 
 data:extend{diffusion}
 
@@ -607,4 +609,3 @@ if mods["maraxsis"] then
         subgroup="muluna-products"
     }}
 end
-    
