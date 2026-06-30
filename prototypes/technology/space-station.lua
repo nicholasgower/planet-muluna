@@ -505,7 +505,7 @@ data:extend{
             },
             {
                 type = "unlock-recipe",
-                recipe = "muluna-vacuum-flying-robot-frame",
+                recipe = "muluna-burner-flying-robot-frame",
             }
         }
     },
@@ -518,21 +518,21 @@ data:extend{
         icon = data.raw["technology"]["logistic-robotics"].icon,
         research_trigger = {
             type = "craft-item",
-            item = "muluna-vacuum-flying-robot-frame",
+            item = "muluna-burner-flying-robot-frame",
             count = 5,
         },
         effects = {
             {
                 type = "unlock-recipe",
-                recipe = "muluna-vacuum-roboport",
+                recipe = "muluna-burner-roboport",
             },
             {
                 type = "unlock-recipe",
-                recipe = "muluna-vacuum-logistic-robot",
+                recipe = "muluna-burner-logistic-robot",
             },
             {
                 type = "unlock-recipe",
-                recipe = "muluna-vacuum-construction-robot",
+                recipe = "muluna-burner-construction-robot",
             },
         }
     },

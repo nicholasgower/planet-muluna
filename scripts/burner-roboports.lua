@@ -21,18 +21,18 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
     for _,machine in pairs(heat_assembling_machines) do
-        if entity.valid and entity.name == machine["roboport"] then
+        if entity.valid and entity.name == machine["refueler"] then
             is_heat_assembling_machine = true
             heat_assembling_machine_data = machine
             break
         end
     end
-    local reactor = nil
+    local roboport = nil
     if is_heat_assembling_machine then
         if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
         storage.active_burner_roboports[entity.unit_number] = entity
-        reactor = entity.surface.create_entity{
-            name = heat_assembling_machine_data["refueler"],
+        roboport = entity.surface.create_entity{
+            name = heat_assembling_machine_data["roboport"],
             position = entity.position,
             direction = entity.direction,
             quality = entity.quality,
@@ -42,15 +42,15 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
-        reactor.set_recipe("vacuum-roboport-refuel-muluna","normal")
+        entity.set_recipe("vacuum-roboport-refuel-muluna","normal")
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
-        reactor.add_fluid_box_linked_connection(1,entity,1) 
-        reactor.recipe_locked = true
+        entity.add_fluid_box_linked_connection(1,entity,1) 
+        entity.recipe_locked = true
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.burner_roboports then storage.burner_roboports = {} end
-        storage.burner_roboports[entity.unit_number] = {["roboport"]=entity,["refueler"] = reactor}
+        storage.burner_roboports[entity.unit_number] = {["roboport"]=roboport,["refueler"] = entity}
     end
 
 
@@ -167,12 +167,11 @@ Muluna.events.on_nth_tick(long_update_period, function()
 
     for key,entity_table in pairs(storage.burner_roboports) do
         local roboport = entity_table["roboport"]
-
+        local refueler = entity_table["refueler"]
         local energy_percent = calc_energy_percent(roboport)
 
         if energy_percent <= cutoff_energy_low then
-            storage.active_burner_roboports[key] = roboport 
-            local refueler = storage.burner_roboports[key]["refueler"]
+            storage.active_burner_roboports[key] = refueler
             refueler.disabled_by_script = false --Turns on refueler
         end
     end
@@ -184,24 +183,29 @@ end)
 
 Muluna.events.on_nth_tick(short_update_period, function() 
 
-    for key,roboport in pairs(storage.active_burner_roboports) do
+    for key,refueler in pairs(storage.active_burner_roboports) do
         --local roboport = entity_table["roboport"]
+        
+        
+        local roboport = storage.burner_roboports[key]["roboport"]
+
         local energy_percent = calc_energy_percent(roboport)
-        local refueler = storage.burner_roboports[key]["refueler"]
 
         --Destroy fluid and add energy to roboport
-        --local fluids = refueler.get_fluid_contents()
-        --game.print(serpent.block(fluids))
-        local fluid_removed = refueler.clear_fluid(3) --Not sure if this is the right fluid index
-        local fluid_removed_amount = fluid_removed and fluid_removed.amount
-        local energy_value = 0.1 * 1000000
-        local delta_energy = (fluid_removed_amount or 0) * energy_value
-        roboport.energy = (roboport.energy or 0) + delta_energy
-        if calc_energy_percent(roboport) >= cutoff_energy_high then
-            storage.active_burner_roboports[key] = nil --Deactivates roboport
-            refueler.disabled_by_script = true --Turns off refueler
-            -- Add status
+        local fluids = refueler.get_fluid_contents()
+        if fluids then
+            local fluid_removed = refueler.clear_fluid(3) --Not sure if this is the right fluid index
+            local fluid_removed_amount = fluid_removed and fluid_removed.amount
+            local energy_value = 0.1 * 1000000
+            local delta_energy = (fluid_removed_amount or 0) * energy_value
+            roboport.energy = (roboport.energy or 0) + delta_energy
+            if calc_energy_percent(roboport) >= cutoff_energy_high then
+                storage.active_burner_roboports[key] = nil --Deactivates roboport
+                refueler.disabled_by_script = true --Turns off refueler
+                -- Add status
+            end
         end
+       
     end
 
 

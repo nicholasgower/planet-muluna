@@ -51,7 +51,7 @@ data:extend{
     }
 }    
 for _,roboport in pairs(data.raw["roboport"]) do
-    if true or roboport.is_vacuum_roboport then
+    if roboport.is_vacuum_roboport then
         vacuum_roboports[roboport.name] = {}
         local roboport_data = vacuum_roboports[roboport.name]
         if roboport.energy_source.type == "electric" then
@@ -71,7 +71,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
 
             local refueler = {
                 type = "assembling-machine",
-                name = roboport.name .. "-refueler",
+                name = roboport.name,
                 quality_affects_energy_usage = true,
                 selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,-0.4),
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
@@ -132,8 +132,13 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 },
                 energy_usage = roboport.energy_source.input_flow_limit,
                 max_health = 10000,
+                quality_indicator_shift = {-0.4,0.4}
             }
-            data:extend{refueler}
+            
+            roboport.name = roboport.name .. "-roboport"
+            roboport.is_vacuum_roboport = false
+            data:extend{roboport,refueler}
+            data.raw["roboport"][refueler.name] = nil
             roboport_data["refueler"] = refueler.name
             roboport_data["roboport"] = roboport.name
             roboport.energy_source.input_flow_limit = "0W"

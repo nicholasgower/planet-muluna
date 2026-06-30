@@ -1,6 +1,6 @@
 local rro = Muluna.rro
 for _,robot_name in pairs(Muluna.constants.robot_names) do
-    local replacement_name = "muluna-vacuum-" .. robot_name
+    local replacement_name = "muluna-burner-" .. robot_name
     local recipe = table.deepcopy(data.raw["recipe"][robot_name])
     local robot = table.deepcopy(data.raw[robot_name][robot_name])
     local item = table.deepcopy(data.raw["item"][robot_name])
@@ -18,7 +18,7 @@ for _,robot_name in pairs(Muluna.constants.robot_names) do
         end
         if prototype.type == "recipe" then
             rro.replace(prototype.ingredients,{type = "item" , name = "flying-robot-frame", amount = "_any"},
-                                                {type = "item" , name = "muluna-vacuum-flying-robot-frame", amount = 1})
+                                                {type = "item" , name = "muluna-burner-flying-robot-frame", amount = 1})
             
         end
     end
@@ -30,12 +30,17 @@ end
 data:extend {
     rro.merge(data.raw["item"]["flying-robot-frame"],{
         type = "item",
-        name = "muluna-vacuum-flying-robot-frame",
+        name = "muluna-burner-flying-robot-frame",
         
+    }),
+    rro.merge(data.raw["item"]["roboport"],{
+        type = "item",
+        name = "muluna-burner-roboport",
+        place_result = "muluna-burner-roboport",
     }),
     rro.merge(data.raw["recipe"]["flying-robot-frame"],{
         type = "recipe",
-        name = "muluna-vacuum-flying-robot-frame",
+        name = "muluna-burner-flying-robot-frame",
         ingredients = {
             {type = "item", name = "steel-plate",  amount = 1},
             {type = "item", name = "pipe",  amount = 2},
@@ -43,11 +48,11 @@ data:extend {
             {type = "item", name = "engine-unit",  amount = 1}
         
         },
-        results = {{type = "item", name = "muluna-vacuum-flying-robot-frame", amount = 1}},
+        results = {{type = "item", name = "muluna-burner-flying-robot-frame", amount = 1}},
     }),
     rro.merge(data.raw["recipe"]["roboport"],{
         type = "recipe",
-        name = "muluna-vacuum-roboport",
+        name = "muluna-burner-roboport",
         ingredients = {
             {type = "item", name = "advanced-circuit",  amount = 45},
             {type = "item", name = "steel-plate",  amount = 45},
@@ -55,6 +60,6 @@ data:extend {
             --{type = "item", name = "engine-unit",  amount = 1}
         
         },
-        results = {{type = "item", name = "muluna-vacuum-flying-robot-frame", amount = 1}},
+        results = {{type = "item", name = "muluna-burner-roboport", amount = 1}},
     }),
 }
