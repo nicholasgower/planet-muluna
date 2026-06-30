@@ -66,7 +66,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
     for _,machine in pairs(heat_assembling_machines) do
-        if entity.name == machine["roboport"] then
+        if entity.name == machine["refueler"] then
             
             is_heat_assembling_machine = true
             heat_assembling_machine_data = machine
@@ -78,12 +78,12 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         local reactor = nil
         if storage.burner_roboports then
             if storage.burner_roboports[entity.unit_number] then
-                reactor = storage.burner_roboports[entity.unit_number]["refueler"]
+                reactor = storage.burner_roboports[entity.unit_number]["roboport"]
                 storage.burner_roboports[entity.unit_number] = nil
             end
             for i,registered_machine in pairs(storage.burner_roboports) do
                 if registered_machine["roboport"] == entity then
-                    reactor = registered_machine["refueler"]
+                    reactor = registered_machine["roboport"]
                     storage.burner_roboports[i] = nil
                     break
                     

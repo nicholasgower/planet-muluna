@@ -134,7 +134,9 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 max_health = 10000,
                 quality_indicator_shift = {-0.4,0.4}
             }
-            
+            refueler.minable = roboport.minable
+            roboport.minable = nil
+            refueler.minable.result = refueler.name
             roboport.name = roboport.name .. "-roboport"
             roboport.is_vacuum_roboport = false
             data:extend{roboport,refueler}
