@@ -329,6 +329,23 @@ for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
     add_oxygen_condition(entity)
 end
 
+local function add_pressure_condition(robot)
+    if not string.find(robot.name,"muluna") then
+        PlanetsLib.restrict_surface_conditions(robot,{
+            property = "pressure",
+            min = 5
+        })
+    end
+end
+
+for _,robot in pairs(data.raw["construction-robot"]) do
+    add_pressure_condition(robot)
+end
+
+for _,robot in pairs(data.raw["logistic-robot"]) do
+    add_pressure_condition(robot)
+end
+
 -- for _,entity in pairs(data.raw["burner-generator"]) do
 --     add_oxygen_condition(entity)
 -- end
