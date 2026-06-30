@@ -31,7 +31,7 @@ big_silo.fluidboxes=nil
 
 local objects = {big_silo,big_rocket,big_pod,rocket_shadow}
 
-
+--Scale up all of the graphics fields(There are many of them)
 for _,scalar_field in pairs({"scale","rocket_render_layer_switch_distance","full_render_layer_switch_distance","rocket_above_wires_slice_offset_from_center","rocket_air_object_slice_offset_from_center","rocket_visible_distance_from_center"}) do
     Muluna.rro.deep_replace_field(objects,scalar_field,function(old_scale) return old_scale * 15/9 end)
 end
