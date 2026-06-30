@@ -42,7 +42,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
-        entity.set_recipe("vacuum-roboport-refuel-muluna","normal")
+        entity.set_recipe("burner-roboport-refuel-muluna","normal")
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.

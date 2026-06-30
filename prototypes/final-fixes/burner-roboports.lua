@@ -47,7 +47,7 @@ local function localise_energy(energy)
 data:extend{
     {
         type="recipe-category",
-        name="muluna-vacuum-roboport",
+        name="muluna-burner-roboport",
     }
 }    
 for _,roboport in pairs(data.raw["roboport"]) do
@@ -75,7 +75,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 quality_affects_energy_usage = true,
                 selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,-0.4),
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
-                crafting_categories = {"muluna-vacuum-roboport"},
+                crafting_categories = {"muluna-burner-roboport"},
                 use_mirroring=true,
                 allowed_effects = {},
                 fluid_boxes = {
