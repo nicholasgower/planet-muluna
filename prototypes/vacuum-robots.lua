@@ -37,6 +37,7 @@ data:extend {
         type = "item",
         name = "muluna-burner-roboport",
         place_result = "muluna-burner-roboport",
+        order = data.raw["item"]["roboport"].order .. "a"
     }),
     -- rro.merge(data.raw["recipe"]["flying-robot-frame"],{
     --     type = "recipe",
@@ -61,5 +62,6 @@ data:extend {
         
         },
         results = {{type = "item", name = "muluna-burner-roboport", amount = 1}},
+        
     }),
 }

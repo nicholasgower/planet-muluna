@@ -141,6 +141,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 quality_indicator_shift = {-0.4,0.4}
             }
             refueler.minable = roboport.minable
+            roboport.localised_name = {"entity-name.muluna-burner-roboport"}
             roboport.minable = nil
             refueler.minable.result = refueler.name
             roboport.name = roboport.name .. "-roboport"

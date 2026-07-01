@@ -146,7 +146,7 @@ end
 -- 5000 MJ / 2000 MW
 
 local cutoff_energy_high = 0.8 --If energy % is greater/equal than this, stop updating
-local cutoff_energy_low = 0.3 --If energy % is lower than this, start updating
+local cutoff_energy_low = 0.2 --If energy % is lower than this, start updating
 
 local discharge_time_max = 1200 -- Shortest possible time to fully discharge a normal roboport (in ticks)
 local dischange_time_threshold = discharge_time_max * (cutoff_energy_high-cutoff_energy_low)
@@ -154,7 +154,7 @@ local long_update_tolerance = 2 --Higher tolerance is less performant, but less 
 local long_update_period = dischange_time_threshold / long_update_tolerance --During long update, roboport's energy value is checked to see if they need more energy.
 
 
-local short_update_period = 30 --Arbitrary choice that should be less than the time to half-fill the energy fluid buffer
+local short_update_period = 60 --Arbitrary choice that should be less than the time to half-fill the energy fluid buffer
 
 local function calc_energy_percent(roboport) 
     
