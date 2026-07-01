@@ -140,6 +140,15 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 max_health = 10000,
                 quality_indicator_shift = {-0.4,0.4}
             }
+            if not refueler.graphics_set then
+                local graphics = table.deepcopy(roboport.base)
+                graphics.frame_count = 1
+                for _,frame in pairs(graphics.layers) do
+                    frame.line_length = 1
+                    frame.frame_count = 1
+                end
+                refueler.graphics_set =  {idle_animation = {north = graphics}}
+            end
             refueler.minable = roboport.minable
             roboport.localised_name = {"entity-name.muluna-burner-roboport"}
             roboport.minable = nil
