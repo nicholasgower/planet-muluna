@@ -69,7 +69,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
 
             
 
-            local refueler = {
+            local refueler = { 
                 type = "assembling-machine",
                 name = roboport.name,
                 quality_affects_energy_usage = true,
@@ -78,6 +78,12 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 crafting_categories = {"muluna-burner-roboport"},
                 use_mirroring=true,
                 allowed_effects = {},
+                surface_conditions = {
+                    {
+                        property="pressure",
+                        min=3,
+                    },
+                },
                 fluid_boxes = {
                     
                     {
