@@ -514,7 +514,7 @@ data:extend{
         name = "muluna-burner-roboport",
         localised_name = {"entity-name.muluna-burner-roboport"},
         localised_description = {"entity-description.muluna-burner-roboport"},
-        prerequisites = {"metallic-asteroid-crushing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
+        prerequisites = {"muluna-aluminum-processing","metallic-asteroid-crushing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
         
         icons = {
             {
