@@ -511,9 +511,9 @@ data:extend{
     },
     {
         type = "technology",
-        name = "muluna-vacuum-roboport",
-        localised_name = {"entity-name.muluna-vacuum-roboport"},
-        localised_description = {"entity-name.muluna-vacuum-roboport"},
+        name = "muluna-burner-roboport",
+        localised_name = {"entity-name.muluna-burner-roboport"},
+        localised_description = {"entity-description.muluna-burner-roboport"},
         prerequisites = {"muluna-aluminum-processing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
         icon = data.raw["technology"]["logistic-robotics"].icon,
         icon_size = data.raw["technology"]["logistic-robotics"].icon_size,
