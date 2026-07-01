@@ -503,10 +503,10 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "aluminum-crushing",
             },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-burner-flying-robot-frame",
-            }
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "muluna-burner-flying-robot-frame",
+            -- }
         }
     },
     {
@@ -514,26 +514,27 @@ data:extend{
         name = "muluna-vacuum-roboport",
         localised_name = {"entity-name.muluna-vacuum-roboport"},
         localised_description = {"entity-name.muluna-vacuum-roboport"},
-        prerequisites = {"muluna-aluminum-processing","carbonic-asteroid-crushing","oxide-asteroid-crushing","construction-robotics"},
+        prerequisites = {"muluna-aluminum-processing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
         icon = data.raw["technology"]["logistic-robotics"].icon,
+        icon_size = data.raw["technology"]["logistic-robotics"].icon_size,
         research_trigger = {
             type = "craft-item",
-            item = "muluna-burner-flying-robot-frame",
-            count = 5,
+            item = "aluminum-plate",
+            count = 50,
         },
         effects = {
             {
                 type = "unlock-recipe",
                 recipe = "muluna-burner-roboport",
             },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-burner-logistic-robot",
-            },
-            {
-                type = "unlock-recipe",
-                recipe = "muluna-burner-construction-robot",
-            },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "muluna-burner-logistic-robot",
+            -- },
+            -- {
+            --     type = "unlock-recipe",
+            --     recipe = "muluna-burner-construction-robot",
+            -- },
         }
     },
     {
