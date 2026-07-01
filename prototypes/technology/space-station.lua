@@ -514,9 +514,21 @@ data:extend{
         name = "muluna-burner-roboport",
         localised_name = {"entity-name.muluna-burner-roboport"},
         localised_description = {"entity-description.muluna-burner-roboport"},
-        prerequisites = {"muluna-aluminum-processing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
-        icon = data.raw["technology"]["logistic-robotics"].icon,
-        icon_size = data.raw["technology"]["logistic-robotics"].icon_size,
+        prerequisites = {"metallic-asteroid-crushing","carbonic-asteroid-crushing","oxide-asteroid-crushing"},
+        
+        icons = {
+            {
+                icon = "__muluna-graphics__/graphics/technology/burner-roboport.png",
+                icon_size = data.raw["technology"]["logistic-robotics"].icon_size,
+            },
+            {
+                icon = data.raw["item"]["thruster"].icon,
+                icon_size=64,
+                --scale=0.3,
+                shift = {45,45},
+                scale=0.75,
+            },
+        },
         research_trigger = {
             type = "craft-item",
             item = "aluminum-plate",

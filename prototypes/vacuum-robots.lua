@@ -37,7 +37,8 @@ data:extend {
         type = "item",
         name = "muluna-burner-roboport",
         place_result = "muluna-burner-roboport",
-        order = data.raw["item"]["roboport"].order .. "a"
+        order = data.raw["item"]["roboport"].order .. "a",
+        icon = "__muluna-graphics__/graphics/icons/burner-roboport.png",
     }),
     -- rro.merge(data.raw["recipe"]["flying-robot-frame"],{
     --     type = "recipe",
