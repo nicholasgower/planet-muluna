@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.13
+Date: 2026-07-03
+  Locale:
+    - Updated zh-CN locale (By Tanvec).
+---------------------------------------------------------------------------------------------------
+Version: 2.3.12
+Date: 2026-06-30
+  Bugfixes:
+    - Fixed fluidbox indexing correction to only target recipes with only the "crafting-with-fluid" crafting category. https://github.com/nicholasgower/planet-muluna/issues/416
+---------------------------------------------------------------------------------------------------
 Version: 2.3.11
 Date: 2026-06-28
   Graphics:
