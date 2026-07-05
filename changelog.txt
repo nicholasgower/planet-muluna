@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.14
+Date: 2026-07-05
+  Balancing:
+    - Greenhouse recipes allow quality modules, but forbid crafting at any quality level other than normal.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.13
 Date: 2026-07-03
   Locale:
