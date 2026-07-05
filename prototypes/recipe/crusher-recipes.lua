@@ -353,4 +353,13 @@ data:extend{{
     results = {{type = "item", name = "muluna-basic-hard-drive", amount = 1}}, 
 }}
 
+if settings.startup["muluna-easy-sulfur"].value then
+    local copy = table.deepcopy(data.raw["recipe"]["advanced-carbonic-asteroid-crushing"])
+    copy.name = "muluna-advanced-carbonic-asteroid-crushing"
+    copy.enabled = false
+    copy.localised_name = {"", {"recipe-name.advanced-carbonic-asteroid-crushing"}, " (Muluna)"}
+    copy.surface_conditions = {{property = "is-muluna", min = 1}}
+    data:extend{copy}
+end
+
 

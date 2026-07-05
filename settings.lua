@@ -156,7 +156,34 @@ data:extend{
         default_value = false,
         order = "bga",
       },
-      
+      {
+        type = "bool-setting",
+        name = "muluna-easy-t1-science-anywhere",
+        setting_type = "startup",
+        default_value = false,
+        order = "bh",
+      },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-remove-aquilo-t2-gate",
+        setting_type = "startup",
+        default_value = false,
+        order = "bi",
+      },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-muluna-rocket-bonus",
+        setting_type = "startup",
+        default_value = false,
+        order = "bj",
+      },
+      {
+        type = "bool-setting",
+        name = "muluna-easy-sulfur",
+        setting_type = "startup",
+        default_value = false,
+        order = "bk",
+      },
       {
         type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",

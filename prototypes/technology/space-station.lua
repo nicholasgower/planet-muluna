@@ -1748,3 +1748,10 @@ if not data.raw["lab"]["biolab"] then
 
 
 data.raw["assembling-machine"]["crusher"].localised_description = {"entity-description.muluna-crusher"}
+
+if settings.startup["muluna-easy-sulfur"].value then
+    table.insert(data.raw["technology"]["carbonic-asteroid-crushing"].effects, {
+        type = "unlock-recipe",
+        recipe = "muluna-advanced-carbonic-asteroid-crushing"
+    })
+end

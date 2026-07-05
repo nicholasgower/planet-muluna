@@ -263,6 +263,7 @@ local rocket_part_muluna = table.deepcopy(data.raw["recipe"]["rocket-part"])
 rocket_part_muluna.name = "rocket-part-muluna"
 rocket_part_muluna.surface_conditions = {
     {property = "gravity",
+    min = 0.05,
     max = 2,
     }   
 }
@@ -318,6 +319,14 @@ end
 
 
 
+if settings.startup["muluna-easy-muluna-rocket-bonus"].value then
+    rocket_part_muluna.energy_required = (rocket_part_muluna.energy_required or 30) / 2
+    table.insert(data.raw["technology"]["planet-discovery-muluna"].effects, {
+        type = "change-recipe-productivity",
+        recipe = "rocket-part-muluna",
+        change = 0.5
+    })
+end
 
 data:extend{rocket_part_muluna}
 
@@ -327,24 +336,26 @@ for _, silo in pairs(data.raw["rocket-silo"]) do
         silo.disabled_when_recipe_not_researched = true
     end
 end
-data.raw.recipe["space-science-pack"].surface_conditions = {
-    {property = "gravity",
-    min = 2,
-    max = 2,
-    },
-    {property = "oxygen",
-    min = 0,
-    max = 0,
-    },
-    PlanetsLib.surface_conditions.restrict_to_surface("muluna")
-}
+if not settings.startup["muluna-easy-t1-science-anywhere"].value then
+    data.raw.recipe["space-science-pack"].surface_conditions = {
+        {property = "gravity",
+        min = 2,
+        max = 2,
+        },
+        {property = "oxygen",
+        min = 0,
+        max = 0,
+        },
+        PlanetsLib.surface_conditions.restrict_to_surface("muluna")
+    }
 
-if mods["Krastorio2-spaced-out"] then
-    data.raw.recipe["kr-space-research-data"].surface_conditions = data.raw.recipe["space-science-pack"].surface_conditions
+    if mods["Krastorio2-spaced-out"] then
+        data.raw.recipe["kr-space-research-data"].surface_conditions = data.raw.recipe["space-science-pack"].surface_conditions
 
+    end
+
+    data.raw.recipe["interstellar-science-pack"].surface_conditions = data.raw.recipe["space-science-pack"].surface_conditions
 end
-
-data.raw.recipe["interstellar-science-pack"].surface_conditions = data.raw.recipe["space-science-pack"].surface_conditions
 
 -- rro.replace(data.raw["technology"]["planet-discovery-vulcanus"].prerequisites,"space-science-pack","asteroid-collector")
 -- rro.replace(data.raw["technology"]["planet-discovery-gleba"].prerequisites,"space-science-pack","asteroid-collector")
@@ -487,6 +498,12 @@ for _,planet in pairs(data.raw["planet"]) do
 
 
 rro.soft_insert(data.raw["technology"]["planet-discovery-aquilo"].prerequisites,"interstellar-science-pack")
+if settings.startup["muluna-easy-remove-aquilo-t2-gate"].value then
+    rro.remove(data.raw["technology"]["planet-discovery-aquilo"].prerequisites,"advanced-space-science-pack")
+    if data.raw["technology"]["planet-discovery-aquilo"].unit then
+        rro.remove(data.raw["technology"]["planet-discovery-aquilo"].unit.ingredients,{"advanced-space-science-pack","_any"})
+    end
+end
 --table.insert(data.raw["technology"]["promethium-science-pack"].prerequisites,"interstellar-science-pack")
 --data.raw["item"]["space-science-pack"].localised_name = {"item-name."}
 --data.raw["technology"]["space-science-pack"].localised_name = {"item-name.lunar-science-pack"}
@@ -841,43 +858,46 @@ PlanetsLib:update
 require("prototypes.technology.interstellar-technologies")
 
 
-local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["space-science-pack"])
-data.raw["recipe"]["space-science-pack"].order = data.raw["item"]["space-science-pack"].order .. "-2"
-data.raw["recipe"]["space-science-pack"].surface_conditions = {
-    {
-        property = "gravity",
-        min = 0,
-        max = 0,
-    },
-}
-space_science_pack_advanced.name = "space-science-pack-muluna"
-space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
---space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
-data:extend{space_science_pack_advanced}
-
-if mods["Krastorio2-spaced-out"] then
-    local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["kr-space-research-data"])
-
-    space_science_pack_advanced.surface_conditions = {
+if not settings.startup["muluna-easy-t1-science-anywhere"].value then
+    local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["space-science-pack"])
+    data.raw["recipe"]["space-science-pack"].order = data.raw["item"]["space-science-pack"].order .. "-2"
+    data.raw["recipe"]["space-science-pack"].surface_conditions = {
         {
             property = "gravity",
             min = 0,
             max = 0,
         },
-        -- {
-        --     property = "oxygen",
-        --     min = 0,
-        --     max = 0,
-        -- },
     }
-    space_science_pack_advanced.name = "kr-space-research-data-advanced"
+    space_science_pack_advanced.name = "space-science-pack-muluna"
+    space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
     --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
     data:extend{space_science_pack_advanced}
-    rro.soft_insert(data.raw["technology"]["advanced-space-science-pack"].effects ,  {
-        type = "unlock-recipe",
-        recipe = space_science_pack_advanced.name
-    })
-    
+
+    if mods["Krastorio2-spaced-out"] then
+        local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["kr-space-research-data"])
+
+        space_science_pack_advanced.surface_conditions = {
+            {
+                property = "gravity",
+                min = 0,
+                max = 0,
+            },
+            -- {
+            --     property = "oxygen",
+            --     min = 0,
+            --     max = 0,
+            -- },
+        }
+        space_science_pack_advanced.name = "kr-space-research-data-advanced"
+        --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
+        data:extend{space_science_pack_advanced}
+        rro.soft_insert(data.raw["technology"]["advanced-space-science-pack"].effects ,  {
+            type = "unlock-recipe",
+            recipe = space_science_pack_advanced.name
+        })
+    end
+else
+    data.raw["technology"]["advanced-space-science-pack"].hidden = true
 end
 
 
