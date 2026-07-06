@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.18
+Date: 2026-07-06
+  Compatibility:
+    - Muluna.data_fluids.dummy_fluidbox is now a public function to make it easier for other mods to add dummy fluidboxes to their buildings if they want to add a data port to their building. https://github.com/nicholasgower/planet-muluna/issues/419
+---------------------------------------------------------------------------------------------------
 Version: 2.3.17
 Date: 2026-07-06
   Bugfixes:
