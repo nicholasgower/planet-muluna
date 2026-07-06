@@ -3,7 +3,7 @@ local rro =Muluna.rro
 -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
 
-local max_fluid_boxes=12 --Assuming that no modded machines have this many fluidboxes.
+local max_fluid_boxes=30 --Assuming that no modded machines have this many fluidboxes.
 local dummy_fluidboxes = max_fluid_boxes-2
 
 for _,recipe in pairs(data.raw["recipe"]) do
@@ -14,7 +14,7 @@ for _,recipe in pairs(data.raw["recipe"]) do
                 for _,recipe in pairs(input) do
                     if recipe.type == "fluid" and recipe.fluidbox_index == nil then
                         recipe.fluidbox_index = i
-                        recipe.optional_fluidbox_indexes = {2,3,4,5,6}
+                        recipe.optional_fluidbox_indexes = rro.range(2,25)
                         i = i + 1
                     end
                 end
