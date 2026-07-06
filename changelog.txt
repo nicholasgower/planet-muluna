@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.15
+Date: 2026-07-06
+  Bugfixes:
+    - Assembling machines with data ports will no longer show their data port on recipes without a data component. This fix will stop working if any crafting buildings use 12 or more fluidboxes. https://github.com/nicholasgower/planet-muluna/issues/320
+---------------------------------------------------------------------------------------------------
 Version: 2.3.14
 Date: 2026-07-05
   Balancing:
