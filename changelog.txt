@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.16
+Date: 2026-07-06
+  Locale:
+    - Disabled all German locale due to its low-quality and outdated translations. https://github.com/nicholasgower/planet-muluna/issues/374
+---------------------------------------------------------------------------------------------------
 Version: 2.3.15
 Date: 2026-07-06
   Bugfixes:
