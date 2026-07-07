@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.19
+Date: 2026-07-07
+  Balancing:
+    - Rolled back all changes to vanilla rocket part costs and the cost of other modded rocket parts, and removed all pre-Aquilo rocket part productivity technologies. Using PlanetsLib's new runtime entity replacement system, rocket silos on Muluna now have a doubled rocket lift capacity.
+  Compatibility:
+    - Raised required PlanetsLib version to 1.20.0.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.18
 Date: 2026-07-06
   Compatibility:
