@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.18
+Date: 2026-07-06
+  Compatibility:
+    - Muluna.data_fluids.dummy_fluidbox is now a public function to make it easier for other mods to add dummy fluidboxes to their buildings if they want to add a data port to their building. https://github.com/nicholasgower/planet-muluna/issues/419
+---------------------------------------------------------------------------------------------------
+Version: 2.3.17
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed fluidbox indexing issues with UMR/UFP.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.16
+Date: 2026-07-06
+  Locale:
+    - Disabled all German locale due to its low-quality and outdated translations. https://github.com/nicholasgower/planet-muluna/issues/374
+---------------------------------------------------------------------------------------------------
+Version: 2.3.15
+Date: 2026-07-06
+  Bugfixes:
+    - Assembling machines with data ports will no longer show their data port on recipes without a data component. This fix will stop working if any crafting buildings use 12 or more fluidboxes. https://github.com/nicholasgower/planet-muluna/issues/320
+---------------------------------------------------------------------------------------------------
+Version: 2.3.14
+Date: 2026-07-05
+  Balancing:
+    - Greenhouse recipes allow quality modules, but forbid crafting at any quality level other than normal.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.13
 Date: 2026-07-03
   Locale:

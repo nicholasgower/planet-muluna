@@ -37,7 +37,8 @@ data:extend{
         energy_required=5*60,
         subgroup="muluna-forestry",
         max_productivity = 3,
-        allow_quality = false,
+        allow_quality = true,
+        can_set_quality = false,
         auto_recycle=false,
         allow_productivity = true,
         hide_from_signal_gui = false,
@@ -81,7 +82,6 @@ data:extend{
         type = "recipe",
         name = "muluna-tree-growth-greenhouse-water-saving",
         enabled = false,
-        allow_quality = false,
         categories = {"muluna-greenhouse"},
         icons = dual_icon("muluna-sapling","water"),
         ingredients = {
@@ -97,7 +97,8 @@ data:extend{
         auto_recycle=false,
         subgroup="muluna-forestry",
         max_productivity = 3,
-        allow_productivity = true,
+        allow_quality = true,
+        can_set_quality = false,
         hide_from_signal_gui = false,
         surface_conditions = {
             {

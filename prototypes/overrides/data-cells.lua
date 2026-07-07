@@ -31,9 +31,9 @@ for _, category in pairs({"item", "tool"}) do
                     enabled = false,
                     ingredients = { 
                         {type = "item",name = prototype.name, amount = 1,ignored_by_stats = 1},
-                        {type = "fluid", name = "muluna-astronomical-data", amount = prototype.data_capacity, fluidbox_index = 2,ignored_by_stats = prototype.data_capacity,ignored_by_productivity=prototype.data_capacity},
+                        {type = "fluid", name = "muluna-astronomical-data", amount = prototype.data_capacity, fluidbox_index = 30,ignored_by_stats = prototype.data_capacity,ignored_by_productivity=prototype.data_capacity},
                     },
-                    results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 2,ignored_by_stats = 1,ignored_by_productivity=1}},
+                    results = {{type = "item" , name = data_cell.name, amount = 1, fluidbox_index = 30,ignored_by_stats = 1,ignored_by_productivity=1}},
                     main_product = data_cell.name,
                     energy_required = 5,
                     allow_quality = false,
