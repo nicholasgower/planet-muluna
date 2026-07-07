@@ -10,7 +10,7 @@
     "base >= 2.1.7",
     "space-age",
     "? quality",
-    "PlanetsLib >= 1.20.0",
+    "PlanetsLib >= 1.20.2",
     "muluna-graphics >= 1.1.10",
     "tile-upgrade-planner-muluna >= 1.0.1",
     "! tile-upgrade-planner",
