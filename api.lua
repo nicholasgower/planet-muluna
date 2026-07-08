@@ -15,7 +15,7 @@ Muluna.img = require("lib.images")
 Muluna.vectors=require("lib.vectors")
 Muluna.multiply_energy = require("lib.energy-multiply").multiply_energy
 Muluna.pipe_pictures = require("lib.pipe-pictures")
-
+Muluna.data_fluids = require("lib.data-lib")
 --flib imports
 Muluna.flib_bounding_box = require("__planet-muluna__.lib.flib-bounding-box")
 Muluna.flib_prototypes = require("__flib__.prototypes")

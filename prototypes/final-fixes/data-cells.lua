@@ -3,7 +3,7 @@ local rro =Muluna.rro
 -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
 
-local max_fluid_boxes=12 --Assuming that no modded machines have this many fluidboxes.
+local max_fluid_boxes=30 --Assuming that no modded machines have this many fluidboxes.
 local dummy_fluidboxes = max_fluid_boxes-2
 
 for _,recipe in pairs(data.raw["recipe"]) do
@@ -14,7 +14,7 @@ for _,recipe in pairs(data.raw["recipe"]) do
                 for _,recipe in pairs(input) do
                     if recipe.type == "fluid" and recipe.fluidbox_index == nil then
                         recipe.fluidbox_index = i
-                        recipe.optional_fluidbox_indexes = {2,3,4,5,6}
+                        recipe.optional_fluidbox_indexes = rro.range(2,25)
                         i = i + 1
                     end
                 end
@@ -31,23 +31,6 @@ local function rotate_position(position)
     return {-y,x}
 end
 
-local function dummy_fluidbox(production_type,flow_direction,linked_connection_id) --Dummy fluidbox to occupy a fluidbox index.
-    return {
-        volume = 0.5^24, --The smallest possible fluidbox value.
-        production_type = production_type,
-        pipe_connections = {
-            
-            {
-                flow_direction = flow_direction,
-                connection_type = "linked",
-                hide_connection_info = true,
-                linked_connection_id=linked_connection_id
-            },
-            
-        }
-    }
-
-end
 
 
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
@@ -60,7 +43,7 @@ for _,am3 in pairs(data.raw["assembling-machine"]) do
             for _,box in pairs({input,output}) do
                 for i = 1,dummy_fluidboxes do
                     linked_connection_id = linked_connection_id + 1
-                    table.insert(am3.fluid_boxes,dummy_fluidbox(box.production_type,box.pipe_connections[1].flow_direction,linked_connection_id))
+                    table.insert(am3.fluid_boxes,Muluna.data_fluids.dummy_fluidbox(box.production_type,box.pipe_connections[1].flow_direction,linked_connection_id))
                 end
                 box.pipe_picture = nil
                 box.pipe_covers = nil

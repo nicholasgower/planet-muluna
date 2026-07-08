@@ -368,4 +368,13 @@ function rro.keys(table)
     return out
 end
 
+function rro.range(first, last)
+    local t = {}
+    for i = first, last do
+        t[#t + 1] = i
+    end
+    return t
+end
+
+
 return rro

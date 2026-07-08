@@ -1,4 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.21
+Date: 2026-07-07
+  Locale:
+    - Updated Czech locale. By Vagonek.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.20
+Date: 2026-07-07
+  Compatibility:
+    - Raised required PlanetsLib version to 1.20.2.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.19
+Date: 2026-07-07
+  Balancing:
+    - Rolled back all changes to vanilla rocket part costs and the cost of other modded rocket parts, and removed all pre-Aquilo rocket part productivity technologies. Using PlanetsLib's new runtime entity replacement system, rocket silos on Muluna now have a doubled rocket lift capacity.
+  Compatibility:
+    - Raised required PlanetsLib version to 1.20.0.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.18
+Date: 2026-07-06
+  Compatibility:
+    - Muluna.data_fluids.dummy_fluidbox is now a public function to make it easier for other mods to add dummy fluidboxes to their buildings if they want to add a data port to their building. https://github.com/nicholasgower/planet-muluna/issues/419
+---------------------------------------------------------------------------------------------------
+Version: 2.3.17
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed fluidbox indexing issues with UMR/UFP.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.16
 Date: 2026-07-06
   Locale:

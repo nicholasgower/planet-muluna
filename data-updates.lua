@@ -145,7 +145,8 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         data:extend{tech,tech_2}
     end
 
-    
+else
+    PlanetsLib.set_special_properties("muluna", {rocket_lift_multiplier=2}) 
 end
 
 rocket_prod_aquilo.name="rocket-part-productivity-aquilo"

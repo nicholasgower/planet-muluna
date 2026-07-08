@@ -100,6 +100,8 @@ data:extend{
         name = "muluna-easy-vanilla-rocket-part-costs",
         setting_type = "startup",
         default_value = false,
+        hidden = true,
+        forced_value = true,
         order = "ba",
       },
       {
