@@ -441,13 +441,6 @@ local oxygen_from_oxidizer = {
             amount = 8000/divider,
             ignored_by_productivity=8000/divider,
         },
-        {
-            type = "fluid",
-            name = "water",
-            amount = 100/divider/probability,
-            independent_probability = probability,
-            ignored_by_productivity=100/divider/probability,
-        }
     }
 }
 
