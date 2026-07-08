@@ -74,20 +74,20 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         gui_type = defines.relative_gui_type.constant_combinator_gui
         localised_button = {"muluna-gui.telescope-combinator-goto-button"}
         button_name = "telescope-combinator"
-    elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other["roboport"] end ) then
-        local telescope_data = storage.vacuum_roboports
-        other_entity_button = true
-        gui_type = defines.relative_gui_type.roboport_gui
-        localised_button = {"muluna-gui.vacuum-roboport-goto-button"}
-        other_entity = storage.vacuum_roboports
-        button_name = "burner-roboport-unit"
+    -- elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other["roboport"] end ) then
+    --     local telescope_data = storage.vacuum_roboports
+    --     other_entity_button = true
+    --     gui_type = defines.relative_gui_type.roboport_gui
+    --     localised_button = {"muluna-gui.vacuum-roboport-goto-button"}
+    --     other_entity = storage.vacuum_roboports
+    --     button_name = "burner-roboport-unit"
         
-    elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other["refueler"] end ) then
-        local telescope_data = storage.vacuum_roboports
-        other_entity_button = true
-        gui_type = defines.relative_gui_type.assembling_machine_gui
-        localised_button = {"muluna-gui.vacuum-roboport-refueler-goto-button"}
-        button_name = "burner-roboport-refueler"
+    -- elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other["refueler"] end ) then
+    --     local telescope_data = storage.vacuum_roboports
+    --     other_entity_button = true
+    --     gui_type = defines.relative_gui_type.assembling_machine_gui
+    --     localised_button = {"muluna-gui.vacuum-roboport-refueler-goto-button"}
+    --     button_name = "burner-roboport-refueler"
     elseif rro.contains(Muluna.constants.heat_assembling_machines,function(other) return entity_name == other["assembling-machine"] end ) then
         local assembling_machine_data = storage.heat_assembling_machines
         other_entity_button = true
@@ -103,9 +103,10 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     end
 
     if other_entity_button or satradar_gui then
+        game.print("Showing gui")
         local player = game.players[event.player_index]
         local frame = player.gui.relative.add{type="frame", name="muluna-entity-gui", caption=localised_title, direction = "vertical",
-    
+        
         anchor = {
 				gui = gui_type,
 				position = satradar_gui and defines.relative_gui_position.bottom or defines.relative_gui_position.right,
