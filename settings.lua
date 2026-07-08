@@ -157,6 +157,8 @@ data:extend{
         setting_type = "startup",
         default_value = false,
         order = "bga",
+        hidden = true,
+        forced_value = true,
       },
       
       {
