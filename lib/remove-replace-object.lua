@@ -283,7 +283,9 @@ function rro.merge(old, new)
     old = util.table.deepcopy(old)
 
     for k, v in pairs(new) do
-        if v == "_nil" then
+        if type(v) == "function" then
+            old[k] = v(old[k])
+        elseif v == "_nil" then
             old[k] = nil
         else
             old[k] = v

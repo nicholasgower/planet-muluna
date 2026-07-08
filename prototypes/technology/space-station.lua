@@ -1638,8 +1638,7 @@ data:extend{
     {
         type = "technology",
         name = "muluna-big-rocket-silo",
-        icon = data.raw["technology"]["rocket-silo"].icon,
-        icon_size = data.raw["technology"]["rocket-silo"].icon_size,
+        icons = mods["space-exploration-graphics"] and Muluna.img.blur_technology_icon({{icon = "__space-exploration-graphics__/graphics/technology/rocket-launch-pad.png",icon_size = 128}},8),
         localised_name={"entity-name.muluna-big-rocket-silo"},
         unit = {
             count = 2000,

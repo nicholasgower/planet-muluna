@@ -224,5 +224,6 @@ rro.deep_replace(big_rocket_silo,"rocket-silo","muluna-big-rocket-silo")
 big_rocket_silo.place_result="muluna-big-rocket-silo"
 big_rocket_silo.stack_size=1
 big_rocket_silo.weight=big_rocket_silo.weight*5
-
+big_rocket_silo.icon="__space-exploration-graphics__/graphics/icons/rocket-launch-pad.png"
+big_rocket_silo.order = big_rocket_silo.order .. "b"
 data:extend{space_boiler,vacuum_heating_tower,crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,data_cable,big_rocket_silo}

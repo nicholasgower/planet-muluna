@@ -317,6 +317,7 @@ big_rocket_silo.ingredients = {
     {type = "item", name = "refined-concrete", amount = 2000},
     {type = "item", name = "foundation", amount = 100},
 }
+
 big_rocket_silo.energy_required=90
 
 data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,big_rocket_silo}
