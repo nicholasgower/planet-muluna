@@ -19,6 +19,7 @@ require("prototypes.combined_files.data-pump")
 
 require("prototypes.tiles.artificial-tiles")
 require("prototypes.radiation")
+require("prototypes.vacuum-robots")
 require("prototypes.entity.oxidized-boiler")
 require("prototypes.entity.vacuum-heating-tower")
 --null change

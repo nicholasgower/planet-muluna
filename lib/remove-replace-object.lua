@@ -106,10 +106,11 @@ function rro.replace(list, objectToRemove, replacementObject,no_duplicates)
 end
 
 --- Similar to rro.replace, but acts recursively within subobjects.
-function rro.deep_replace(list, objectToRemove, replacementObject,gsub)
+function rro.deep_replace(list, objectToRemove, replacementObject,gsub,excluded_fields)
     if gsub == nil then gsub = false end
     if list then
         for i,item in pairs(list) do -- Can also be a dictionary
+            if rro.contains(excluded_fields,i) then goto continue end
             if type(item) == "string" and type(objectToRemove) == "string" and gsub then
                 item = string.gsub(item,objectToRemove,replacementObject)
             
@@ -123,8 +124,9 @@ function rro.deep_replace(list, objectToRemove, replacementObject,gsub)
                 end
                 --break -- Don't exit the loop after replacing or removing
             elseif type(list[i]) == "table" then
-                rro.deep_replace(list[i],objectToRemove, replacementObject)
+                rro.deep_replace(list[i],objectToRemove, replacementObject, excluded_fields)
             end
+            ::continue::
         end
     end
 

@@ -70,7 +70,7 @@ if data.raw["heat-assembling-machine"] then
                 end
             end
         end
-        assembler.quality_indicator_shift = {-0.2,0.2}
+        assembler.quality_indicator_shift = {-0.4,0.4}
         reactor.energy_source = {
             type = "void",
             -- fluid_box = {
