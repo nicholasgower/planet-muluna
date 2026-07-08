@@ -24,7 +24,7 @@ big_silo.perceived_performance = {performance_to_activity_rate=1/3}
 big_silo.active_energy_usage = Muluna.multiply_energy(big_silo.active_energy_usage,5)
 big_silo.lamp_energy_usage = Muluna.multiply_energy(big_silo.lamp_energy_usage,3)
 
---big_rocket.tall = true
+big_rocket.tall = true
 big_silo.selection_box=flib_bounding_box.resize(rocket_silo.selection_box,3) 
 big_silo.collision_box=flib_bounding_box.resize(rocket_silo.collision_box,3) 
 
