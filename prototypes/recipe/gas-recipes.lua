@@ -438,8 +438,8 @@ local oxygen_from_oxidizer = {
         {
             type = "fluid",
             name = "oxygen",
-            amount = 4000/divider,
-            ignored_by_productivity=4000/divider,
+            amount = 8000/divider,
+            ignored_by_productivity=8000/divider,
         },
         {
             type = "fluid",
