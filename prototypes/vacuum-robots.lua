@@ -56,9 +56,10 @@ data:extend {
         type = "recipe",
         name = "muluna-burner-roboport",
         ingredients = {
-            {type = "item", name = "advanced-circuit",  amount = 45},
+            {type = "item", name = "electronic-circuit",  amount = 45},
             {type = "item", name = "steel-plate",  amount = 45},
             {type = "item", name = "iron-gear-wheel",  amount = 45},
+            {type = "item", name = "pipe",  amount = 45},
             --{type = "item", name = "engine-unit",  amount = 1}
         
         },
