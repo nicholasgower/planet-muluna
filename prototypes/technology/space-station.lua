@@ -1591,7 +1591,39 @@ data:extend{
     --     icon = data.raw["technology"]["space-platform"].icon,
     --     icon_size = data.raw["technology"]["space-platform"].icon_size,
     -- }
-
+    {
+        type = "technology",
+        name = "muluna-big-rocket-silo",
+        icon = data.raw["technology"]["rocket-silo"].icon,
+        icon_size = data.raw["technology"]["rocket-silo"].icon_size,
+        localised_name={"entity-name.muluna-big-rocket-silo"},
+        unit = {
+            count = 2000,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
+                {"space-science-pack", 1},
+                {"interstellar-science-pack",1},
+                {"electromagnetic-science-pack",1},
+                {"metallurgic-science-pack",1},
+                {"agricultural-science-pack",1},
+                {"cryogenic-science-pack",1},
+            },
+        },
+        prerequisites = {
+            "foundation","quantum-processor"
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-big-rocket-silo",
+            }
+        }
+    }
 }
 if settings.startup["muluna-easy-wood-gasification-productivity"].value == true or (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") then-- or  then
     local gasification_prod = {

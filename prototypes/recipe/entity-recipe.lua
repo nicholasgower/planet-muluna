@@ -306,4 +306,17 @@ data:extend{{
     enabled = false,
   }}
 
-data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope}
+local big_rocket_silo=table.deepcopy(data.raw["recipe"]["rocket-silo"])
+rro.deep_replace(big_rocket_silo,"rocket-silo","muluna-big-rocket-silo")
+big_rocket_silo.ingredients = {
+    {type = "item", name = "steel-plate", amount = 3000},
+    {type = "item", name = "processing-unit", amount = 400},
+    {type = "item", name = "quantum-processor", amount = 200},
+    {type = "item", name = "electric-engine-unit", amount = 600},
+    {type = "item", name = "pipe", amount = 300},
+    {type = "item", name = "refined-concrete", amount = 2000},
+    {type = "item", name = "foundation", amount = 100},
+}
+big_rocket_silo.energy_required=90
+
+data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,big_rocket_silo}

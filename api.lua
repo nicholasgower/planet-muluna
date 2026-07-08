@@ -20,7 +20,7 @@ Muluna.data_fluids = require("lib.data-lib")
 Muluna.flib_bounding_box = require("__planet-muluna__.lib.flib-bounding-box")
 Muluna.flib_prototypes = require("__flib__.prototypes")
 Muluna.telescopes = require("lib.telescopes")
-
+Muluna.machine_scaling = require("lib.machine_scaling")
 if Muluna.stage == "data" then
     data:extend{{
         type = "mod-data",
