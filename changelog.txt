@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2026-07-09
+  Features:
+    - Added "Big rocket silo", a 15x15 rocket silo with 5x lift weight, 3x crafting speed, and (5/3)x lift weight per rocket part relative to the vanilla rocket silo.
+    - Added "Burner roboport", a type of roboport that consumes thruster oxidizer and thruster fuel instead of electricity. Intended to be the only roboport allowed on Muluna.
+  Balancing:
+    - "Thruster oxidizer separation" no longer returns water.
+    - Doubled oxygen output of "Thruster oxidizer separation" recipe.
+    - Reduced pressure on Muluna from 50 to 3 hPa.
+  Compatibility:
+    - Added "space-exploration-graphics-5" as a required dependency.
+  Changes:
+    - Previously optional setting adding alternative battery recipe is now always enabled.
+---------------------------------------------------------------------------------------------------
 Version: 2.3.21
 Date: 2026-07-07
   Locale:
