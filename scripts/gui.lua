@@ -103,7 +103,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     end
 
     if other_entity_button or satradar_gui then
-        game.print("Showing gui")
+        --game.print("Showing gui")
         local player = game.players[event.player_index]
         local frame = player.gui.relative.add{type="frame", name="muluna-entity-gui", caption=localised_title, direction = "vertical",
         
