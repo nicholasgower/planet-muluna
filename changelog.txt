@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 2026-07-09
+  Bugfixes:
+    - Fixed crash on load with Krastorio 2 Spaced Out. This is a temporary fix that disables K2's GUI for roboports on Muluna's burner roboport. Thank you Shanquan954! https://github.com/nicholasgower/planet-muluna/issues/422
+---------------------------------------------------------------------------------------------------
 Version: 2.4.2
 Date: 2026-07-09
   Changes:
