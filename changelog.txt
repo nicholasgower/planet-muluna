@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2026-07-09
+  Changes:
+    - Added an on-load warning that tells users that early versions of Factorio 2.1.X break fluidboxes on Muluna, and that the developer of Muluna has no control over the issue.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.1
 Date: 2026-07-09
   Bugfixes:
