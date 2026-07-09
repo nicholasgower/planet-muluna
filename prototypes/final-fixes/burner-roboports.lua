@@ -149,10 +149,23 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 end
                 refueler.graphics_set =  {idle_animation = {north = graphics}}
             end
+            local minable_result = nil
+            if roboport.minable then
+                minable_result = roboport.minable.result
+            end
             refueler.minable = roboport.minable
             roboport.localised_name = {"entity-name.muluna-burner-roboport"}
             roboport.minable = nil
-            refueler.minable.result = refueler.name
+            -- K2 generates roboport mode variants such as `-logistic-mode` and `-construction-mode`.
+            -- Those variants do not have matching item prototypes, so they must keep dropping the
+            -- original burner roboport item instead of their entity name.
+            if refueler.minable then
+                if data.raw["item"][refueler.name] then
+                    refueler.minable.result = refueler.name
+                else
+                    refueler.minable.result = minable_result
+                end
+            end
             roboport.name = roboport.name .. "-roboport"
             roboport.is_vacuum_roboport = false
             data:extend{roboport,refueler}
