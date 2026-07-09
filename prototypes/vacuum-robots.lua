@@ -66,4 +66,4 @@ data:extend {
         results = {{type = "item", name = "muluna-burner-roboport", amount = 1}},
         
     }),
-}
+} 
