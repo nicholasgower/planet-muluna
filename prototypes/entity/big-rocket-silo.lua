@@ -95,5 +95,8 @@ big_rocket.shadow_slave_entity = rocket_shadow.name
 
 big_silo.module_slots = 8
 
+big_silo.alarm_sound = {filename = "__muluna-graphics__/sound/entity/muluna-big-rocket-silo/big-silo-alarm.ogg",max_volume=2,min_volume=2}
+big_silo.quick_alarm_sound = {filename = "__muluna-graphics__/sound/entity/muluna-big-rocket-silo/big-silo-alarm-short.ogg",max_volume=2,min_volume=2}
+
 data:extend{big_silo,big_rocket,big_pod}
 
