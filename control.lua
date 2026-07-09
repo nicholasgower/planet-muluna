@@ -69,6 +69,10 @@ Muluna.events.register_delayed_function('space-exploration-graphics-4-missing', 
     game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics-4","0.7.2"})
 end)
 
+Muluna.events.register_delayed_function('factorio-update-required', function() 
+    game.print({"console.factorio-update-required"})
+end)
+
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
     if not script.active_mods["space-exploration-graphics"] then
         Muluna.events.execute_later('space-exploration-graphics-missing',15)
@@ -77,6 +81,7 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
         Muluna.events.execute_later('space-exploration-graphics-4-missing',15)
         --game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics-4","0.7.2"})
     end
+    Muluna.events.execute_later('factorio-update-required',15)
     --init_storage() 
     storage.walking_tick_rates = {}
     for _,force in pairs(game.forces) do
@@ -122,11 +127,13 @@ end
 
 
 
-
 script.on_event(defines.events.on_research_finished, function(event) interstellar_science_pack.update_interstellar_pack(event.research.force) end)
 -- script.on_configuration_changed(function()
     
 -- end
 -- )
+
+
+
 
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
