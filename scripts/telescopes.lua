@@ -175,6 +175,8 @@ end,
 telescope_filters
 )
 
+local asteroid_types = {}
+
 
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
@@ -241,29 +243,41 @@ Muluna.events.on_event({defines.events.on_player_rotated_entity}, function(event
     end
 end)
 
-local function get_state_integer(state)
-    if state == defines.space_platform_state.waiting_for_starter_pack then
-        return 1
-    elseif state == defines.space_platform_state.starter_pack_requested then
-        return 2
-    elseif state == defines.space_platform_state.starter_pack_on_the_way then
-        return 3
-    elseif state == defines.space_platform_state.on_the_path then
-        return 4
-    elseif state == defines.space_platform_state.waiting_for_departure then
-        return 5
-    elseif state == defines.space_platform_state.no_schedule then
-        return 6
-    elseif state == defines.space_platform_state.no_path then
-        return 7
-    elseif state == defines.space_platform_state.waiting_at_station then
-        return 8
-    elseif state == defines.space_platform_state.paused then
-        return 9
-    else
-        return nil -- or some default value if needed
-    end
-end
+local get_state_integer = {
+    [defines.space_platform_state.waiting_for_starter_pack] = 1,
+    [defines.space_platform_state.starter_pack_requested] = 2,
+    [defines.space_platform_state.starter_pack_on_the_way] = 3,
+    [defines.space_platform_state.on_the_path] = 4,
+    [defines.space_platform_state.waiting_for_departure] = 5,
+    [defines.space_platform_state.no_path] = 6,
+    [defines.space_platform_state.no_path] = 7,
+    [defines.space_platform_state.waiting_at_station] = 8,
+    [defines.space_platform_state.paused] = 9,
+}
+
+-- local function get_state_integer(state)
+--     if state == defines.space_platform_state.waiting_for_starter_pack then
+--         return 1
+--     elseif state == defines.space_platform_state.starter_pack_requested then
+--         return 2
+--     elseif state == defines.space_platform_state.starter_pack_on_the_way then
+--         return 3
+--     elseif state == defines.space_platform_state.on_the_path then
+--         return 4
+--     elseif state == defines.space_platform_state.waiting_for_departure then
+--         return 5
+--     elseif state == defines.space_platform_state.no_schedule then
+--         return 6
+--     elseif state == defines.space_platform_state.no_path then
+--         return 7
+--     elseif state == defines.space_platform_state.waiting_at_station then
+--         return 8
+--     elseif state == defines.space_platform_state.paused then
+--         return 9
+--     else
+--         return nil -- or some default value if needed
+--     end
+-- end
 
 local function bool_to_int(state)
     if state == true then
@@ -310,7 +324,7 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
                 signals[i]={value = {type = "virtual",name = signal,quality = "normal"},min= space_platform.index}
                 i = i+1
                 if debug then log("space_platform.state") end
-                signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer(space_platform.state)}
+                signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer[space_platform.state]}
                 i = i+1
                 signals[i]={value = {type = "virtual",name = signal,quality = "rare"},min= bool_to_int(space_platform.can_leave_current_location())}
                 i = i+1
@@ -367,8 +381,14 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                     local signals = get_telescope_combinator_signals(combinator.surface,combinator.force)
                     if not rro.deep_equals(signals,cached_signals) then
                         combinator_behavior.remove_section(1)
+                        
+                        
                         local section = combinator_behavior.add_section()
+                        local filters = section.filters 
+                        game.print(section.type)
+                        --filters = signals
                         for i,signal in ipairs(signals) do
+                            --filters[i]=signal
                             section.set_slot(i,signal)
                         end
                     end

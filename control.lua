@@ -34,6 +34,7 @@ require("scripts.heat-assembling-machine")
 require("scripts.telescopes")
 require("scripts.gui")
 require("scripts.burner-roboports")
+require("scripts.commands")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
@@ -52,6 +53,7 @@ require("scripts.burner-roboports")
 -- script.on_event(defines.events.on_built_entity, function(event)
 --     ground_digger.construct_sand_extractor(event)
 -- end)
+
 
 local function init_storage() 
     storage.players_on_muluna = {}
