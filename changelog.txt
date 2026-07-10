@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.10
+Date: 2026-07-10
+  Changes:
+    - Temporarily raised the pressure on Muluna to 10 hPa to make vanilla roboports work on Muluna again. https://github.com/nicholasgower/planet-muluna/issues/426
+---------------------------------------------------------------------------------------------------
 Version: 2.4.9
 Date: 2026-07-10
   Graphics:
