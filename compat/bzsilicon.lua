@@ -43,14 +43,14 @@ if data.raw["furnace"]["basic-crusher"] and not mods["crushing-industry"] then
 end
 
 if mods["bztitanium"] then
-    table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "titanium-ore",amount = 1,probability = 0.025})
+    table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "titanium-ore",amount = 1,independent_probability = 0.025})
     -- data.raw["planet"]["muluna"].map_gen_settings.autoplace_controls["titanium-ore"] = {}
     -- data.raw["planet"]["muluna"].map_gen_settings.autoplace_settings["entity"]["settings"]["titanium-ore"] = {}
     rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"space-science-pack",1})
     rro.remove(data.raw["technology"]["wood-gas-processing-to-crude-oil"].unit.ingredients,{"production-science-pack",1})
 end
 if mods["bzzirconium"] then
-    table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "zircon",amount = 1,probability = 0.05})
+    table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "zircon",amount = 1,independent_probability = 0.05})
 end
 
 if mods["bzsilicon"] then
