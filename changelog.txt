@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.6
+Date: 2026-07-10
+  Bugfixes:
+    - Burner roboport is properly flagged as player-placeable, allowing it to be placed in blueprints. https://github.com/nicholasgower/planet-muluna/issues/424
+---------------------------------------------------------------------------------------------------
 Version: 2.4.5
 Date: 2026-07-09
   Sounds:
