@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.8
+Date: 2026-07-10
+  Balancing:
+    - Raised weight of satellite radar item to 2 tons, ensuring it can only be launched by standard rocket silos on Muluna or by big rocket silos on other planets.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.7
 Date: 2026-07-10
   Bugfixes:
