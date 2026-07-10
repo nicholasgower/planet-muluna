@@ -96,7 +96,7 @@ local function crushing_technology_icon(item_sprite,item_sprite_size)
     return  {
         {
             icon = "__muluna-graphics__/graphics/technology/comminution.png",
-            icon_size = 968,
+            icon_size = 256,
         },  
         {
             icon = item_sprite,
@@ -304,7 +304,7 @@ data:extend{
         -- icons = {
         --     {
         --         icon = "__muluna-graphics__/graphics/technology/comminution.png",
-        --         icon_size = 968,
+        --         icon_size = 256,
         --     },  
         -- }
         icons = crushing_technology_icon(data.raw["item"]["metallic-asteroid-chunk"].icon,data.raw["item"]["metallic-asteroid-chunk"].icon_size)
@@ -344,7 +344,7 @@ data:extend{
         -- icons = {
         --     {
         --         icon = "__muluna-graphics__/graphics/technology/comminution.png",
-        --         icon_size = 968,
+        --         icon_size = 256,
         --     },  
         -- }
         icons = digging_technology_icon(data.raw["item"]["muluna-lunar-regolith"].icon,data.raw["item"]["muluna-lunar-regolith"].icon_size)
@@ -374,7 +374,7 @@ data:extend{
         icons = {
             {
                 icon = "__muluna-graphics__/graphics/technology/comminution.png",
-                icon_size = 968,
+                icon_size = 256,
             },  
             {
                 icon = data.raw["item"]["stone"].icon,
@@ -447,7 +447,7 @@ data:extend{
         icons = {
             {
                 icon = "__muluna-graphics__/graphics/technology/comminution.png",
-                icon_size = 968,
+                icon_size = 256,
             },  
             {
                 icon = "__muluna-graphics__/graphics/icons/anorthite-chunk.png",
@@ -1365,7 +1365,7 @@ data:extend{
         name = "space-chest-muluna",
         localised_name = {"entity-name.space-chest-muluna"},
         icon = "__muluna-graphics__/graphics/technology/packaging.png",
-        icon_size = 1024,
+        icon_size = 256,
         unit = {
             count = 1000,
             time = 60,
@@ -1536,7 +1536,7 @@ data:extend{
     {
         type = "technology",
         name = "water-recycling-productivity",
-        icons = technology_icon_constant_recipe_productivity("__muluna-graphics__/graphics/technology/filtration.png",1024),
+        icons = technology_icon_constant_recipe_productivity("__muluna-graphics__/graphics/technology/filtration.png",256),
         icon = data.raw["technology"]["space-platform"].icon,
         icon_size = data.raw["technology"]["space-platform"].icon_size,
         max_level = "infinite",
