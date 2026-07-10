@@ -77,7 +77,10 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
                 crafting_categories = {"muluna-burner-roboport"},
                 use_mirroring=true,
+                flags = {"player-creation","placeable-player"},
+                icon = data.raw["item"]["muluna-burner-roboport"].icon,
                 allowed_effects = {},
+                placeable_by = roboport.placeable_by,
                 surface_conditions = {
                     {
                         property="pressure",
@@ -137,7 +140,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                     
                 },
                 energy_usage = roboport.energy_source.input_flow_limit,
-                max_health = 10000,
+                max_health = roboport.max_health,
                 quality_indicator_shift = {-0.4,0.4}
             }
             if not refueler.graphics_set then
@@ -150,6 +153,8 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 refueler.graphics_set =  {idle_animation = {north = graphics}}
             end
             local minable_result = nil
+            roboport.max_health = 10000
+            roboport.placeable_by = nil
             if roboport.minable then
                 minable_result = roboport.minable.result
             end
