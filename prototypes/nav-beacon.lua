@@ -33,7 +33,7 @@ if settings.startup["enable-nav-beacon"].value == true then
         }
     })
     navBeaconItem.order = navBeaconItem.order .. "-z"
-    navBeaconItem.weight = 1000*kg
+    navBeaconItem.weight = 2000*kg --One standard rocket on Muluna
 
     radarEntity.pictures = nil
     ---@type RadarPrototype
