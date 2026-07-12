@@ -1,23 +1,23 @@
 [item-name]
-tar=Verdünntem Bitumen
+tar=Verdünntes Bitumen
 
 [fluid-name]
-tar=Verdünntem Bitumen
+tar=Verdünntes Bitumen
 
 [entity-name]
 
 [recipe-name]
-wood-gasification=Holzgasextrahierung
-solid-fuel-from-tar=Verdünntem Bitumen zu Festbrennstoff
-crude-oil-from-tar=Verdünntem Bitumen zu Rohöl
-advanced-wood-gasification=Verbesserte Holzgasextrahierung
+wood-gasification=Holzvergasung
+solid-fuel-from-tar=Festbrennstoff aus verdünntem Bitumen
+crude-oil-from-tar=Rohöl aus verdünntem Bitumen
+advanced-wood-gasification=Fortgeschrittene Holzvergasung
 
 [technology-name]
-wood-gas-processing=Gasextrahierung
-wood-gas-processing-to-crude-oil=Aufbereitung von verdünntem Bitumen
-advanced-wood-gas-processing=Verbesserte Gasextrahierung
+wood-gas-processing=Verarbeitungstechnik zur Holzvergasung
+wood-gas-processing-to-crude-oil=Upgrade von verdünntem Bitumen
+advanced-wood-gas-processing=Fortgeschrittene Verarbeitungstechnik zur Holzvergasung
 
 [technology-description]
-wood-gas-processing=Mit Hilfe eines Chemischen Labors wird aus 10 Holz 20 Einheiten Petroleum und 6 Teer. Aus 32 Teer kannst du 1 Festbrennstoff herstellen als zusätzliches Rezept.
-wood-gas-processing-to-crude-oil=Bei der Aufbereitung von verdünntem Bitumen werden 32 verdünntes Bitumen und 200 Wasser verwendet zu 40 Einheiten Rohöl
-advanced-wood-gas-processing=Die Verbesserte Holzgasextrahierung erlaubt es, in einer Ölraffinerie aus 20 Holz und 200 Einheiten Wasser 15 Einheiten Schweröl, 15 Einheiten Leichtöl und 30 Einheiten Petroleum zu extrahieren.
+wood-gas-processing=Durch die Holzvergasung wird in einer Chemiefabrik aus Zellulose und zerkleinertem Aluminiumoxid Flüssiggas und verdünntes Bitumen gewonnen. Verdünntes Bitumen wiederum kann in einer Chemiefabrik zu Festbrennstoff umgewandelt werden.
+wood-gas-processing-to-crude-oil=Das Upgrade von verdünntem Bitumen nutzt verdünntes Bitumen und Wasser zur Herstellung von Rohöl.
+advanced-wood-gas-processing=Durch die fortgeschrittene Holzvergasung wird in einer Ölraffinerie aus Zellulose, zerkleinertem Aluminiumoxid und Wasser Schweröl, Leichtöl und Flüssiggas gewonnen.
