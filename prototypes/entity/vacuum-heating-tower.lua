@@ -48,6 +48,7 @@ local recipe = {
         name = "muluna-vacuum-heating",
         category = recipe_category,
         energy_required = energy_required,
+        hide_from_player_crafting=true,
         ingredients = {
             {
                 type = "fluid",
