@@ -37,6 +37,8 @@ for _,space_location in pairs(data.raw["planet"]) do
                 ingredients = {},
                 results = {{type = "fluid", name = "muluna-astronomical-data",amount = 10 + math.floor(distance_factor)/1500}},
                 icons = Muluna.icons.dual_icon("muluna-astronomical-data",space_location.name),
+                --hidden=true,
+                hide_from_player_crafting=true,
                 surface_conditions = {
                     {
                         property = "pressure",

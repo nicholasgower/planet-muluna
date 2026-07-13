@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.14
+Date: 2026-07-13
+  Compatibility:
+    - Raised required muluna-graphics version.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.13
+Date: 2026-07-13
+  Bugfixes:
+    - Telescope data recipes are now hidden from the player crafting gui.
+    - Vacuum heating tower and burner roboport recipes are now hidden from the player crafting gui.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.12
 Date: 2026-07-12
   Locale:
