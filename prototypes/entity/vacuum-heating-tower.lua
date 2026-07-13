@@ -72,6 +72,8 @@ local recipe = {
         main_product = "muluna-heat",
         subgroup = "environmental-protection",
         order = "e[muluna-vacuum-heating]",
+        hidden=true,
+        hide_from_player_crafting=true
     }
 
 data:extend{steam_proxy,recipe}
