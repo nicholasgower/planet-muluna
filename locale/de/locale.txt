@@ -1,56 +1,69 @@
 [mod-name]
-planet-muluna=○🌐Muluna, Mond von Nauvis
+planet-muluna=○🌐Muluna, Nauvis’ Mond
+
 
 [mod-description]
-planet-muluna=○🌐Erkunde Muluna, den Mond von Nauvis, und wage deinen ersten Schritt ins All. Überarbeitet das Weltraumwissenschaftspaket, das nun auf Muluna hergestellt werden muss. Die Oberfläche ist leblos – aber wer weiß, was sich in den vielen Kratern des Mondes verbirgt?
+planet-muluna=Erkunde Muluna, Nauvis’ Mond, auf dem sich alles um das Zerkleinern von Asteroiden dreht, und wage deinen ersten Schritt ins All. Entdecke neue Einsatzzwecke für Zerkleinerer, die nun auf jeder Oberfläche platziert werden können. Nutze das Wissenschaftspaket für Erkundung, um deine Raumplattform upzugraden und noch weiter in den Weltraum vorzudringen.
+
 
 [space-location-name]
 muluna=Muluna
 
+
 [space-location-description]
-muluna=Nauvis’ größter natürlicher Satellit. Die Oberfläche ist leblos, aber reich an Metallen und Helium. Kupfer ist nur schwer zugänglich, doch Aluminium kann in den meisten Fällen als Ersatz dienen. Pflanzenwachstum ist hier nur unter großen Schwierigkeiten möglich.
+muluna=Nauvis’ größter natürlicher Satellit. Die Oberfläche ist frei von Leben, aber reich an Metallen und Mineralien. Kupfer ist nur schwer zugänglich, doch Aluminium dient in den meisten Fällen als Ersatz. Der Anbau von Pflanzen ist hier nur unter großen Schwierigkeiten möglich.
+
 
 [decorative-name]
-lunar-medium-rock=Mittelgroßer Mondfelsen
-lunar-small-rock=Kleiner Mondfelsen
-lunar-tiny-rock=Winziger Mondfelsen
+lunar-medium-rock=Mittelgroßes Mondgestein
+lunar-small-rock=Kleines Mondgestein
+lunar-tiny-rock=Winziges Mondgestein
 
 [entity-name]
 muluna-advanced-boiler=Vakuumheizkessel
-space-boiler-legacy=Weltraum-Boiler (Veraltet)
-space-heating-tower=Weltraum-Heizturm
-anorthite-chunk=Anorthitbrocken
+space-heating-tower=Weltraumheizturm
+anorthite-chunk=Anorthithaltiger Asteroidenbrocken
 cryolab=Kryolabor
 space-chest-muluna=Weltraumkiste
-lunar-rock=Mondgestein
-lunar-huge-rock=Riesiger Mondfelsen
+lunar-rock=Großes Mondgestein
+lunar-huge-rock=Riesiges Mondgestein
 muluna-satellite-radar=Satellitenradar
-nav-beacon-electric-interface=Satellitenradar-Elektroschnittstelle
-platform-mode=Plattform-modus
-planet-mode=Planeten-modus
+nav-beacon-electric-interface=Elektrische Schnittstelle des Satellitenradars
+platform-mode=Plattform-Modus
+planet-mode=Planeten-Modus
 n-deprecated=__1__ (Veraltet)
-muluna-greenhouse-wood=Versiegeltes Gewächshaus (Holzanbau)
-fulgoran-cargo-pod-container=Fulgora-Frachtraumkapsel-Kontainer  
-metallic-asteroid-chunk=Metallischer Meteoritenbrocken  
-carbonic-asteroid-chunk=Kohlenstoffhaltiger Meteoritenbrocken  
+muluna-greenhouse-wood=Versiegeltes Gewächshaus (Holz-Anbau)
+muluna-greenhouse-yumako=Versiegeltes Gewächshaus (Yumako-Anbau)
+muluna-greenhouse-jellynut=Versiegeltes Gewächshaus (Geleenuss-Anbau)
+fulgoran-cargo-pod-container=Gelandete fulgoranische Frachtkapsel
+metallic-asteroid-chunk=Metallischer Meteoritenbrocken
+carbonic-asteroid-chunk=Kohlenstoffhaltiger Meteoritenbrocken
 oxide-asteroid-chunk=Sauerstoffhaltiger Meteoritenbrocken
-cupric-asteroid-chunk=Kupferartiger Asteroidenbrocken
-cliff-muluna=Klippe von Muluna
+cupric-asteroid-chunk=Kupferhaltiger Meteoritenbrocken
+cliff-muluna=Muluna-Klippe
 muluna-cycling-steam-turbine=Kondensationsturbine
-muluna-steam-steel-furnace=Dampfschmelzofen
-muluna-steam-stone-furnace=Dampfhochofen
-muluna-steam-crusher=Dampfzerklinerer
-x-ground-digger=__1__ für graben
+muluna-steam-steel-furnace=Dampfhochofen
+muluna-steam-stone-furnace=Dampfschmelzofen
+muluna-steam-crusher=Dampfzerkleinerer
+x-ground-digger=__1__ (Ausgrabung)
 muluna-rocket-buggy=Raketenbuggy
 muluna-vacuum-heating-tower=Vakuumheizturm
 heat-assembling-machine-x-reactor=__1__ (Heizelement)
-small-anorthite-asteroid=Kleines Anorthitasteroid
-medium-anorthite-asteroid=Mittelgroßer Anorthitasteroid
-big-anorthite-asteroid=Großer Anorthitasteroid
-huge-anorthite-asteroid=Riesiger Anorthitasteroid
+small-anorthite-asteroid=Kleiner anorthithaltiger Asteroid
+medium-anorthite-asteroid=Mittelgroßer anorthithaltiger Asteroid
+big-anorthite-asteroid=Großer anorthithaltiger Asteroid
+huge-anorthite-asteroid=Riesiger anorthithaltiger Asteroid
 muluna-telescope=Teleskop
-muluna-telescope-combinator=Teleskopkombinator
-muluna-data-cable=Electrisches Datenkabel
+muluna-telescope-combinator=Kombinator für Teleskop
+muluna-data-cable=Elektrisches Datenkabel
+muluna-big-rocket-silo=Großes Raketensilo
+muluna-big-cargo-pod=Große Frachtkapsel
+muluna-burner-roboport=Befeuerter Roboterhangar
+
+[autoplace-control-names]
+muluna_cliff=Muluna-Klippen
+lunar_rocks=Mondgesteine
+
 
 [entity-description]
 muluna-advanced-boiler=Ein Heizkessel, der in sauerstofffreien Umgebungen wie [planet=muluna] und auf Weltraumplattformen funktioniert.
