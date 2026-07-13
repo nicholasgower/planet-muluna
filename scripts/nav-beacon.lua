@@ -211,6 +211,26 @@ local filter_built = {
 }
 
 
+local function display_nav_beacon_alert(player)
+    if not player.gui.top["muluna-satellite-radar-alert-button"] then
+        local top = player.gui.top.add{
+            type = "sprite-button",
+            name = "muluna-satellite-radar-alert-button",
+            sprite = "utility/change_recipe", -- swap for your own sprite, e.g. "item/iron-plate"
+            tooltip = { "my-mod.toggle-button-tooltip" }, -- falls back fine if you haven't localized it yet
+            style = "frame_action_button" -- gives it the same look as vanilla top-bar buttons
+        }
+    end
+    
+        
+
+end
+
+-- Hides the button for a single player (destroys the GUI element)
+local function hide_nav_beacon_alert(player)
+  local button = player.gui.top["muluna-satellite-radar-alert-button"]
+    if button then button.destroy() end
+end
 
 ------------------------------------------------------------------------------------------------------------------------
 ----- HANDLE TRAVERSING THE MAP -----
@@ -267,6 +287,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                             navSat = beacon
                                             if display_beacon_alert then
                                                 local enabled = storage.nav_beacons_other[navSat.unit_number].gui.enabled
+                                                display_nav_beacon_alert(player)
                                                 player.add_custom_alert(beacon,
                                                     {type = "item", name = "muluna-satellite-radar"},
                                                     {enabled and "alert.nav-beacon-available" or "alert.nav-beacon-available-disabled",{"space-location-name."..player.surface.name}},
@@ -276,10 +297,12 @@ if settings.startup["enable-nav-beacon"].value == true then
                                             
                                             break
                                     else
+                                        hide_nav_beacon_alert(player)
                                         player.remove_alert{entity = beacon}
                                     end end
                                 
                                 else 
+                                    hide_nav_beacon_alert(player)
                                     player.remove_alert{entity = beacon}
                                 end
                             ::on_to_the_next::
