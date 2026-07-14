@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.15
+Date: 2026-07-14
+  Compatibility:
+    - Added hard dependency on "Valves mod" to help get around Factorio 2.1.11's issues with fluidbox mixing prevention. Clarified on-launch warning informing users that pumps and valves can get around this fluidbox mixing issue.
+    - Raised required Factorio version to 2.1.11.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.14
 Date: 2026-07-13
   Compatibility:
