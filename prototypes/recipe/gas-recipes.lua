@@ -605,7 +605,8 @@ if mods["maraxsis"] then
         --     }
         -- },
         energy_required=0.1,
-        subgroup="muluna-products"
+        subgroup="muluna-products",
+        hide_from_signal_gui = false,
     }}
 end
     
