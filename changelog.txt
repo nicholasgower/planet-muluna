@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.16
+Date: 2026-07-14
+  Bugfixes:
+    - Hydrogen venting now in signal gui. https://github.com/nicholasgower/planet-muluna/issues/434
+---------------------------------------------------------------------------------------------------
 Version: 2.4.15
 Date: 2026-07-14
   Compatibility:
