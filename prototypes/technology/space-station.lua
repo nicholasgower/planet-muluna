@@ -539,6 +539,11 @@ data:extend{
                 type = "unlock-recipe",
                 recipe = "muluna-burner-roboport",
             },
+            {
+                type = "unlock-recipe",
+                recipe = "muluna-roboport-propellant",
+            },
+            
             -- {
             --     type = "unlock-recipe",
             --     recipe = "muluna-burner-logistic-robot",

@@ -194,7 +194,7 @@ Muluna.events.on_nth_tick(short_update_period, function()
         --Destroy fluid and add energy to roboport
         local fluids = refueler.get_fluid_contents()
         if fluids then
-            local fluid_removed = refueler.clear_fluid(3) --Not sure if this is the right fluid index
+            local fluid_removed = refueler.clear_fluid(2) --Not sure if this is the right fluid index
             local fluid_removed_amount = fluid_removed and fluid_removed.amount
             local energy_value = 0.1 * 1000000
             local delta_energy = (fluid_removed_amount or 0) * energy_value
