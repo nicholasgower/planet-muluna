@@ -25,7 +25,7 @@ for i,tab in pairs({telescope_keys,heat_assembling_machine_keys}) do
 end
 Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     
-    if not (event.entity and rro.contains({"assembling-machine","constant-combinator","reactor","accumulator"},event.entity.type)) then return end
+    if not (event.entity and rro.contains({"assembling-machine","constant-combinator","reactor","accumulator","roboport"},event.entity.type)) then return end
     --game.print("gui opened")
     local player = game.players[event.player_index]
     local selected = (player or {}).opened --The currently selected entity
@@ -74,20 +74,20 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         gui_type = defines.relative_gui_type.constant_combinator_gui
         localised_button = {"muluna-gui.telescope-combinator-goto-button"}
         button_name = "telescope-combinator"
-    -- elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other["roboport"] end ) then
-    --     local telescope_data = storage.vacuum_roboports
-    --     other_entity_button = true
-    --     gui_type = defines.relative_gui_type.roboport_gui
-    --     localised_button = {"muluna-gui.vacuum-roboport-goto-button"}
-    --     other_entity = storage.vacuum_roboports
-    --     button_name = "burner-roboport-unit"
+    elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other.roboport end ) then
+        local telescope_data = storage.vacuum_roboports
+        other_entity_button = true
+        gui_type = defines.relative_gui_type.roboport_gui
+        localised_button = {"muluna-gui.vacuum-roboport-roboport-goto-button"}
+        other_entity = storage.vacuum_roboports
+        button_name = "burner-roboport-unit"
         
-    -- elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other["refueler"] end ) then
-    --     local telescope_data = storage.vacuum_roboports
-    --     other_entity_button = true
-    --     gui_type = defines.relative_gui_type.assembling_machine_gui
-    --     localised_button = {"muluna-gui.vacuum-roboport-refueler-goto-button"}
-    --     button_name = "burner-roboport-refueler"
+    elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other.refueler end ) then
+        local telescope_data = storage.vacuum_roboports
+        other_entity_button = true
+        gui_type = defines.relative_gui_type.assembling_machine_gui
+        localised_button = {"muluna-gui.vacuum-roboport-refueler-goto-button"}
+        button_name = "burner-roboport-refueler"
     elseif rro.contains(Muluna.constants.heat_assembling_machines,function(other) return entity_name == other["assembling-machine"] end ) then
         local assembling_machine_data = storage.heat_assembling_machines
         other_entity_button = true
@@ -191,7 +191,7 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
     elseif string.find(element.name, "muluna%-goto%-button") then 
 
         local player = game.players[event.player_index]
-
+        
         local selected = player.opened --The currently selected entity
         local to_entity --Entity to change focus to
         local to_planet --Planet to switch view to
@@ -203,13 +203,13 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
             --game.print(element.name)
             local to_entity_table = rro.find_contains(storage.telescopes, function(entry) return entry["constant-combinator"].unit_number == selected.unit_number end)
             to_entity = to_entity_table["assembling-machine"]
-        elseif string.find(element.name,"burner%-roboport-unit")  then
+        elseif string.find(element.name,"burner%-roboport%-unit")  then
             --game.print(element.name)
-            local to_entity_table = storage.burner_roboports[selected.unit_number]["roboport"]
+            local to_entity_table = rro.find_contains(storage.burner_roboports, function(entry) return entry["roboport"].unit_number == selected.unit_number end)
             to_entity = to_entity_table["refueler"]
-        elseif string.find(element.name,"burner%-roboport-refueler")  then
+        elseif string.find(element.name,"burner%-roboport%-refueler")  then
             --game.print(element.name)
-            local to_entity_table = rro.find_contains(storage.burner_roboports, function(entry) return entry["constant-combinator"].unit_number == selected.unit_number end)
+            local to_entity_table = rro.find_contains(storage.burner_roboports, function(entry) return entry["refueler"].unit_number == selected.unit_number end)
             to_entity = to_entity_table["roboport"]
         elseif string.find(element.name,"heat%-assembling%-machine%-unit")  then
             to_entity = storage.heat_assembling_machines[selected.unit_number]["reactor"]
@@ -221,6 +221,7 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
         elseif string.find(element.name,"satellite%-radar")  then
             to_planet = storage.nav_surfaces[selected.unit_number]
         end
+        
         if to_entity then
             player.opened = to_entity
         elseif to_planet then
