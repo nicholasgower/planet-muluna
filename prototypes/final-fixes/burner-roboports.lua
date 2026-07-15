@@ -208,9 +208,10 @@ end
 
 -- local diffs = ""
 
--- for field,value in pairs(data.raw.roboport.roboport) do 
---     if not rro.deep_equals(value,data.raw.roboport["muluna-burner-roboport-roboport"][field]) then
---          diffs = diffs .. (field .. ": " .. serpent.block(value) .. " vs. " .. serpent.block(data.raw.roboport["muluna-burner-roboport-roboport"][field])) .. "\n" 
+-- for field,value in pairs(data.raw.car.car) do 
+--     local val = data.raw.car["muluna-rocket-buggy"][field]
+--     if not rro.deep_equals(value,val) then
+--          diffs = diffs .. (field .. ": " .. serpent.block(value) .. " vs. " .. (type(val) == "string" and val or serpent.block(val))) .. "\n" 
 --         end 
 
 --         end
