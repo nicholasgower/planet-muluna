@@ -146,7 +146,22 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 },
                 energy_usage = roboport.energy_source.input_flow_limit,
                 max_health = roboport.max_health,
-                quality_indicator_shift = {-0.4,0.4}
+                quality_indicator_shift = {-0.4,0.4},
+                radius_visualisation_specification =
+                    {
+                    sprite =
+                    {
+                        layers = {
+                            {
+                                filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-radius-visualization.png",
+                                size = 10
+                            }
+                        }
+                        
+                    },
+                    distance = 50,
+                    offset = {0, 0}
+                    }
             }
             if not refueler.graphics_set then
                 local graphics = table.deepcopy(roboport.base)
