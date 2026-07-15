@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.18
+Date: 2026-07-15
+  Bugfixes:
+    - Burner roboports now shut down and remove themselves from the logistic network on running out of power.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.17
 Date: 2026-07-15
   Bugfixes:
