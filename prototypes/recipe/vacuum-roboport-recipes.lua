@@ -24,6 +24,7 @@ data:extend{
         type = "recipe",
         name = "muluna-roboport-propellant",
         icon = "__muluna-graphics__/graphics/icons/roboport-propellant.png",
+        crafting_machine_tint = {201,51,231},
         icon_size = 64,
         energy_required=0.1,
         allow_productivity=false,
