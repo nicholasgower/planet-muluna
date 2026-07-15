@@ -221,6 +221,8 @@ Muluna.events.on_nth_tick(short_update_period, function()
         local fluids = refueler.get_fluid_contents()
         if refueler.get_fluid_count("muluna-roboport-propellant") == 0 then
             refueler.custom_status = status_burner_roboport_empty
+            storage.active_burner_roboports[key] = nil --Deactivates roboport
+            refueler.disabled_by_script = true --Turns off refueler
         else
             refueler.custom_status = status_burner_roboport_refueling
         end
