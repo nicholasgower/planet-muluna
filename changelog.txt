@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.20
+Date: 2026-07-15
+  Optimizations:
+    - When a burner roboport has no fuel in it, it is not considered active, and so will have a reduced performance impact, similar to a fully filled burner roboport.
+  Compatibility:
+    - Maraxsis: migrated maraxsis-wyrm-specimen to maraxsis-ooozma-specimen, fixing crash on creating new Muluna surface.
+  Bugfixes:
+    - Burner roboports don't render "no power" or "no network" icons.
+    - Inserters can now insert robots into burner roboports. https://github.com/nicholasgower/planet-muluna/issues/426
+  Graphics:
+    - Added radius visualisation to burner roboport to simplify placing burner roboports in the radius of other burner roboports.
+  Changes:
+    - Added "Flying robot propellant, a fuel that powers burner roboports. Crafted by mixing an equal amount of thruster oxidizer and thruster fuel.
+    - Added custom status lights to burner roboport.
+    - Burner roboports now have a GUI to help switch views between roboport and refueler.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.19
 Date: 2026-07-15
   Compatibility:
