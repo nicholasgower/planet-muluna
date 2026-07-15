@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.17
+Date: 2026-07-15
+  Bugfixes:
+    - Inserters can now insert robots into burner roboports. https://github.com/nicholasgower/planet-muluna/issues/426
+---------------------------------------------------------------------------------------------------
+Version: 2.4.16
+Date: 2026-07-14
+  Bugfixes:
+    - Hydrogen venting now in signal gui. https://github.com/nicholasgower/planet-muluna/issues/434
+---------------------------------------------------------------------------------------------------
+Version: 2.4.15
+Date: 2026-07-14
+  Compatibility:
+    - Added hard dependency on "Valves mod" to help get around Factorio 2.1.11's issues with fluidbox mixing prevention. Clarified on-launch warning informing users that pumps and valves can get around this fluidbox mixing issue.
+    - Raised required Factorio version to 2.1.11.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.14
 Date: 2026-07-13
   Compatibility:
