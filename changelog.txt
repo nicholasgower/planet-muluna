@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.21
+Date: 2026-07-15
+  Balancing:
+    - Banned electric roboports from Muluna by reducing Muluna's pressure to 3 hPa once again.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.20
 Date: 2026-07-15
   Optimizations:
