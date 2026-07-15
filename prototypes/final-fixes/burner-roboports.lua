@@ -183,6 +183,8 @@ for _,roboport in pairs(data.raw["roboport"]) do
             roboport_data["refueler"] = refueler.name
             roboport_data["roboport"] = roboport.name
             roboport.energy_source.input_flow_limit = "0W"
+            roboport.energy_source.render_no_power_icon = false
+            roboport.energy_source.render_no_network_icon = false
         
         end
         
