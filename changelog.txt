@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.18
+Date: 2026-07-15
+  Bugfixes:
+    - Burner roboports now shut down and remove themselves from the logistic network on running out of power.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.17
+Date: 2026-07-15
+  Bugfixes:
+    - Inserters can now insert robots into burner roboports. https://github.com/nicholasgower/planet-muluna/issues/426
+---------------------------------------------------------------------------------------------------
 Version: 2.4.16
 Date: 2026-07-14
   Bugfixes:
