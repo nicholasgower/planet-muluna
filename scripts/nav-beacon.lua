@@ -211,15 +211,17 @@ local filter_built = {
 }
 
 
-local function display_nav_beacon_alert(player)
+local function display_nav_beacon_alert(player,alert_locale)
     if not player.gui.top["muluna-satellite-radar-alert-button"] then
         local top = player.gui.top.add{
             type = "sprite-button",
             name = "muluna-satellite-radar-alert-button",
-            sprite = "utility/change_recipe", -- swap for your own sprite, e.g. "item/iron-plate"
-            tooltip = { "my-mod.toggle-button-tooltip" }, -- falls back fine if you haven't localized it yet
+            sprite = "item/muluna-satellite-radar", -- swap for your own sprite, e.g. "item/iron-plate"
+            tooltip = alert_locale, -- falls back fine if you haven't localized it yet
             style = "frame_action_button" -- gives it the same look as vanilla top-bar buttons
         }
+        top.style.height = 60
+        top.style.width = 60
     end
     
         
@@ -287,10 +289,11 @@ if settings.startup["enable-nav-beacon"].value == true then
                                             navSat = beacon
                                             if display_beacon_alert then
                                                 local enabled = storage.nav_beacons_other[navSat.unit_number].gui.enabled
-                                                display_nav_beacon_alert(player)
+                                                local alert_locale = {enabled and "alert.nav-beacon-available" or "alert.nav-beacon-available-disabled",{"space-location-name."..player.surface.name}}
+                                                display_nav_beacon_alert(player,alert_locale)
                                                 player.add_custom_alert(beacon,
                                                     {type = "item", name = "muluna-satellite-radar"},
-                                                    {enabled and "alert.nav-beacon-available" or "alert.nav-beacon-available-disabled",{"space-location-name."..player.surface.name}},
+                                                    alert_locale,
                                                     false
                                                 )
                                             end
@@ -421,3 +424,26 @@ Muluna.events.on_event(defines.events.on_robot_mined_entity, function(event)
     if entity.name ~= "muluna-satellite-radar" then return end
     destroyed_nav_beacon(entity)
 end, filter_built)
+
+Muluna.events.on_event(defines.events.on_gui_click,function(event)
+    local player = game.players[event.player_index]
+        
+    local element = event.element
+    if element.name ~= "muluna-satellite-radar-alert-button" then return end
+        
+
+    local selected
+    for beacon_unit_number,nav_surface in pairs(storage.nav_surfaces) do
+        local surface = game.planets[space_location.object_name]
+        game.print(surface)
+        if nav_surface.name == player.surface.name then
+            selected = storage.nav_beacons[beacon_unit_number]
+            break
+        end
+    end
+    print(selected)
+    local to_platform = selected.surface
+    player.set_controller{type = defines.controllers.remote,surface = to_platform}
+
+
+end)
