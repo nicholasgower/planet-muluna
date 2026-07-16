@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2026-07-16
+  Features:
+    - Added "Asteroid upcycling" recipes, a collection of recipes that consume astronomical data and asteroid chunks in exchange for higher quality asteroid chunks.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.24
 Date: 2026-07-16
   Bugfixes:
