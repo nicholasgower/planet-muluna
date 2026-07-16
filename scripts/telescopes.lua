@@ -82,7 +82,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             else
                 player = event.robot
             end
-            local stack = {name=entity.prototype.mineable_properties.products[1].name, amount=1}
+            local stack = {name=entity.prototype.mineable_properties.products[1].name, amount=1,quality=entity.quality}
 
             --if event.consumed_items then
                 --for i = 1,#event.consumed_items do --Return telescope to player inventory
