@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.23
+Date: 2026-07-16
+  Bugfixes:
+    - Fixed crash on load with outdated versions of Maraxsis. Any version of Maraxsis above 1.33.0 is now supported.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.22
 Date: 2026-07-15
   Compatibility:
