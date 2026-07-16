@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.24
+Date: 2026-07-16
+  Bugfixes:
+    - On placing a quality telescope when a planet is already at its telescope limit, the quality of the telescope is preserved when returned to the player's inventory.
+---------------------------------------------------------------------------------------------------
 Version: 2.4.23
 Date: 2026-07-16
   Bugfixes:
