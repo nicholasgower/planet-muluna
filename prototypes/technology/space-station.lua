@@ -1327,7 +1327,7 @@ data:extend{
                 shift = {45,-45},
                 scale=1,
             },},
-        prerequisites = {"advanced-asteroid-processing","interstellar-science-pack","crusher-2"},
+        prerequisites = {"advanced-asteroid-processing","interstellar-science-pack","crusher-2","quality-module"},
         unit = {
             count = 3000,
             time = 60,
