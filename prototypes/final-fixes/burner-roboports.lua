@@ -89,24 +89,27 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 },
                 fluid_boxes = {
                     
-                    {
-                        production_type = "input",
-                        pipe_picture = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures,
-                        pipe_picture_frozen = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures_frozen,
-                        pipe_covers = pipecoverspictures(),
-                        volume = 100,
-                        secondary_draw_orders = { north = -1 },
-                        pipe_connections = {{ flow_direction="input-output", direction = defines.direction.south, position = {0.5, 1.5} }}
-                    },
-                    {
-                        production_type = "input",
-                        pipe_picture = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures,
-                        pipe_picture_frozen = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures_frozen,
-                        pipe_covers = pipecoverspictures(),
-                        volume = 100,
-                        secondary_draw_orders = { north = -1 },
-                        pipe_connections = {{ flow_direction="input-output", direction = defines.direction.north, position = {-0.5, -1.5} }}
-                    },
+                    -- {
+                    --     production_type = "input",
+                    --     pipe_picture = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures,
+                    --     pipe_picture_frozen = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures_frozen,
+                    --     pipe_covers = pipecoverspictures(),
+                    --     volume = 100,
+                    --     secondary_draw_orders = { north = -1 },
+                    --     pipe_connections = {{ flow_direction="input-output", direction = defines.direction.south, position = {0.5, 1.5} },
+                    --                         { flow_direction="input-output", direction = defines.direction.west, position = {-1.5, 0.5} },
+                    --                         { flow_direction="input-output", direction = defines.direction.east, position = {1.5, -0.5} },
+                    --                         { flow_direction="input-output", direction = defines.direction.north, position = {-0.5, -1.5} }}
+                    -- },
+                    -- {
+                    --     production_type = "input",
+                    --     pipe_picture = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures,
+                    --     pipe_picture_frozen = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures_frozen,
+                    --     pipe_covers = pipecoverspictures(),
+                    --     volume = 100,
+                    --     secondary_draw_orders = { north = -1 },
+                    --     pipe_connections = {{ flow_direction="input-output", direction = defines.direction.north, position = {-0.5, -1.5} }}
+                    -- },
                     {
                         production_type = "output",
                         pipe_picture = require("__space-age__.prototypes.entity.electromagnetic-plant-pictures").pipe_pictures,
@@ -120,7 +123,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 crafting_speed = 1,
                 energy_source = {
                     type = "fluid",
-                    fuel_categories = {"thruster-fuel"},
+                    fuel_categories = {"muluna-roboport-propellant"},
                     scale_fluid_usage = true,
                     burns_fluid = true,
                     fluid_box = {
@@ -130,18 +133,35 @@ for _,roboport in pairs(data.raw["roboport"]) do
                         pipe_covers = pipecoverspictures(),
                         volume = 1000,
                         secondary_draw_orders = { north = -1 },
-                        filter = "thruster-fuel",
+                        filter = "muluna-roboport-propellant",
 
                         pipe_connections = {
-                            { flow_direction="input-output", direction = defines.direction.west, position = {-1.5, 0.5} },
-                            { flow_direction="input-output", direction = defines.direction.east, position = {1.5, -0.5} }
-                        }
+                            { flow_direction="input-output", direction = defines.direction.south, position = {0.5, 1.5} },
+                                            { flow_direction="input-output", direction = defines.direction.west, position = {-1.5, 0.5} },
+                                            { flow_direction="input-output", direction = defines.direction.east, position = {1.5, -0.5} },
+                                            { flow_direction="input-output", direction = defines.direction.north, position = {-0.5, -1.5} }}
+                        
                     },
                     
                 },
                 energy_usage = roboport.energy_source.input_flow_limit,
                 max_health = roboport.max_health,
-                quality_indicator_shift = {-0.4,0.4}
+                quality_indicator_shift = {-0.4,0.4},
+                radius_visualisation_specification =
+                    {
+                    sprite =
+                    {
+                        layers = {
+                            {
+                                filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-radius-visualization.png",
+                                size = 10
+                            }
+                        }
+                        
+                    },
+                    distance = 50,
+                    offset = {0, 0}
+                    }
             }
             if not refueler.graphics_set then
                 local graphics = table.deepcopy(roboport.base)
@@ -178,8 +198,22 @@ for _,roboport in pairs(data.raw["roboport"]) do
             roboport_data["refueler"] = refueler.name
             roboport_data["roboport"] = roboport.name
             roboport.energy_source.input_flow_limit = "0W"
+            roboport.energy_source.render_no_power_icon = false
+            roboport.energy_source.render_no_network_icon = false
         
         end
         
     end
 end
+
+-- local diffs = ""
+
+-- for field,value in pairs(data.raw.car.car) do 
+--     local val = data.raw.car["muluna-rocket-buggy"][field]
+--     if not rro.deep_equals(value,val) then
+--          diffs = diffs .. (field .. ": " .. serpent.block(value) .. " vs. " .. (type(val) == "string" and val or serpent.block(val))) .. "\n" 
+--         end 
+
+--         end
+
+-- error(diffs)

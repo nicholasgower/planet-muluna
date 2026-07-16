@@ -24,7 +24,9 @@ buggy.icons = {
         scale=0.2,
     },
 }
-
+if mods["Krastorio2"] then
+    buggy.energy_source.fuel_categories={"kr-vehicle-fuel"}
+end
 
 buggy.equipment_grid = data.raw["car"]["tank"].equipment_grid
 buggy.allow_remote_driving = true
