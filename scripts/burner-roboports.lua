@@ -2,6 +2,24 @@ local rro = Muluna.rro
 
 local heat_assembling_machines = Muluna.constants.vacuum_roboports
 
+local status_burner_roboport_refueling = {
+    diode = defines.entity_status_diode.yellow,
+    label = {"custom-status.muluna-burner-roboport-refueling"}
+
+}
+
+local status_burner_roboport_full = {
+    diode = defines.entity_status_diode.green,
+    label = {"custom-status.muluna-burner-roboport-full"}
+    
+}
+
+local status_burner_roboport_empty = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-burner-roboport-empty"}
+    
+}
+   
 local function move_entity_to_bottom_layer(entity)
 
     entity.rotate{reverse=false}
@@ -48,6 +66,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         entity.add_fluid_box_linked_connection(1,entity,1) 
         entity.recipe_locked = true
+        entity.custom_status= status_burner_roboport_empty
+        roboport.custom_status = entity.custom_status
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.burner_roboports then storage.burner_roboports = {} end
         storage.burner_roboports[entity.unit_number] = {["roboport"]=roboport,["refueler"] = entity}
@@ -173,6 +193,12 @@ Muluna.events.on_nth_tick(long_update_period, function()
         if energy_percent <= cutoff_energy_low then
             storage.active_burner_roboports[key] = refueler
             refueler.disabled_by_script = false --Turns on refueler
+            if refueler.get_fluid_count() > 0 then
+                refueler.custom_status = status_burner_roboport_refueling
+            else
+                refueler.custom_status = status_burner_roboport_empty
+            end
+            roboport.custom_status = refueler.custom_status 
         end
     end
 
@@ -193,8 +219,15 @@ Muluna.events.on_nth_tick(short_update_period, function()
 
         --Destroy fluid and add energy to roboport
         local fluids = refueler.get_fluid_contents()
+        if refueler.get_fluid_count("muluna-roboport-propellant") == 0 then
+            refueler.custom_status = status_burner_roboport_empty
+            storage.active_burner_roboports[key] = nil --Deactivates roboport
+            refueler.disabled_by_script = true --Turns off refueler
+        else
+            refueler.custom_status = status_burner_roboport_refueling
+        end
         if fluids then
-            local fluid_removed = refueler.clear_fluid(3) --Not sure if this is the right fluid index
+            local fluid_removed = refueler.clear_fluid(2) --Not sure if this is the right fluid index
             local fluid_removed_amount = fluid_removed and fluid_removed.amount
             local energy_value = 0.1 * 1000000
             local delta_energy = (fluid_removed_amount or 0) * energy_value
@@ -202,10 +235,13 @@ Muluna.events.on_nth_tick(short_update_period, function()
             if calc_energy_percent(roboport) >= cutoff_energy_high then
                 storage.active_burner_roboports[key] = nil --Deactivates roboport
                 refueler.disabled_by_script = true --Turns off refueler
+                refueler.custom_status = status_burner_roboport_full
                 -- Add status
             end
+        else
+            
         end
-       
+        roboport.custom_status = refueler.custom_status
     end
 
 
