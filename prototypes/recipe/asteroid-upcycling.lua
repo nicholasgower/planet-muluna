@@ -24,6 +24,7 @@ for _,asteroid_name in pairs(asteroid_list) do
         order = data.raw["recipe"]["oxide-asteroid-reprocessing"].order .. "-" ..  tostring(i),
         allow_quality=true,
         enabled = false,
+        hide_from_signal_gui = false,
     })
     data:extend{new_recipe}
     table.insert(data.raw["technology"]["muluna-asteroid-upcycling"].effects, {
