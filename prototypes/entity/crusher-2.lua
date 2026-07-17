@@ -1,3 +1,9 @@
+data:extend{
+    {
+        type = "recipe-category",
+        name = "muluna-crusher-2"
+    }
+}
 local flib_data_util=require("__flib__.data-util")
 
 
@@ -12,7 +18,7 @@ crusher_2.max_health=crusher_2.max_health+50
 local energy, suffix=flib_data_util.get_energy_value(crusher_2.energy_usage)
 crusher_2.energy_usage=tostring(energy*2) .. suffix
 crusher_2.energy_source.emissions_per_minute["pollution"] = crusher_2.energy_source.emissions_per_minute["pollution"]*0.75
-
+table.insert(crusher_2.crafting_categories,"muluna-crusher-2")
 --crusher_2.energy_usage=crusher_2.crafting_speed*2
 crusher_2.localised_name={"",{"item-name.crusher"}," 2"}
 crusher_2.icon="__muluna-graphics__/graphics/icons/crusher-2.png"

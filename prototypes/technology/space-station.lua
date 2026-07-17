@@ -1319,6 +1319,36 @@ data:extend{
     },
     {
         type = "technology",
+        name = "muluna-asteroid-upcycling",
+        icons = {{icon = data.raw["technology"]["advanced-asteroid-processing"].icon,icon_size=256},{
+                icon = data.raw["fluid"]["muluna-astronomical-data"].icon or  "__space-age__/graphics/icons/tungsten-plate.png",
+                icon_size=data.raw["fluid"]["muluna-astronomical-data"].icon_size or 64,
+                --scale=0.3,
+                shift = {45,-45},
+                scale=1,
+            },},
+        prerequisites = {"advanced-asteroid-processing","interstellar-science-pack","crusher-2","quality-module"},
+        unit = {
+            count = 3000,
+            time = 60,
+            ingredients = {
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
+                {"space-science-pack", 1},
+                {"agricultural-science-pack",1},
+                {"electromagnetic-science-pack",1},
+                {"interstellar-science-pack",1},
+            }
+        },
+        effects = {
+
+        }
+    },
+    {
+        type = "technology",
         name = "carbonic-asteroid-crushing",
         localised_name = {"recipe-name.carbonic-asteroid-crushing"},
         localised_description={"technology-description.x-asteroid-crushing"},
@@ -1671,7 +1701,8 @@ data:extend{
                 recipe = "muluna-big-rocket-silo",
             }
         }
-    }
+    },
+    
 }
 if settings.startup["muluna-easy-wood-gasification-productivity"].value == true or (settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna") then-- or  then
     local gasification_prod = {

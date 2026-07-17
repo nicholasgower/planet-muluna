@@ -27,7 +27,7 @@ Muluna.constants.cargo_drop_spawn_imports = { --Generated from Claude Code. See 
 
 Muluna.constants.cargo_drop_rare_drops = {
         moshine = "moshine-tech-magnet",
-        maraxsis = "maraxsis-ooozma-specimen",
+        maraxsis = data.raw["item"]["maraxsis-ooozma-specimen"] and "maraxsis-ooozma-specimen" or "maraxsis-wyrm-specimen",
         corrundum = "platinum-plate",
         secretas = "gold-plate",
         tenebris = "quartz-crystal",

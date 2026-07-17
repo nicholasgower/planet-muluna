@@ -107,3 +107,24 @@ for _,am3 in pairs(data.raw["assembling-machine"]) do
 
 
 end
+local crusher_2 = data.raw["assembling-machine"]["crusher-2"]
+
+crusher_2.fluid_boxes = {
+
+}
+local crusher_linked_connection_id=100
+while #crusher_2.fluid_boxes <= dummy_fluidboxes do
+        crusher_linked_connection_id = crusher_linked_connection_id + 1
+        table.insert(crusher_2.fluid_boxes,Muluna.data_fluids.dummy_fluidbox("input","input",crusher_linked_connection_id))
+    end
+
+table.insert(crusher_2.fluid_boxes, {production_type = "input",
+                volume = 50,
+                base_area = 1,
+                height = 2,
+                base_level = -1,
+                pipe_connections = {
+                    {connection_category="data", flow_direction = "input", direction = defines.direction.east, position = {0.5, -1}},
+                },
+                
+                })
