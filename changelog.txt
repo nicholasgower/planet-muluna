@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.3
+Date: 2026-07-17
+  Compatibility:
+    - All recipes using gases that previously had their gas quantities multiplied by ten will no longer have that done. Muluna recipes using gases have their gas quantities divided by ten. This is the same patch applied when K2 is installed, now applied at all times. This will reduce the amount of changes made by Muluna to other planets.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.2
 Date: 2026-07-17
   Bugfixes:
