@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.100
+Date: 2026-07-16
+  Bugfixes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna.
+    - Hydrogen venting now in signal gui. #434
+    - Adjusted satellite radar alert removal to not remove other alerts. #432
+    - Vacuum heating tower recipe is now hidden from the player crafting gui.
+    - On placing a quality telescope when a planet is already at its telescope limit, the quality of the telescope is preserved when returned to the player's inventory.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.1
 Date: 2026-07-17
   Bugfixes:
