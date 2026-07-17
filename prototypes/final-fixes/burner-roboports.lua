@@ -208,8 +208,8 @@ end
 
 -- local diffs = ""
 
--- for field,value in pairs(data.raw.car.car) do 
---     local val = data.raw.car["muluna-rocket-buggy"][field]
+-- for field,value in pairs(data.raw["rocket-silo"]["rocket-silo"]) do 
+--     local val = data.raw["rocket-silo"]["muluna-big-rocket-silo"]
 --     if not rro.deep_equals(value,val) then
 --          diffs = diffs .. (field .. ": " .. serpent.block(value) .. " vs. " .. (type(val) == "string" and val or serpent.block(val))) .. "\n" 
 --         end 
