@@ -783,7 +783,7 @@ local subgroup_blacklist = {
     "muluna-products"
 }
 
-if not mods["Krastorio2-spaced-out"] then
+if false and not mods["Krastorio2-spaced-out"] then
     for _,gas in pairs(gases) do
         for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
             if not (rro.contains(recipe_blacklist,recipe.name) or rro.contains_any(category_blacklist,recipe.categories) or rro.contains(subgroup_blacklist,recipe.subgroup)) then
