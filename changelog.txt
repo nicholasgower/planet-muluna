@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.1
+Date: 2026-07-17
+  Bugfixes:
+    - Adjusted satellite radar alert removal to not remove other alerts. https://github.com/nicholasgower/planet-muluna/issues/432
+---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2026-07-16
   Features:
