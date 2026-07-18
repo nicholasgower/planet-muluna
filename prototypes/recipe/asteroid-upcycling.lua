@@ -2,6 +2,10 @@
 
 local asteroid_list={"metallic-asteroid","carbonic-asteroid","oxide-asteroid"}
 local quality_chance = 0.15 --Chance of upgrading the quality of an asteroid 
+if mods["rigor-module"] then
+    quality_chance = 0.10 -- If recipe can be improved with rigor, nerf the recipe to balance it.
+end
+
 local loss_chance = 0.2 -- Chance of a craft being a complete loss
 local i = 0
 for _,asteroid_name in pairs(asteroid_list) do
