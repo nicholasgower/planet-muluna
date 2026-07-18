@@ -1,7 +1,7 @@
 local roboport = table.deepcopy(data.raw["roboport"]["roboport"])
 
 roboport.name = "muluna-burner-roboport"
-roboport.energy_usage = "0.001W"
+roboport.energy_usage = helpers.compare_versions(helpers.game_version,"2.1.12") < 0 and "0.001W" or "0W"
 roboport.placeable_by = {item = "muluna-burner-roboport",count=1}
 roboport.is_vacuum_roboport = true
 roboport.recharging_animation.filename = "__muluna-graphics__/graphics/entity/burner-roboport/burner-roboport-recharging.png"
