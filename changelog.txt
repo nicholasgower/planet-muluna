@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.4
+Date: 2026-07-18
+  Bugfixes:
+    - Set the inner subcomponent of the vacuum heating tower and the burner roboport to "tall" so that the "hide tall entities" button can make the lower-layer subentity easier to click on.
+  Locale:
+    - Updated description of burner roboport to make roboport charging information easier to access.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.3
 Date: 2026-07-17
   Compatibility:

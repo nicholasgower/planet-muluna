@@ -77,6 +77,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
                 crafting_categories = {"muluna-burner-roboport"},
                 use_mirroring=true,
+                tall = true,
                 flags = {"player-creation","placeable-player","no-automated-item-insertion"},
                 icon = data.raw["item"]["muluna-burner-roboport"].icon,
                 allowed_effects = {},
