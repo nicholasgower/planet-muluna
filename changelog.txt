@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.5
+Date: 2026-07-18
+  Bugfixes:
+    - When Factorio version >= 2.1.12, workaround burner roboport passive energy usage is removed in favor of "0 W".
+---------------------------------------------------------------------------------------------------
 Version: 2.5.4
 Date: 2026-07-18
   Bugfixes:
