@@ -7,9 +7,11 @@ local rro=Muluna.rro
 rro.replace(data.raw["technology"]["space-science-pack"].prerequisites,"space-platform","muluna-alice-propellant")
 table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"muluna-steam-crusher")
 table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"wood-gas-processing")
-for _,result in pairs(data.raw["technology"]["space-science-pack"].effects) do
-    if result.recipe == "space-science-pack" then
-        result.recipe = "space-science-pack-muluna"
+if not settings.startup["muluna-easy-t1-science-anywhere"].value then
+    for _,result in pairs(data.raw["technology"]["space-science-pack"].effects) do
+        if result.recipe == "space-science-pack" then
+            result.recipe = "space-science-pack-muluna"
+        end
     end
 end
 --table.insert(data.raw["technology"]["space-science-pack"].prerequisites,"muluna-oxide-asteroid-processing")
