@@ -29,6 +29,7 @@ for _,asteroid_name in pairs(asteroid_list) do
         allow_quality=true,
         enabled = false,
         hide_from_signal_gui = false,
+        rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
     })
     data:extend{new_recipe}
     table.insert(data.raw["technology"]["muluna-asteroid-upcycling"].effects, {
