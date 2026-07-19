@@ -100,3 +100,4 @@ big_silo.quick_alarm_sound = {filename = "__muluna-graphics__/sound/entity/mulun
 
 data:extend{big_silo,big_rocket,big_pod}
 
+table.insert(PlanetsLib.constants.space_platform_hub_receiving_cargo_units,big_pod.name)
