@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.8
+Date: 2026-07-19
+  Changes:
+    - Added optional setting to remove the exploration science pack from all technologies but Muluna rewards and endgame technologies.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.7
 Date: 2026-07-19
   Balancing:
