@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.10
+Date: 2026-07-19
+  Compatibility:
+    - Moved compatibility code for low density space platform foundation on Tile Upgrade Planner from Tile Upgrade Planner to Muluna.
+    - Raised required Tile Upgrade Planner version from to 1.0.8.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.9
 Date: 2026-07-19
   Compatibility:
