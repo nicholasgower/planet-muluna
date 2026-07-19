@@ -66,6 +66,9 @@ local techs_interstellar = {
             "weapon-shooting-speed-7",
             "weapon-shooting-speed-8",
         },
+    ["rigor-module"] = (not mods["planet-crucible"]) and {
+            "rigor-module-3"
+        } or {},
     other = 
         {
             "promethium-science-pack",

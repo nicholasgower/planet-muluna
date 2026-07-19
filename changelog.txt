@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.7
+Date: 2026-07-19
+  Balancing:
+    - Asteroid upcycling recipes given a rigor sensitivity of 0.5.
+    - Muluna's non-asteroid crushing recipes given a rigor sensitivity of 0.5.
+    - When rigor module is installed, "Diffused plastic" has a rigor sensitivity of 2x.
+    - When rigor module is installed, the base chance of upgrading the quality of asteroids via upcycling is reduced from 15% to 10% to account for the bonus from the crusher 2's inherent rigor bonus.
+  Compatibility:
+    - "Rigor module 3" now required exploration science to unlock.
+    - "Rigor module" is now a recommended dependency.
+    - Changes made to "Rigor module 3" not applied when "Planet Crucible" is installed.
+    - Muluna crusher recipes added to Rigor module compatibility mode whitelist.
+  Changes:
+    - When rigor module is installed, "Crusher 2" has an inherent 50% rigor bonus.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.6
+Date: 2026-07-18
+  Graphics:
+    - Updated the "tree" item icon to use Factorio 2.1's new plantable tree graphics.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.5
+Date: 2026-07-18
+  Bugfixes:
+    - When Factorio version >= 2.1.12, workaround burner roboport passive energy usage is removed in favor of "0 W".
+---------------------------------------------------------------------------------------------------
 Version: 2.5.4
 Date: 2026-07-18
   Bugfixes:

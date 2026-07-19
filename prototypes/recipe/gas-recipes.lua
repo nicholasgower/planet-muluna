@@ -462,6 +462,7 @@ local diffusion = {
             --{type = "item",name = "muluna-diffused-plastic", amount = 1},
             {type = "fluid",name = "carbon-dioxide", amount = 2.5} --Because I want to make finding the perfect combination of productivity vs speed more challenging
         },
+        rigor_sensitivity=mods["rigor-module"] and 2 or nil,
         energy_required = 10,
         main_product = "muluna-diffused-plastic",
         --icons = data.raw["item"][].icons,

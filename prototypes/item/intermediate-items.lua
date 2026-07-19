@@ -94,7 +94,7 @@ data:extend{{
 {
     type="item",
     name="muluna-sapling",
-    icon="__base__/graphics/icons/tree-01.png",
+    icon=mods["space-age"] and "__space-age__/graphics/icons/planted-tree.png" or "__base__/graphics/icons/tree-01.png",
     icon_size=64,
     -- icons ={
     --     {

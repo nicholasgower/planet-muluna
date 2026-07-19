@@ -142,6 +142,7 @@ alumina_crushing.results = {{type = "item", name = "alumina", amount = 1,ignored
 alumina_crushing.ingredients = {{type = "item",name = "alumina",amount = 1}}
 alumina_crushing.energy_required = 1
 alumina_crushing.order="b-aa-a"
+alumina_crushing.rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
 
 local aluminum_crushing=table.deepcopy(anorthite_crushing)
 aluminum_crushing.icons = crushing_icon("__muluna-graphics__/graphics/icons/metal-plate-aluminium.png",64)
@@ -150,6 +151,7 @@ aluminum_crushing.results = {{type = "item", name = "aluminum-plate", amount = 1
 aluminum_crushing.ingredients = {{type = "item",name = "aluminum-plate",amount = 1}}
 aluminum_crushing.energy_required = 1
 aluminum_crushing.order="b-aa-b"
+aluminum_crushing.rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
 
 local stone_crushing=table.deepcopy(anorthite_crushing)
 
@@ -159,7 +161,7 @@ stone_crushing.name="stone-crushing"
 stone_crushing.energy_required=1
 stone_crushing.order="b-aa-c"
 stone_crushing.icons = crushing_icon(data.raw.item["stone"].icon,data.raw.item["stone"].icon_size)
-
+stone_crushing.rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
 
 
 local aluminum_plate = table.deepcopy(data.raw["recipe"]["iron-plate"])
@@ -195,6 +197,7 @@ wood_crushing.name = "woodchips"
 wood_crushing.results = {{type = "item", name = "wood", amount = 1,ignored_by_productivity=1, independent_probability = 1/20 },{type = "item",name = "woodchips",amount = 2}}
 wood_crushing.ingredients = {{type = "item",name = "wood",amount = 1}}
 wood_crushing.energy_required = 0.5
+wood_crushing.rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
 
 if mods["Age-of-Production"] then
     rro.soft_insert(wood_crushing.categories ,"woodworking")
@@ -211,6 +214,7 @@ tree_crushing.results = {{type = "item", name = "muluna-sapling", amount = 1,ign
 tree_crushing.ingredients = {{type = "item",name = "muluna-sapling",amount = 1}}
 tree_crushing.icons=crushing_icon(data.raw.item["muluna-sapling"].icon,data.raw.item["muluna-sapling"].icon_size)
 tree_crushing.order="b-aa-b"
+tree_crushing.rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
 
 
 local regolith_sorting = {
@@ -291,6 +295,12 @@ for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  
           recipe.hide_from_signal_gui = false
     end 
+    if mods["rigor-module"] then
+        data.raw["mod-data"]["rigor_module_mod_data"].data.compatibility_mode_recipe_whitelist[recipe.name]=true
+    end
+    
+    
+    
 end
 
 
