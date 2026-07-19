@@ -160,7 +160,14 @@ data:extend{
         hidden = true,
         forced_value = true,
       },
-      
+       {
+        type = "bool-setting",
+        name = "muluna-easy-interstellar-science-pack-compatibility-mode",
+        setting_type = "startup",
+        default_value = false,
+        --maximum_value = 10,
+        order = "bga",
+      },
       {
         type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",

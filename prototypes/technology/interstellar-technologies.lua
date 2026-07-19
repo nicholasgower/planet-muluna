@@ -18,7 +18,7 @@ local techs_interstellar = {
         },
     infinite = 
         {
-            "research-productivity", "maraxsis-promethium-productivity", "research-speed-infinite"
+            "maraxsis-promethium-productivity", "research-speed-infinite"
         },
     corrundum = 
         {
@@ -71,7 +71,7 @@ local techs_interstellar = {
         } or {},
     other = 
         {
-            "promethium-science-pack",
+            
             
             "shield-projector",
             "orbital-transfer",
@@ -118,66 +118,75 @@ local function make_interstellar(tech_name)
 end
 
 
+if settings.startup["muluna-easy-interstellar-science-pack-compatibility-mode"].value == false then
+    for _,tech in pairs(data.raw["technology"]) do
 
-for _,tech in pairs(data.raw["technology"]) do
-
-    local interstellar = 
-        ( -- If is Aquilo-tier space-related technology
-            tech.unit and 
-            (
+        local interstellar = 
+            ( -- If is Aquilo-tier space-related technology
+                tech.unit and 
                 (
-                        rro.count(
-                        {rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}),
-                        rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}),
-                        rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"})}
-                    ,rro.predicates.equals(true)) >= 2
-                    and
                     (
-                    rro.find_many(tech.name,{"discovery","thruster","asteroid%-collector","asteroid_collector","planet","science%-pack"})
-                        --string.find(tech.name,"discovery") or
-                        --string.find(tech.name,"thruster")
+                            rro.count(
+                            {rro.contains(tech.unit.ingredients,{"metallurgic-science-pack","_any"}),
+                            rro.contains(tech.unit.ingredients,{"electromagnetic-science-pack","_any"}),
+                            rro.contains(tech.unit.ingredients,{"agricultural-science-pack","_any"})}
+                        ,rro.predicates.equals(true)) >= 2
+                        and
+                        (
+                        rro.find_many(tech.name,{"discovery","thruster","asteroid%-collector","asteroid_collector","planet","science%-pack"})
+                            --string.find(tech.name,"discovery") or
+                            --string.find(tech.name,"thruster")
+                        )
+                    ) or
+                    (
+                        old_aop and string.find(tech.name,"aop")
+                    ) or
+                    (
+                    new_aop and (
+                        rro.contains(tech.unit.ingredients,{"aop-quantistic-science-pack","_any"})
                     )
-                ) or
-                (
-                    old_aop and string.find(tech.name,"aop")
-                ) or
-                (
-                  new_aop and (
-                    rro.contains(tech.unit.ingredients,{"aop-quantistic-science-pack","_any"})
-                  )
+                    )
                 )
-            )
-            
-            
-        )  --Add additional "or" statements below
-    
-    if interstellar then
-        make_interstellar(tech.name)
+                
+                
+            )  --Add additional "or" statements below
+        
+        if  interstellar then
+            make_interstellar(tech.name)
+        end
+
     end
 
-end
 
-for _,group in pairs(techs_interstellar) do
-    for _,tech in pairs(group) do
-        if data.raw["technology"][tech] then
-            make_interstellar(tech)
+
+    for _,group in pairs(techs_interstellar) do
+        for _,tech in pairs(group) do
+            if data.raw["technology"][tech] then
+                make_interstellar(tech)
+            end
         end
     end
-end
 
-for _,tech in pairs(techs_asteroid) do
-    if data.raw["technology"][tech] then
-        rro.soft_insert(data.raw["technology"][tech].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
-        rro.soft_insert(data.raw["technology"][tech].prerequisites,"crusher-2") --Add science pack if it doesn't already exist.
-    end
-    
-end
-
-if mods["Starmap_Nexuz"] then
-    for _,tech in pairs(planets_nexuz) do
+    for _,tech in pairs(techs_asteroid) do
         if data.raw["technology"][tech] then
-            make_interstellar(tech)
+            rro.soft_insert(data.raw["technology"][tech].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+            rro.soft_insert(data.raw["technology"][tech].prerequisites,"crusher-2") --Add science pack if it doesn't already exist.
         end
         
     end
+    
+    if mods["Starmap_Nexuz"] then
+        for _,tech in pairs(planets_nexuz) do
+            if data.raw["technology"][tech] then
+                make_interstellar(tech)
+            end
+            
+        end
+    end
+
 end
+
+--This one is hardcoded
+rro.soft_insert(data.raw["technology"]["promethium-science-pack"].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+rro.soft_insert(data.raw["technology"]["research-productivity"].unit.ingredients,{"interstellar-science-pack",1}) --Add science pack if it doesn't already exist.
+ 
