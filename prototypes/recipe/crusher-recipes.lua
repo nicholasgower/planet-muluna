@@ -295,8 +295,10 @@ for _,recipe in pairs(recipes) do
     if #recipe.results > 1 then  
           recipe.hide_from_signal_gui = false
     end 
+    if mods["rigor-module"] then
+        data.raw["mod-data"]["rigor_module_mod_data"].data.compatibility_mode_recipe_whitelist[recipe.name]=true
+    end
     
-    data.raw["mod-data"]["rigor_module_mod_data"].data.compatibility_mode_recipe_whitelist[recipe.name]=true
     
     
 end
