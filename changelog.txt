@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.9
+Date: 2026-07-19
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.0.
+  Bugfixes:
+    - Big rocket silo can now launch cargo to regular space platforms. Animation for big cargo pod is currently incorrect, but this is only visible when launching a player via a big rocket silo. https://github.com/nicholasgower/planet-muluna/issues/425
+  Locale:
+    - Corrected "Tips and tricks" description for space science that had outdated instructions on how to craft space science on space platforms. https://github.com/nicholasgower/planet-muluna/issues/435
+---------------------------------------------------------------------------------------------------
 Version: 2.5.8
 Date: 2026-07-19
   Changes:
