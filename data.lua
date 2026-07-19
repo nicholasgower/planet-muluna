@@ -33,6 +33,7 @@ require("prototypes.achievements")
 
 require("compat.maraxsis")
 require("compat.solar-productivity")
+require("compat.tile-upgrade-planner-muluna")
 
 --if mods["MT-lib"] then require("compat.MT-lib") end
 if mods["any-planet-start"] then
