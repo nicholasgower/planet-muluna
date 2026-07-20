@@ -68,6 +68,7 @@ end
 data.raw["fluid"]["carbon-dioxide"].heat_capacity=multiply_energy(data.raw["fluid"]["carbon-dioxide"].heat_capacity,1/10)
 data.raw["fluid"]["carbon-dioxide"].min_temperature = 21
 data.raw["fluid"]["carbon-dioxide"].max_temperature = 3000
+data.raw["fluid"]["carbon-dioxide"].auto_barrel = true
 
 -- data:extend {{
 --     type = "fluid",
