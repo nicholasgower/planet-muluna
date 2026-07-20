@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.14
+Date: 2026-07-20
+  Balancing:
+    - Loss rate of asteroid upcycling increased from 20% to 50%. Rigor sensitivity increased from 0.5x to 1x.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.13
 Date: 2026-07-20
   Optimizations:
