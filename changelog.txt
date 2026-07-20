@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.12
+Date: 2026-07-19
+  Compatibility:
+    - Rabbasca warpfield science pack now contributes progress to exploration science pack.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.11
 Date: 2026-07-19
   Bugfixes:
