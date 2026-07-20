@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.16
+Date: 2026-07-20
+  Compatibility:
+    - When another mod adds CO2 fluid, auto_barrel is set to true.
+  Bugfixes:
+    - Removed all changes to CO2 heat capacity.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.15
 Date: 2026-07-20
   Bugfixes:
