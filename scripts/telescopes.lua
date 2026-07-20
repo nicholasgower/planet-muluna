@@ -63,7 +63,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         elseif event.platform then
             builder = event.platform
         else
-            error("Ghost telescope placed by entity that is neither a player nor robot.")
+            builder = {force = entity.force}
+            --error("Ghost telescope placed by entity that is neither a player nor robot.")
         end
         
         local builder_force_index = builder.force.index
