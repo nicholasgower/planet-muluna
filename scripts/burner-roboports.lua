@@ -176,10 +176,26 @@ local long_update_period = dischange_time_threshold / long_update_tolerance --Du
 
 local short_update_period = 60 --Arbitrary choice that should be less than the time to half-fill the energy fluid buffer
 
+local burner_roboports = {}
+
+for _,burner_roboport_table in pairs(Muluna.constants.vacuum_roboports) do
+    local roboport= burner_roboport_table.roboport
+    table.insert(burner_roboports,roboport)
+end
+
+local roboport_max_energy = {}
+
+for _,roboport_name in pairs(burner_roboports) do
+    local roboport = prototypes.entity[roboport_name]
+    if roboport.electric_energy_source_prototype and roboport.electric_energy_source_prototype.buffer_capacity then
+        roboport_max_energy[roboport.name] = roboport.electric_energy_source_prototype.buffer_capacity
+    end
+end
+
 local function calc_energy_percent(roboport) 
     
     local energy = roboport.energy
-    local max_energy = roboport.prototype.electric_energy_source_prototype.buffer_capacity
+    local max_energy = roboport_max_energy[roboport.name] --roboport.prototype.electric_energy_source_prototype.buffer_capacity
     return energy/max_energy
 end
 

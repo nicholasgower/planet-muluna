@@ -6,7 +6,7 @@ if mods["rigor-module"] then
     quality_chance = 0.10 -- If recipe can be improved with rigor, nerf the recipe to balance it.
 end
 
-local loss_chance = 0.2 -- Chance of a craft being a complete loss
+local loss_chance = 0.5 -- Chance of a craft being a complete loss
 local i = 0
 for _,asteroid_name in pairs(asteroid_list) do
     i = i + 1
@@ -29,7 +29,7 @@ for _,asteroid_name in pairs(asteroid_list) do
         allow_quality=true,
         enabled = false,
         hide_from_signal_gui = false,
-        rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
+        rigor_sensitivity=mods["rigor-module"] and 1 or nil
     })
     data:extend{new_recipe}
     table.insert(data.raw["technology"]["muluna-asteroid-upcycling"].effects, {

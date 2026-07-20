@@ -43,11 +43,14 @@ local possible_science_packs = --Science pack technologies
     "abacayba_ominous_science_pack_tech",
     "environment-research-center",
     "s6x-iridescent-science-pack",
+    "rabbasca-warpfield-science-pack",
 }
 
 if mods["panglia_planet"] then
     table.insert(possible_science_packs,"cloning-vat-technology")
 end
+
+
 
 -- Other mods can use the field "muluna_adds_progress_to_exploration_science_pack" to make a technology contribute progress to the exploration science pack.
 for _,tech in pairs(data.raw["technology"]) do

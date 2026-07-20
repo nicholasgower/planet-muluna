@@ -1,4 +1,45 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.14
+Date: 2026-07-20
+  Balancing:
+    - Loss rate of asteroid upcycling increased from 20% to 50%. Rigor sensitivity increased from 0.5x to 1x.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.13
+Date: 2026-07-20
+  Optimizations:
+    - Improved performance of burner roboport by caching max energy value.
+    - Minor improvements to footstep animation.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.12
+Date: 2026-07-19
+  Compatibility:
+    - Rabbasca warpfield science pack now contributes progress to exploration science pack.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.11
+Date: 2026-07-19
+  Bugfixes:
+    - Surface conditions no longer removed from asteroid collector.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.10
+Date: 2026-07-19
+  Compatibility:
+    - Moved compatibility code for low density space platform foundation on Tile Upgrade Planner from Tile Upgrade Planner to Muluna.
+    - Raised required Tile Upgrade Planner version from to 1.0.8.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.9
+Date: 2026-07-19
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.0.
+  Bugfixes:
+    - Big rocket silo can now launch cargo to regular space platforms. Animation for big cargo pod is currently incorrect, but this is only visible when launching a player via a big rocket silo. https://github.com/nicholasgower/planet-muluna/issues/425
+  Locale:
+    - Corrected "Tips and tricks" description for space science that had outdated instructions on how to craft space science on space platforms. https://github.com/nicholasgower/planet-muluna/issues/435
+---------------------------------------------------------------------------------------------------
+Version: 2.5.8
+Date: 2026-07-19
+  Changes:
+    - Added optional setting to remove the exploration science pack from all technologies but Muluna rewards and endgame technologies.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.7
 Date: 2026-07-19
   Balancing:
