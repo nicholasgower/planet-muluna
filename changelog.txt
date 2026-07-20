@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.13
+Date: 2026-07-20
+  Optimizations:
+    - Improved performance of burner roboport by caching max energy value.
+    - Minor improvements to footstep animation.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.12
 Date: 2026-07-19
   Compatibility:
