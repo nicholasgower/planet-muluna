@@ -119,20 +119,12 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
                    
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
-                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} goto continue end --game.print(profiler) return end
-                        local character_is_flying
-                        if experimental then
-                            character_is_flying = not character or character.is_flying 
-                        else
-                            local player_armor = get_armor(player)
-                            character_is_flying = false
-                            if player_armor.valid_for_read then 
-                                character_is_flying=armor_list[player_armor.name].provides_flight
-                            end
-                        end
+                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} goto continue end --game.print(profiler) return end 
+                        local character_is_flying = not character or character.is_flying 
+                        if character_is_flying then goto continue end
                         
                         local player_tile = surface.get_tile(player.position)
-                        if player.physical_vehicle or (player_tile.valid and player_tile.hidden_tile) or character_is_flying then return end
+                        if player.physical_vehicle or (player_tile.valid and player_tile.hidden_tile) then goto continue end
                             
                             local player_position
 
