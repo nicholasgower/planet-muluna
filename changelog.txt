@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.102
+Date: 2026-07-21
+  Bugfixes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna:
+    - hide_from_signal_gui = false applied to aluminum cable recipe and a few modded recipes.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.101
 Date: 2026-07-21
   Bugfixes:
