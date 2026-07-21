@@ -99,7 +99,7 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
     if not storage.telescopes then storage.telescopes = {} end 
     if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
     if not storage.burner_roboports then storage.burner_roboports = {} end
-    
+    if not storage.cached_direction_to_string then storage.cached_direction_to_string = {} end
     if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
     for i,radar in pairs(storage.nav_beacons) do
         if not storage.nav_beacons_other[i] then

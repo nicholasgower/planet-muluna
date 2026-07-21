@@ -21,27 +21,37 @@ if settings.startup["muluna-graphics-enable-footstep-animations"].value == true 
         NorthNorthWest = {m/math.sqrt(2),m/math.sqrt(2)},
     }
 
+local function cached_direction_to_string(x)
+    local s = storage.cached_direction_to_string[x]
+    if s == nil then
+        s = helpers.direction_to_string(x)
+        storage.cached_direction_to_string[x] = s
+    end
+    return s
+end
 
-
+    
+    
 
  
 
 
-    local step_process_tick_rate = 6
+    local step_process_tick_rate = 1
     local function update_step_tick_rates(event)
-        if game.surfaces.muluna then
+        --if game.surfaces.muluna then
             if not storage.walking_tick_rates then storage.walking_tick_rates = {} end
-            for i,player in pairs(storage.players_on_muluna) do
-                if not (player.connected and player.surface.name == "muluna") then goto continue end
+            for i,player_table in pairs(storage.players_on_muluna) do
+                --if not (player.connected and player.surface.name == "muluna") then goto continue end
                 --player.print(player.name)
-                local speed = player.character_running_speed
+                local player = player_table.player
+                local speed = player.character_running_speed or 0
                 local tick_rate = storage.walking_tick_rates[i]
                 storage.walking_tick_rates[i] = step_process_tick_rate*math.ceil(30/(speed/0.075)/step_process_tick_rate)
                 --player.print(storage.walking_tick_rates[i])
                 --player.print(speed)
                 ::continue::
             end
-        end
+        --end
     end
 
     Muluna.events.on_nth_tick(60, update_step_tick_rates)
@@ -96,21 +106,42 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
         return (armor_inventory or {{valid_for_read = false}})[1] 
     end
     --local profiler = helpers.create_profiler()
-    Muluna.events.on_nth_tick(step_process_tick_rate, function(event)
+local function generate_particles(speed,movement,player_position,surface)
+    for i = 1,math.floor(3*math.sqrt(speed)),1 do
+        local new_movement = {}
+        --local random = r*(math.random()-0.5)
+        new_movement[1] = (speed)*(movement[1] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
+        new_movement[2] = (speed)*(movement[2] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
+        surface.create_particle{
+            name = "stone-particle",
+            position = player_position,
+            movement = new_movement,
+            height = 0,
+            vertical_speed = 0.075*math.sqrt((speed >= 5 and 5) or (speed)),
+            frame_speed = 0.1
+        }
+    end
+
+end
+
+
+
+    Muluna.events.on_event(defines.events.on_tick, function(event)
         --local update_tick_rate = event.tick % 180 == true
         
         
-        if not game.surfaces.muluna then return end --If Muluna does not exist, don't execute.
+        --if not game.surfaces.muluna then return end --If Muluna does not exist, don't execute.
             for i,player_info in pairs(storage.players_on_muluna) do
                 --profiler.reset()
+                
+                if not storage.walking_tick_rates then update_step_tick_rates(event) end
+                local tick_rate = storage.walking_tick_rates[i] 
+                if not tick_rate then update_step_tick_rates(event) tick_rate = storage.walking_tick_rates[i] end
+                --if surface.name ~= "muluna" then goto continue end
+                if event.tick % tick_rate ~= 0 then goto continue end
                 local player = player_info.player or player_info
                 local character = player.character
                 local surface = player.surface
-                if not storage.walking_tick_rates then update_step_tick_rates(event) end
-                local tick_rate = storage.walking_tick_rates[i] or 30
-                --if not tick_rate then update_step_tick_rates(event) end
-                if surface.name ~= "muluna" then goto continue end
-                if event.tick % tick_rate == 0 then
                     --game.print(surface.name)
                     
                     
@@ -141,34 +172,23 @@ local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor
                                 vertical_speed = 0,
                                 frame_speed = 1
                             }
-                            local direction = helpers.direction_to_string(walking_state.direction)
+                            local direction = cached_direction_to_string(walking_state.direction)
                             
                             local speed = player.character_running_speed /0.075
                             if speed == 1/0 then speed = 1 end --To fix issue where character running speed is infinity for some reason.
                             
+                            
                             local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
                             local prev_movement = storage.players_on_muluna[i].previous_movement or {0,0}
-                            movement = vectors.vector_average(movement,prev_movement)
+                            movement = vectors.vector_average_unsafe(movement,prev_movement)
                             --game.print(serpent.block(movement))
                             storage.players_on_muluna[i].previous_movement = table.deepcopy(movement)
-                            for i = 1,math.floor(3*speed),1 do
-                                local new_movement = {}
-                                --local random = r*(math.random()-0.5)
-                                new_movement[1] = (speed)*(movement[1] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
-                                new_movement[2] = (speed)*(movement[2] + r*((math.random()-0.5)+(math.random()-0.5)+(math.random()-0.5)))
-                                surface.create_particle{
-                                    name = "stone-particle",
-                                    position = player_position,
-                                    movement = new_movement,
-                                    height = 0,
-                                    vertical_speed = 0.075*math.sqrt((speed >= 5 and 5) or (speed)),
-                                    frame_speed = 0.1
-                                }
-                            end
+                            generate_particles(speed,movement,player_position,surface)
+                            
                         --end
                     
                 --game.print(profiler)
-                end
+                
                 ::continue::
             end
         

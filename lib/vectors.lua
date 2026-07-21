@@ -39,6 +39,16 @@ function vector.vector_average(v, v2)
     return result
 end
 
+-- Scalar addition: adds two vectors together, assertion skipped for performance
+function vector.vector_average_unsafe(v, v2)
+    local result = {}
+    for i = 1, #v do
+        result[i] = (v[i] + v2[i]) / 2
+    end
+    return result
+end
+
+
 
 
 -- Dot product: sum of element-wise multiplications
