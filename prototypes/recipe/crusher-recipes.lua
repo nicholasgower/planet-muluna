@@ -181,6 +181,7 @@ aluminum_cable.icons = dual_icon("copper-cable","aluminum-plate")
 aluminum_cable.subgroup="muluna-products"
 aluminum_cable.allow_decomposition = false
 aluminum_cable.allow_as_intermediate = false
+aluminum_cable.hide_from_signal_gui = false
 --aluminum_cable.results = {{type = "item",name = "aluminum-cable",amount = 2}}
 
 -- table.insert(data.raw["technology"]["asteroid-productivity"].effects, {

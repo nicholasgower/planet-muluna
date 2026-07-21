@@ -227,6 +227,7 @@ for i,recipe_name in ipairs(recipes_to_replace) do
         new_recipe.localised_name={"recipe-name.x-from-aluminum",{"item-name."..recipe.name}}
         new_recipe.allow_decomposition = false
         new_recipe.allow_as_intermediate = false
+        new_recipe.hide_from_signal_gui = false
         new_recipe.auto_recycle = false
         for _,ingredient in pairs(new_recipe.ingredients) do
             if ingredient.name == "copper-plate" then
