@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.101
+Date: 2026-07-21
+  Bugfixes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna:
+    - When script builds a telescope, force is determined from telescope's force.
+    - Entities that burn thruster oxidizer are no longer given an oxygen surface condition.
+    - Surface conditions no longer removed from asteroid collector.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.18
+Date: 2026-07-21
+  Bugfixes:
+    - Entities that burn thruster oxidizer are no longer given an oxygen surface condition.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.17
+Date: 2026-07-20
+  Balancing:
+    - When rigor module is installed, Crusher 2 speed reduce to 1.25.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.16
 Date: 2026-07-20
   Compatibility:
