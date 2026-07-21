@@ -236,7 +236,7 @@ local function short_update_roboport(refueler)
         local key = refueler.unit_number
         
         local roboport = storage.burner_roboports[key]["roboport"]
-        
+        refueler.custom_status = status_burner_roboport_refueling
         roboport.energy = (roboport.energy or 0) + delta_energy
         if roboport.energy >= roboport_cutoff_energy_high[roboport.name] then
             --storage.active_burner_roboports[key] = nil --Deactivates roboport
@@ -250,7 +250,6 @@ end
 
 script.on_event(prototypes.recipe["burner-roboport-refuel-muluna"].on_crafted_event, function(event)
     short_update_roboport(event.entity)
-  
 end)
 
 
