@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.20
+Date: 2026-07-21
+  Optimizations:
+    - Improved performance of burner roboports using Factorio 2.1.12's new RecipePrototype::raise_on_crafted field, as well as some other optimizations to reduce the number of calculations required per refuel event.
+  Compatibility:
+    - Raised required Factorio version to 2.1.12.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.19
 Date: 2026-07-21
   Locale:
