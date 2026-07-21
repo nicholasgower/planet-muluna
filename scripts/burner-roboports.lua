@@ -166,11 +166,11 @@ end
 -- 5000 MJ / 2000 MW
 
 local cutoff_energy_high = 0.8 --If energy % is greater/equal than this, stop updating
-local cutoff_energy_low = 0.2 --If energy % is lower than this, start updating
+local cutoff_energy_low = 0.6 --If energy % is lower than this, start updating
 
 local discharge_time_max = 1200 -- Shortest possible time to fully discharge a normal roboport (in ticks)
 local dischange_time_threshold = discharge_time_max * (cutoff_energy_high-cutoff_energy_low)
-local long_update_tolerance = 2 --Higher tolerance is less performant, but less likely to create UX complaints
+local long_update_tolerance = 0.5 --Higher tolerance is less performant, but less likely to create UX complaints
 local long_update_period = dischange_time_threshold / long_update_tolerance --During long update, roboport's energy value is checked to see if they need more energy.
 
 
@@ -184,11 +184,15 @@ for _,burner_roboport_table in pairs(Muluna.constants.vacuum_roboports) do
 end
 
 local roboport_max_energy = {}
+local roboport_cutoff_energy_low = {}
+local roboport_cutoff_energy_high = {}
 
 for _,roboport_name in pairs(burner_roboports) do
     local roboport = prototypes.entity[roboport_name]
     if roboport.electric_energy_source_prototype and roboport.electric_energy_source_prototype.buffer_capacity then
         roboport_max_energy[roboport.name] = roboport.electric_energy_source_prototype.buffer_capacity
+        roboport_cutoff_energy_low[roboport.name]=roboport.electric_energy_source_prototype.buffer_capacity*cutoff_energy_low
+        roboport_cutoff_energy_high[roboport.name]=roboport.electric_energy_source_prototype.buffer_capacity*cutoff_energy_high
     end
 end
 
@@ -204,10 +208,10 @@ Muluna.events.on_nth_tick(long_update_period, function()
     for key,entity_table in pairs(storage.burner_roboports) do
         local roboport = entity_table["roboport"]
         local refueler = entity_table["refueler"]
-        local energy_percent = calc_energy_percent(roboport)
+        --local energy_percent = calc_energy_percent(roboport)
 
-        if energy_percent <= cutoff_energy_low then
-            storage.active_burner_roboports[key] = refueler
+        if roboport.energy <= roboport_cutoff_energy_low[roboport.name] and refueler.custom_status ~= status_burner_roboport_refueling then
+            --storage.active_burner_roboports[key] = refueler
             refueler.disabled_by_script = false --Turns on refueler
             if refueler.get_fluid_count() > 0 then
                 refueler.custom_status = status_burner_roboport_refueling
@@ -221,44 +225,40 @@ Muluna.events.on_nth_tick(long_update_period, function()
 
 end)
 
+local fluid_per_craft = Muluna.constants.burner_roboport_fluid_per_craft
+local fluid_removed_amount = fluid_per_craft
+local energy_value = 0.1 * 1000000
+local delta_energy = (fluid_removed_amount or 0) * energy_value
 
-
-Muluna.events.on_nth_tick(short_update_period, function() 
-
-    for key,refueler in pairs(storage.active_burner_roboports) do
-        --local roboport = entity_table["roboport"]
-        
+--Pre 2.1.12, this function was used in a loop on every refueler with low energy in a table to periodically convert proxy fluid into energy. Now, it's done on crafting of a recipe that consumes fuel.
+local function short_update_roboport(refueler)
+    --local roboport = entity_table["roboport"]
+        local key = refueler.unit_number
         
         local roboport = storage.burner_roboports[key]["roboport"]
-
-        local energy_percent = calc_energy_percent(roboport)
-
-        --Destroy fluid and add energy to roboport
-        local fluids = refueler.get_fluid_contents()
-        if refueler.get_fluid_count("muluna-roboport-propellant") == 0 then
-            refueler.custom_status = status_burner_roboport_empty
-            storage.active_burner_roboports[key] = nil --Deactivates roboport
+        
+        roboport.energy = (roboport.energy or 0) + delta_energy
+        if roboport.energy >= roboport_cutoff_energy_high[roboport.name] then
+            --storage.active_burner_roboports[key] = nil --Deactivates roboport
             refueler.disabled_by_script = true --Turns off refueler
-        else
-            refueler.custom_status = status_burner_roboport_refueling
+            refueler.custom_status = status_burner_roboport_full
+            roboport.custom_status = refueler.custom_status
+            -- Add status
         end
-        if fluids then
-            local fluid_removed = refueler.clear_fluid(2) --Not sure if this is the right fluid index
-            local fluid_removed_amount = fluid_removed and fluid_removed.amount
-            local energy_value = 0.1 * 1000000
-            local delta_energy = (fluid_removed_amount or 0) * energy_value
-            roboport.energy = (roboport.energy or 0) + delta_energy
-            if calc_energy_percent(roboport) >= cutoff_energy_high then
-                storage.active_burner_roboports[key] = nil --Deactivates roboport
-                refueler.disabled_by_script = true --Turns off refueler
-                refueler.custom_status = status_burner_roboport_full
-                -- Add status
-            end
-        else
-            
-        end
-        roboport.custom_status = refueler.custom_status
-    end
 
+end
 
+script.on_event(prototypes.recipe["burner-roboport-refuel-muluna"].on_crafted_event, function(event)
+    short_update_roboport(event.entity)
+  
 end)
+
+
+-- Muluna.events.on_nth_tick(short_update_period, function() 
+
+--     for key,refueler in pairs(storage.active_burner_roboports) do
+--         short_update_roboport(refueler)
+--     end
+
+
+-- end)
