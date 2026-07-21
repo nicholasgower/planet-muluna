@@ -25,7 +25,7 @@
 
 - [ ] I have tested control-level changes made by this PR to verify that it doesn't cause any crashes during typical gameplay. Absolute certainty is not required, but reasonable certainty is.
 
-- [ ] If I am submitting locale changes, I have some knowledge of the language involved, either natively or as a second language, and this is not an unverified machine translation.
+- [ ] If I am submitting locale changes, I have some knowledge of the language involved, either natively or as a second language, and this is not an unverified machine translation. I have also considered submitting locale changes to Muluna's dependencies, including PlanetsLib and Rigor Module.
 
 
 ## Screenshots (if appropriate):
