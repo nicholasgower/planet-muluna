@@ -311,7 +311,8 @@ local function add_oxygen_condition(entity)
         (
             entity.energy_source.type == "fluid" and 
             entity.energy_source.burns_fluid == true and not
-            rro.contains(entity.crafting_categories,"muluna-burner-roboport")
+            rro.contains(entity.crafting_categories,"muluna-burner-roboport") and not 
+            (entity.energy_source.fluid_box and entity.energy_source.fluid_box.filter == "thruster-oxidizer") 
         ))
     then
         --print("Burner energy source in " .. entity.name)
