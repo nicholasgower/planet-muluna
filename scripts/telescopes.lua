@@ -242,36 +242,56 @@ Muluna.events.on_event({defines.events.on_player_rotated_entity}, function(event
     end
 end)
 
+local state_integer_table = {
+    [defines.space_platform_state.waiting_for_starter_pack] = 1,
+    [defines.space_platform_state.starter_pack_requested] = 2,
+    [defines.space_platform_state.starter_pack_on_the_way] = 3,
+    [defines.space_platform_state.on_the_path] = 4,
+    [defines.space_platform_state.waiting_for_departure] = 5,
+    [defines.space_platform_state.no_path] = 6,
+    [defines.space_platform_state.waiting_at_station] = 7,
+    [defines.space_platform_state.paused] = 8,
+    [defines.space_platform_state.paused] = 9,
+}
+
 local function get_state_integer(state)
-    if state == defines.space_platform_state.waiting_for_starter_pack then
-        return 1
-    elseif state == defines.space_platform_state.starter_pack_requested then
-        return 2
-    elseif state == defines.space_platform_state.starter_pack_on_the_way then
-        return 3
-    elseif state == defines.space_platform_state.on_the_path then
-        return 4
-    elseif state == defines.space_platform_state.waiting_for_departure then
-        return 5
-    elseif state == defines.space_platform_state.no_schedule then
-        return 6
-    elseif state == defines.space_platform_state.no_path then
-        return 7
-    elseif state == defines.space_platform_state.waiting_at_station then
-        return 8
-    elseif state == defines.space_platform_state.paused then
-        return 9
-    else
-        return nil -- or some default value if needed
-    end
+    return state_integer_table[state]
+    -- if state == defines.space_platform_state.waiting_for_starter_pack then
+    --     return 1
+    -- elseif state == defines.space_platform_state.starter_pack_requested then
+    --     return 2
+    -- elseif state == defines.space_platform_state.starter_pack_on_the_way then
+    --     return 3
+    -- elseif state == defines.space_platform_state.on_the_path then
+    --     return 4
+    -- elseif state == defines.space_platform_state.waiting_for_departure then
+    --     return 5
+    -- elseif state == defines.space_platform_state.no_schedule then
+    --     return 6
+    -- elseif state == defines.space_platform_state.no_path then
+    --     return 7
+    -- elseif state == defines.space_platform_state.waiting_at_station then
+    --     return 8
+    -- elseif state == defines.space_platform_state.paused then
+    --     return 9
+    -- else
+    --     return nil -- or some default value if needed
+    -- end
 end
 
+local bool_to_int_table = {
+    [true] = 2,
+    [false] = 1,
+}
+
 local function bool_to_int(state)
-    if state == true then
-        return 2
-    else
-        return 1
-    end
+    return bool_to_int_table[state]
+
+    -- if state == true then
+    --     return 2
+    -- else
+    --     return 1
+    -- end
 
 
 end
@@ -294,23 +314,24 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
         -- Uncommon quality: State of space platform (https://lua-api.factorio.com/latest/defines.html#defines.space_platform_state)
         -- Rare quality: Can leave_current_location (1 or 2) (https://lua-api.factorio.com/latest/classes/LuaSpacePlatform.html#can_leave_current_location)
         local space_platforms = {}
-        if experimental then
-            if debug then log("planet.get_space_platforms(" .. force.name .. ")") end
-            space_platforms = planet.get_space_platforms(force)
-        else
-            for j,platform in pairs(force.platforms) do
-                if platform.space_location and platform.space_location.name == planet.name then
-                    space_platforms[j] = platform
-                end
-            end
-        end
+        space_platforms = planet.get_space_platforms(force)
+        -- if experimental then
+        --     if debug then log("planet.get_space_platforms(" .. force.name .. ")") end
+            
+        -- else
+        --     for j,platform in pairs(force.platforms) do
+        --         if platform.space_location and platform.space_location.name == planet.name then
+        --             space_platforms[j] = platform
+        --         end
+        --     end
+        -- end
         
         for j,space_platform in ipairs(space_platforms) do
             local signal = platform_list_signals[j+3]
             if signal then
                 signals[i]={value = {type = "virtual",name = signal,quality = "normal"},min= space_platform.index}
                 i = i+1
-                if debug then log("space_platform.state") end
+                --if debug then log("space_platform.state") end
                 signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer(space_platform.state)}
                 i = i+1
                 signals[i]={value = {type = "virtual",name = signal,quality = "rare"},min= bool_to_int(space_platform.can_leave_current_location())}
@@ -366,13 +387,14 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                 if combinator_behavior.enabled == true then
                     local cached_signals = telescope.cached_signals or {} 
                     local signals = get_telescope_combinator_signals(combinator.surface,combinator.force)
-                    if not rro.deep_equals(signals,cached_signals) then
-                        combinator_behavior.remove_section(1)
-                        local section = combinator_behavior.add_section()
-                        for i,signal in ipairs(signals) do
-                            section.set_slot(i,signal)
-                        end
-                    end
+                    --if not rro.deep_equals(signals,cached_signals) then
+                        --combinator_behavior.remove_section(1)
+                        local section = combinator_behavior.get_section(1) or combinator_behavior.add_section()
+                        section.filters = signals
+                        -- for i,signal in ipairs(signals) do
+                        --     section.set_slot(i,signal)
+                        -- end
+                    --end
                     
                     telescope.cached_signals = signals
                 end
