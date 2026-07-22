@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.23
+Date: 2026-07-21
+  Bugfixes:
+    - Fixed footstep particle animation and optimized it to the point of being able to run its script every tick.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.102
 Date: 2026-07-21
   Bugfixes:
