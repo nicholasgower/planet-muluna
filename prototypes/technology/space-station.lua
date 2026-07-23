@@ -1013,10 +1013,6 @@ data:extend{
                 space_location = "muluna"
             },
             {
-                type="unlock-recipe",
-                recipe="rocket-part-muluna"
-            },
-            {
                 type = "unlock-travel-to-space-platforms",
                 modifier = true
             }
