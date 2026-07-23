@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.26
+Date: 2026-07-23
+  Bugfixes:
+    - Updated category list used to automatically detect modded standard assembling machines that should be provided a data port.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.25
 Date: 2026-07-23
   Balancing:
