@@ -35,7 +35,7 @@ end
 
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 for _,am3 in pairs(data.raw["assembling-machine"]) do
-    if rro.contains({"assembling-machine-3","mini-assembler-3","micro-assembler-3","aop-advanced-assembling-machine"},am3.name) or rro.contains_all(am3.crafting_categories,{"basic-crafting", "crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.energy_source.type == "electric" and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 then
+    if rro.contains({"assembling-machine-3","mini-assembler-3","micro-assembler-3","aop-advanced-assembling-machine"},am3.name) or rro.contains_all(am3.crafting_categories,{"crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.energy_source.type == "electric" and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 then
         local linked_connection_id=100
         if am3.fluid_boxes then
             local input=table.deepcopy(am3.fluid_boxes[1])
