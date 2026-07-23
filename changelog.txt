@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.27
+Date: 2026-07-23
+  Bugfixes:
+    - Fixed crash on load with mods that manually add data ports to their assembling machines.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.26
 Date: 2026-07-23
   Bugfixes:
