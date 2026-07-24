@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.29
+Date: 2026-07-24
+  Balancing:
+    - Increased the number of tree seeds included with initial cargo drops.
+    - Initial cargo drops now include some iron chests.
+    - Reduced the number of aluminum plates required to trigger the discovery of burner roboports from 50 to 25 aluminum plates.
+  Changes:
+    - Moved water-saving tree growth recipe to separate technology unlocked after space science to stop players from slowing themselves down by unwisely using the wrong recipe for early wood production.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.28
 Date: 2026-07-24
   Compatibility:
