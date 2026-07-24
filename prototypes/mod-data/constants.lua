@@ -22,6 +22,7 @@ Muluna.constants.cargo_drop_spawn_imports = { --Generated from Claude Code. See 
     "__planet-muluna__.scripts.cargo-drop-spawns.vanilla.spoilage",
     "__planet-muluna__.scripts.cargo-drop-spawns.vanilla.tree-seed",
     "__planet-muluna__.scripts.cargo-drop-spawns.vanilla.wood",
+    "__planet-muluna__.scripts.cargo-drop-spawns.vanilla.iron-chest",
 
 }
 
