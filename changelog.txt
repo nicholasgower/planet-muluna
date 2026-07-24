@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.28
+Date: 2026-07-24
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.2.
+  Graphics:
+    - Orbit sprite graphic called from PlanetsLib.get_orbit_sprite, allowing the seamless replacement and scaling of orbit sprites when changing orbit radius in any-planet-start.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.27
 Date: 2026-07-23
   Bugfixes:
