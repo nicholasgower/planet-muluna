@@ -712,10 +712,6 @@ data:extend{
                 type = "unlock-recipe",
                 recipe="muluna-tree-growth-greenhouse"
             },
-            {
-                type = "unlock-recipe",
-                recipe="muluna-tree-growth-greenhouse-water-saving"
-            },
             -- {
             --     type = "unlock-recipe",
             --     recipe="muluna-tree-growth-greenhouse-quick"
@@ -727,6 +723,32 @@ data:extend{
             {
                 type = "unlock-recipe",
                 recipe="tree-seed"
+            },
+            
+            
+        }
+    },
+    {
+        type = "technology",
+        name = "muluna-water-saving-wood-cultivation",
+        prerequisites = {"space-science-pack"},
+        unit = {
+            count = 250,
+            time = 30,
+            ingredients = {
+                    {"automation-science-pack", 1},
+                    {"logistic-science-pack", 1},
+                    {"chemical-science-pack", 1},
+                    {"production-science-pack", 1},
+                    {"space-science-pack", 1}
+                    --{"utility-science-pack", 1},
+                    --{"space-science-pack", 1},
+            }
+        },
+        effects = {
+            {
+                type = "unlock-recipe",
+                recipe="muluna-tree-growth-greenhouse-water-saving"
             },
             
             
@@ -1050,7 +1072,7 @@ data:extend{
                 --{"interstellar-science-pack",1}
             }
         },
-        prerequisites = {"agricultural-science-pack","muluna-greenhouses"},
+        prerequisites = {"agricultural-science-pack","muluna-water-saving-wood-cultivation"},
         effects = {
 
         }
