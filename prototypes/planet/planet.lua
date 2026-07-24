@@ -292,7 +292,7 @@ local parent_planet = "nauvis"
 --   end
 --   end
 
-
+local orbit_radius = 1.5
 local o_parent_planet = data.raw["planet"][parent_planet]
 
 local muluna= 
@@ -340,18 +340,18 @@ local muluna=
     orbit = { --Added in preparation for PlanetsLib to display orbits, hopefully in a less invasive way than MTLib.
       --polar = {2,0.005*tau},
       orientation = 0.75, --When planetsLib orbit is added, orientation and distance are set relative to parent body.
-      distance = 1.5*o_parent_planet.magnitude/(nauvis.magnitude),
+      distance = orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude),
       parent = {
         type = "planet",
         name = parent_planet,
         },
-      
-        sprite = {
-          type = "sprite",
-          filename = "__muluna-graphics__/graphics/orbits/orbit-muluna.png",
-          size = 412,
-          scale = 0.25*o_parent_planet.magnitude/(nauvis.magnitude),
-        }
+        sprite = PlanetsLib.get_orbit_sprite(orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude))
+        -- sprite = {
+        --   type = "sprite",
+        --   filename = "__muluna-graphics__/graphics/orbits/orbit-muluna.png",
+        --   size = 412,
+        --   scale = 0.25*o_parent_planet.magnitude/(nauvis.magnitude),
+        -- }
     },
     platform_surface_render_parameters = {
       platform_backdrop = require("planet-appearance-21")
