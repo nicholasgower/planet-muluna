@@ -532,7 +532,7 @@ data:extend{
         research_trigger = {
             type = "craft-item",
             item = "aluminum-plate",
-            count = 50,
+            count = 25,
         },
         effects = {
             {
