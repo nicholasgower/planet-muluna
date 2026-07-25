@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.30
+Date: 2026-07-25
+  Changes:
+    - Added wire buttons to the GUI of each compound entity subcomponent with circuit wire support.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.29
 Date: 2026-07-24
   Balancing:
