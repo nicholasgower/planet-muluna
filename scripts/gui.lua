@@ -142,6 +142,26 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                 name = "muluna-goto-button-" .. button_name,
                 caption = localised_button,
             })
+            local horizontal_space = frame.add({
+                type = "flow",
+                name = "muluna-flow",
+                direction = "horizontal",
+            })
+            if entity.name ~= "muluna-burner-roboport" then
+                local red_wire_button = horizontal_space.add({
+                type = "sprite-button",
+                name = "muluna-drag-green",
+                sprite = "item/green-wire"
+                --caption = localised_button,
+                })
+                local green_wire_button = horizontal_space.add({
+                    type = "sprite-button",
+                    name = "muluna-drag-red",
+                    sprite = "item/red-wire"
+                    --caption = localised_button,
+                })
+            end
+            
         elseif satradar_gui then
             local enable_switch = frame.add({
                 type = "checkbox",
@@ -167,6 +187,9 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
 		-- })
         --player.gui..relative.greeting.caption = "Hello there!"
         --player.gui.top["greeting"].caption = "Actually, never mind, I don't like your face"
+
+    
+        
     end
 
 end
@@ -188,13 +211,14 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
     --game.print(serpent.block(element))
     if false then
 
-    elseif string.find(element.name, "muluna%-goto%-button") then 
+    elseif string.find(element.name, "muluna%-goto%-button") or string.find(element.name, "muluna%-drag")   then 
 
         local player = game.players[event.player_index]
         
         local selected = player.opened --The currently selected entity
         local to_entity --Entity to change focus to
         local to_planet --Planet to switch view to
+        local wire_color
         --game.print(element.name)
         if string.find(element.name,"telescope%-unit") then
             --game.print(element.name)
@@ -220,12 +244,35 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
             --game.print(element.name)
         elseif string.find(element.name,"satellite%-radar")  then
             to_planet = storage.nav_surfaces[selected.unit_number]
+        elseif string.find(element.name,"drag%-green")  then
+            wire_color = "green"
+        elseif string.find(element.name,"drag%-red")  then
+            wire_color = "red"
         end
         
         if to_entity then
             player.opened = to_entity
         elseif to_planet then
             player.set_controller{type = defines.controllers.remote,surface = to_planet.name}
+        elseif wire_color then
+            --player.close_
+            --game.print("wire color")
+            player.clear_cursor()
+            player.cursor_stack.set_stack(
+                {
+                    name = wire_color .. "-wire",
+                    count = 1,
+                    quality = "normal"
+                }
+            )
+            --game.print(serpent.block(player.opened))
+            local entity_position = player.opened.position
+            player.selected=player.opened
+            --game.print("Selected entity:"..serpent.block(player.selected))
+            player.opened = nil
+            --player.update_selected_entity(entity_position)
+            player.drag_wire{position=entity_position}
+           
         end
 
 
