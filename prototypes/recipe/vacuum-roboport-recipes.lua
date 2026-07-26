@@ -19,7 +19,7 @@ data:extend{
         icon_size = 64,
         base_color = {201,51,231},
         flow_color = {201,51,231},
-        auto_barrel=false,
+        auto_barrel=true,
     }),
     rro.merge(data.raw["recipe"]["thruster-fuel"],{
         type = "recipe",
