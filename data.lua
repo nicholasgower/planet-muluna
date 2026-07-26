@@ -31,6 +31,7 @@ require("prototypes.decoratives.muluna-decoratives")
 require("prototypes.mod-data.ground-diggers")
 require("prototypes.achievements")
 
+
 require("compat.maraxsis")
 require("compat.solar-productivity")
 require("compat.tile-upgrade-planner-muluna")
