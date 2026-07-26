@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.31
+Date: 2026-07-26
+  Bugfixes:
+    - Reverted decision to hide certain entity subcomponents when "Hide tall entities" is enabled.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.30
 Date: 2026-07-25
   Changes:
