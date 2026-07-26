@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.33
+Date: 2026-07-26
+  Balancing:
+    - Doubled logistics/construction radii of burner roboports to simplify propellant pipe networks.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.32
 Date: 2026-07-26
   Changes:
