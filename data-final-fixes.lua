@@ -37,6 +37,7 @@ require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
 require("prototypes.final-fixes.telescope-prototype")
 require("prototypes.final-fixes.burner-roboports")
+require("prototypes.final-fixes.oxygenated-vehicles")
 --Overrides any mods which add their own techs to space platform thruster as a prereq.
 --Moves prereq to asteroid collector, which is roughly equivalent to space platform thruster's place in the vanilla tech tree.
 local new_prereqs={}
