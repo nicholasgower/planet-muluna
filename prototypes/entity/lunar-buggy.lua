@@ -28,6 +28,7 @@ if mods["Krastorio2"] then
     buggy.energy_source.fuel_categories={"kr-vehicle-fuel"}
 end
 
+buggy.trash_inventory_size = data.raw["car"]["tank"].trash_inventory_size
 buggy.equipment_grid = data.raw["car"]["tank"].equipment_grid
 buggy.allow_remote_driving = true
 buggy.collision_box = {{-0.7*buggy_scale, -1*buggy_scale}, {0.7*buggy_scale, 1*buggy_scale}}
