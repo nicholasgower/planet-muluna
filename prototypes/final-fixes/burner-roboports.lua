@@ -90,12 +90,12 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 custom_tooltip_fields = {
                     {
                         name = {"description.supply-area"},
-                        value = "50x50",
+                        value = tostring(roboport.logistics_radius*2).."x" ..tostring(roboport.logistics_radius*2),
                         order = 1,
                     },
                     {
                         name = {"description.construction-area"},
-                        value = "110x110",
+                        value = tostring(roboport.construction_radius*2).."x" ..tostring(roboport.construction_radius*2),
                         order = 2,
                     },
                     {
@@ -177,7 +177,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                         }
                         
                     },
-                    distance = 50,
+                    distance = roboport.logistics_radius*2,
                     offset = {0, 0}
                     }
             }
