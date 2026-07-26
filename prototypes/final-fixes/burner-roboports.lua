@@ -100,7 +100,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                     },
                     {
                         name = {"description.radar-coverage-distance"},
-                        value = "2",
+                        value = "4",
                         order = 3,
                     },
                     
