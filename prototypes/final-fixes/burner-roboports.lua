@@ -87,6 +87,24 @@ for _,roboport in pairs(data.raw["roboport"]) do
                         min=3,
                     },
                 },
+                custom_tooltip_fields = {
+                    {
+                        name = {"description.supply-area"},
+                        value = "50x50",
+                        order = 1,
+                    },
+                    {
+                        name = {"description.construction-area"},
+                        value = "110x110",
+                        order = 2,
+                    },
+                    {
+                        name = {"description.radar-coverage-distance"},
+                        value = "2",
+                        order = 3,
+                    },
+                    
+                },
                 fluid_boxes = {
                     
                     -- {
