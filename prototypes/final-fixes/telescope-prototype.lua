@@ -19,6 +19,11 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
         telescope_combinator.selection_box = flib_bounding_box.resize(entity.selection_box,0.0)
         telescope_combinator.selection_priority=49 --Default is 50
         telescope_combinator.factoriopedia_description={"entity-factoriopedia-description.muluna-telescope-combinator"}
+        if not mods["quality"] then
+            telescope_combinator.factoriopedia_description={"entity-factoriopedia-description.muluna-telescope-combinator-no-quality"}
+            telescope_combinator.localised_description={"entity-description.muluna-telescope-combinator-no-quality"}
+        end
+
         entity.selection_box = flib_bounding_box.resize(entity.selection_box,-0.4)
         entity.quality_indicator_shift = {-0.4,0.4}
         Muluna.constants.telescopes[entity.name] = {

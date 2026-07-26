@@ -302,6 +302,7 @@ for _,signal in pairs(prototypes.virtual_signal) do
     table.insert(platform_list_signals,signal.name)
 end
 local experimental = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
+local use_quality = script.active_mods["quality"]
 local debug = false
 local function get_telescope_combinator_signals(surface,force) --Intended to be memoized with cache resetting every on_nth_tick event
     if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
@@ -332,10 +333,12 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
                 signals[i]={value = {type = "virtual",name = signal,quality = "normal"},min= space_platform.index}
                 i = i+1
                 --if debug then log("space_platform.state") end
-                signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer(space_platform.state)}
-                i = i+1
-                signals[i]={value = {type = "virtual",name = signal,quality = "rare"},min= bool_to_int(space_platform.can_leave_current_location())}
-                i = i+1
+                if use_quality then
+                    signals[i]={value = {type = "virtual",name = signal,quality = "uncommon"},min= get_state_integer(space_platform.state)}
+                    i = i+1
+                    signals[i]={value = {type = "virtual",name = signal,quality = "rare"},min= bool_to_int(space_platform.can_leave_current_location())}
+                    i = i+1
+                end
 
             end
         end
