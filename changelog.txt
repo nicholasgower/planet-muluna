@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.32
+Date: 2026-07-26
+  Changes:
+    - Added custom tooltips to burner roboport showing information from the roboport subentity.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.31
 Date: 2026-07-26
   Bugfixes:
