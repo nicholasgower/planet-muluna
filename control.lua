@@ -101,6 +101,7 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
     if not storage.burner_roboports then storage.burner_roboports = {} end
     if not storage.cached_direction_to_string then storage.cached_direction_to_string = {} end
     if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
+    if not storage.entity_info then storage.entity_info = {} end
     for i,radar in pairs(storage.nav_beacons) do
         if not storage.nav_beacons_other[i] then
             storage.nav_beacons_other[i] = {gui = {enabled = true}}
