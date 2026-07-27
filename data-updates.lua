@@ -915,3 +915,8 @@ if settings.startup["muluna-hardcore-remove-space-casino"] and settings.startup[
         end
     end
 end
+local propellant_barrel = data.raw["item"]["muluna-roboport-propellant-barrel"]
+propellant_barrel.fuel_value = Muluna.multiply_energy(data.raw["fluid"]["muluna-roboport-propellant"].fuel_value, 50)
+propellant_barrel.fuel_category = "muluna-oxygenated-fuel"
+propellant_barrel.burnt_result = "barrel" --No automatic way to remove barrels, so I will disable this for now
+data.raw["recipe"]["muluna-roboport-propellant-barrel"].hide_from_player_crafting = false
