@@ -30,6 +30,7 @@ data:extend({
     always_show_made_in = true,
     allow_decomposition = false,
     allow_productivity=true,
+    auto_recycle = false,
   },
   {
     type = "recipe",
@@ -58,6 +59,7 @@ data:extend({
     always_show_made_in = true,
     allow_decomposition = false,
     allow_productivity=true,
+    auto_recycle = false,
   },
   {
     type = "recipe",
@@ -87,6 +89,7 @@ data:extend({
     always_show_products = true,
     always_show_made_in = true,
     allow_decomposition = false,
+    auto_recycle = false,
   },
   {
     type = "recipe",
@@ -116,6 +119,7 @@ data:extend({
     always_show_products = true,
     always_show_made_in = true,
     allow_decomposition = false,
+    
   },
 --   {
 --     type = "recipe",
