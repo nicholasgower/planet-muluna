@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 2026-07-27
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.7.
+  Bugfixes:
+    - Vehicles without surface conditions can now be captured by Muluna's vehicle variant generator.
+  Changes:
+    - Locomotives are now affected by the changes targeting cars and spider vehicles.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.1
 Date: 2026-07-27
   Compatibility:
