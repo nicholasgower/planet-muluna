@@ -18,7 +18,7 @@ end
 for _,category in pairs(categories) do
     for _,vehicle in pairs(data.raw[category]) do
         if (not vehicle.PlanetsLib_do_not_generate_variants) and 
-        vehicle.surface_conditions and surface_property_lib.fits_surface_conditions(vehicle,"muluna") and 
+        (not vehicle.surface_conditions or surface_property_lib.fits_surface_conditions(vehicle,"muluna")) and 
         vehicle.energy_source.type == "burner" and 
         vehicle.energy_source.fuel_categories and Muluna.rro.contains_any(vehicle.energy_source.fuel_categories,{"chemical","kr-vehicle-fuel"}) then
             local new_energy_source = table.deepcopy(vehicle.energy_source)
