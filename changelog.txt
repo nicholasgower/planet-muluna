@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.3
+Date: 2026-07-27
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.8.
+  Bugfixes:
+    - Fixed crash on load with Multiple Unit Train Control
+---------------------------------------------------------------------------------------------------
 Version: 2.6.2
 Date: 2026-07-27
   Compatibility:
