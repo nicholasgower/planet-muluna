@@ -25,14 +25,19 @@ for _,category in pairs(categories) do
             new_energy_source.fuel_categories = {"muluna-oxygenated-fuel",new_nuclear_fuel_category}
             new_energy_source.burnt_inventory_size = new_energy_source.burnt_inventory_size or 2
             vehicle.fast_replaceable_group = not vehicle.fast_replaceable_group and vehicle.name
+            local new_placeable_by = data.raw.item[vehicle.name] and {{item = vehicle.name, count =1}} or nil
+            local item_name = data.raw["item-with-entity-data"][vehicle.name] and vehicle.name or nil
+            --error(vehicle.name .. " " .. item_name)
             local new_vehicle = PlanetsLib.create_planet_entity_variant("muluna",vehicle,
                 {
                     
                     energy_source = new_energy_source,
-                    placeable_by = data.raw.item[vehicle.name] and {{item = vehicle.name, count =1}}
+                    placeable_by = new_placeable_by
                 },
-                "muluna-runtime-vehicle-replacement"
+                "muluna-runtime-vehicle-replacement",
+                item_name
             )
+            
         end
         
         
