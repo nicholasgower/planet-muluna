@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2026-07-27
+  Features:
+    - All car vehicles on Muluna that normally use chemical fuel are required to use oxygenated fuel instead.
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.3.
+    - Raised required PlanetsLib version to 1.22.5.
+    - Raised required PlanetsLib version to 1.22.6.
+  Changes:
+    - Flying robot propellant can now be barreled and burned as an oxygenated fuel.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.37
 Date: 2026-07-26
   Changes:
