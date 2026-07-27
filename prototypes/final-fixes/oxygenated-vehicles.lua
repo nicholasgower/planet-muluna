@@ -1,5 +1,5 @@
 local surface_property_lib = require("__PlanetsLib__.lib.surface-property-lib")
-local categories = {"car","spider-vehicle"}
+local categories = {"car","spider-vehicle","locomotive"}
 
 local nuclear_fuel_category = data.raw["item"]["nuclear-fuel"].fuel_category
 local new_nuclear_fuel_category = "muluna-nuclear-chemical-fuel"
