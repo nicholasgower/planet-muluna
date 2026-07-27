@@ -24,7 +24,7 @@ for _,category in pairs(categories) do
             local new_energy_source = table.deepcopy(vehicle.energy_source)
             new_energy_source.fuel_categories = {"muluna-oxygenated-fuel",new_nuclear_fuel_category}
             new_energy_source.burnt_inventory_size = new_energy_source.burnt_inventory_size or 2
-            vehicle.fast_replaceable_group = not vehicle.fast_replaceable_group and vehicle.name
+            vehicle.fast_replaceable_group = vehicle.fast_replaceable_group or vehicle.name
             local new_placeable_by = data.raw.item[vehicle.name] and {{item = vehicle.name, count =1}} or nil
             local item_name = data.raw["item-with-entity-data"][vehicle.name] and vehicle.name or nil
             --error(vehicle.name .. " " .. item_name)
