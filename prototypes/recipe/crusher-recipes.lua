@@ -297,7 +297,7 @@ for _,recipe in pairs(recipes) do
           recipe.hide_from_signal_gui = false
     end 
     if mods["rigor-module"] then
-        data.raw["mod-data"]["rigor_module_mod_data"].data.compatibility_mode_recipe_whitelist[recipe.name]=true
+        recipe.rigor_compatibility_mode_whitelist=true
     end
     
     

@@ -29,7 +29,8 @@ if mods["quality"] then
             allow_quality=true,
             enabled = false,
             hide_from_signal_gui = false,
-            rigor_sensitivity=mods["rigor-module"] and 1 or nil
+            rigor_sensitivity=mods["rigor-module"] and 1 or nil,
+            rigor_compatibility_mode_whitelist=mods["rigor-module"] and true or nil
         })
         data:extend{new_recipe}
         table.insert(data.raw["technology"]["muluna-asteroid-upcycling"].effects, {
