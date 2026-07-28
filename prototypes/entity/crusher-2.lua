@@ -23,10 +23,7 @@ table.insert(crusher_2.crafting_categories,"muluna-crusher-2")
 crusher_2.localised_name={"",{"item-name.crusher"}," 2"}
 crusher_2.icon="__muluna-graphics__/graphics/icons/crusher-2.png"
 
-if mods["rigor-module"] then
-    
-    data.raw["mod-data"]["rigor_module_mod_data"].data["entity_to_base_rigor"][crusher_2.name]=50
-end
+crusher_2.rigor_base_value=mods["rigor-module"] and 50 or nil
 
 data:extend{crusher_2}
 

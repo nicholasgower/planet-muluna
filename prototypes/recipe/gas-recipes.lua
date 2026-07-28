@@ -463,6 +463,7 @@ local diffusion = {
             {type = "fluid",name = "carbon-dioxide", amount = 2.5} --Because I want to make finding the perfect combination of productivity vs speed more challenging
         },
         rigor_sensitivity=mods["rigor-module"] and 2 or nil,
+        rigor_compatibility_mode_whitelist=mods["rigor-module"] and true or nil,
         energy_required = 10,
         main_product = "muluna-diffused-plastic",
         --icons = data.raw["item"][].icons,
@@ -486,6 +487,7 @@ local diffusion = {
             reset_freshness_on_craft = settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true,
         })
     end
+    diffusion.results[2].rigor_product=mods["rigor-module"] and true or nil
 
 data:extend{diffusion}
 

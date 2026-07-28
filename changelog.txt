@@ -1,4 +1,61 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.7
+Date: 2026-07-28
+  Compatibility:
+    - Raised Rigor Module version to 1.1.13 and switched to new API.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.6
+Date: 2026-07-28
+  Bugfixes:
+    - Added optional setting to enable runtime locomotive replacement, disabled by default. This feature is experimental.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.5
+Date: 2026-07-27
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.9.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.4
+Date: 2026-07-27
+  Bugfixes:
+    - Disabled autorecycling on several wood gasification recipes.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.3
+Date: 2026-07-27
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.8.
+  Bugfixes:
+    - Fixed crash on load with Multiple Unit Train Control
+---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 2026-07-27
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.7.
+  Bugfixes:
+    - Vehicles without surface conditions can now be captured by Muluna's vehicle variant generator.
+  Changes:
+    - Locomotives are now affected by the changes targeting cars and spider vehicles.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.1
+Date: 2026-07-27
+  Compatibility:
+    - Muluna's changes to vehicle fuel categories now apply to Krastorio 2 vehicles.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2026-07-27
+  Features:
+    - All car vehicles on Muluna that normally use chemical fuel are required to use oxygenated fuel instead.
+  Compatibility:
+    - Raised required PlanetsLib version to 1.22.3.
+    - Raised required PlanetsLib version to 1.22.5.
+    - Raised required PlanetsLib version to 1.22.6.
+  Changes:
+    - Flying robot propellant can now be barreled and burned as an oxygenated fuel.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.37
+Date: 2026-07-26
+  Changes:
+    - Rocket buggy now supports logistic requests.
+---------------------------------------------------------------------------------------------------
 Version: 2.5.36
 Date: 2026-07-26
   Locale:
