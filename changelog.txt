@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.10
+Date: 2026-07-28
+  Bugfixes:
+    - Fixed crash on placing telescope with robot when planet is at per-telescope limit. https://github.com/nicholasgower/planet-muluna/issues/444
+---------------------------------------------------------------------------------------------------
 Version: 2.6.9
 Date: 2026-07-28
   Balancing:
