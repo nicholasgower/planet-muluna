@@ -16,6 +16,10 @@ end
 
 
 for _,category in pairs(categories) do
+    local setting = "muluna-runtime-vehicle-replacement"
+    if category == "locomotive" then
+        setting = "muluna-runtime-locomotive-replacement"
+    end
     for _,vehicle in pairs(data.raw[category]) do
         if (not vehicle.PlanetsLib_do_not_generate_variants) and 
         (not vehicle.surface_conditions or surface_property_lib.fits_surface_conditions(vehicle,"muluna")) and 
@@ -34,7 +38,7 @@ for _,category in pairs(categories) do
                     energy_source = new_energy_source,
                     placeable_by = new_placeable_by
                 },
-                "muluna-runtime-vehicle-replacement",
+                setting,
                 item_name
             )
             

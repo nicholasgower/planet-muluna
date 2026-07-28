@@ -351,4 +351,13 @@ data:extend{
       hidden = true,
       forced_value = true,
     },
+    {
+      type = "bool-setting",
+      name = "muluna-runtime-locomotive-replacement",
+      setting_type = "startup",
+      default_value = false,
+      order = "a",
+      hidden = false,
+      --forced_value = true,
+    },
 }
