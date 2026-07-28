@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.9
+Date: 2026-07-28
+  Balancing:
+    - Wood gasification recipes no longer need an output belt, as returned catalyst is now automatically returned to the oil refinery's input.
+  Compatibility:
+    - Raised required PlanetsLib version to 1.23.0.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.8
 Date: 2026-07-28
   Locale:
