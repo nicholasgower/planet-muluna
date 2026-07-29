@@ -1,6 +1,7 @@
 
 if mods["quality"] then
-    local asteroid_list={"metallic-asteroid","carbonic-asteroid","oxide-asteroid"}
+    local asteroid_list={"metallic-asteroid","carbonic-asteroid","oxide-asteroid","anorthite"}
+    local data_cost = {anorthite = 2}
     local quality_chance = 0.15 --Chance of upgrading the quality of an asteroid 
     if mods["rigor-module"] then
         quality_chance = 0.10 -- If recipe can be improved with rigor, nerf the recipe to balance it.
@@ -19,7 +20,7 @@ if mods["quality"] then
             icons =  Muluna.icons.dual_icon(asteroid,"muluna-astronomical-data"),
             ingredients = {
                 {type = "item",name = asteroid,amount=1},
-                {type = "fluid", name = "muluna-astronomical-data",amount=1,fluidbox_index=30}
+                {type = "fluid", name = "muluna-astronomical-data",amount=data_cost[asteroid_name] or 1,fluidbox_index=30}
             },
             results = {
                 {type ="item",name = asteroid,amount=1,shared_probability={min = loss_chance,max = 1-quality_chance}},
