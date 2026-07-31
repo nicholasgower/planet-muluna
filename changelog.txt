@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.11
+Date: 2026-07-30
+  Compatibility:
+    - Developers can add fuels to the list of fuels supported by non oxygenated vehicles with the item field "muluna_oxygenated_fuel"(boolean).
+---------------------------------------------------------------------------------------------------
+Version: 2.2.103
+Date: 2026-07-28
+  Bugfixes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna:
+    - Fixed crash on placing telescope with robot when planet is at per-telescope limit. #444
+---------------------------------------------------------------------------------------------------
 Version: 2.6.10
 Date: 2026-07-28
   Bugfixes:
