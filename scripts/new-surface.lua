@@ -131,6 +131,10 @@ function Public.on_new_surface(muluna_index)
 -- end
 
     if game.planets["muluna"].surface and game.planets["muluna"].surface.index == muluna_index then
+        local surface = game.planets["muluna"].surface
+        surface.wind_speed = 0
+        surface.wind_orientation = 0
+        surface.wind_orientation_change = 0
         if settings.startup["muluna-hardcore-remove-starting-cargo-pods"].value == true then 
             if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then
                 game.print({"console.muluna-incompatible-aps-setting"})
@@ -144,6 +148,8 @@ function Public.on_new_surface(muluna_index)
         for i = 1,10 do
             random_place_entity(muluna,"lunar-rock")
         end
+
+
         
         
         
