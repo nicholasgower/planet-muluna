@@ -385,16 +385,17 @@ space_boiler_new.energy_source.light_flicker =
     minimum_intensity = 0.6*3,
     maximum_intensity = 0.95*3
   }
+local smoke_position = util.by_pixel(30.5, -85)
 space_boiler_new.energy_source.smoke =
 {
   {
     name = "smoke",
-    --north_position = util.by_pixel(-38, -47.5),
-    position = util.by_pixel(30.5, -85),
-    --east_position = util.by_pixel(20, -70),
-    --west_position = util.by_pixel(-19, -8.5),
-    frequency = 15,
-    starting_vertical_speed = 0.0,
+    north_position = smoke_position,
+    east_position = smoke_position,
+    west_position = smoke_position,
+    south_position = smoke_position,
+    frequency = 30,
+    starting_vertical_speed = 0.20,
     starting_frame_deviation = 60
   }
 }
