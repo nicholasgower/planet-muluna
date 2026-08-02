@@ -101,6 +101,9 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     if data.raw["technology"]["steam-power"].prerequisites == nil then
         data.raw["technology"]["steam-power"].prerequisites = {"metallic-asteroid-crushing"}
     end
+    
+    table.insert(data.raw["technology"]["muluna-advanced-boiler"].prerequisites, "steam-power")
+    
     if data.raw["technology"]["steel-axe"].prerequisites == nil or #data.raw["technology"]["steel-axe"].prerequisites == 0 then
         data.raw["technology"]["steel-axe"].prerequisites = {"metallic-asteroid-crushing"}
     end
