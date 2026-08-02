@@ -394,7 +394,7 @@ space_boiler_new.energy_source.smoke =
     east_position = smoke_position,
     west_position = smoke_position,
     south_position = smoke_position,
-    frequency = 30,
+    frequency = 15,
     starting_vertical_speed = 0.20,
     starting_frame_deviation = 60
   }
