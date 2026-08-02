@@ -118,6 +118,11 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     rro.remove(data.raw["technology"]["space-platform-thruster"].prerequisites,"afterburner")
     data.raw["technology"]["rocket-silo"].research_trigger.item =  "rocket-fuel"
     delete_tech("advanced-wood-gas-processing","advanced-oil-processing")
+    delete_tech("muluna-burner-roboport","robotics")
+    table.insert(data.raw["technology"]["automobilism"].effects, {
+        type = "unlock-recipe",
+        recipe = "muluna-roboport-propellant",
+    })
     data.raw["research-achievement"]["eco-unfriendly"] = nil
     rro.remove(data.raw["technology"]["wood-gas-processing"].prerequisites,"oil-processing")
     
