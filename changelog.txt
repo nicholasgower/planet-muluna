@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.12
+Date: 2026-08-02
+  Bugfixes:
+    - Corrected order of Gleba greenhouse recipes
+    - Fixed position of Vacuum Boiler's smoke generator on non-north-rotated boilers. Raised vertical speed and frequency of smoke on Vacuum Boilers.  https://github.com/nicholasgower/planet-muluna/issues/443
+  Graphics:
+    - Muluna no longer has wind effects applied to it. Smoke effects will always emit smoke directly up.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.11
 Date: 2026-07-30
   Compatibility:
