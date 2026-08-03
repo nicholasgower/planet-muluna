@@ -24,6 +24,7 @@ for _,import in pairs(modded_cargo_drop_spawns_imports) do
 end
 
 local function random_place(surface,item_name,item_count)
+    if not prototypes.get_item_filtered{{filter = "name",name = item_name}} then return end
     local item_count_adjusted = item_count * item_multiplier
     --if item_count == nil then item_count = 1 end
     local x = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
@@ -64,7 +65,7 @@ local function place_muluna_cargo_pods()
             if prototypes.get_item_filtered{{filter = "name",name = spawn.item}} then
                 random_place(muluna,spawn.item,spawn.item_quantity())
             else
-                game.print("Warning: Muluna tried to spawn item ".. item ..", but it was removed by another mod.")
+                print("Warning: Muluna tried to spawn item ".. item ..", but it was removed by another mod.")
             end
             
         end
@@ -75,9 +76,14 @@ local function place_muluna_cargo_pods()
     
     for mod,item in pairs(mod_list) do
         if mods[mod] and math.random(1,10)>3 then
-            for i = 1,1 do
+            if prototypes.get_item_filtered{{filter = "name",name = spawn.item}} then
                 random_place(muluna,item,math.random(2,5)+math.random(2,5))
+            else
+                print("Warning: Muluna tried to spawn item ".. item ..", but it was removed by another mod. Check prototypes.mod_data.cargo_drop_rare_drops")
             end
+            -- for i = 1,1 do
+            --     random_place(muluna,item,math.random(2,5)+math.random(2,5))
+            -- end
         end
     end
     if mods["moshine"] then
