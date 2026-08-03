@@ -48,6 +48,7 @@ aluminum_rocket_fuel.ingredients = {{type = "item",name = "aluminum-crushed",amo
 aluminum_rocket_fuel.auto_recycle=false
 aluminum_rocket_fuel.icons= dual_icon_reversed("rocket-fuel","aluminum-crushed")
 aluminum_rocket_fuel.allow_decomposition = false
+rro.soft_insert(aluminum_rocket_fuel.categories,"cryogenics")
 
 local carbon_nanotubes_lds = table.deepcopy(data.raw["recipe"]["low-density-structure"])
 
