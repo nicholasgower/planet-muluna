@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.13
+Date: 2026-08-03
+  Compatibility:
+    - Muluna start: Burner roboport tech removed from the game. Recipes in the tech are moved to appropriate vanilla techs.
+    - Muluna start: Vacuum Boiler technology now requires Steam Power as a prerequisite.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.12
 Date: 2026-08-02
   Bugfixes:
