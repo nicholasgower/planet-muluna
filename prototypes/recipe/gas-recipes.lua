@@ -391,6 +391,7 @@ data:extend{
             {type = "fluid", name = "water", amount = 25}
         },
         allow_productivity = true,
+        hide_from_signal_gui = false,
     
     },
 
@@ -441,7 +442,8 @@ local oxygen_from_oxidizer = {
             amount = 8000/divider,
             ignored_by_productivity=8000/divider,
         },
-    }
+    },
+    hide_from_signal_gui = false,
 }
 
 if not mods["Krastorio2-spaced-out"] then
