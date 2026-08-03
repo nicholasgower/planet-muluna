@@ -33,7 +33,7 @@ if mods["quality"] then
             rigor_sensitivity=mods["rigor-module"] and 1 or nil,
             rigor_compatibility_mode_whitelist=mods["rigor-module"] and true or nil
         })
-        data:extend{new_recipe}
+        Muluna:extend{new_recipe}
         table.insert(data.raw["technology"]["muluna-asteroid-upcycling"].effects, {
             type = "unlock-recipe",
             recipe = new_recipe.name

@@ -1,4 +1,4 @@
-data:extend{
+Muluna:extend{
     {
         type = "recipe-category",
         name = "muluna-crusher-2"
@@ -25,6 +25,6 @@ crusher_2.icon="__muluna-graphics__/graphics/icons/crusher-2.png"
 
 crusher_2.rigor_base_value=mods["rigor-module"] and 50 or nil
 
-data:extend{crusher_2}
+Muluna:extend{crusher_2}
 
 data.raw["assembling-machine"]["crusher"].next_upgrade = crusher_2.name

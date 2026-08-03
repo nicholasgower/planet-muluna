@@ -147,7 +147,7 @@ local function greenhouse_technology_icon(item_sprite,item_sprite_size)
     }
 end
 
-data:extend{
+Muluna:extend{
     -- {
     --     type = "technology",
     --     name = "planet-discovery-muluna",
@@ -1693,7 +1693,7 @@ data:extend{
     
 }
 if mods["quality"] then
-    data:extend{
+    Muluna:extend{
         {
         type = "technology",
         name = "muluna-asteroid-upcycling",
@@ -1779,11 +1779,11 @@ if settings.startup["muluna-easy-wood-gasification-productivity"].value == true 
         }
         rro.remove(gasification_prod.prerequisites,"space-science-pack")
     end
-    data:extend{gasification_prod}
+    Muluna:extend{gasification_prod}
 end
 
 if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
-    -- data:extend{{
+    -- Muluna:extend{{
     --     type = "technology",
     --     name = "muluna-steam-furnaces",
     --     effects = {},
@@ -1815,7 +1815,7 @@ if settings.startup["muluna-hardcore-remove-steam-furnaces"].value == false then
 end
 
 if settings.startup["muluna-hardcore-lock-cargo-drops"].value == true then
-    data:extend{
+    Muluna:extend{
         Muluna.rro.merge(
             PlanetsLib.cargo_drops_technology_base("muluna", "__muluna-graphics__/graphics/moon-icon.png",1482),
             {

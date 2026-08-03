@@ -78,7 +78,7 @@ for _,recipe_name in pairs(old_recipes) do
         end
         
         if not rro.deep_equals(recipe,new_recipe) then
-            data:extend{new_recipe}
+            Muluna:extend{new_recipe}
             table.insert(data.raw["technology"]["foundry"].effects,
                 {
                     type = "unlock-recipe",
@@ -100,7 +100,7 @@ if data.raw["fluid"]["molten-copper"] then
             else
                 new_fluid.name = "molten-aluminum"
             end
-            data:extend{new_fluid}
+            Muluna:extend{new_fluid}
         end
 
 data.raw["fluid"]["molten-aluminum"].icon = "__muluna-graphics__/graphics/icons/molten-aluminum.png"

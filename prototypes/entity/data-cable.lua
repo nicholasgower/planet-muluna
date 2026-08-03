@@ -426,4 +426,4 @@ rro.deep_replace(data_cable,"optical-cable","muluna-data-cable")
 
 
 
-data:extend{corpse,data_cable}
+Muluna:extend{corpse,data_cable}

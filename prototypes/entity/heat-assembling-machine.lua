@@ -8,7 +8,7 @@ constants.heat_output_assemblers = {
 }
 
 
-data:extend{
+Muluna:extend{
     {
         type = "heat-assembling-machine"
     }

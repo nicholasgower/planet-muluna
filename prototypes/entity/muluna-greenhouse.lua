@@ -404,4 +404,4 @@ if mods["fluid-nutrients"] then
 end
 
 
-data:extend{greenhouse,greenhouse_category}
+Muluna:extend{greenhouse,greenhouse_category}

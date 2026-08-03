@@ -6,7 +6,7 @@ local asteroid_util = require "__space-age__.prototypes.planet.asteroid-spawn-de
 local tau = 2*math.pi
 local meld = require("meld")
 local planet_catalogue_vulcanus = require("__space-age__.prototypes.planet.procession-catalogue-vulcanus")
-data:extend({
+Muluna:extend({
 		{
 			type = "surface-property",
 			name = "is-muluna",
@@ -17,7 +17,7 @@ data:extend({
 			order = "z[is-muluna]z",
 		},
 	})
-data:extend{
+Muluna:extend{
   {
     type = "autoplace-control",
     --localised_name = {"entity-name.cliff-muluna"},
@@ -476,4 +476,4 @@ end
 
 PlanetsLib:extend({muluna})
 
-data:extend{muluna_connection}
+Muluna:extend{muluna_connection}

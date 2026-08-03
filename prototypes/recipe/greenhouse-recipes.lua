@@ -20,7 +20,7 @@
 --     subgroup="muluna-products",
 --     max_productivity = 3,
 -- }
--- data:extend{greenhouse_growth}
+-- Muluna:extend{greenhouse_growth}
 -- {
 --     type = "recipe",
 --     name = "muluna-tree-growth-greenhouse-water-saving-10x10",

@@ -66,7 +66,7 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     rro.replace_name(red_science.ingredients,"copper-plate","aluminum-plate")
     red_science.name="automation-science-pack-muluna"
     red_science.icons=dual_icon("automation-science-pack","aluminum-plate")
-    data:extend{red_science}
+    Muluna:extend{red_science}
     
     rro.soft_insert(data.raw["technology"]["automation-science-pack"].effects,
     {
@@ -79,7 +79,7 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         rro.deep_replace(burner_lab,"copper-plate","aluminum-plate")
         burner_lab.localised_name = {"recipe-name.x-from-aluminum",{"item-name.burner-lab"}}
         burner_lab.icons=dual_icon("burner-lab","aluminum-plate")
-        data:extend{burner_lab}
+        Muluna:extend{burner_lab}
         rro.soft_insert(data.raw["technology"]["electric-lab"].effects,
         {
             type = "unlock-recipe",

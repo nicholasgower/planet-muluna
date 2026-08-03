@@ -92,7 +92,7 @@ for _,am3 in pairs(data.raw["assembling-machine"]) do
         --     }
         --     )
             table.insert(am3.crafting_categories, "crafting-with-fluid-and-data")
-            data:extend {
+            Muluna:extend {
 
                 {
                     type = "recipe-category",

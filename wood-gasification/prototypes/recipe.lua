@@ -1,5 +1,5 @@
 
-data:extend({
+Muluna:extend({
   {
     type = "recipe",
     name = "wood-gasification",

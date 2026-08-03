@@ -1,4 +1,4 @@
-data:extend({
+Muluna:extend({
   {
     type = "fluid",
     name = "tar",

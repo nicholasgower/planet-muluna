@@ -21,5 +21,5 @@ local data_pump_set = table.deepcopy(get_all_matching_name("pump"))
 --rro.deep_replace(data_pump_set,"pump","muluna-data-pump")
 data_pump_set[1].type = "pump"
 
-data:extend(data_pump_set)
+Muluna:extend(data_pump_set)
 

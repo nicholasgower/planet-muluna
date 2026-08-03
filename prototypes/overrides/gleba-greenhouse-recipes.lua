@@ -130,7 +130,7 @@ for plant,fruit in pairs(plant_list) do
             type = "unlock-recipe",
             recipe = new_recipe.name
         })
-        data:extend{new_recipe}
+        Muluna:extend{new_recipe}
     end
-    data:extend{recipe_category,new_greenhouse_entity,new_greenhouse_item,new_greenhouse_recipe,new_plant_item,new_processing_recipe}
+    Muluna:extend{recipe_category,new_greenhouse_entity,new_greenhouse_item,new_greenhouse_recipe,new_plant_item,new_processing_recipe}
 end

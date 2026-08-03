@@ -1,7 +1,7 @@
 --Adds atmosphere fluid from Maraxsis, with intention to be cross-compatible when both mods are installed.
 if data.raw["fluid"]["maraxsis-atmosphere"] == nil then
     
-    data:extend {{
+    Muluna:extend {{
         type = "fluid",
         name = "maraxsis-atmosphere",
         default_temperature = 0,
@@ -17,7 +17,7 @@ if data.raw["fluid"]["maraxsis-atmosphere"] == nil then
     }}
 end
 if data.raw["recipe"]["maraxsis-atmosphere"] == nil then
-    data:extend {{
+    Muluna:extend {{
         type = "recipe",
         name = "maraxsis-atmosphere",
         localised_name={"fluid.maraxsis-atmosphere"},
@@ -45,7 +45,7 @@ data.raw["fluid"]["maraxsis-atmosphere"].localised_description = {"fluid-descrip
 data.raw["recipe"]["maraxsis-atmosphere"].results[1].amount=1000
 data.raw["recipe"]["maraxsis-atmosphere"].energy_required=1
 
-data:extend {{
+Muluna:extend {{
     type = "recipe",
     name = "atmosphere-oxygen-separation",
     localised_name={"fluid-name.oxygen"},
@@ -70,7 +70,7 @@ end
 
 
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "technology",
 --     name = "maraxsis-liquid-atmosphere",
 --     icon = "__maraxsis__/graphics/technology/liquid-atmosphere.png",
@@ -106,7 +106,7 @@ end
 --     localised_name = {"fluid-name.maraxsis-liquid-atmosphere"}
 -- }}
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "fluid",
 --     name = "maraxsis-liquid-atmosphere",
 --     default_temperature = -200,
@@ -120,7 +120,7 @@ end
 --     gas_temperature = -196,
 -- }}
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "recipe",
 --     name = "maraxsis-liquid-atmosphere",
 --     categories = {"cryogenics"},
@@ -145,7 +145,7 @@ end
 --     }}
 -- }}
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "recipe",
 --     name = "maraxsis-liquid-atmosphere-decompression",
 --     categories = {"maraxsis-hydro-plant"},

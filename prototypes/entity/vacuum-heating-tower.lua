@@ -3,7 +3,7 @@
 
 local recipe_category = "muluna-vacuum-heating-tower"
 
-data:extend{
+Muluna:extend{
     {
         type="recipe-category",
         name=recipe_category,
@@ -76,7 +76,7 @@ local recipe = {
         hide_from_player_crafting=true
     }
 
-data:extend{steam_proxy,recipe}
+Muluna:extend{steam_proxy,recipe}
 
 
 local heating_boiler = table.deepcopy(data.raw["assembling-machine"]["muluna-advanced-boiler"])
@@ -281,5 +281,5 @@ heating_boiler.fluid_boxes = {
     }
 
 -- heating_boiler.type = "heat-assembling-machine"
-data:extend{heating_boiler}
+Muluna:extend{heating_boiler}
 defines.prototypes.entity["heat-assembling-machine"] = 0

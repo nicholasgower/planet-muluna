@@ -23,11 +23,11 @@ local rro = Muluna.rro
 --         end
 --     end
 
---     data:extend(prototypes)
+--     Muluna:extend(prototypes)
     
 -- end
 
-data:extend {
+Muluna:extend {
     -- rro.merge(data.raw["item"]["flying-robot-frame"],{
     --     type = "item",
     --     name = "muluna-burner-flying-robot-frame",

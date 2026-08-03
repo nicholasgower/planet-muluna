@@ -1,4 +1,4 @@
-data:extend{
+Muluna:extend{
     {type = "item-subgroup",
     name = "muluna-products",
     group = "intermediate-products",

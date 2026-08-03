@@ -73,7 +73,7 @@ end
 -- --------------------------------------------------------------------------------
 -- -- Step 5: Final extension into the data stage
 -- --------------------------------------------------------------------------------
--- data:extend({
+-- Muluna:extend({
 --   space_boiler
 -- })
 
@@ -153,7 +153,7 @@ local space_boiling_atmosphere = util.merge{space_boiling,{
 --   }
 -- }}
 
--- data:extend{space_boiling_high_temperature}
+-- Muluna:extend{space_boiling_high_temperature}
 
 
 
@@ -188,7 +188,7 @@ local space_melting = {
 local space_melting_oxygen = table.deepcopy(space_melting)
 ingredient_multiply(space_melting_oxygen.ingredients,"oxygen",5,"maraxsis-atmosphere")
 space_melting_oxygen.name="advanced-water-melting-atmosphere"
-data:extend{space_melting,space_melting_oxygen}
+Muluna:extend{space_melting,space_melting_oxygen}
 
 
 local space_boiler_new = {
@@ -490,7 +490,7 @@ end
 
 
 
-data:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}
+Muluna:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}
 
 data.raw["generator"]["steam-engine"].fluid_box.minimum_temperature=50
 data.raw["generator"]["steam-turbine"].fluid_box.minimum_temperature=50

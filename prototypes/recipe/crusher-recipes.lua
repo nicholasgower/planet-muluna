@@ -131,7 +131,7 @@ local advanced_anorthite_crushing = util.merge{table.deepcopy(anorthite_crushing
 advanced_anorthite_crushing.results = {{type = "item",name = "alumina",amount = 10},{type = "item",name = "silicon",amount = 4},{type = "item", name = "anorthite-chunk", amount = 1, independent_probability = 0.1}}
 advanced_anorthite_crushing.hide_from_signal_gui = false
 
-data:extend{advanced_anorthite_crushing}
+Muluna:extend{advanced_anorthite_crushing}
 
 
 
@@ -306,14 +306,14 @@ end
 
 
 
-data:extend(recipes)
+Muluna:extend(recipes)
 
 
 
 
 if not data.raw["recipe"]["silicon-cell"] then
 
-data:extend{{ --Moshine recipe
+Muluna:extend{{ --Moshine recipe
     type = "recipe",
     name = "silicon-cell",
     categories = {"crafting","electromagnetics"},
@@ -332,7 +332,7 @@ end
 
 if not data.raw["recipe"]["silicon-carbide"] then
 
-data:extend{{ --Moshine recipe
+Muluna:extend{{ --Moshine recipe
     type = "recipe",
     name = "silicon-carbide",
     categories = {"crafting-with-fluid"},
@@ -350,7 +350,7 @@ data:extend{{ --Moshine recipe
 
 end
 
-data:extend{{
+Muluna:extend{{
     type = "recipe",
     name = "muluna-basic-hard-drive",
     categories = {"crafting-with-fluid"},

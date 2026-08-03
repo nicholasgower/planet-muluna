@@ -30,7 +30,7 @@ thruster_fuel.icons= {
 
 thruster_fuel.icon=nil
 thruster_fuel.icon_size=nil
-data:extend{thruster_fuel}
+Muluna:extend{thruster_fuel}
 
 -- table.insert(data.raw["technology"]["space-platform-thruster"].effects,{
 --     type="unlock-recipe",

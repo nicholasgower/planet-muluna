@@ -66,7 +66,7 @@ for _, category in pairs({"item", "tool"}) do
                     )
                 end
 
-                data:extend{data_cell,recipe,recipe_empty}
+                Muluna:extend{data_cell,recipe,recipe_empty}
 
 
                 

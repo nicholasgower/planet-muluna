@@ -18,4 +18,4 @@ for _,drill in pairs(data.raw["mining-drill"]) do
     
 end
 
-data:extend{radiation}
+Muluna:extend{radiation}

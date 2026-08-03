@@ -53,7 +53,7 @@ if settings.startup["muluna-separate-shadows"].value == true then
 
 
 
-        data:extend{pipe_ground}
+        Muluna:extend{pipe_ground}
 
         local pipe = table.deepcopy(data.raw["pipe"]["pipe"])
         local new_pictures = {}
@@ -120,7 +120,7 @@ if settings.startup["muluna-separate-shadows"].value == true then
 
 
 
-        data:extend{pipe}
+        Muluna:extend{pipe}
     end
 
 --Inserters 

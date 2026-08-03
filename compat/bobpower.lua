@@ -18,6 +18,6 @@ if mods["bobpower"] then
             object.name = "muluna-advanced-boiler-" tostring(i)
         end
 
-        data:extend{new_advanced_boiler}
+        Muluna:extend{new_advanced_boiler}
     end
 end

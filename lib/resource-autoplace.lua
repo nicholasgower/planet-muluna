@@ -42,7 +42,7 @@ resource_autoplace_all_patches.local_expressions.double_density_distance = 1e12 
 
 resource_autoplace_all_patches.name = "muluna_resource_autoplace"
 
-data:extend{resource_autoplace_all_patches}
+Muluna:extend{resource_autoplace_all_patches}
 
 
 local default_autoplace_set_name = "default"
@@ -121,7 +121,7 @@ local function resource_autoplace_settings(params)
   local autoplace_set = get_autoplace_set(autoplace_set_name)
   local all_patches_name = autoplace_set_name .. "-" .. patch_set_name .. "-patches" 
 
-  data:extend
+  Muluna:extend
   {
     {
       type = "noise-expression",
@@ -174,7 +174,7 @@ local function resource_autoplace_settings(params)
   if params.create_named_expressions then
     local probability_name = autoplace_set_name .. "-" .. patch_set_name .. "-probability"
     local richness_name = autoplace_set_name .. "-" .. patch_set_name .. "-richness"
-    data:extend
+    Muluna:extend
     {
       {type = "noise-expression", name = probability_name, expression = probability_expression},
       {type = "noise-expression", name = richness_name, expression = richness_expression}

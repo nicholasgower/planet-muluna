@@ -14,7 +14,7 @@ local function generate_void_icons(fluid_icons)
 end
 
 table.insert(data.raw["assembling-machine"]["chemical-plant"].crafting_categories , "muluna-greenhouse")
-data:extend{
+Muluna:extend{
      {
         type="recipe-category",
         name="muluna-greenhouse",
@@ -447,7 +447,7 @@ local oxygen_from_oxidizer = {
 }
 
 if not mods["Krastorio2-spaced-out"] then
-    data:extend{oxygen_from_oxidizer}
+    Muluna:extend{oxygen_from_oxidizer}
 end
 
 
@@ -491,7 +491,7 @@ local diffusion = {
     end
     diffusion.results[2].rigor_product=mods["rigor-module"] and true or nil
 
-data:extend{diffusion}
+Muluna:extend{diffusion}
 
 local greenhouse_recipes_with_nutrients = {}
 local recipe_icons_vulcanus = {dual_icon("muluna-sapling","fluoroketone-cold","carbon-dioxide"),dual_icon("muluna-sapling","fluoroketone-cold","water")}
@@ -575,7 +575,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
             --         item.name = "fluoroketone-hot"
             --     end
             -- end
-            data:extend{recipe,recipe_vulcanus}
+            Muluna:extend{recipe,recipe_vulcanus}
             if data.raw["technology"]["muluna-fertilized-greenhouses"] then
                 table.insert(data.raw["technology"]["muluna-fertilized-greenhouses"].effects,{type = "unlock-recipe", recipe = recipe.name})
             end
@@ -587,7 +587,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
 
 if mods["maraxsis"] then
     
-    data:extend{{
+    Muluna:extend{{
         type = "recipe",
         name = "hydrogen-venting",
         enabled = false,

@@ -5,7 +5,7 @@
 -- for _,belt in pairs(data.raw["sonic-transport-belt"]) do
 --     belt.type = "transport-belt"
 
---     data:extend{belt}
+--     Muluna:extend{belt}
 --     sonic_transport_belts[belt.name] = {
 --         name = belt.name,
 --         no_belt_mixing = true,

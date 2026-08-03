@@ -6,4 +6,4 @@ space_chest.minable.result = "space-chest-muluna"
 space_chest.surface_conditions = {{property="gravity",min=0,max=0}}
 space_chest.subgroup = "space-platform"
 space_chest.quality_affects_inventory_size = false
-data:extend{space_chest}
+Muluna:extend{space_chest}

@@ -123,7 +123,7 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     end
     extractor.icon = nil
     extractor.icon_size = nil
-    data:extend {extractor}
+    Muluna:extend {extractor}
 
     
 end

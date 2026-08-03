@@ -1,4 +1,4 @@
-data:extend {
+Muluna:extend {
     {
         type = "fuel-category",
         name = "muluna-oxygenated-fuel",

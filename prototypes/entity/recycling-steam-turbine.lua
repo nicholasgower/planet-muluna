@@ -101,5 +101,5 @@ if helpers.compare_versions(helpers.game_version,"2.0.67") >= 0 then
     
 end
 
-data:extend{recycling_turbine,cooled_steam}
+Muluna:extend{recycling_turbine,cooled_steam}
 

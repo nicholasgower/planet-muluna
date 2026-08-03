@@ -21,8 +21,20 @@ Muluna.flib_bounding_box = require("__planet-muluna__.lib.flib-bounding-box")
 Muluna.flib_prototypes = require("__flib__.prototypes")
 Muluna.telescopes = require("lib.telescopes")
 Muluna.machine_scaling = require("lib.machine_scaling")
+
+function Muluna:extend(new_data)
+    for _,prototype in pairs(new_data) do
+        if prototype.type == "recipe" then
+            if prototype.icons and not prototype.hide_from_recipe_gui then
+                prototype.hide_from_recipe_gui = false
+            end
+        end
+    end
+    data:extend(new_data)
+end
+
 if Muluna.stage == "data" then
-    data:extend{{
+    Muluna:extend{{
         type = "mod-data",
         name = "muluna-constants",
         data = {

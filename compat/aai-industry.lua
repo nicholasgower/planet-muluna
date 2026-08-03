@@ -51,7 +51,7 @@ local small_electric_motor = table.deepcopy(data.raw["recipe"]["electric-motor"]
 
 -- rro.replace(small_electric_motor.ingredients, {type = "item", name = "copper-cable", amount = 6}, {type = "item", name = "aluminum-cable", amount = 6})
 
--- data:extend{small_electric_motor}
+-- Muluna:extend{small_electric_motor}
 
 local burner_items = {
     "burner-assembling-machine",

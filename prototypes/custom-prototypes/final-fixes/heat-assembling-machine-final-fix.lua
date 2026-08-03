@@ -100,7 +100,7 @@ if data.raw["heat-assembling-machine"] then
         reactor.localised_name = {"entity-name.heat-assembling-machine-x-reactor",{"entity-name."..assembler.name}}
         reactor.consumption = Muluna.multiply_energy(machine.energy_usage,machine.effectivity)
         
-        data:extend{assembler,reactor}
+        Muluna:extend{assembler,reactor}
         table.insert(Muluna.constants.heat_assembling_machines,
             {
                 name = machine.name,

@@ -151,7 +151,7 @@ if mods["Igrys"] then
 end
 
 
- data:extend(all)
+ Muluna:extend(all)
 
 -- r_lunar_pack_4.ingredients = {
 --     {type = "fluid", name = "helium-4", amount = 100},
@@ -165,5 +165,5 @@ end
 
 
 
---data:extend{r_lunar_pack_4}
+--Muluna:extend{r_lunar_pack_4}
 

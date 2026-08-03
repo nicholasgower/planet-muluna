@@ -52,7 +52,7 @@ for i = 1,6,1 do
   muluna_dirt.layer=19+i
   muluna_dirt.map_color=color[i]
   --muluna_dirt.effect = "space"
-  data:extend{muluna_dirt}
+  Muluna:extend{muluna_dirt}
 end
 
 
@@ -95,7 +95,7 @@ for i = 1,3,1 do
   }
   muluna_dirt.layer=25+i
   muluna_dirt.map_color=color_sand[i]
-  data:extend{muluna_dirt}
+  Muluna:extend{muluna_dirt}
 end
 
 

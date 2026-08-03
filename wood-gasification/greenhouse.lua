@@ -18,7 +18,7 @@
 --   },
 -- }
 
--- data:extend({
+-- Muluna:extend({
 --   {
 --     type = "assembling-machine",
 --     name = "kr-greenhouse",

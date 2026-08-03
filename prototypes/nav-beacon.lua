@@ -260,7 +260,7 @@ if settings.startup["enable-nav-beacon"].value == true then
         }
     })
     
-    data:extend({
+    Muluna:extend({
         -- navBeaconEntity_Planet,
         --navBeaconEntity_Platform,
         navBeaconEntity,

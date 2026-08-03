@@ -1,7 +1,7 @@
 
 --- RECIPES ---
 -- if mods["space-age"] then
---   data:extend({
+--   Muluna:extend({
     -- {
     --   type = "recipe",
     --   name = "yumako-seed-greenhouse",
