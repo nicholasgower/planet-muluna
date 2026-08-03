@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.104
+Date: 2026-08-03
+  Changes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna:
+    - Turbine steam condensation and "Oxygen from oxidizer" recipes now have signals.
+    - Added additional check to new surface cargo pod generator to ensure that the game does not try to place an item that was removed from the game by another mod.
+    - Fixed position of Vacuum Boiler's smoke generator on non-north-rotated boilers. Raised vertical speed and frequency of smoke on Vacuum Boilers.  https://github.com/nicholasgower/planet-muluna/issues/443
+    - Muluna no longer has wind effects applied to it. Smoke effects will always emit smoke directly up.
+    - Disabled autorecycling on several wood gasification recipes.
+    - Rocket buggy now supports logistic requests.
+    - Initial cargo drops now include some iron chests.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.16
 Date: 2026-08-03
   Bugfixes:
