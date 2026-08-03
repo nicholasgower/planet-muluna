@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.16
+Date: 2026-08-03
+  Bugfixes:
+    - Added additional check to new surface cargo pod generator to ensure that the game does not try to place an item that was removed from the game by another mod.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.15
 Date: 2026-08-03
   Bugfixes:
