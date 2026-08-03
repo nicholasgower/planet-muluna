@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.17
+Date: 2026-08-03
+  Compatibility:
+    - Replaced every use of data:extend with a wrapper function Muluna:extend that automatically defines certain undefined fields. Used to automatically add recipe signals to signal gui.
+---------------------------------------------------------------------------------------------------
 Version: 2.2.104
 Date: 2026-08-03
   Changes:
