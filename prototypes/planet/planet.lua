@@ -442,6 +442,10 @@ if settings.startup["PlanetsLib-enable-carbon-dioxide"].value == true then
   muluna.surface_properties["carbon-dioxide"] = 0
 end
 
+if settings.startup["muluna-easy-electric-roboports-on-muluna"].value == true then
+  muluna.surface_properties["pressure"] = 10
+end
+
 
 if mods["any-planet-start"] then
   local nauvis = data.raw["planet"]["nauvis"]
