@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.20
+Date: 2026-08-04
+  Balancing:
+    - Anorthite chunk crushing recipes that return anorthite chunks as products have ignored_by_productivity enabled to match vanilla asteroid crushing recipes.
+  Changes:
+    - Crushing recipes that have vanilla asteroids as ingredients or products will have their ingredients and results tracked by production statistics.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.19
 Date: 2026-08-04
   Bugfixes:
