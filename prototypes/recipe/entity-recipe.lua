@@ -178,7 +178,7 @@ local greenhouse_wood = util.merge{table.deepcopy(data.raw["recipe"]["chemical-p
 greenhouse_wood.ingredients = {
     {type = "item", name = "muluna-greenhouse", amount = 1},
     --{type = "fluid", name = "carbon-dioxide", amount = 100000},
-    {type = "item", name = "muluna-sapling", amount = 100},
+    {type = "item", name = "muluna-sapling", amount = 100,quality_max="normal"},
     --{type = "fluid", name = "water", amount = 10000},
     {type = "item", name = "landfill", amount = 10},
 }
