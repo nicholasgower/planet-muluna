@@ -76,7 +76,7 @@ local function place_muluna_cargo_pods()
     
     for mod,item in pairs(mod_list) do
         if mods[mod] and math.random(1,10)>3 then
-            if prototypes.get_item_filtered{{filter = "name",name = spawn.item}} then
+            if prototypes.get_item_filtered{{filter = "name",name = item}} then
                 random_place(muluna,item,math.random(2,5)+math.random(2,5))
             else
                 print("Warning: Muluna tried to spawn item ".. item ..", but it was removed by another mod. Check prototypes.mod_data.cargo_drop_rare_drops")
