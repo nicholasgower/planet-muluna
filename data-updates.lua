@@ -920,3 +920,37 @@ propellant_barrel.fuel_value = Muluna.multiply_energy(data.raw["fluid"]["muluna-
 propellant_barrel.fuel_category = "muluna-oxygenated-fuel"
 propellant_barrel.burnt_result = "barrel" --No automatic way to remove barrels, so I will disable this for now
 --data.raw["recipe"]["muluna-roboport-propellant-barrel"].hide_from_player_crafting = false
+
+
+
+
+--Remove asteroids from ignored_by_stats while preserving ignored_by_productivity behavior
+local asteroid_chunks = {
+    "metallic-asteroid-chunk",
+    "carbonic-asteroid-chunk",
+    "oxide-asteroid-chunk",
+}
+
+local function check_productingredient(productingredient) --Invented a new word for this funciton :)
+    if rro.contains(asteroid_chunks,productingredient.name) and productingredient.ignored_by_stats then
+        if productingredient.ignored_by_productivity == nil then
+            productingredient.ignored_by_productivity = productingredient.ignored_by_stats
+        end
+        productingredient.ignored_by_stats = nil
+        
+        
+    end
+
+end
+
+for _,recipe in pairs(data.raw.recipe) do
+    if rro.contains(recipe.categories,"crushing") then
+        for _,result in pairs(recipe.results) do
+            check_productingredient(result)
+        end
+        for _,ingredient in pairs(recipe.ingredients) do
+            check_productingredient(ingredient)
+        end
+    end
+end
+
