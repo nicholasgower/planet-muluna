@@ -24,9 +24,10 @@ for _,import in pairs(modded_cargo_drop_spawns_imports) do
 end
 
 local function random_place(surface,item_name,item_count)
-    if not prototypes.get_item_filtered{{filter = "name",name = item_name}} then return end
+    -- FIXED FOR FACTORIO 2.0: Check for item existence via prototypes.item
+    if not prototypes.item[item_name] then return end
+    
     local item_count_adjusted = item_count * item_multiplier
-    --if item_count == nil then item_count = 1 end
     local x = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
     local y = math.random(-cargo_drop_radius,cargo_drop_radius)+math.random(-cargo_drop_radius,cargo_drop_radius)
     local entity = {name = "fulgoran-cargo-pod-container", position = {x,y}, force = "player"}
@@ -60,14 +61,14 @@ local function place_muluna_cargo_pods()
         
     
     for _,spawn in pairs(modded_cargo_drop_spawns) do
-        --local spawn = require(spawn_import)
         for i = 1,spawn.pod_count() do
-            if prototypes.get_item_filtered{{filter = "name",name = spawn.item}} then
+            -- FIXED FOR FACTORIO 2.0: Safe validation via prototypes.item
+            if prototypes.item[spawn.item] then
                 random_place(muluna,spawn.item,spawn.item_quantity())
             else
-                print("Warning: Muluna tried to spawn item ".. item ..", but it was removed by another mod.")
+                -- FIXED: Replaced non-existent item with spawn.item to prevent print from crashing
+                print("Warning: Muluna tried to spawn item ".. tostring(spawn.item) ..", but it was removed by another mod.")
             end
-            
         end
     end
     local mods = script.active_mods
