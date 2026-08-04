@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.22
+Date: 2026-08-04
+  Compatibility:
+    - Valves, "Enhanced Shadows," and "Tile Upgrade Planner(Muluna Fork)", are now recommended dependencies, no longer hard requirements.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.21
 Date: 2026-08-04
   Changes:
