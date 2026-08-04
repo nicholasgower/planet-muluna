@@ -1,3 +1,11 @@
+Muluna:extend{
+  {
+    type = "item-subgroup",
+    name = "muluna-tiles",
+    group = "tiles",
+    order = "g",
+  }
+}
 
 local concrete = table.deepcopy(data.raw["tile"]["concrete"])
 local refined_concrete = table.deepcopy(data.raw["tile"]["refined-concrete"])
@@ -9,6 +17,9 @@ muluna_dirt_base.walking_speed_modifier = speed_modifier
 muluna_dirt_base.vehicle_friction_modifier = concrete.vehicle_friction_modifier
 muluna_dirt_base.walking_sound = "__space-age__/sound/walking/soft-sand-1.ogg"
 muluna_dirt_base.destroys_dropped_items = true
+muluna_dirt_base.hidden = false
+muluna_dirt_base.hidden_in_factoriopedia = false
+muluna_dirt_base.subgroup = "muluna-tiles"
 muluna_dirt_base.custom_tooltip_fields = {
   {
     name = {"tooltip.digging-result"},
@@ -34,8 +45,14 @@ local color={
 for i = 1,6,1 do
     local muluna_dirt=table.deepcopy(muluna_dirt_base)
     muluna_dirt.name="muluna-dirt-"..tostring(i)
+    if i == 1 then
+      muluna_dirt.hidden_in_factoriopedia = false
+      muluna_dirt.hidden = false
+    else
+      muluna_dirt.factoriopedia_alternative = "muluna-dirt-1"
+    end
     muluna_dirt.autoplace = {probability_expression = 'expression_in_range_base(0.45, -10, 0.55, 0.35) + 0.25*noise_layer_noise('..tostring(i)..')'}
-    muluna_dirt.localised_name={"tile-name.muluna-dirt",tostring(i)}
+    muluna_dirt.localised_name={"tile-name.muluna-dirt",i > 1 and tostring(i) or ""}
     
     muluna_dirt.variants = tile_variations_template(
     "__alien-biomes-graphics__/graphics/terrain/mineral-grey-dirt-"..tostring(i)..".png", "__base__/graphics/terrain/masks/transition-3.png",
@@ -67,6 +84,10 @@ local color_sand={
 for i = 1,3,1 do
     local muluna_dirt=table.deepcopy(muluna_sand_base)
     muluna_dirt.name="muluna-dirt-"..tostring(i+6)
+   
+    --muluna_dirt.hidden_in_factoriopedia = true
+    --muluna_dirt.hidden = true
+    muluna_dirt.factoriopedia_alternative = "muluna-dirt-1"
     muluna_dirt.autoplace = {probability_expression = 'expression_in_range_base(0.45, -10, 0.55, 0.35) + 0.25*noise_layer_noise('..tostring(i+6)..')'}
     muluna_dirt.localised_name={"tile-name.muluna-dirt",tostring(i+6)}
     muluna_dirt.walking_speed_modifier = speed_modifier
