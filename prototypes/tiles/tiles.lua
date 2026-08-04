@@ -2,7 +2,7 @@
 local concrete = table.deepcopy(data.raw["tile"]["concrete"])
 local refined_concrete = table.deepcopy(data.raw["tile"]["refined-concrete"])
 
-local speed_modifier = 2/3
+local speed_modifier = 4/5
 
 local muluna_dirt_base=table.deepcopy(data.raw["tile"]["dry-dirt"])
 muluna_dirt_base.walking_speed_modifier = speed_modifier
