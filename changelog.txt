@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.23
+Date: 2026-08-04
+  Balancing:
+    - Greenhouse crafting recipes only require normal quality plants for all quality levels.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.22
 Date: 2026-08-04
   Compatibility:
