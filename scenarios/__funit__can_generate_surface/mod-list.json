@@ -1,0 +1,20 @@
+{
+    "mods": [
+        {
+            "name": "space-age",
+            "enabled": true
+        },
+        {
+            "name": "planet-muluna",
+            "enabled": true
+        },
+        {
+            "name": "rigor-module",
+            "enabled": true
+        },
+        {
+            "name": "PlanetsLib",
+            "enabled": true
+        }
+    ]
+}
