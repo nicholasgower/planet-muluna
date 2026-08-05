@@ -304,6 +304,7 @@ Muluna:extend{{
     results = {{type = "item", name = "muluna-data-cable", amount = 2}},
     allow_productivity = false,
     enabled = false,
+    categories = {"crafting","electromagnetics"}
   }}
 
 local big_rocket_silo=table.deepcopy(data.raw["recipe"]["rocket-silo"])
