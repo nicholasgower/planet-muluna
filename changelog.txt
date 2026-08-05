@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.28
+Date: 2026-08-05
+  Bugfixes:
+    - Astronomical data unloading recipes for Moshine's data cells are now hidden when Moshine's data cells are locked.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.27
 Date: 2026-08-05
   Balancing:
