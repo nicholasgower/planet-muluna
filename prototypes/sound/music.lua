@@ -72,7 +72,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         track = Muluna.rro.merge({
             name = "muluna-music-" .. track.sound.filename,
             type = "ambient-sound",
-            planet = "muluna",
+            planets = {"muluna"},
             
         },track)
         if not track.track_type then track.track_type = "main-track" end
