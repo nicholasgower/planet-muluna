@@ -4,7 +4,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
     --     name = "muluna-sandy-boys-beth-cohens",
     --     type = "ambient-sound",
     --     track_type = "main-track",
-    --     planet = "muluna",
+    --     planets = {"muluna"},
     --     sound = {
     --         filename = "__muluna-graphics__/sound/music/1 - Sandy Boys Beth Cohen's [aiqbWEikr4w].ogg",
     --         volume = 0.7,
