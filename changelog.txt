@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.26
+Date: 2026-08-05
+  Compatibility:
+    - Raised required Factorio version to 2.1.13.
+  Bugfixes:
+    - Vacuum heating tower's proxy fluid hidden from stats.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.25
 Date: 2026-08-05
   Bugfixes:
