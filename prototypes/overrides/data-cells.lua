@@ -37,6 +37,7 @@ for _, category in pairs({"item", "tool"}) do
                     main_product = data_cell.name,
                     energy_required = 5,
                     allow_quality = false,
+                    requires_ingredients_to_unlock_results = true,
                     
                 }
 
@@ -54,6 +55,7 @@ for _, category in pairs({"item", "tool"}) do
                     icons = Muluna.icons.dual_icon("muluna-astronomical-data",prototype.name),
                     auto_recycle = false,
                     allow_quality = false,
+                    requires_ingredients_to_unlock_results = true,
                 }
 
                 for _,recipe in pairs({recipe,recipe_empty}) do
