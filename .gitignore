@@ -7,3 +7,4 @@
 *.pyc
 *.exe
 /.vscode
+.env
