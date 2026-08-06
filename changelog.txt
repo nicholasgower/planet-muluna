@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.29
+Date: 2026-08-06
+  Locale:
+    - Overridden base game fluid mixing warning to tell the user to isolate fluid networks with pumps or valves.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.28
 Date: 2026-08-05
   Bugfixes:
