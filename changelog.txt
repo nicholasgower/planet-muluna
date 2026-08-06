@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.30
+Date: 2026-08-06
+  Sounds:
+    - I deserve criminal charges for taking this long to fix this: "Ode to the Pilots" by FluidNatalie now plays on Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.29
 Date: 2026-08-06
   Locale:
