@@ -41,6 +41,13 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
                 volume = 0.7
             }
         },
+         {
+            track_type = "interlude",
+            sound = {
+                filename = "Ode-to-the-Pilots",
+                volume = 0.7
+            }
+        },
         {
             
             sound = {
