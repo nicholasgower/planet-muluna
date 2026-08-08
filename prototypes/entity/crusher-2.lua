@@ -15,6 +15,7 @@ crusher_2.minable.result="crusher-2"
 crusher_2.graphics_set = require("__muluna-graphics__.graphics.entities.crusher.crusher-2-pictures")
 crusher_2.crafting_speed=crusher_2.crafting_speed*(mods["rigor-module"] and 1.25 or 1.5)
 crusher_2.max_health=crusher_2.max_health+50
+crusher_2.use_mirroring=true
 local energy, suffix=flib_data_util.get_energy_value(crusher_2.energy_usage)
 crusher_2.energy_usage=tostring(energy*2) .. suffix
 crusher_2.energy_source.emissions_per_minute["pollution"] = crusher_2.energy_source.emissions_per_minute["pollution"]*0.75
