@@ -343,7 +343,13 @@ end
 local corpse = {
     type = "corpse",
     name = "muluna-data-cable-remnants",
-    icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    --icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+            tint = {238, 139, 0}
+        }
+    },
     flags = {"placeable-neutral", "not-on-map"},
     hidden_in_factoriopedia = true,
     subgroup = "energy-pipe-distribution-remnants",
@@ -371,7 +377,13 @@ local corpse = {
 local data_cable = {
     type = "pipe",
     name = "muluna-data-cable",
-    icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    --icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+            tint = {238, 139, 0}
+        }
+    },
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 0.1, result = "muluna-data-cable"},
     max_health = 10,
