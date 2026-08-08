@@ -416,13 +416,18 @@ local data_cable = {
     close_sound = sounds.metal_small_close,
 
     horizontal_window_bounding_box = {{-0.25, -0.28125}, {0.25, 0.15625}},
-    vertical_window_bounding_box = {{-0.28125, -0.5}, {0.03125, 0.125}}
+    vertical_window_bounding_box = {{-0.28125, -0.5}, {0.03125, 0.125}},
+    
   }
 
 
 rro.deep_replace(data_cable,"optical-cable","muluna-data-cable")
 
+data_cable.fast_replaceable_group="optical-cable"
 
+if mods["Moshine"] then
+  data_cable.next_upgrade="optical-cable"
+end
 
 
 
