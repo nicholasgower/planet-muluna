@@ -134,7 +134,7 @@ function Public.construct_sand_extractor(event)
 
     
 
-    surface.create_entity {
+    local extractor = surface.create_entity {
         name = is_ghost and "entity-ghost" or drill_name,
         inner_name = is_ghost and drill_name or nil,
         position = position,
@@ -144,6 +144,8 @@ function Public.construct_sand_extractor(event)
         direction = direction,
         raise_built = true,
     }
+    extractor.set_recipe("muluna-regolith-digging","normal")
+    extractor.recipe_locked = true
     if player.force.technologies["muluna-regolith-digging"].researched == false then --Because This script unexpectedly 
         Muluna.complete_research(player.force,"muluna-regolith-digging")
     end
