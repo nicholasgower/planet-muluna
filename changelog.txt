@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.31
+Date: 2026-08-08
+  Bugfixes:
+    - Crusher 2 can be mirrored.
+  Graphics:
+    - Corrected icon of data cable entity to match item icon.
+  Changes:
+    - Data cable can be fast-replaced with Moshine's Optical Fiber.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.30
 Date: 2026-08-06
   Sounds:
