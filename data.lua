@@ -1,6 +1,7 @@
 require("api")
 local rro = Muluna.rro
 require("prototypes.fuel-categories")
+require("prototypes.spoil-categories")
 require("prototypes.overrides.vanilla-overrides")
 require("prototypes.custom-prototypes.heat-assembling-machine")
 require("wood-gasification.data")

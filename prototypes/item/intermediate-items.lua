@@ -192,6 +192,7 @@ Muluna:extend{{
     spoil_ticks =  10.5*60,
     spoil_result = "plastic-bar",
     spoil_quality_change = -1,
+    PlanetsLib_spoil_category = "diffusible",
     icons = {
         
         {
