@@ -337,21 +337,14 @@ local muluna=
     },
     map_gen_settings = map_gen,
     parked_platforms_orientation=0.70,
-    orbit = { --Added in preparation for PlanetsLib to display orbits, hopefully in a less invasive way than MTLib.
-      --polar = {2,0.005*tau},
-      orientation = 0.75, --When planetsLib orbit is added, orientation and distance are set relative to parent body.
+    orbit = {
+      orientation = 0.75, 
       distance = orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude),
       parent = {
         type = "planet",
         name = parent_planet,
         },
         sprite = PlanetsLib.get_orbit_sprite(orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude))
-        -- sprite = {
-        --   type = "sprite",
-        --   filename = "__muluna-graphics__/graphics/orbits/orbit-muluna.png",
-        --   size = 412,
-        --   scale = 0.25*o_parent_planet.magnitude/(nauvis.magnitude),
-        -- }
     },
     platform_surface_render_parameters = {
       platform_backdrop = require("planet-appearance-21")
