@@ -96,43 +96,6 @@ function Public.construct_sand_extractor(event)
         }
     rro.remove(colliding_entities,function(entry) return entry.type == "corpse" end)
     if #colliding_entities ~= 0 then return end
-    
-    local neighboring_belts = rro.get_concatenation(
-        surface.find_entities_filtered{
-            area= {{position.x-offset_width+margin,position.y-offset_height+margin},{position.x+offset_width-margin,position.y+offset_height-margin}}, 
-            type = {"transport-belt","underground-belt","splitter","container"},
-            --ghost_type = {"transport-belt","underground-belt","splitter","container"},
-        },
-        surface.find_entities_filtered{
-            area= {{position.x-offset_width+margin,position.y-offset_height+margin},{position.x+offset_width-margin,position.y+offset_height-margin}}, 
-            --type = {"entity-ghost"},
-            ghost_type = {"transport-belt","underground-belt","splitter","container"},
-        }
-
-    )
-    --game.print(serpent.block(neighboring_belts))
-    if neighboring_belts then --If adjacent belts exist, change direction of drill such that it feeds one of those belts. Muluna addition.
-        for _,neighbor in pairs(neighboring_belts) do
-            local delta_pos = {x = neighbor.position.x- position.x, y = neighbor.position.y- position.y}
-            --game.print(serpent.block(neighbor))
-            --game.print(serpent.block(delta_pos))
-            if (delta_pos.x <=0.5 and delta_pos.x >= -0.5) then
-                if delta_pos.y > 0 then
-                    direction = defines.direction.south
-                else
-                    direction = defines.direction.north
-                end
-            elseif (delta_pos.y <=0.5 and delta_pos.y >= -0.5) then
-                if delta_pos.x > 0 then
-                    direction = defines.direction.east
-                else
-                    direction = defines.direction.west
-                end
-            end
-        end
-    end
-
-    
 
     surface.create_entity {
         name = is_ghost and "entity-ghost" or drill_name,
@@ -141,7 +104,7 @@ function Public.construct_sand_extractor(event)
         force = player.force,
         player = player,
         quality = quality,
-        direction = direction,
+        direction = event.cursor_direction, --Why it took me until Aug 2026 to learn about a feature created in Feb 2025, I'll never know.
         raise_built = true,
     }
     if player.force.technologies["muluna-regolith-digging"].researched == false then --Because This script unexpectedly 
