@@ -7,6 +7,11 @@ Date: 2026-08-09
     - Regolith digger build script now determines cursor direction by reading cursor direction, rather than attempting to guess cursor direction based on surrounding entities.
     - I deserve criminal charges for taking this long to fix this: "Ode to the Pilots" by FluidNatalie now plays on Muluna.
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.33
+Date: 2026-08-10
+  Changes:
+    - Regolith digger build script now determines cursor direction by reading cursor direction, rather than attempting to guess cursor direction based on surrounding entities.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.32
 Date: 2026-08-08
   Balancing:
