@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.33
+Date: 2026-08-10
+  Changes:
+    - Regolith digger build script now determines cursor direction by reading cursor direction, rather than attempting to guess cursor direction based on surrounding entities.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.32
 Date: 2026-08-08
   Balancing:
