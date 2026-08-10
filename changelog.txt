@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.106
+Date: 2026-08-09
+  Changes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna:
+    - Data cable can be fast-replaced with Moshine's Optical Fiber.
+    - Regolith digger build script now determines cursor direction by reading cursor direction, rather than attempting to guess cursor direction based on surrounding entities.
+    - I deserve criminal charges for taking this long to fix this: "Ode to the Pilots" by FluidNatalie now plays on Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.32
 Date: 2026-08-08
   Balancing:
