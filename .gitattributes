@@ -25,3 +25,5 @@ docs export-ignore
 *.ltp export-ignore
 *.css export-ignore
 scenarios export-ignore
+bin export-ignore
+.env export-ignore
