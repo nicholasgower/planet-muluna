@@ -87,8 +87,9 @@ if data.raw["heat-assembling-machine"] then
                     scale_fluid_usage = true,
                     render_no_power_icon = false,
                     render_no_network_icon = false,
+                    hide_from_stats = true
                 }
-                new_fluid_box =  reactor.energy_source.fluid_box
+                local new_fluid_box =  reactor.energy_source.fluid_box
                 new_fluid_box.production_type = "input"
                 --new_fluid_box.linked_connection_id = 1
                 new_fluid_box.pipe_connections[1].flow_direction = "input"

@@ -100,7 +100,7 @@ for plant,fruit in pairs(plant_list) do
         })
 
     rro.deep_replace(new_greenhouse_recipe,new_greenhouse_recipe.name,"muluna-greenhouse-" .. fruit)
-    rro.replace(new_greenhouse_recipe.ingredients,{type = "item", name = "muluna-sapling",amount = "_any"},{type = "item", name = fruit .. "-seed" ,amount = function(other) return 1 * other end})
+    rro.replace(new_greenhouse_recipe.ingredients,{type = "item", name = "muluna-sapling",amount = "_any",quality_max="normal"},{type = "item",quality_max="normal", name = fruit .. "-seed" ,amount = function(other) return 1 * other end})
     rro.replace(new_greenhouse_recipe.ingredients,{type = "item", name = "landfill",amount = "_any"},{type = "item", name = "overgrowth-" .. fruit .. "-soil" ,amount = function(other) return other end})
     rro.soft_insert(new_tech.effects, {
             type = "unlock-recipe",

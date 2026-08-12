@@ -1,4 +1,90 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.106
+Date: 2026-08-09
+  Changes:
+    - Backported some fixes initially released for the Factorio 2.1 version of Muluna:
+    - Data cable can be fast-replaced with Moshine's Optical Fiber.
+    - Regolith digger build script now determines cursor direction by reading cursor direction, rather than attempting to guess cursor direction based on surrounding entities.
+    - I deserve criminal charges for taking this long to fix this: "Ode to the Pilots" by FluidNatalie now plays on Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.33
+Date: 2026-08-10
+  Changes:
+    - Regolith digger build script now determines cursor direction by reading cursor direction, rather than attempting to guess cursor direction based on surrounding entities.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.32
+Date: 2026-08-08
+  Balancing:
+    - Rigor modules now supported in regolith diggers.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.31
+Date: 2026-08-08
+  Bugfixes:
+    - Crusher 2 can be mirrored.
+  Graphics:
+    - Corrected icon of data cable entity to match item icon.
+  Changes:
+    - Data cable can be fast-replaced with Moshine's Optical Fiber.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.30
+Date: 2026-08-06
+  Sounds:
+    - I deserve criminal charges for taking this long to fix this: "Ode to the Pilots" by FluidNatalie now plays on Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.29
+Date: 2026-08-06
+  Locale:
+    - Overridden base game fluid mixing warning to tell the user to isolate fluid networks with pumps or valves.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.28
+Date: 2026-08-05
+  Bugfixes:
+    - Astronomical data unloading recipes for Moshine's data cells are now hidden when Moshine's data cells are locked.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.27
+Date: 2026-08-05
+  Balancing:
+    - Electrical data cable can be crafted in electromagnetic plants.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.26
+Date: 2026-08-05
+  Compatibility:
+    - Raised required Factorio version to 2.1.13.
+  Bugfixes:
+    - Vacuum heating tower's proxy fluid hidden from stats.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.25
+Date: 2026-08-05
+  Bugfixes:
+    - Fixed usage of deprecated AmbientSound property removed in 2.1.13.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.24
+Date: 2026-08-05
+  Bugfixes:
+    - Fixed music-related crash on load with Factorio 2.1.13.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.23
+Date: 2026-08-04
+  Balancing:
+    - Greenhouse crafting recipes only require normal quality plants for all quality levels.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.22
+Date: 2026-08-04
+  Compatibility:
+    - Valves, "Enhanced Shadows," and "Tile Upgrade Planner(Muluna Fork)", are now recommended dependencies, no longer hard requirements.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.21
+Date: 2026-08-04
+  Changes:
+    - Added optional setting to make electric roboports work on Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.20
+Date: 2026-08-04
+  Balancing:
+    - Anorthite chunk crushing recipes that return anorthite chunks as products have ignored_by_productivity enabled to match vanilla asteroid crushing recipes.
+  Changes:
+    - Crushing recipes that have vanilla asteroids as ingredients or products will have their ingredients and results tracked by production statistics.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.19
 Date: 2026-08-04
   Bugfixes:

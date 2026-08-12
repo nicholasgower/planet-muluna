@@ -61,6 +61,7 @@ local recipe = {
                 name = "muluna-heat",
                 amount = heat_amount,
                 temperature = temperature,
+                ignored_by_stats=heat_amount
             },
             {
                 type = "fluid",

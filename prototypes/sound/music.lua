@@ -4,7 +4,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
     --     name = "muluna-sandy-boys-beth-cohens",
     --     type = "ambient-sound",
     --     track_type = "main-track",
-    --     planet = "muluna",
+    --     planets = {"muluna"},
     --     sound = {
     --         filename = "__muluna-graphics__/sound/music/1 - Sandy Boys Beth Cohen's [aiqbWEikr4w].ogg",
     --         volume = 0.7,
@@ -41,6 +41,13 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
                 volume = 0.7
             }
         },
+         {
+            track_type = "interlude",
+            sound = {
+                filename = "Ode-to-the-Pilots",
+                volume = 0.7
+            }
+        },
         {
             
             sound = {
@@ -72,7 +79,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         track = Muluna.rro.merge({
             name = "muluna-music-" .. track.sound.filename,
             type = "ambient-sound",
-            planet = "muluna",
+            planets = {"muluna"},
             
         },track)
         if not track.track_type then track.track_type = "main-track" end
