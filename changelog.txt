@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.37
+Date: 2026-08-12
+  Balancing:
+    - Reworked regolith digging recipe to use shared probability. Rigor modules decrease the odds of producing crushed stone and increase the odds of producing everything else.
+  Compatibility:
+    - K2SO: Rigor modules increase the odds of producing rare metal ore from regolith diggers.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.36
 Date: 2026-08-12
   Bugfixes:
