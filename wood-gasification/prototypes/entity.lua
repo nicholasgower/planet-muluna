@@ -1,4 +1,4 @@
--- data:extend({
+-- Muluna:extend({
 --   {
 --     type = "assembling-machine",
 --     name = "E-greenhouse",

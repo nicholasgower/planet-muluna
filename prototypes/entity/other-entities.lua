@@ -26,7 +26,7 @@ if true then
 
         steam_furnace.minable.result = "muluna-steam-".. name
         steam_furnace.surface_conditions = nil
-        -- data:extend{
+        -- Muluna:extend{
         --     type = "fuel-category",
         --     name = "steam",
 
@@ -127,7 +127,7 @@ if true then
         end
         
 
-        data:extend{steam_furnace,recipe,item}
+        Muluna:extend{steam_furnace,recipe,item}
 
     end
     end
@@ -141,7 +141,7 @@ if true then
     end
 
 
-    -- data:extend{
+    -- Muluna:extend{
     --     util.merge{),
     --     {
     --         name = "muluna-steam-".. name,

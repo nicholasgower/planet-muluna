@@ -70,7 +70,7 @@ end
 for _,tech in pairs(data.raw["technology"]) do
     local found = rro.find_contains(tech.effects,{type = "mining-drill-productivity-bonus", modifier = "_any"})
     if found then
-        table.insert(tech.effects, 
+        rro.soft_insert(tech.effects, 
         {
             type = "change-recipe-productivity",
             recipe = "muluna-regolith-digging",
@@ -83,18 +83,20 @@ end
 
 for _,digger in pairs(Muluna.constants.regolith_drills) do
     if not data.raw["mining-drill"][digger.name] then error("Invalid ground digger: " .. digger.name) end
+    if data.raw["assembling-machine"][digger.name .. "-ground-digger"] then goto on_to_the_next end
     local extractor = table.deepcopy(data.raw["mining-drill"][digger.name])
     local original_drill = data.raw["mining-drill"][digger.name]
     original_drill.custom_tooltip_fields = original_drill.custom_tooltip_fields or {}
     rro.soft_insert(original_drill.custom_tooltip_fields,{name = {"tooltip.digging-result-drill-on-X","[planet=muluna]"},value = "[item=muluna-lunar-regolith]"})
     extractor.type = "assembling-machine"
     extractor.crafting_categories = {"ground-digging"}
+    extractor.rigor_no_recipe = true
     extractor.placeable_by = data.raw["item"][extractor.name] and {item = extractor.name, count = 1} or nil
     extractor.localised_name = {"entity-name.x-ground-digger",extractor.localised_name or {"entity-name." .. extractor.name}}
     extractor.localised_description = {"recipe-description.muluna-regolith-digging"}
     --extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
     extractor.hidden_in_factoriopedia = false
-    extractor.fixed_recipe = "muluna-regolith-digging"
+    --extractor.fixed_recipe = "muluna-regolith-digging"
     extractor.fixed_quality = "normal"
     extractor.crafting_speed = extractor.mining_speed
     extractor.mining_speed = nil
@@ -123,7 +125,8 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     end
     extractor.icon = nil
     extractor.icon_size = nil
-    data:extend {extractor}
+    Muluna:extend {extractor}
+    ::on_to_the_next::
 
     
 end

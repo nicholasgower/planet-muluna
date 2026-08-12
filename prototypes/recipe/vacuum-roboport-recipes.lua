@@ -3,7 +3,7 @@ local MJ_per_fluid = 0.1
 local roboport_power_MW=5
 local fluid_per_craft = 150 --Not a real fluid at this point, just a variable used to replace the actual proxy fluid previously used.
 Muluna.constants.burner_roboport_fluid_per_craft = fluid_per_craft --Passed to control to tell refueling script how much fluid to assume was consumed, now that there's no proxy fluid to transfer energy through.
-data:extend{
+Muluna:extend{
     -- rro.merge(data.raw["fluid"]["water"],{
     --     type = "fluid",
     --     name = "muluna-roboport-energy",

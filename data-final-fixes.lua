@@ -130,7 +130,7 @@ if data.raw["technology"]["fluid-handling"] then
             end
         end
 rro.soft_insert(data.raw["technology"]["thruster-oxidizer"].prerequisites,barreling_tech.name)
-data:extend{barreling_tech}
+Muluna:extend{barreling_tech}
 
 end
 
@@ -290,7 +290,7 @@ for _,recipe_name in pairs(recipes_to_fix) do
 
     )
 
-    data:extend{recipe_muluna,recipe}
+    Muluna:extend{recipe_muluna,recipe}
 end
 
 

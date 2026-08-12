@@ -77,7 +77,7 @@ telescope.fluid_boxes[1].pipe_covers_frozen = nil
 telescope.fluid_boxes[1].pipe_picture = nil
 telescope.fluid_boxes[1].pipe_picture_frozen = nil
 
-data:extend{telescope}
+Muluna:extend{telescope}
 
 -- Muluna.rro.copy_fields(telescope,data.raw["assembling-machine"]["assembling-machine-3"],
 
@@ -115,7 +115,7 @@ Muluna.rro.soft_insert(Muluna.constants.telescope_entities, --Entities with limi
 
 
 
-data:extend{
+Muluna:extend{
   {
     type = "recipe-category",
     name = "muluna-telescope"

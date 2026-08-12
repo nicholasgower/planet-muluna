@@ -11,7 +11,7 @@ chunk.icon = item.icon
 chunk.icon_size = item.icon_size
 
 
-data:extend{chunk}
+Muluna:extend{chunk}
 
 
 local size_array = {"small","medium","big","huge"}
@@ -28,5 +28,5 @@ for i,size in pairs(size_array) do
     rro.deep_replace(asteroid,"metallic-asteroid-chunk","anorthite-chunk")
     asteroid.order = "za".. i .. "[" .. size.."-metallic-asteroid" .. "]"
 
-    data:extend{asteroid}
+    Muluna:extend{asteroid}
 end

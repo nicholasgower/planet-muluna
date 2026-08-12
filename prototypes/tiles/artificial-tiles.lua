@@ -390,4 +390,4 @@ gravel.transitions_between_transitions[3].spritesheet = "__muluna-graphics__/gra
 
 
 
-data:extend{low_density_space_platform_foundation,gravel}
+Muluna:extend{low_density_space_platform_foundation,gravel}

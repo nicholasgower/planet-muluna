@@ -44,7 +44,7 @@ local function localise_energy(energy)
 		end
 	end
 
-data:extend{
+Muluna:extend{
     {
         type="recipe-category",
         name="muluna-burner-roboport",
@@ -211,7 +211,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
             end
             roboport.name = roboport.name .. "-roboport"
             roboport.is_vacuum_roboport = false
-            data:extend{roboport,refueler}
+            Muluna:extend{roboport,refueler}
             data.raw["roboport"][refueler.name] = nil
             roboport_data["refueler"] = refueler.name
             roboport_data["roboport"] = roboport.name

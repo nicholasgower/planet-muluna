@@ -89,7 +89,7 @@ else
 end
 
 
-data:extend{
+Muluna:extend{
     {
         type = "mod-data",
         name = "muluna-interstellar-science-pack-conditions",

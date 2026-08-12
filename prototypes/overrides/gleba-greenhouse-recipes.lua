@@ -25,8 +25,9 @@ for plant,fruit in pairs(possible_plant_list) do
         plant_list[plant] = fruit
     end
 end
-
+local j = 0
 for plant,fruit in pairs(plant_list) do
+    j = j + 1
     local recipe_category = {
             type = "recipe-category",
             name = "muluna-greenhouse-".. fruit,
@@ -49,6 +50,7 @@ for plant,fruit in pairs(plant_list) do
                     draw_background = true,
                 }
             },
+            order = greenhouse_entity.order and greenhouse_entity.order .. tostring(j) or nil
         }
         )
     rro.deep_replace(new_greenhouse_entity,greenhouse_entity.name,"muluna-greenhouse-" .. fruit)
@@ -59,6 +61,7 @@ for plant,fruit in pairs(plant_list) do
             place_result = new_greenhouse_entity.name,
 
             icons = new_greenhouse_entity.icons,
+            order = greenhouse_item.order and greenhouse_item.order .. tostring(j) or nil
         }
     )
     
@@ -66,7 +69,8 @@ for plant,fruit in pairs(plant_list) do
 
     local new_greenhouse_recipe = rro.merge(greenhouse_recipe,
         {
-           icons = new_greenhouse_entity.icons
+           icons = new_greenhouse_entity.icons,
+           order = greenhouse_recipe.order and greenhouse_recipe.order .. tostring(j) or nil
         }
         )
 
@@ -96,7 +100,7 @@ for plant,fruit in pairs(plant_list) do
         })
 
     rro.deep_replace(new_greenhouse_recipe,new_greenhouse_recipe.name,"muluna-greenhouse-" .. fruit)
-    rro.replace(new_greenhouse_recipe.ingredients,{type = "item", name = "muluna-sapling",amount = "_any"},{type = "item", name = fruit .. "-seed" ,amount = function(other) return 1 * other end})
+    rro.replace(new_greenhouse_recipe.ingredients,{type = "item", name = "muluna-sapling",amount = "_any",quality_max="normal"},{type = "item",quality_max="normal", name = fruit .. "-seed" ,amount = function(other) return 1 * other end})
     rro.replace(new_greenhouse_recipe.ingredients,{type = "item", name = "landfill",amount = "_any"},{type = "item", name = "overgrowth-" .. fruit .. "-soil" ,amount = function(other) return other end})
     rro.soft_insert(new_tech.effects, {
             type = "unlock-recipe",
@@ -118,7 +122,7 @@ for plant,fruit in pairs(plant_list) do
         elseif i == 2 then
             new_recipe.name = "muluna-greenhouse-growth-water-saving-" .. fruit
         end
-        new_recipe.order = "zzz-"
+        new_recipe.order = "zzz-" .. tostring(j)
         rro.replace(new_recipe.ingredients,{type = "item", name = "tree-seed",amount = "_any"},{type = "item", name = fruit .. "-seed",amount = function(other) return other end})
         rro.replace(new_recipe.results,{type = "item", name = "muluna-sapling",amount = "_any"},{type = "item", name = new_plant_item.name ,amount = function(other) return 25 * other end})
 
@@ -126,7 +130,7 @@ for plant,fruit in pairs(plant_list) do
             type = "unlock-recipe",
             recipe = new_recipe.name
         })
-        data:extend{new_recipe}
+        Muluna:extend{new_recipe}
     end
-    data:extend{recipe_category,new_greenhouse_entity,new_greenhouse_item,new_greenhouse_recipe,new_plant_item,new_processing_recipe}
+    Muluna:extend{recipe_category,new_greenhouse_entity,new_greenhouse_item,new_greenhouse_recipe,new_plant_item,new_processing_recipe}
 end

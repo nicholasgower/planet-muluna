@@ -91,7 +91,7 @@ local asteroid_processing = {
     }
 }
 
-data:extend{muluna_category,asteroid_processing}
+Muluna:extend{muluna_category,asteroid_processing}
 
 data.raw["tips-and-tricks-item"]["space-science"].localised_name = {"tips-and-tricks-item-name.space-science"}
 data.raw["tips-and-tricks-item"]["space-science"].localised_description = {"tips-and-tricks-item-description.space-science"}

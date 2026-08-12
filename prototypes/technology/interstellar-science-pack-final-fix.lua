@@ -131,7 +131,7 @@ for i = 1, #science_packs - 1 do
                 end
             end
         end
-        data:extend{dynamic_interstellar_pack_tech(item1,item2)}
+        Muluna:extend{dynamic_interstellar_pack_tech(item1,item2)}
     end
 end
 

@@ -68,7 +68,7 @@ if false and mods["bobpower"] then
         }
 
         for key,object in pairs(new_advanced_boiler) do
-            data:extend{object}
+            Muluna:extend{object}
         end
     end
 end

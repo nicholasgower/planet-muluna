@@ -53,7 +53,7 @@ if mods["aai-industry"] then
     local glass = data.raw["technology"]["glass-processing"]
     local electric_lab = data.raw["technology"]["electric-lab"]
     local automation_pack = data.raw["technology"]["automation-science-pack"]
-    data:extend{rro.merge(sand,
+    Muluna:extend{rro.merge(sand,
         {
             prerequisites = "_nil",
             research_trigger = {type = "mine-entity", entity = "lunar-rock"},

@@ -1,4 +1,4 @@
-data:extend{
+Muluna:extend{
     {
         type = "recipe-category",
         name = "muluna-crusher-2"
@@ -15,6 +15,7 @@ crusher_2.minable.result="crusher-2"
 crusher_2.graphics_set = require("__muluna-graphics__.graphics.entities.crusher.crusher-2-pictures")
 crusher_2.crafting_speed=crusher_2.crafting_speed*(mods["rigor-module"] and 1.25 or 1.5)
 crusher_2.max_health=crusher_2.max_health+50
+crusher_2.use_mirroring=true
 local energy, suffix=flib_data_util.get_energy_value(crusher_2.energy_usage)
 crusher_2.energy_usage=tostring(energy*2) .. suffix
 crusher_2.energy_source.emissions_per_minute["pollution"] = crusher_2.energy_source.emissions_per_minute["pollution"]*0.75
@@ -25,6 +26,6 @@ crusher_2.icon="__muluna-graphics__/graphics/icons/crusher-2.png"
 
 crusher_2.rigor_base_value=mods["rigor-module"] and 50 or nil
 
-data:extend{crusher_2}
+Muluna:extend{crusher_2}
 
 data.raw["assembling-machine"]["crusher"].next_upgrade = crusher_2.name

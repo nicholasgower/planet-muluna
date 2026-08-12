@@ -98,6 +98,6 @@ big_silo.module_slots = 8
 big_silo.alarm_sound = {filename = "__muluna-graphics__/sound/entity/muluna-big-rocket-silo/big-silo-alarm.ogg",max_volume=2,min_volume=2}
 big_silo.quick_alarm_sound = {filename = "__muluna-graphics__/sound/entity/muluna-big-rocket-silo/big-silo-alarm-short.ogg",max_volume=2,min_volume=2}
 
-data:extend{big_silo,big_rocket,big_pod}
+Muluna:extend{big_silo,big_rocket,big_pod}
 
 table.insert(PlanetsLib.constants.space_platform_hub_receiving_cargo_units,big_pod.name)

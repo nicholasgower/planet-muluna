@@ -1,10 +1,10 @@
 if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == false then
-    -- data:extend{
+    -- Muluna:extend{
     --     {
     --     name = "muluna-sandy-boys-beth-cohens",
     --     type = "ambient-sound",
     --     track_type = "main-track",
-    --     planet = "muluna",
+    --     planets = {"muluna"},
     --     sound = {
     --         filename = "__muluna-graphics__/sound/music/1 - Sandy Boys Beth Cohen's [aiqbWEikr4w].ogg",
     --         volume = 0.7,
@@ -41,6 +41,13 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
                 volume = 0.7
             }
         },
+         {
+            track_type = "interlude",
+            sound = {
+                filename = "Ode-to-the-Pilots",
+                volume = 0.7
+            }
+        },
         {
             
             sound = {
@@ -72,7 +79,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         track = Muluna.rro.merge({
             name = "muluna-music-" .. track.sound.filename,
             type = "ambient-sound",
-            planet = "muluna",
+            planets = {"muluna"},
             
         },track)
         if not track.track_type then track.track_type = "main-track" end
@@ -82,7 +89,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
         --track.min_speed=0.95
         --track.max_speed=1.05
         track.sound.filename = track.sound.filename .. ".ogg"
-        data:extend{track}
+        Muluna:extend{track}
     end
 
     if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "muluna" then --Title track when Muluna start is loaded.
@@ -95,7 +102,7 @@ if Muluna.rro.safe_get(settings.startup["disable-muluna-music"],{"value"}) == fa
                 data.raw["ambient-sound"][track.name] = nil
             end
         end
-        data:extend{title_track}
+        Muluna:extend{title_track}
     end
 end
 

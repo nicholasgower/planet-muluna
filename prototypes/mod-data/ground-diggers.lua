@@ -1,6 +1,6 @@
 --data.raw["mod-data"]["ground-diggers"]
 
--- data:extend{{
+-- Muluna:extend{{
 --     type = "mod-data",
 --     name = "ground-diggers",
 --     data = {

@@ -42,7 +42,7 @@ local function get_decal_pictures(file_path, size_class, image_size, amount, tin
   return pictures
 end
 
-data:extend
+Muluna:extend
 {
   {
     name = "low-density-space-platform-decorative-tiny",
@@ -162,7 +162,7 @@ data:extend
 -- FOR DEBUGGING PURPOSES
 
 for k, v in pairs(data.raw["optimized-decorative"]) do
-  data:extend
+  Muluna:extend
   {
     {
       type = "explosion",

@@ -170,6 +170,13 @@ data:extend{
       },
       {
         type = "bool-setting",
+        name = "muluna-easy-electric-roboports-on-muluna",
+        setting_type = "startup",
+        default_value = false,
+        order = "bh",
+      },
+      {
+        type = "bool-setting",
         name = "muluna-change-quality-science-pack-drain",
         setting_type = "startup",
         default_value = true,

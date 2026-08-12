@@ -6,7 +6,7 @@ local space_age_item_sounds = require("__space-age__.prototypes.item_sounds")
 -- anorthite.order=anorthite.order .. "a"
 -- anorthite.type="item"
 
-data:extend{{
+Muluna:extend{{
     type = "item",
     name = "anorthite-chunk",
     icon="__muluna-graphics__/graphics/icons/anorthite-chunk.png",
@@ -42,4 +42,4 @@ data:extend{{
   
 }
 
---data:extend{{anorthite}}
+--Muluna:extend{{anorthite}}

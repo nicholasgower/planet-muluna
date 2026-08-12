@@ -79,4 +79,4 @@ buggy_gun.name = "muluna-rocket-buggy-rocket-launcher"
 buggy_gun.localised_name = nil
 
 table.insert(buggy.guns, buggy_gun.name)
-data:extend{buggy,buggy_gun}
+Muluna:extend{buggy,buggy_gun}

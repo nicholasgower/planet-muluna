@@ -31,6 +31,6 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
             ["constant-combinator"] = telescope_combinator.name,
         }
         entity.muluna_is_telescope = false
-        data:extend{telescope_combinator}
+        Muluna:extend{telescope_combinator}
     end
 end

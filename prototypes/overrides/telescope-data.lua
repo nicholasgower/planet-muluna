@@ -75,7 +75,7 @@ for _,space_location in pairs(data.raw["planet"]) do
                     recipe = recipe.name,
                 }
                 )
-            data:extend{recipe}
+            Muluna:extend{recipe}
         end
     end
 end
@@ -103,7 +103,7 @@ local space_platform_data = rro.merge(table.deepcopy(data.raw["recipe"]["muluna-
 
 --space_platform_data.results[1].amount = 100
 
-data:extend{space_platform_data}
+Muluna:extend{space_platform_data}
 
 PlanetsLib.add_science_packs_from_vanilla_lab_to_technology(data.raw["technology"]["muluna-space-telescope"])
 

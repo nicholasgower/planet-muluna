@@ -1,7 +1,7 @@
 local multiply_energy = require("lib.energy-multiply").multiply_energy
 --Forked from Maraxsis to ensure cross-compatibility between both mods' molecule fluids.
 if not mods["maraxsis"] then
-    data:extend {{
+    Muluna:extend {{
         type = "fluid",
         name = "oxygen",
         icon = "__muluna-graphics__/graphics/icons/oxygen.png",
@@ -21,7 +21,7 @@ if not mods["maraxsis"] then
     }}
     
 
-    -- data:extend {{
+    -- Muluna:extend {{
     --     type = "fluid",
     --     name = "hydrogen",
     --     icon = "__muluna-graphics__/graphics/icons/hydrogen.png",
@@ -44,7 +44,7 @@ end
 
 --Cross-compatibility also desired with Corrundum.
 if data.raw["fluid"]["carbon-dioxide"] == nil then
-    data:extend {{
+    Muluna:extend {{
         type = "fluid",
         name = "carbon-dioxide",
         --group = "fluids",
@@ -70,7 +70,7 @@ data.raw["fluid"]["carbon-dioxide"].min_temperature = 21
 data.raw["fluid"]["carbon-dioxide"].max_temperature = 3000
 data.raw["fluid"]["carbon-dioxide"].auto_barrel = true
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "fluid",
 --     name = "helium",
 --     icon = "__muluna-graphics__/graphics/icons/molecule-noble-gas.png",
@@ -88,7 +88,7 @@ data.raw["fluid"]["carbon-dioxide"].auto_barrel = true
 --     localised_name={"fluid-name.helium"}
 -- }}
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "fluid",
 --     name = "helium-4",
 --     icons = {
@@ -112,7 +112,7 @@ data.raw["fluid"]["carbon-dioxide"].auto_barrel = true
 --     localised_name={"fluid-name.helium-n","4"}
 -- }}
 
--- data:extend {{
+-- Muluna:extend {{
 --     type = "fluid",
 --     name = "helium-3",
 --     icons = {

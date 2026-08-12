@@ -66,7 +66,7 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     rro.replace_name(red_science.ingredients,"copper-plate","aluminum-plate")
     red_science.name="automation-science-pack-muluna"
     red_science.icons=dual_icon("automation-science-pack","aluminum-plate")
-    data:extend{red_science}
+    Muluna:extend{red_science}
     
     rro.soft_insert(data.raw["technology"]["automation-science-pack"].effects,
     {
@@ -79,7 +79,7 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
         rro.deep_replace(burner_lab,"copper-plate","aluminum-plate")
         burner_lab.localised_name = {"recipe-name.x-from-aluminum",{"item-name.burner-lab"}}
         burner_lab.icons=dual_icon("burner-lab","aluminum-plate")
-        data:extend{burner_lab}
+        Muluna:extend{burner_lab}
         rro.soft_insert(data.raw["technology"]["electric-lab"].effects,
         {
             type = "unlock-recipe",
@@ -101,6 +101,9 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     if data.raw["technology"]["steam-power"].prerequisites == nil then
         data.raw["technology"]["steam-power"].prerequisites = {"metallic-asteroid-crushing"}
     end
+    
+    table.insert(data.raw["technology"]["muluna-advanced-boiler"].prerequisites, "steam-power")
+    
     if data.raw["technology"]["steel-axe"].prerequisites == nil or #data.raw["technology"]["steel-axe"].prerequisites == 0 then
         data.raw["technology"]["steel-axe"].prerequisites = {"metallic-asteroid-crushing"}
     end
@@ -118,6 +121,11 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     rro.remove(data.raw["technology"]["space-platform-thruster"].prerequisites,"afterburner")
     data.raw["technology"]["rocket-silo"].research_trigger.item =  "rocket-fuel"
     delete_tech("advanced-wood-gas-processing","advanced-oil-processing")
+    delete_tech("muluna-burner-roboport","robotics")
+    table.insert(data.raw["technology"]["automobilism"].effects, {
+        type = "unlock-recipe",
+        recipe = "muluna-roboport-propellant",
+    })
     data.raw["research-achievement"]["eco-unfriendly"] = nil
     rro.remove(data.raw["technology"]["wood-gas-processing"].prerequisites,"oil-processing")
     

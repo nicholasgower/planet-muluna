@@ -24,3 +24,4 @@ docs export-ignore
 *.html export-ignore
 *.ltp export-ignore
 *.css export-ignore
+scenarios export-ignore

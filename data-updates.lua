@@ -1,5 +1,6 @@
 require("prototypes.recipe.vanilla-alternate-recipes")
 require("prototypes.planet.planet-position-update")
+require("prototypes.final-fixes.ground-digger") --Also called during final-fixes.
 local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 
@@ -116,7 +117,7 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         if i==4 then
             table.insert(rocket_prod_aquilo.prerequisites,tech.name)
         end
-        data:extend{tech}
+        Muluna:extend{tech}
     end
 
     --local t2_planet_rocket_prod={}
@@ -142,7 +143,7 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         tech_2.localised_name={"",{"technology-name.rocket-part-productivity-"..planet_name[i]}," ",tostring(2)}
         --table.insert(t2_planet_rocket_prod,tech_2.name)
         table.insert(rocket_prod_aquilo.prerequisites,tech_2.name)
-        data:extend{tech,tech_2}
+        Muluna:extend{tech,tech_2}
     end
 
 else
@@ -162,7 +163,7 @@ end
 --     table.insert(rocket_prod_aquilo.prerequisites,entry)
 -- end
 
-data:extend{rocket_prod_aquilo}
+Muluna:extend{rocket_prod_aquilo}
 if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == true then
     data.raw["technology"]["rocket-part-productivity"] = nil
 end
@@ -402,7 +403,7 @@ for _,tech in pairs(data.raw["technology"]) do --Adds placeholder icon to techno
 end
 
 if not(mods["maraxsis"]) then
-    data:extend {{
+    Muluna:extend {{
         type = "item-subgroup",
         name = "maraxsis-atmosphere-barreling",
         order = "ff",
@@ -827,7 +828,7 @@ data.raw["recipe"]["space-science-pack"].surface_conditions = {
 space_science_pack_advanced.name = "space-science-pack-muluna"
 space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
 --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
-data:extend{space_science_pack_advanced}
+Muluna:extend{space_science_pack_advanced}
 
 if mods["Krastorio2-spaced-out"] then
     local space_science_pack_advanced = table.deepcopy(data.raw["recipe"]["kr-space-research-data"])
@@ -846,7 +847,7 @@ if mods["Krastorio2-spaced-out"] then
     }
     space_science_pack_advanced.name = "kr-space-research-data-advanced"
     --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
-    data:extend{space_science_pack_advanced}
+    Muluna:extend{space_science_pack_advanced}
     rro.soft_insert(data.raw["technology"]["advanced-space-science-pack"].effects ,  {
         type = "unlock-recipe",
         recipe = space_science_pack_advanced.name
@@ -886,7 +887,7 @@ if mods["cupric-asteroids"] then
         }
     cupric_crushing.icons[2].icon = data.raw["item"]["cupric-asteroid-chunk"].icon
     cupric_crushing.icons[2].icon_size = data.raw["item"]["cupric-asteroid-chunk"].icon_size
-    data:extend{cupric_crushing}
+    Muluna:extend{cupric_crushing}
     rro.remove(data.raw["technology"]["space-platform"].effects,{type = "unlock-recipe",recipe = "cupric-asteroid-crushing"})
 end
 
@@ -919,4 +920,38 @@ local propellant_barrel = data.raw["item"]["muluna-roboport-propellant-barrel"]
 propellant_barrel.fuel_value = Muluna.multiply_energy(data.raw["fluid"]["muluna-roboport-propellant"].fuel_value, 50)
 propellant_barrel.fuel_category = "muluna-oxygenated-fuel"
 propellant_barrel.burnt_result = "barrel" --No automatic way to remove barrels, so I will disable this for now
-data.raw["recipe"]["muluna-roboport-propellant-barrel"].hide_from_player_crafting = false
+--data.raw["recipe"]["muluna-roboport-propellant-barrel"].hide_from_player_crafting = false
+
+
+
+
+--Remove asteroids from ignored_by_stats while preserving ignored_by_productivity behavior
+local asteroid_chunks = {
+    "metallic-asteroid-chunk",
+    "carbonic-asteroid-chunk",
+    "oxide-asteroid-chunk",
+}
+
+local function check_productingredient(productingredient) --Invented a new word for this funciton :)
+    if rro.contains(asteroid_chunks,productingredient.name) and productingredient.ignored_by_stats then
+        if productingredient.ignored_by_productivity == nil then
+            productingredient.ignored_by_productivity = productingredient.ignored_by_stats
+        end
+        productingredient.ignored_by_stats = nil
+        
+        
+    end
+
+end
+
+for _,recipe in pairs(data.raw.recipe) do
+    if rro.contains(recipe.categories,"crushing") then
+        for _,result in pairs(recipe.results) do
+            check_productingredient(result)
+        end
+        for _,ingredient in pairs(recipe.ingredients) do
+            check_productingredient(ingredient)
+        end
+    end
+end
+

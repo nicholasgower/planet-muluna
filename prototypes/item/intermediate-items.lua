@@ -3,7 +3,7 @@ local item_sounds = require("__base__.prototypes.item_sounds")
 local item_tints = require("__base__.prototypes.item-tints")
 
 local iron_ore=data.raw["item"]["iron-ore"]
-data:extend{{
+Muluna:extend{{
     type="item",
     name="alumina",
     icon = "__muluna-graphics__/graphics/icons/crushed-alumina.png",
@@ -261,7 +261,7 @@ if settings.startup["muluna-easy-simple-nanofoamed-polymers"].value == true then
 end
 
 if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true then
-    data:extend{{ --Copied from Wooden industries
+    Muluna:extend{{ --Copied from Wooden industries
     type = "item",
     name = "woodchips",
     icon = "__muluna-graphics__/graphics/icons/woodchips.png",
@@ -295,12 +295,12 @@ end
 local placed_tree = table.deepcopy(data.raw["plant"]["tree-plant"])
 placed_tree.name = "muluna-placed-tree"
 placed_tree.growth_ticks = 1
-data:extend{placed_tree}
+Muluna:extend{placed_tree}
     
 
 
 if not data.raw["item"]["silicon"] then --Copied from Moshine
-    data:extend{{
+    Muluna:extend{{
         type = "item",
         name = "silicon",
         icon = "__muluna-graphics__/graphics/icons/silicon.png",
@@ -316,7 +316,7 @@ if not data.raw["item"]["silicon"] then --Copied from Moshine
       }}
 end
 if not data.raw["item"]["silicon-carbide"] then
-      data:extend{{
+      Muluna:extend{{
         type = "item",
         name = "silicon-cell",
         icon = "__muluna-graphics__/graphics/icons/silicon-cell.png",
@@ -331,7 +331,7 @@ if not data.raw["item"]["silicon-carbide"] then
       }}
 end
 if not data.raw["item"]["silicon-carbide"] then
-data:extend{{
+Muluna:extend{{
     type = "item",
     name = "silicon-carbide",
     icon = "__muluna-graphics__/graphics/icons/silicon-carbide.png",
@@ -377,7 +377,7 @@ end
 
 
 -- if not data.raw["item"]["sand"] then
---     data:extend{ --Copied from Crushing Industry
+--     Muluna:extend{ --Copied from Crushing Industry
 --         type = "item",
 --         name = "sand",
 --         icon = "__crushing-industry__/graphics/icons/sand.png",

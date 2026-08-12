@@ -343,7 +343,13 @@ end
 local corpse = {
     type = "corpse",
     name = "muluna-data-cable-remnants",
-    icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    --icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+            tint = {238, 139, 0}
+        }
+    },
     flags = {"placeable-neutral", "not-on-map"},
     hidden_in_factoriopedia = true,
     subgroup = "energy-pipe-distribution-remnants",
@@ -371,7 +377,13 @@ local corpse = {
 local data_cable = {
     type = "pipe",
     name = "muluna-data-cable",
-    icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    --icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+    icons = {
+        {
+            icon = "__muluna-graphics__/graphics/icons/optical-fiber.png",
+            tint = {238, 139, 0}
+        }
+    },
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 0.1, result = "muluna-data-cable"},
     max_health = 10,
@@ -416,14 +428,19 @@ local data_cable = {
     close_sound = sounds.metal_small_close,
 
     horizontal_window_bounding_box = {{-0.25, -0.28125}, {0.25, 0.15625}},
-    vertical_window_bounding_box = {{-0.28125, -0.5}, {0.03125, 0.125}}
+    vertical_window_bounding_box = {{-0.28125, -0.5}, {0.03125, 0.125}},
+    
   }
 
 
 rro.deep_replace(data_cable,"optical-cable","muluna-data-cable")
 
+data_cable.fast_replaceable_group="optical-cable"
+
+if mods["Moshine"] then
+  data_cable.next_upgrade="optical-cable"
+end
 
 
 
-
-data:extend{corpse,data_cable}
+Muluna:extend{corpse,data_cable}

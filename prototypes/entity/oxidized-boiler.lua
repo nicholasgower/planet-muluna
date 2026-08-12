@@ -73,7 +73,7 @@ end
 -- --------------------------------------------------------------------------------
 -- -- Step 5: Final extension into the data stage
 -- --------------------------------------------------------------------------------
--- data:extend({
+-- Muluna:extend({
 --   space_boiler
 -- })
 
@@ -153,7 +153,7 @@ local space_boiling_atmosphere = util.merge{space_boiling,{
 --   }
 -- }}
 
--- data:extend{space_boiling_high_temperature}
+-- Muluna:extend{space_boiling_high_temperature}
 
 
 
@@ -188,7 +188,7 @@ local space_melting = {
 local space_melting_oxygen = table.deepcopy(space_melting)
 ingredient_multiply(space_melting_oxygen.ingredients,"oxygen",5,"maraxsis-atmosphere")
 space_melting_oxygen.name="advanced-water-melting-atmosphere"
-data:extend{space_melting,space_melting_oxygen}
+Muluna:extend{space_melting,space_melting_oxygen}
 
 
 local space_boiler_new = {
@@ -385,16 +385,17 @@ space_boiler_new.energy_source.light_flicker =
     minimum_intensity = 0.6*3,
     maximum_intensity = 0.95*3
   }
+local smoke_position = util.by_pixel(30.5, -85)
 space_boiler_new.energy_source.smoke =
 {
   {
     name = "smoke",
-    --north_position = util.by_pixel(-38, -47.5),
-    position = util.by_pixel(30.5, -85),
-    --east_position = util.by_pixel(20, -70),
-    --west_position = util.by_pixel(-19, -8.5),
+    north_position = smoke_position,
+    east_position = smoke_position,
+    west_position = smoke_position,
+    south_position = smoke_position,
     frequency = 15,
-    starting_vertical_speed = 0.0,
+    starting_vertical_speed = 0.20,
     starting_frame_deviation = 60
   }
 }
@@ -489,7 +490,7 @@ end
 
 
 
-data:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}
+Muluna:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}
 
 data.raw["generator"]["steam-engine"].fluid_box.minimum_temperature=50
 data.raw["generator"]["steam-turbine"].fluid_box.minimum_temperature=50

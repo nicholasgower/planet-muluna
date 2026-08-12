@@ -107,7 +107,7 @@ if true or data.raw["recipe"]["biolab"] then
             max = 0,
         },
     }
-    data:extend{cryolab}
+    Muluna:extend{cryolab}
 end
     
 
@@ -178,7 +178,7 @@ local greenhouse_wood = util.merge{table.deepcopy(data.raw["recipe"]["chemical-p
 greenhouse_wood.ingredients = {
     {type = "item", name = "muluna-greenhouse", amount = 1},
     --{type = "fluid", name = "carbon-dioxide", amount = 100000},
-    {type = "item", name = "muluna-sapling", amount = 100},
+    {type = "item", name = "muluna-sapling", amount = 100,quality_max="normal"},
     --{type = "fluid", name = "water", amount = 10000},
     {type = "item", name = "landfill", amount = 10},
 }
@@ -291,7 +291,7 @@ local telescope = Muluna.rro.merge(data.raw["recipe"]["assembling-machine-3"],
 )
 rro.deep_replace(telescope,"assembling-machine-3","muluna-telescope")
 
-data:extend{{
+Muluna:extend{{
     type = "recipe",
     name = "muluna-data-cable",
     energy_required = 2,
@@ -304,6 +304,7 @@ data:extend{{
     results = {{type = "item", name = "muluna-data-cable", amount = 2}},
     allow_productivity = false,
     enabled = false,
+    categories = {"crafting","electromagnetics"}
   }}
 
 local big_rocket_silo=table.deepcopy(data.raw["recipe"]["rocket-silo"])
@@ -320,4 +321,4 @@ big_rocket_silo.ingredients = {
 
 big_rocket_silo.energy_required=90
 
-data:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,big_rocket_silo}
+Muluna:extend{space_boiler,vacuum_heating_tower, crusher_2,space_chest,greenhouse,greenhouse_wood,low_density_space_platform_foundation,recycling_turbine,buggy,telescope,big_rocket_silo}

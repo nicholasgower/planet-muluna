@@ -1,11 +1,11 @@
 --forked from Maraxsis
 
-data:extend {{
+Muluna:extend {{
     type = "recipe-category",
     name = "ground-digging"
 }}
 
-data:extend {{
+Muluna:extend {{
     type = "recipe",
     name = "muluna-regolith-digging",
     categories = {"ground-digging"},
@@ -21,42 +21,44 @@ data:extend {{
     allow_productivity = true,
     maximum_productivity = 9999999,
     main_product = "muluna-lunar-regolith",
+    rigor_no_results=true,
     auto_recycle = false,
+    rigor_whitelist=mods["rigor-module"] and true
     --localised_name = {"item-name.sand"},
     --localised_description = {"item-description.sand"},
 }}
 
 
 
-data:extend {{
+Muluna:extend {{
     type = "custom-input",
     name = "build",
     key_sequence = "",
     linked_game_control = "build"
 }}
 
-data:extend {{
+Muluna:extend {{
     type = "custom-input",
     name = "rotate",
     key_sequence = "",
     linked_game_control = "rotate"
 }}
 
-data:extend {{
+Muluna:extend {{
     type = "custom-input",
     name = "reverse-rotate",
     key_sequence = "",
     linked_game_control = "rotate"
 }}
 
-data:extend {{
+Muluna:extend {{
     type = "custom-input",
     name = "build-ghost",
     key_sequence = "",
     linked_game_control = "build-ghost"
 }}
 
-data:extend {{
+Muluna:extend {{
     type = "custom-input",
     name = "super-forced-build",
     key_sequence = "",

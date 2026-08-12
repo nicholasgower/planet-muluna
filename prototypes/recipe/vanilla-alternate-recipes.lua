@@ -48,6 +48,7 @@ aluminum_rocket_fuel.ingredients = {{type = "item",name = "aluminum-crushed",amo
 aluminum_rocket_fuel.auto_recycle=false
 aluminum_rocket_fuel.icons= dual_icon_reversed("rocket-fuel","aluminum-crushed")
 aluminum_rocket_fuel.allow_decomposition = false
+rro.soft_insert(aluminum_rocket_fuel.categories,"cryogenics")
 
 local carbon_nanotubes_lds = table.deepcopy(data.raw["recipe"]["low-density-structure"])
 
@@ -152,7 +153,7 @@ end
 
 table.insert(recipes,bio_plastic)
 
-data:extend(recipes)
+Muluna:extend(recipes)
 
 if settings.startup["muluna-easy-alternative-battery-recipe"].value == true then
     -- Battery from aluminum instead of copper.
@@ -176,7 +177,7 @@ if settings.startup["muluna-easy-alternative-battery-recipe"].value == true then
         recipe = "muluna-battery-from-aluminum",
     })
     
-    data:extend{aluminum_battery}
+    Muluna:extend{aluminum_battery}
 end
 
 
@@ -186,7 +187,7 @@ if not (settings.startup["aps-planet"] and settings.startup["aps-planet"].value 
     rro.replace_name(aluminum_red_science.ingredients,"copper-plate","aluminum-plate")
     aluminum_red_science.name="automation-science-pack-muluna"
     aluminum_red_science.icons=dual_icon("automation-science-pack","aluminum-plate")
-    data:extend({aluminum_red_science})
+    Muluna:extend({aluminum_red_science})
 
     rro.soft_insert(data.raw["technology"]["muluna-aluminum-processing"].effects,
     {
@@ -241,7 +242,7 @@ for i,recipe_name in ipairs(recipes_to_replace) do
             }
         )
         
-        data:extend{new_recipe}
+        Muluna:extend{new_recipe}
     end
 
 

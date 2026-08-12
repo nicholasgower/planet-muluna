@@ -45,7 +45,7 @@ local function extend_lunar_rock(copied_entity,results)
       control = "control:lunar_rocks:size"
     }
   }
-  data:extend{lunar_rock}
+  Muluna:extend{lunar_rock}
 end
 
 extend_lunar_rock("big-rock",
@@ -69,7 +69,7 @@ extend_lunar_rock("small-rock", nil)
 extend_lunar_rock("tiny-rock", nil)
 
 
-data:extend{
+Muluna:extend{
     {
         type = "noise-expression",
         name = "lunar_rock_noise",
@@ -96,7 +96,7 @@ local ancient_container = table.deepcopy(data.raw["temporary-container"]["cargo-
 ancient_container.picture.layers[1].filename = "__muluna-graphics__/graphics/entities/cargo-pod/pod-landing.png"
 ancient_container.name = "fulgoran-cargo-pod-container"
 ancient_container.alert_after_time = 0
-data:extend{ancient_container}
+Muluna:extend{ancient_container}
 
 
 
@@ -115,6 +115,6 @@ local lunar_cliff = scaled_cliff(
       factoriopedia_simulation = simulations.factoriopedia_cliff
     }
   )
-data:extend{lunar_cliff}
+Muluna:extend{lunar_cliff}
 
 

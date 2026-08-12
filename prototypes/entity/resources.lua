@@ -73,7 +73,7 @@ if mods["any-planet-start"] then if settings.startup["aps-planet"].value == "mul
 end end
 
 
-data:extend {{
+Muluna:extend {{
     type = "autoplace-control",
     category = "resource",
     name = "oxide-asteroid-chunk",
@@ -81,7 +81,7 @@ data:extend {{
     order = u_ore_order.."00",
     richness = true
 }}
-data:extend {{
+Muluna:extend {{
     type = "autoplace-control",
     category = "resource",
     name = "metallic-asteroid-chunk",
@@ -89,7 +89,7 @@ data:extend {{
     order = u_ore_order.."01",
     richness = true
 }}
-data:extend {{
+Muluna:extend {{
     type = "autoplace-control",
     category = "resource",
     name = "carbonic-asteroid-chunk",
@@ -97,7 +97,7 @@ data:extend {{
     order = u_ore_order.."02",
     richness = true
 }}
-data:extend {{
+Muluna:extend {{
   type = "autoplace-control",
   category = "resource",
   name = "anorthite-chunk",
@@ -105,7 +105,7 @@ data:extend {{
   order = u_ore_order.."03",
   richness = true
 }}
--- data:extend {{
+-- Muluna:extend {{
 --   type = "autoplace-control",
 --   category = "resource",
 --   name = "helium",
@@ -114,7 +114,7 @@ data:extend {{
 --   richness = true
 -- }}
 if mods["cupric-asteroids"] then
-  data:extend {{
+  Muluna:extend {{
     type = "autoplace-control",
     category = "resource",
     name = "cupric-asteroid-chunk",
@@ -124,7 +124,7 @@ if mods["cupric-asteroids"] then
 }}
 end
 
-data:extend {{
+Muluna:extend {{
   type = "autoplace-control",
   category = "terrain",
   name = "lunar_rocks",
@@ -430,7 +430,7 @@ cupric.icon=data.raw["item"]["cupric-asteroid-chunk"].icon
 cupric.stages = data.raw["resource"]["copper-ore"].stages
 local cupric_chunk_particle = table.deepcopy(data.raw["optimized-particle"]["copper-ore-particle"])
 cupric_chunk_particle.name="cupric-asteroid-chunk-particle"
-data:extend{cupric,cupric_chunk_particle}
+Muluna:extend{cupric,cupric_chunk_particle}
 end
 -- ice_ore.autoplace = {
 --     control = "ice",
@@ -442,4 +442,4 @@ end
 --     richness_expression = [[var("control:maraxsis-coral:richness") * random_penalty(x, y, 9232 + (sqrt(x*x + y*y) / 10), 99, 1000)]],
 -- }
 
-data:extend{metal_ore,carbon_ore,ice_ore,ice_ore_particle,anorthite,anorthite_chunk_particle}
+Muluna:extend{metal_ore,carbon_ore,ice_ore,ice_ore_particle,anorthite,anorthite_chunk_particle}

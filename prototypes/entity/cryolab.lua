@@ -150,7 +150,7 @@ cryolab.off_animation = {
   }
 cryolab.working_sound = data.raw["assembling-machine"]["cryogenic-plant"].working_sound
 
-data:extend{cryolab}
+Muluna:extend{cryolab}
 end
 
 
