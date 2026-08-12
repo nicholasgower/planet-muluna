@@ -10,7 +10,7 @@ local item_multiplier = settings.startup["muluna-balance-fulgoran-cargo-drop-ite
 
 local modded_cargo_drop_spawns_imports = Muluna.constants.cargo_drop_spawn_imports
 local modded_cargo_drop_spawns = {}
-
+ 
 for _,import in pairs(modded_cargo_drop_spawns_imports) do
     local imported = require(import)
     if type(imported[1]) == "table" then
