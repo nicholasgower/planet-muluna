@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.38
+Date: 2026-08-12
+  Bugfixes:
+    - Improved error handling when items spawned in drop pods don't exist. By Tachigami Itsuki.
+  Locale:
+    - Updated German locale. By stef77stef.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.37
 Date: 2026-08-12
   Balancing:
