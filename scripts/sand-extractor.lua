@@ -87,11 +87,15 @@ function Public.construct_sand_extractor(event)
     --this check allows them to exist in mod-data without crashing.
     local offset_width = drill_prototype.tile_width
     local offset_height = drill_prototype.tile_height
-    local margin = 0.5
+    local margin = 1.5
+    local rounded_position = {
+        x = math.ceil(position.x+0.5),
+        y = math.ceil(position.y+0.5)
+    }
     if offset_width ~= offset_height then return end 
 
     local colliding_entities = surface.find_entities_filtered{
-            area= {{position.x-offset_width/2+margin,position.y-offset_height/2+margin},{position.x+offset_width/2-margin,position.y+offset_height/2-margin}},
+            area= {{rounded_position.x-offset_width/2+margin,rounded_position.y-offset_height/2+margin},{rounded_position.x+offset_width/2-margin,rounded_position.y+offset_height/2-margin}},
             to_be_deconstructed = false,
         }
     rro.remove(colliding_entities,function(entry) return entry.type == "corpse" end)
