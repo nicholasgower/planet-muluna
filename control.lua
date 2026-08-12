@@ -96,11 +96,13 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
             storage.players_on_muluna[i] = {player=player}
         end
     end
+    if not storage.players_walking_on_muluna then storage.players_walking_on_muluna = {} end
     if not storage.telescopes then storage.telescopes = {} end 
     if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
     if not storage.burner_roboports then storage.burner_roboports = {} end
     if not storage.cached_direction_to_string then storage.cached_direction_to_string = {} end
     if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
+    if not storage.walking_tick_rates then storage.walking_tick_rates = {} end
     for i,radar in pairs(storage.nav_beacons) do
         if not storage.nav_beacons_other[i] then
             storage.nav_beacons_other[i] = {gui = {enabled = true}}

@@ -8,8 +8,8 @@ if mods["Krastorio2-spaced-out"] then
     rro.replace_field(data.raw["technology"]["kr-singularity-lab"].effects,"recipe","biolab","cryolab")
     rro.soft_insert(data.raw["technology"]["kr-singularity-lab"].prerequisites,"cryolab")
 
-    
-    table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "kr-rare-metal-ore",amount = 1,independent_probability = 0.025})
+    data.raw["recipe"]["muluna-regolith-digging"].results[2].shared_probability.max = 0.975
+    table.insert(data.raw["recipe"]["muluna-regolith-digging"].results,{type = "item", name = "kr-rare-metal-ore",amount = 1,shared_probability = {min = 0.975,max = 1}})
 
 
     data.raw["technology"]["muluna-silicon-processing"].localised_name = {"technology-name.muluna-silicon-processing-alt"}
