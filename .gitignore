@@ -6,3 +6,5 @@
 *.zip
 *.pyc
 *.exe
+.env
+bin/act
