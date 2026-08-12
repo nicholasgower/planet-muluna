@@ -124,6 +124,17 @@ local function generate_particles(speed,movement,player_position,surface)
 
 end
 
+    Muluna.events.on_event(Muluna.events.events.on_player_moved(), function(event)
+        local player = game.players[event.player_index]
+        if player.controller_type == defines.controllers.character and player.physical_surface.name == "muluna" then
+            storage.players_walking_on_muluna[event.player_index] = player
+        end
+    
+    
+    
+    
+    end)
+
 
 
     Muluna.events.on_event(defines.events.on_tick, function(event)
@@ -131,9 +142,9 @@ end
         
         
         --if not game.surfaces.muluna then return end --If Muluna does not exist, don't execute.
-            for i,player_info in pairs(storage.players_on_muluna) do
+            for i,player in pairs(storage.players_walking_on_muluna) do
                 --profiler.reset()
-                
+                local player_info = storage.players_on_muluna[i]
                 if not storage.walking_tick_rates then update_step_tick_rates(event) end
                 local tick_rate = storage.walking_tick_rates[i] 
                 if not tick_rate then update_step_tick_rates(event) tick_rate = storage.walking_tick_rates[i] end
@@ -150,7 +161,12 @@ end
                    
                     local walking_state = player.walking_state
                     --game.print(player.character_running_speed)
-                    if walking_state.walking == false then storage.players_on_muluna[i].previous_movement = {0,0} goto continue end --game.print(profiler) return end 
+                    if walking_state.walking == false then 
+                        storage.players_on_muluna[i].previous_movement = {0,0} 
+                        storage.players_walking_on_muluna[i] = nil
+                        goto continue 
+
+                    end 
                         local character_is_flying = not character or character.is_flying 
                         if character_is_flying then goto continue end
                         

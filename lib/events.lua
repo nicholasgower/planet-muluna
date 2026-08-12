@@ -166,6 +166,14 @@ Public.events = {
 	--- 		}
 	--- 	}
 	--- }
+	on_player_moved = function()
+		return {
+			"move-up",
+			"move-down",
+			"move-left",
+			"move-right",
+		}
+	end,
 	on_built = function()
 		return {
 			defines.events.on_built_entity,
@@ -176,6 +184,7 @@ Public.events = {
 			--defines.events.on_biter_base_built
 		}
 	end,
+	
 	--- Called after the results of an entity being mined are collected just before the entity is destroyed. [...]
 	on_destroyed = function()
 		return {

@@ -96,6 +96,7 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
             storage.players_on_muluna[i] = {player=player}
         end
     end
+    if not storage.players_walking_on_muluna then storage.players_walking_on_muluna = {} end
     if not storage.telescopes then storage.telescopes = {} end 
     if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
     if not storage.burner_roboports then storage.burner_roboports = {} end
