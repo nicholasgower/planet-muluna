@@ -38,8 +38,6 @@ end
 
     local step_process_tick_rate = 1
     local function update_step_tick_rates(event)
-        --if game.surfaces.muluna then
-            if not storage.walking_tick_rates then storage.walking_tick_rates = {} end
             for i,player_table in pairs(storage.players_on_muluna) do
                 --if not (player.connected and player.surface.name == "muluna") then goto continue end
                 --player.print(player.name)
@@ -138,10 +136,6 @@ end
 
 
     Muluna.events.on_event(defines.events.on_tick, function(event)
-        --local update_tick_rate = event.tick % 180 == true
-        
-        
-        --if not game.surfaces.muluna then return end --If Muluna does not exist, don't execute.
             for i,player in pairs(storage.players_walking_on_muluna) do
                 --profiler.reset()
                 local player_info = storage.players_on_muluna[i]
