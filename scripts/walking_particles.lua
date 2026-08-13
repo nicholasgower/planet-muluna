@@ -31,26 +31,36 @@ local function cached_direction_to_string(x)
 end
 
     
-    
+local step_process_tick_rate = 1
+local function update_player_step_tick_rate(i,player_table)
+        --if not (player.connected and player.surface.name == "muluna") then goto continue end
+        --player.print(player.name)
+        local player = player_table.player
+        local speed
+        if storage.player_control_method[i] == defines.input_method.game_controller then
+            speed = player_table.delta_position and math.sqrt( player_table.delta_position.x^2 + player_table.delta_position.y^2) or player.character_running_speed
+        else
+            speed = player.character_running_speed or 0
+        end
+        
+        local tick_rate = storage.walking_tick_rates[i]
+        storage.walking_tick_rates[i] = step_process_tick_rate*math.ceil(30/(speed/0.075)/step_process_tick_rate)
+        --player.print(storage.walking_tick_rates[i])
+        --player.print(speed)
+        ::continue::
 
+    end
  
 
 
-    local step_process_tick_rate = 1
+    
     local function update_step_tick_rates(event)
             for i,player_table in pairs(storage.players_on_muluna) do
-                --if not (player.connected and player.surface.name == "muluna") then goto continue end
-                --player.print(player.name)
-                local player = player_table.player
-                local speed = player.character_running_speed or 0
-                local tick_rate = storage.walking_tick_rates[i]
-                storage.walking_tick_rates[i] = step_process_tick_rate*math.ceil(30/(speed/0.075)/step_process_tick_rate)
-                --player.print(storage.walking_tick_rates[i])
-                --player.print(speed)
-                ::continue::
+                update_player_step_tick_rate(i,player_table)
             end
         --end
     end
+    
 
     Muluna.events.on_nth_tick(60, update_step_tick_rates)
     Muluna.events.on_event({defines.events.on_player_armor_inventory_changed}, update_step_tick_rates)
@@ -115,7 +125,7 @@ local function generate_particles(speed,movement,player_position,surface)
             position = player_position,
             movement = new_movement,
             height = 0,
-            vertical_speed = 0.075*math.sqrt((speed >= 5 and 5) or (speed)),
+            vertical_speed = (speed < 0.14 and 0.02905*speed/0.15) or (0.075*(math.sqrt((speed >= 5 and 5) or (speed)))),
             frame_speed = 0.1
         }
     end
@@ -123,22 +133,37 @@ local function generate_particles(speed,movement,player_position,surface)
 end
 
     Muluna.events.on_event(Muluna.events.events.on_player_moved(), function(event)
+        if not storage.players_on_muluna[event.player_index] then return end
         local player = game.players[event.player_index]
         if player.controller_type == defines.controllers.character and player.physical_surface.name == "muluna" then
             storage.players_walking_on_muluna[event.player_index] = player
+            update_player_step_tick_rate(event.player_index,storage.players_on_muluna[event.player_index])
         end
-    
-    
-    
-    
     end)
-
+    Muluna.events.on_event(defines.events.on_player_changed_position, function(event)
+        if not storage.player_control_method[event.player_index] == defines.input_method.game_controller then return end
+            if not storage.players_on_muluna[event.player_index] then return end
+            local player = game.players[event.player_index]
+            if player.controller_type == defines.controllers.character and player.physical_surface.name == "muluna" then
+                storage.players_walking_on_muluna[event.player_index] = player
+                update_player_step_tick_rate(event.player_index,storage.players_on_muluna[event.player_index])
+            end
+    end)
+    Muluna.events.on_event({defines.events.on_player_joined_game,defines.events.on_player_input_method_changed},function(event)
+        storage.player_control_method[event.player_index] = game.players[event.player_index].input_method
+    end)
 
 
     Muluna.events.on_event(defines.events.on_tick, function(event)
             for i,player in pairs(storage.players_walking_on_muluna) do
                 --profiler.reset()
                 local player_info = storage.players_on_muluna[i]
+                if storage.player_control_method[i] == defines.input_method.game_controller then
+                    if not player_info.cached_position then player_info.cached_position = player.physical_position end
+                    player_info.delta_position = {x = player.physical_position.x-player_info.cached_position.x,y = player.physical_position.y - player_info.cached_position.y}
+                    player_info.cached_position = player.character.position
+                end
+
                 if not storage.walking_tick_rates then update_step_tick_rates(event) end
                 local tick_rate = storage.walking_tick_rates[i] 
                 if not tick_rate then update_step_tick_rates(event) tick_rate = storage.walking_tick_rates[i] end

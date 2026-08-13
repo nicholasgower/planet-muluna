@@ -61,6 +61,17 @@ local function init_storage()
 end
 local interstellar_science_pack = require("scripts.interstellar-science-pack")
 
+-- Muluna.events.on_event(defines.events.on_tick, function()
+--     for _,player in pairs(game.players) do
+--         if player.character then
+--             print(player.character_running_speed_modifier)
+--         end
+        
+--     end
+
+-- end
+-- )
+
 Muluna.events.register_delayed_function('space-exploration-graphics-missing', function() 
     game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics","0.7.5"})
 end)
@@ -97,6 +108,12 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
         end
     end
     if not storage.players_walking_on_muluna then storage.players_walking_on_muluna = {} end
+    if not storage.player_control_method then 
+        storage.player_control_method = {} 
+        for i,player in pairs(game.players) do
+            storage.player_control_method[i] = player.input_method 
+        end
+    end
     if not storage.telescopes then storage.telescopes = {} end 
     if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
     if not storage.burner_roboports then storage.burner_roboports = {} end
