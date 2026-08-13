@@ -43,7 +43,7 @@ local function localise_energy(energy)
 			return "?"
 		end
 	end
-
+local refueler_shift = 0.4
 Muluna:extend{
     {
         type="recipe-category",
@@ -67,15 +67,16 @@ for _,roboport in pairs(data.raw["roboport"]) do
                     --quality_values = {}
                 })
 
-            
+            roboport.selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,-refueler_shift)
 
             local refueler = { 
                 type = "assembling-machine",
                 name = roboport.name,
                 quality_affects_energy_usage = true,
-                selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,-0.4),
+                selection_box = Muluna.flib_bounding_box.resize(roboport.selection_box,refueler_shift),
                 collision_box = data.raw["assembling-machine"]["electromagnetic-plant"].collision_box,
                 crafting_categories = {"muluna-burner-roboport"},
+                selection_priority=48,
                 use_mirroring=true,
                 flags = {"player-creation","placeable-player","no-automated-item-insertion"},
                 icon = data.raw["item"]["muluna-burner-roboport"].icon,
@@ -164,7 +165,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 },
                 energy_usage = roboport.energy_source.input_flow_limit,
                 max_health = roboport.max_health,
-                quality_indicator_shift = {-0.4,0.4},
+                quality_indicator_shift = {refueler_shift,-refueler_shift},
                 radius_visualisation_specification =
                     {
                     sprite =
@@ -193,6 +194,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
             local minable_result = nil
             roboport.max_health = 10000
             roboport.placeable_by = nil
+            
             if roboport.minable then
                 minable_result = roboport.minable.result
             end
