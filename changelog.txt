@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.43
+Date: 2026-08-13
+  Bugfixes:
+    - Regolith diggers can not be placed on planets other than Muluna via blueprints. https://github.com/nicholasgower/planet-muluna/issues/457
+---------------------------------------------------------------------------------------------------
 Version: 2.6.42
 Date: 2026-08-13
   Changes:
