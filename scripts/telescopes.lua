@@ -34,6 +34,8 @@ local telescope_filters = {}
 for entity_name,machine in pairs(heat_assembling_machines) do
     table.insert(telescope_filters,{filter = "name", name = entity_name})
     table.insert(telescope_filters,{filter = "ghost_name", name = entity_name})
+    table.insert(telescope_filters,{filter = "name", name = machine["constant-combinator"]})
+    table.insert(telescope_filters,{filter = "ghost_name", name = machine["constant-combinator"]})
 end
 Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     if not storage.telescopes then storage.telescopes = {} end
@@ -180,15 +182,28 @@ telescope_filters
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
     local entity = event.entity
+    --if not entity.valid then return end
     --game.print(entity.name)
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
-    for _,machine in pairs(heat_assembling_machines) do
-        if entity.name == machine["assembling-machine"] then
-            
-            is_heat_assembling_machine = true
-            heat_assembling_machine_data = machine
-            break
+    if entity.valid then
+        for _,machine in pairs(heat_assembling_machines) do
+            --game.print(serpent.block(machine))
+            if entity.name == machine["assembling-machine"] or entity.name == machine["constant-combinator"] then
+                
+                is_heat_assembling_machine = true
+                heat_assembling_machine_data = machine
+                if entity.name == machine["constant-combinator"] then
+                            --game.print("combinator!")
+                            for i,telescope in pairs(storage.telescopes) do
+                                if entity == telescope["constant-combinator"]  then
+                                    entity = telescope["assembling-machine"]
+                                end
+                            assert(entity.type == "assembling-machine")
+                            end
+                end
+                break
+            end
         end
     end
 
@@ -214,6 +229,9 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         --game.print(reactor)
         if reactor then
             reactor.destroy()
+        end
+        if entity.valid then
+            entity.destroy()
         end
         -- entity.surface.create_entity{
         --     name = heat_assembling_machine_data["reactor"],

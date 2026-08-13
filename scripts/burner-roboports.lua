@@ -5,19 +5,16 @@ local heat_assembling_machines = Muluna.constants.vacuum_roboports
 local status_burner_roboport_refueling = {
     diode = defines.entity_status_diode.yellow,
     label = {"custom-status.muluna-burner-roboport-refueling"}
-
 }
 
 local status_burner_roboport_full = {
     diode = defines.entity_status_diode.green,
-    label = {"custom-status.muluna-burner-roboport-full"}
-    
+    label = {"custom-status.muluna-burner-roboport-full"} 
 }
 
 local status_burner_roboport_empty = {
     diode = defines.entity_status_diode.red,
     label = {"custom-status.muluna-burner-roboport-empty"}
-    
 }
    
 local function move_entity_to_bottom_layer(entity)
@@ -82,23 +79,35 @@ heat_assembler_filters
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
     local entity = event.entity
+    if not entity.valid then return end
     --game.print(entity.name)
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
     for _,machine in pairs(heat_assembling_machines) do
-        if entity.name == machine["refueler"] then
+        if entity.name == machine["refueler"] or entity.name == machine["roboport"] then
             
             is_heat_assembling_machine = true
             heat_assembling_machine_data = machine
+            if entity.name == machine["roboport"] then
+                --game.print("roboport!")
+                for i,roboport in pairs(storage.burner_roboports) do
+                    if entity == roboport.roboport  then
+                        entity = roboport.refueler
+                    end
+                assert(entity.type == "assembling-machine")
+                end
+            end
             break
         end
     end
-
+    --game.print(is_heat_assembling_machine)
     if is_heat_assembling_machine then
         local reactor = nil
+        local parent = nil
         if storage.burner_roboports then
             if storage.burner_roboports[entity.unit_number] then
                 reactor = storage.burner_roboports[entity.unit_number]["roboport"]
+                parent = storage.burner_roboports[entity.unit_number]["refueler"]
                 storage.burner_roboports[entity.unit_number] = nil
             end
             for i,registered_machine in pairs(storage.burner_roboports) do
@@ -117,6 +126,8 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         if reactor then
             reactor.destroy()
         end
+        
+        
         -- entity.surface.create_entity{
         --     name = heat_assembling_machine_data["refueler"],
         --     position = entity.position,
@@ -130,6 +141,9 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         -- }
     end
     storage.active_burner_roboports[entity.unit_number] = nil
+    if entity.valid then
+        entity.destroy()
+    end
 
 end,
 heat_assembler_filters)

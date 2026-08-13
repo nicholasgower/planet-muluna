@@ -59,13 +59,23 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
     local entity = event.entity
     --game.print(entity.name)
+    if not entity.valid then return end
     local is_heat_assembling_machine = false
     local heat_assembling_machine_data = {}
     for _,machine in pairs(heat_assembling_machines) do
-        if entity.name == machine["assembling-machine"] then
+        if entity.name == machine["assembling-machine"] or entity.name == machine["reactor"] then
             
             is_heat_assembling_machine = true
             heat_assembling_machine_data = machine
+            if entity.name == machine["reactor"] then
+                        --game.print("roboport!")
+                        for i,heat_assembling_machine in pairs(storage.heat_assembling_machines) do
+                            if entity == heat_assembling_machine.reactor  then
+                                entity = heat_assembling_machine["assembling-machine"]
+                            end
+                        assert(entity.type == "assembling-machine")
+                        end
+            end
             break
         end
     end
@@ -92,6 +102,9 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         --game.print(reactor)
         if reactor then
             reactor.destroy()
+        end
+        if entity.valid then
+            entity.destroy()
         end
         -- entity.surface.create_entity{
         --     name = heat_assembling_machine_data["reactor"],

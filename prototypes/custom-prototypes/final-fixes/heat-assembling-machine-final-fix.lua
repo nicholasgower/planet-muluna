@@ -62,6 +62,7 @@ if data.raw["heat-assembling-machine"] then
         assembler.selection_box = flib_bounding_box.resize(assembler.selection_box,-0.4)
         reactor.circuit_connector = table.deepcopy(assembler.circuit_connector)
         reactor.default_temperature_signal = data.raw["reactor"]["heating-tower"].default_temperature_signal
+        reactor.minable = assembler.minable
         for _,connector in pairs(reactor.circuit_connector) do
             for _,wire in pairs(connector) do
                 for _,color in pairs(wire) do

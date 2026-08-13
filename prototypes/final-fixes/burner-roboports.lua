@@ -200,7 +200,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
             end
             refueler.minable = roboport.minable
             roboport.localised_name = {"entity-name.muluna-burner-roboport"}
-            roboport.minable = nil
+            --roboport.minable = nil
             -- K2 generates roboport mode variants such as `-logistic-mode` and `-construction-mode`.
             -- Those variants do not have matching item prototypes, so they must keep dropping the
             -- original burner roboport item instead of their entity name.
