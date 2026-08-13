@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.45
+Date: 2026-08-13
+  Bugfixes:
+    - Muluna footstep particles are produced at a reduced frequency when using a controller and not walking at full speed.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.44
 Date: 2026-08-13
   Bugfixes:
