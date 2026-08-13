@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.40
+Date: 2026-08-13
+  Changes:
+    - Added "flip pipes" gui button to burner roboport refueler.
+    - Inverted selection priority and selection box size of burner roboport subentities.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.39
 Date: 2026-08-12
   Bugfixes:
