@@ -39,6 +39,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     local other_entity
     local button_name
     local enabled
+    local add_horizontal_flip_button = false
     if not storage.player_focus then storage.player_focus = {} end
     --game.print(entity_name)
     --game.print(serpent.block(Muluna.constants.telescopes))
@@ -88,6 +89,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         gui_type = defines.relative_gui_type.assembling_machine_gui
         localised_button = {"muluna-gui.vacuum-roboport-refueler-goto-button"}
         button_name = "burner-roboport-refueler"
+        add_horizontal_flip_button = true
     elseif rro.contains(Muluna.constants.heat_assembling_machines,function(other) return entity_name == other["assembling-machine"] end ) then
         local assembling_machine_data = storage.heat_assembling_machines
         other_entity_button = true
@@ -147,6 +149,14 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                 name = "muluna-flow",
                 direction = "horizontal",
             })
+            if add_horizontal_flip_button then
+                local horizontal_flip_button = horizontal_space.add({
+                type = "sprite-button",
+                name = "muluna-horizontal-flip",
+                sprite = "virtual-signal/signal-rightwards-leftwards-arrow"
+                --caption = localised_button,
+                })
+            end
             if entity.name ~= "muluna-burner-roboport" then
                 local red_wire_button = horizontal_space.add({
                 type = "sprite-button",
@@ -211,13 +221,14 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
     --game.print(serpent.block(element))
     if false then
 
-    elseif string.find(element.name, "muluna%-goto%-button") or string.find(element.name, "muluna%-drag")   then 
+    elseif string.find(element.name, "muluna%-goto%-button") or string.find(element.name, "muluna%-drag") or element.name == "muluna-horizontal-flip"   then 
 
         local player = game.players[event.player_index]
         
         local selected = player.opened --The currently selected entity
         local to_entity --Entity to change focus to
         local to_planet --Planet to switch view to
+        local flip_rotation
         local wire_color
         --game.print(element.name)
         if string.find(element.name,"telescope%-unit") then
@@ -248,6 +259,8 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
             wire_color = "green"
         elseif string.find(element.name,"drag%-red")  then
             wire_color = "red"
+        elseif element.name == "muluna-horizontal-flip" then
+            flip_rotation = true
         end
         
         if to_entity then
@@ -272,8 +285,10 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
             player.opened = nil
             --player.update_selected_entity(entity_position)
             player.drag_wire{position=entity_position}
-           
+        elseif flip_rotation then
+            player.opened.flip{horizontal = true, by_player = player}
         end
+
 
 
     
