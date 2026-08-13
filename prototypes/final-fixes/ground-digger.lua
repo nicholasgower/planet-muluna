@@ -105,6 +105,7 @@ for _,digger in pairs(Muluna.constants.regolith_drills) do
     extractor.allowed_effects = {"productivity", "consumption", "speed", "pollution", "quality"}
     extractor.resource_drain_rate_percent = nil
     extractor.name = extractor.name .. "-ground-digger"
+    extractor.surface_conditions = {{property = "is-muluna",min=1,max=1}}
     local new_icon = {
                 icon = data.raw["item"]["muluna-lunar-regolith"].icon,
                 icon_size = data.raw["item"]["muluna-lunar-regolith"].icon_size,
