@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.44
+Date: 2026-08-13
+  Bugfixes:
+    - Changed Flying robot propellant recipe group and subgroup to be the same as Thruster fuel and Thruster oxidizer.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.43
 Date: 2026-08-13
   Bugfixes:
