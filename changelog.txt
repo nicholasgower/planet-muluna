@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.41
+Date: 2026-08-13
+  Compatibility:
+    - Raised required PlanetsLib version to 1.25.0.
+  Changes:
+    - Pipetting the subentity of compound entities will now pipette the item required to place the compound entity.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.40
 Date: 2026-08-13
   Changes:
