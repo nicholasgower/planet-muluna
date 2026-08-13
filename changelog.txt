@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.42
+Date: 2026-08-13
+  Changes:
+    - Compound entity subentities are now minable. Mining a subentity will destroy its parent.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.41
 Date: 2026-08-13
   Compatibility:
