@@ -13,9 +13,10 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
                 sprites = "_nil",
                 activity_led_sprites = "_nil",
                 max_health = 10000,
-
+                
             }
         )
+        PlanetsLib.constants.pipette_result[telescope_combinator.name] = entity.name
         telescope_combinator.selection_box = flib_bounding_box.resize(entity.selection_box,0.0)
         telescope_combinator.selection_priority=49 --Default is 50
         telescope_combinator.factoriopedia_description={"entity-factoriopedia-description.muluna-telescope-combinator"}

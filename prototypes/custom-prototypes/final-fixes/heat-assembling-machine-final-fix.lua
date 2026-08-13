@@ -37,7 +37,7 @@ if data.raw["heat-assembling-machine"] then
             type = "reactor",
             name = "heat-assembling-machine-" .. machine.name .. "-reactor",
         }
-    
+        PlanetsLib.constants.pipette_result[reactor.name] = machine.name
 
         for _,field in pairs(transferred_fields) do
             move_field(assembler,reactor,field)

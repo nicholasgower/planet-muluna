@@ -212,6 +212,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 end
             end
             roboport.name = roboport.name .. "-roboport"
+            PlanetsLib.constants.pipette_result[roboport.name] = refueler.name
             roboport.is_vacuum_roboport = false
             Muluna:extend{roboport,refueler}
             data.raw["roboport"][refueler.name] = nil
