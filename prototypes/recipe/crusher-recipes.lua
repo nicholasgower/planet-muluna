@@ -161,7 +161,7 @@ stone_crushing.name="stone-crushing"
 stone_crushing.energy_required=1
 stone_crushing.order="b-aa-c"
 stone_crushing.icons = crushing_icon(data.raw.item["stone"].icon,data.raw.item["stone"].icon_size)
-stone_crushing.rigor_sensitivity=mods["rigor-module"] and 0.5 or nil
+stone_crushing.rigor_sensitivity=mods["rigor-module"] and 1 or nil
 
 
 local aluminum_plate = table.deepcopy(data.raw["recipe"]["iron-plate"])
