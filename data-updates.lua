@@ -955,3 +955,13 @@ for _,recipe in pairs(data.raw.recipe) do
     end
 end
 
+local pressure_adjusted_entity_types = {
+    "generator"
+}
+for _,type in pairs(pressure_adjusted_entity_types) do
+    for _,prototype in pairs(data.raw[type]) do
+        if rro.contains(prototype.surface_conditions,{property="pressure",min = 10}) then
+            PlanetsLib.relax_surface_conditions(prototype,{property="pressure",min = 3})
+        end
+    end
+end
