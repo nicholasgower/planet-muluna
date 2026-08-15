@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.50
+Date: 2026-08-15
+  Bugfixes:
+    - Fixed occasional crash on deconstructing roboport component of burner roboports when lots of roboports have been built.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.49
 Date: 2026-08-14
   Balancing:
