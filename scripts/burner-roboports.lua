@@ -93,9 +93,11 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 for i,roboport in pairs(storage.burner_roboports) do
                     if entity == roboport.roboport  then
                         entity = roboport.refueler
+                        break
                     end
-                assert(entity.type == "assembling-machine")
+                
                 end
+                assert(entity.type == "assembling-machine")
             end
             break
         end

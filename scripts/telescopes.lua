@@ -198,9 +198,10 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                             for i,telescope in pairs(storage.telescopes) do
                                 if entity == telescope["constant-combinator"]  then
                                     entity = telescope["assembling-machine"]
+                                    break
                                 end
-                            assert(entity.type == "assembling-machine")
                             end
+                            assert(entity.type == "assembling-machine")
                 end
                 break
             end
