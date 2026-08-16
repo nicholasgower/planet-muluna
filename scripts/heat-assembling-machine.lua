@@ -72,9 +72,10 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                         for i,heat_assembling_machine in pairs(storage.heat_assembling_machines) do
                             if entity == heat_assembling_machine.reactor  then
                                 entity = heat_assembling_machine["assembling-machine"]
+                                break
                             end
-                        assert(entity.type == "assembling-machine")
                         end
+                        assert(entity.type == "assembling-machine")
             end
             break
         end
