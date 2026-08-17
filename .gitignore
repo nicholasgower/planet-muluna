@@ -8,3 +8,6 @@
 *.exe
 /.vscode
 .env
+opencode.json
+prompts/factorio-docs.txt
+prompts/lua-docs.txt
