@@ -78,6 +78,7 @@ local function update_player_step_tick_rate(i,player_table)
             update_step_tick_rates(event)
         else
             storage.players_on_muluna[event.player_index] = nil
+            storage.players_walking_on_muluna[event.player_index] = nil
         end
 
 
