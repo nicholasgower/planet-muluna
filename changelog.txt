@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.52
+Date: 2026-08-19
+  Bugfixes:
+    - Fixed crash when stale reference to player walking on Muluna exists after changing surfaces. https://github.com/nicholasgower/planet-muluna/issues/458
+---------------------------------------------------------------------------------------------------
 Version: 2.6.51
 Date: 2026-08-16
   Locale:
