@@ -1,0 +1,51 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "build": {
+      "description": "Default build agent for this project.",
+      "model": "localllm/qwen3-coder-next-mlx",
+      "mode": "primary",
+      "temperature": 0.7,
+      "permission": {
+        "edit": "allow",
+        "bash": "ask",
+        "webfetch": "allow",
+        "git *": "allow",
+        "git commit *": "allow",
+        "git push *": "deny"
+      }
+    },
+  "factorio-docs-agent": {
+      "description": "Subagent that gets information from the Factorio documentation.",
+      "mode": "subagent",
+      "model": "localllm/qwen3-coder-next-mlx",
+      "prompt": "{file:./prompts/factorio-docs.txt}",
+      "permission": {
+        "bash": "allow"
+      }
+  },
+  "factorio-docs": {
+      "mode": "primary",
+      "description": "Subagent that gets information from the Factorio documentation.",
+      "model": "localllm/qwen3-coder-next-mlx",
+      "prompt": "{file:./prompts/factorio-docs.txt}",
+      "temperature":0.1,
+      "permission": {
+        "bash": "allow"
+        
+      }
+  },
+  "lua-docs": {
+      "mode": "primary",
+      "description": "Subagent that gets information from the Lua documentation.",
+      "model": "localllm/qwen3-coder-next-mlx",
+      "prompt": "{file:./prompts/lua-docs.txt}",
+      "temperature":0.1,
+      "permission": {
+        "bash": "allow"
+        
+      }
+  }
+  
+}
+}

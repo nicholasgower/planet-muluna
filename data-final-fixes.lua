@@ -293,6 +293,8 @@ for _,recipe_name in pairs(recipes_to_fix) do
     Muluna:extend{recipe_muluna,recipe}
 end
 
+data.raw.recipe["muluna-diffused-plastic-recycling"].results = data.raw.recipe["plastic-bar-recycling"].results
+
 
 local function add_oxygen_condition(entity)
     --print(entity.name)
