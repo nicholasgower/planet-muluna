@@ -5,13 +5,13 @@ local planet_backdrop = {
         --x = 2048,
         --y = 1024,
         width = 4096, --Double the size of vanilla surfaces, because Muluna needs to rely much more on surface detail for planet detail. There's no clouds nor atmosphere on Muluna.
-        height = 2024
+        height = 2048
     },
     planet_normal =
         {
             filename = "__muluna-graphics__/graphics/planet/normal-map-high-intensity.png",
             width = 4096,
-            height = 2024
+            height = 2048
         },
     surface_normal_intensity = 0.2,
         
