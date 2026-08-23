@@ -103,7 +103,9 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         localised_button = {"muluna-gui.heat-assembling-machine-reactor-goto-button"}
         button_name = "heat-assembling-machine-reactor"
     end
-
+    if gui_type == defines.relative_gui_type.assembling_machine_gui and not entity.get_recipe() then
+        gui_type = defines.relative_gui_type.assembling_machine_select_recipe_gui
+    end
     if other_entity_button or satradar_gui then
         --game.print("Showing gui")
         local player = game.players[event.player_index]
