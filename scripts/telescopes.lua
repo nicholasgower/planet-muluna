@@ -2,6 +2,124 @@ local rro = Muluna.rro
 
 local heat_assembling_machines = Muluna.constants.telescopes
 
+
+local stars_covered_during_day = {} 
+
+for name,planet in pairs(prototypes.space_location) do
+    stars_covered_during_day[name] = (planet.surface_properties and planet.surface_properties.pressure or prototypes.surface_property.pressure.default_value) > 300
+end
+
+local status_telescope_stars_not_visible_sun = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-telescopes-stars-covered-by-sun"}
+}
+
+local status_telescope_stars_not_visible_clouds = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-telescopes-stars-covered-by-clouds"}
+}
+
+local status_telescope_stars_not_visible_pollution = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-telescopes-stars-covered-by-pollution"}
+}
+
+local function obscured_sprite(entity) 
+    return{
+        sprite = "muluna-telescope-obscured-warning",
+        target = {
+            entity = entity,
+            offset = entity.prototype.alert_icon_shift
+        },
+        surface = entity.surface_index,
+        x_scale = 1.04,
+        y_scale = 1.04,
+        blink_interval = 30,
+    }
+end
+
+function Muluna.get_telescope_probability(pollution)
+    return (pollution-500)/3000
+end
+
+local function disable_telescope(telescope,telescope_data,disp_warning)
+    telescope.disabled_by_script = true
+    if disp_warning then
+        if not telescope_data.warning_icon then
+            telescope_data.warning_icon = rendering.draw_sprite(obscured_sprite(telescope))
+        end
+    end
+        
+end
+
+local function is_day(daytime,surface)
+    return (daytime < surface.dusk or daytime > surface.dawn)
+
+end
+
+--Updates the telescope based on whether stars are currently visible on this planet.
+function Muluna.update_telescope_daytime(telescope_data)
+    local telescope = telescope_data["assembling-machine"]
+    local surface = telescope.surface
+    local planet_prototype = surface.planet and surface.planet.prototype
+    local daytime = surface.daytime
+    local pollution = surface.get_pollution(telescope.position)
+    local probability = Muluna.get_telescope_probability(pollution)
+
+    
+    if probability > math.random() then
+        telescope.custom_status = status_telescope_stars_not_visible_pollution
+        disable_telescope(telescope,telescope_data,true)
+        goto continue
+    end
+    if Muluna.constants.planet_has_lightning[planet_prototype.name] and Muluna.constants.planet_has_lightning[planet_prototype.name] == true then
+        if stars_covered_during_day[surface.name] and not is_day(daytime,surface) then
+            telescope.custom_status = status_telescope_stars_not_visible_clouds
+            disable_telescope(telescope,telescope_data)
+            goto continue
+        end
+    else
+        if stars_covered_during_day[surface.name] and is_day(daytime,surface) then
+            telescope.custom_status = status_telescope_stars_not_visible_sun
+            disable_telescope(telescope,telescope_data)
+            goto continue
+        end
+    end
+    
+    telescope.custom_status = nil
+    telescope.disabled_by_script = false
+    if telescope_data.warning_icon then
+        telescope_data.warning_icon.destroy()
+        telescope_data.warning_icon = nil
+    end
+    
+    ::continue::
+end
+
+local function update_all_telescopes(surface)
+    if not storage.telescopes_on_surface[surface.name] then return end
+    for telescope_id,_ in pairs(storage.telescopes_on_surface[surface.name]) do
+        local telescope = storage.telescopes[telescope_id]
+        Muluna.update_telescope_daytime(telescope)
+    end
+
+end
+
+Muluna.events.register_delayed_function("update_all_telescopes",update_all_telescopes)
+
+local tolerance = 1
+Muluna.events.on_event(defines.events.on_next_day_started,function(event)
+    local surface = event.surface
+    update_all_telescopes(surface)
+    local day_length = surface.ticks_per_day
+    local dusk_tick = surface.dusk*day_length
+    local dawn_tick = surface.dawn*day_length
+    Muluna.events.execute_later("update_all_telescopes",dusk_tick+tolerance,surface)
+    Muluna.events.execute_later("update_all_telescopes",dawn_tick+tolerance,surface)
+
+end)
+
+
 local function move_entity_to_bottom_layer(entity)
 
     entity.rotate{reverse=false}
@@ -179,6 +297,9 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             end
         end
         storage.telescopes[entity.unit_number] = telescope_data
+        if not storage.telescopes_on_surface[entity.surface.name] then storage.telescopes_on_surface[entity.surface.name] = {} end
+        storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = true
+        Muluna.update_telescope_daytime(telescope_data)
     end
 
 
@@ -256,11 +377,13 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             if storage.telescopes[entity.unit_number] then
                 reactor = storage.telescopes[entity.unit_number]["constant-combinator"]
                 storage.telescopes[entity.unit_number] = nil
+                storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = nil
             end
             for i,registered_machine in pairs(storage.telescopes) do
                 if registered_machine["assembling-machine"] == entity then
                     reactor = registered_machine["constant-combinator"]
                     storage.telescopes[i] = nil
+                    storage.telescopes_on_surface[entity.surface.name][i] = nil
                     break
                     
                 end
@@ -479,6 +602,7 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
     end
     return signals
 end
+
 
 
 

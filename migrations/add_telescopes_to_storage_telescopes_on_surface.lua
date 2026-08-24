@@ -1,0 +1,7 @@
+if not storage.telescopes_on_surface then storage.telescopes_on_surface = {} end
+for i,telescope in pairs(storage.telescopes) do
+    local entity = telescope["assembling-machine"]
+    if not storage.telescopes_on_surface[entity.surface.name] then storage.telescopes_on_surface[entity.surface.name] = {} end
+    storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = true
+    Muluna.update_telescope_daytime(telescope)
+end

@@ -40,6 +40,8 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     local button_name
     local enabled
     local add_horizontal_flip_button = false
+    local pollution
+    local pollution_tooltip
     if not storage.player_focus then storage.player_focus = {} end
     --game.print(entity_name)
     --game.print(serpent.block(Muluna.constants.telescopes))
@@ -60,6 +62,11 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         localised_button = {"muluna-gui.telescope-goto-button"}
         other_entity = storage.telescopes
         button_name = "telescope-unit"
+        if entity.surface.planet and entity.surface.planet.prototype.pollutant_type then
+            pollution = entity.surface.get_pollution(entity.position)
+            pollution_tooltip = entity.surface.planet.prototype.pollutant_type.localised_name
+        end
+        
     -- elseif not storage.telescopes[entity.unit_number] then
     --         local position = entity.position
     --         local combinators = entity.surface.find_entities_filtered{area = {{position.x-1,position.y -1}, {position.x+1,position.y + 1}}, name = "muluna-telescope-combinator"}
@@ -189,6 +196,25 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                     name = "muluna-drag-red",
                     sprite = "item/red-wire"
                     --caption = localised_button,
+                })
+            end
+            if pollution then
+                local pollution_info = frame.add({
+                    type = "label",
+                    name = "muluna-telescope-pollution-label",
+                    caption = {"",pollution_tooltip,": ",tostring(math.floor(pollution))}
+                })
+                local probability = Muluna.get_telescope_probability(pollution) * 100
+                if probability > 100 then
+                    probability = 100
+                end
+                if probability < 0 then
+                    probability = 0
+                end
+                local pollution_probability = frame.add({
+                    type = "label",
+                    name = "muluna-telescope-pollution-value-label",
+                    caption = {"muluna-gui.telescope-pollution-obscured_percent",tostring(math.floor(probability)),pollution_tooltip}
                 })
             end
             

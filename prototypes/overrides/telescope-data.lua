@@ -16,7 +16,7 @@ if mods["any-planet-start"] then
     
     --local o_parent_planet = data.raw["planet"][parent_planet]
 end
-
+Muluna.constants.planet_has_lightning = {}
 -- Telescope data collection recipes
 for _,space_location in pairs(data.raw["planet"]) do
     print(rro.safe_find(data.raw["mod-data"],{"maraxsis-constants","TRENCH_SURFACE_NAME"}))
@@ -29,6 +29,7 @@ for _,space_location in pairs(data.raw["planet"]) do
         then
         local distance_factor = ((Muluna.telescopes.shortest_space_distance(parent_planet,space_location.name)))
         if distance_factor then
+            Muluna.constants.planet_has_lightning[space_location.name] = space_location.lightning_properties ~= nil
             local recipe = {
                 type = "recipe",
                 name = "muluna-telescope-observation-" .. space_location.name,
