@@ -483,7 +483,7 @@ end
 
 
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
-    for _,telescope in pairs(storage.telescopes) do
+    for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
             if combinator.valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
@@ -501,6 +501,8 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                     
                     telescope.cached_signals = signals
                 end
+            else
+                storage.telescopes[key] = nil
             end
     end
 
