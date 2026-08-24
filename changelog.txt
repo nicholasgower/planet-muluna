@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.59
+Date: 2026-08-24
+  Compatibility:
+    - "bplib" is now a required dependency.
+  Changes:
+    - Added gui setting to space platform telescopes that toggles asteroid signals. Telescope settings can now be stored in blueprints and copy/pasted between telescopes.
+    - Copy/pasting entity settings on satellite radars is now possible.
+    - Entity settings of satellite radars are stored in blueprints.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.58
 Date: 2026-08-24
   Graphics:
