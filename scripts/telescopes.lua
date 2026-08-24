@@ -169,8 +169,16 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
-        
-        storage.telescopes[entity.unit_number] = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior}
+        local telescope_data = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior,output_asteroid_signals = false}
+        if event.tags then
+            if event.tags.output_asteroid_signals then
+                telescope_data.output_asteroid_signals = event.tags.output_asteroid_signals
+            end
+            if event.tags.combinator_enabled then
+                control_behavior.enabled = event.tags.combinator_enabled
+            end
+        end
+        storage.telescopes[entity.unit_number] = telescope_data
     end
 
 
@@ -178,6 +186,40 @@ end,
 telescope_filters
 )
 
+Muluna.events.on_event("bplib-extract", function(event)
+    for blueprint_index, entity in pairs(event.entities) do
+    -- The event is raised for all mods, so you must filter for your mod's entities
+    if rro.contains(heat_assembling_machines, function(entry) return entry["assembling-machine"] == entity.name end) then
+        local telescope_data = storage.telescopes[entity.unit_number]
+      event.blueprint.set_blueprint_entity_tags(blueprint_index, {
+        output_asteroid_signals = telescope_data.output_asteroid_signals,
+        combinator_enabled = telescope_data["constant-combinator-control-behavior"].enabled
+    })
+    end
+  end
+end)
+
+local function get_telescope(entity)
+    if storage.telescopes[entity.unit_number] then
+        return storage.telescopes[entity.unit_number]
+    else 
+        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        return telescope
+    end
+end
+
+Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
+    local source = event.source
+    local destination = event.destination
+
+    local source_telescope = get_telescope(source)
+    local destination_telescope = get_telescope(destination)
+    if source_telescope and destination_telescope then
+        destination_telescope.output_asteroid_signals = source_telescope.output_asteroid_signals
+    end
+
+
+end)
 
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
@@ -398,8 +440,10 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
         i = i+1
         -- Also display number of asteroids on screen by type
         
-        local asteroid_counts = {}
-        if (telescope.old_asteroid_counts_next_tick or 0) <= game.tick then
+        if telescope.output_asteroid_signals == nil then telescope.output_asteroid_signals = true end
+        if telescope.output_asteroid_signals == true then
+            local asteroid_counts = {}
+            if (telescope.old_asteroid_counts_next_tick or 0) <= game.tick then
             local asteroids = surface.find_entities_filtered{type = {"asteroid"}}
             local total_asteroid_count = 0
             for _,asteroid in pairs(asteroids) do --Make list of every name and quality of 
@@ -415,20 +459,23 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
             telescope.old_total_asteroid_count = total_asteroid_count
             --game.print(total_asteroid_count)
             telescope.old_asteroid_counts_next_tick = game.tick + get_time_to_next_asteroid_check(telescope)
-        else
-            asteroid_counts = telescope.old_asteroid_counts
+            else
+                asteroid_counts = telescope.old_asteroid_counts
+            end
+            for asteroid,asteroid_info in pairs(asteroid_counts) do
+                for quality,amount in pairs(asteroid_info) do
+                    signals[i]={value = {type = "entity",name = asteroid, quality = quality},min = amount}
+                    i = i+1
+                end
+            end
         end
+        
         
         
         
 
         
-        for asteroid,asteroid_info in pairs(asteroid_counts) do
-            for quality,amount in pairs(asteroid_info) do
-                signals[i]={value = {type = "entity",name = asteroid, quality = quality},min = amount}
-                i = i+1
-            end
-        end
+        
     end
     return signals
 end

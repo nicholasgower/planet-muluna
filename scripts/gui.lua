@@ -44,6 +44,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     --game.print(entity_name)
     --game.print(serpent.block(Muluna.constants.telescopes))
     --game.print(serpent.block(Muluna.constants.heat_assembling_machines))
+    local combinator = rro.find_contains(Muluna.constants.telescopes,function(other) return entity_name == other["constant-combinator"] end )
     if entity_name == "muluna-satellite-radar" then
         satradar_gui = true
         gui_type = defines.relative_gui_type.accumulator_gui
@@ -59,22 +60,31 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         localised_button = {"muluna-gui.telescope-goto-button"}
         other_entity = storage.telescopes
         button_name = "telescope-unit"
-        if not storage.telescopes[entity.unit_number] then
-            local position = entity.position
-            local combinators = entity.surface.find_entities_filtered{area = {{position.x-1,position.y -1}, {position.x+1,position.y + 1}}, name = "muluna-telescope-combinator"}
-                    local combinator = combinators[1]
-                    storage.telescopes[entity.unit_number] = {
-                        ["assembling-machine"] = entity,
-                        ["constant-combinator"] = combinator,
-                        ["constant-combinator-control-behavior"] = combinator.get_control_behavior()
-                    }
-        end
-    elseif rro.contains(Muluna.constants.telescopes,function(other) return entity_name == other["constant-combinator"] end ) then
+    -- elseif not storage.telescopes[entity.unit_number] then
+    --         local position = entity.position
+    --         local combinators = entity.surface.find_entities_filtered{area = {{position.x-1,position.y -1}, {position.x+1,position.y + 1}}, name = "muluna-telescope-combinator"}
+    --                 local combinator = combinators[1]
+    --                 storage.telescopes[entity.unit_number] = {
+    --                     ["assembling-machine"] = entity,
+    --                     ["constant-combinator"] = combinator,
+    --                     ["constant-combinator-control-behavior"] = combinator.get_control_behavior(),
+    --                     output_asteroid_signals = false
+    --                 }
+    elseif combinator then
         local telescope_data = storage.telescopes
+        --game.print(combinator)
+        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        --local telescope = storage.telescopes[combinator["assembling-machine"].unit_number]
+        --game.print(serpent.block(telescope))
+        if telescope.output_asteroid_signals == nil then
+            telescope.output_asteroid_signals = true
+        end
         other_entity_button = true
         gui_type = defines.relative_gui_type.constant_combinator_gui
         localised_button = {"muluna-gui.telescope-combinator-goto-button"}
         button_name = "telescope-combinator"
+        enabled = telescope.output_asteroid_signals
+        --game.print(enabled)
     elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other.roboport end ) then
         local telescope_data = storage.vacuum_roboports
         other_entity_button = true
@@ -157,6 +167,14 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                 name = "muluna-horizontal-flip",
                 sprite = "virtual-signal/signal-rightwards-leftwards-arrow"
                 --caption = localised_button,
+                })
+            end
+            if button_name ==  "telescope-combinator" and entity.surface.platform then
+                local enable_asteroid_switch = frame.add({
+                    type = "checkbox",
+                    name = "muluna-telescope-combinator-enable-asteroid-signal-checkbox",
+                    caption = {"muluna-gui.telescope-combinator-enable-asteroid-signal-checkbox"},
+                    state = enabled,
                 })
             end
             if entity.name ~= "muluna-burner-roboport" then
@@ -309,11 +327,19 @@ end)
 
 Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(event)
     local checkbox = event.element
-
-    if not (checkbox.name and checkbox.name == "muluna-satellite-radar-enable-checkbox") then return end
-    local player = game.players[event.player_index]
-    local radar = player.opened --The currently selected entity (Satellite Radar)
-    storage.nav_beacons_other[radar.unit_number].gui.enabled = checkbox.state
+    --game.print(checkbox.name)
+    if (checkbox.name and checkbox.name == "muluna-satellite-radar-enable-checkbox") then
+        local player = game.players[event.player_index]
+        local radar = player.opened --The currently selected entity (Satellite Radar)
+        storage.nav_beacons_other[radar.unit_number].gui.enabled = checkbox.state
+    elseif (checkbox.name and checkbox.name == "muluna-telescope-combinator-enable-asteroid-signal-checkbox") then
+        local player = game.players[event.player_index]
+        local combinator = player.opened --The currently selected entity (Satellite Radar)
+        local telescope = rro.find_contains(storage.telescopes,function(other) return combinator.unit_number == other["constant-combinator"].unit_number end )
+        storage.telescopes[telescope["assembling-machine"].unit_number].output_asteroid_signals = checkbox.state
+        --game.print(storage.telescopes[telescope["assembling-machine"].unit_number].output_asteroid_signals)
+    end
+    
 
 
 
