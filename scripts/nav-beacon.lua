@@ -208,6 +208,7 @@ local function destroyed_nav_beacon(entity)
     storage.beaconed_platforms[platform.index] = nil
     storage.nav_surfaces[entity.unit_number] = nil
     storage.nav_beacons[entity.unit_number] = nil
+    storage.nav_beacons_other[entity.unit_number] = nil
     if #storage.nav_beacons == 0 then
         storage.has_nav_beacons = false
     end
@@ -427,3 +428,27 @@ Muluna.events.on_event(defines.events.on_robot_mined_entity, function(event)
     if entity.name ~= "muluna-satellite-radar" then return end
     destroyed_nav_beacon(entity)
 end, filter_built)
+
+
+local function get_nav_beacon(entity)
+    if storage.telescopes[entity.unit_number] then
+        return storage.telescopes[entity.unit_number]
+    else 
+        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        return telescope
+    end
+end
+
+Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
+    local source = event.source
+    local destination = event.destination
+
+    local source_beacon_settings = storage.nav_beacons_other[source.unit_number] or {}
+    local destination_beacon_settings = storage.nav_beacons_other[destination.unit_number] or {}
+    if source_beacon_settings.gui and destination_beacon_settings.gui then
+        destination_beacon_settings.gui.enabled = source_beacon_settings.gui.enabled
+    end
+
+
+end)
+
