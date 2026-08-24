@@ -12,7 +12,7 @@
     "? quality",
     "PlanetsLib >= 1.25.1",
     "+ valves",
-    "muluna-graphics >= 1.1.15",
+    "muluna-graphics >= 1.1.16",
     "+ tile-upgrade-planner-muluna >= 1.0.8",
     "! tile-upgrade-planner",
     "alien-biomes-graphics >= 0.7.0",
