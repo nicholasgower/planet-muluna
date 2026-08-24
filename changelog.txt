@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2026-08-24
+  Features:
+    - Telescopes now produce data more intermittently than before. Telescopes must have a clear view of the stars in order to produce data. Daylight can stop telescopes on planets without lightning, lightning can stop telescopes on planets with lightning, and pollution can stop telescopes when enough accumulates over the telescope's position.
+  Balancing:
+    - Increased the crafting time of telescope data recipes from 6 seconds to 10.
+    - Reduced the telescope data generation rate on Muluna from 10 to 5.
+  Compatibility:
+    - Raised required Factorio version to 2.1.15.
+    - Raised required Factorio version to 2.1.16.
+  Graphics:
+    - Raised required muluna-graphics version to 1.1.16.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.60
 Date: 2026-08-24
   Bugfixes:
