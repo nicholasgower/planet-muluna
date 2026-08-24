@@ -184,7 +184,7 @@ local function built_nav_beacon(entity,tags)
         if not storage.nav_beacons_other[nav.unit_number].gui then 
             local enabled = true
             if tags then
-                game.print(serpent.block(tags))
+                --game.print(serpent.block(tags))
                 enabled = tags.enabled
                 
             end
@@ -232,7 +232,7 @@ Muluna.events.on_event("bplib-extract", function(event)
     -- The event is raised for all mods, so you must filter for your mod's entities
     if entity.name == "muluna-satellite-radar" then
         local enabled = storage.nav_beacons_other[entity.unit_number] and storage.nav_beacons_other[entity.unit_number].gui.enabled
-        game.print(enabled)
+        --game.print(enabled)
       event.blueprint.set_blueprint_entity_tags(blueprint_index, {enabled = enabled})
     end
   end
