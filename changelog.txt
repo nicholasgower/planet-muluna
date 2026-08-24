@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.58
+Date: 2026-08-24
+  Graphics:
+    - Reduced the flight approach speed of Muluna to make the appearance of Muluna less sudden when a space platform approaches Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.57
 Date: 2026-08-24
   Graphics:
