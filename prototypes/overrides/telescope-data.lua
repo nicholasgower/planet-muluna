@@ -67,7 +67,7 @@ for _,space_location in pairs(data.raw["planet"]) do
                 order = "zz-" .. (space_location.order or "")
             }
             if space_location.name == "muluna" then
-                recipe.results[1].amount = 10
+                recipe.results[1].amount = 5
             end
             Muluna.rro.soft_insert(data.raw["technology"]["muluna-telescope"].effects,
                 {
