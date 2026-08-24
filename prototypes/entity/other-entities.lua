@@ -97,7 +97,7 @@ if true then
                     south_position = new_smoke_position,
                     east_position = new_smoke_position,
                     west_position = new_smoke_position,
-                    frequency = old_smoke.frequency or 10,
+                    frequency = old_smoke.frequency or 6,
                     starting_vertical_speed = 0.08,
                     starting_frame_deviation = 60
                 },
@@ -108,7 +108,7 @@ if true then
                     east_position = new_smoke_position_up,
                     west_position = new_smoke_position_up,
                     --east_position = old_smoke.east_position or {-2.0, -2.0},
-                    frequency = old_smoke.frequency or 10,
+                    frequency = old_smoke.frequency or 6,
                     starting_vertical_speed = 0.08,
                     starting_frame_deviation = 60
                 },
@@ -119,7 +119,7 @@ if true then
                     east_position = new_smoke_position_down,
                     west_position = new_smoke_position_down,
                     --east_position = old_smoke.east_position or {-2.0, -2.0},
-                    frequency = old_smoke.frequency or 10,
+                    frequency = old_smoke.frequency or 6,
                     starting_vertical_speed = 0.08,
                     starting_frame_deviation = 60
                 },
