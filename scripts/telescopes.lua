@@ -65,7 +65,7 @@ function Muluna.update_telescope_daytime(telescope_data)
     local daytime = surface.daytime
     local pollution = surface.get_pollution(telescope.position)
     local probability = Muluna.get_telescope_probability(pollution)
-
+    if not planet_prototype then goto continue end
     
     if probability > math.random() then
         telescope.custom_status = status_telescope_stars_not_visible_pollution
