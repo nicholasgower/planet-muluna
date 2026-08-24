@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.56
+Date: 2026-08-24
+  Optimizations:
+    - Improved performance of telescope combinator on space platforms by reducing the frequency of asteroid checks from every 0.1 seconds to every 1 second on moving platforms and every 5 seconds on unmoving platforms. On space platforms with a huge number of asteroids, the frequency of asteroid checks is further reduced based on asteroid count to avoid performance issues. The distance calculation continues to run every 0.1 seconds.
+  Bugfixes:
+    - Custom gui elements for telescope assembling machine appear on space telescopes without an assigned recipe.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.55
 Date: 2026-08-22
   Graphics:
