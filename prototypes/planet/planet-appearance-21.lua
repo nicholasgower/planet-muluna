@@ -29,7 +29,7 @@ local planet_backdrop = {
     parallax_strength = {1.05, 1.05}, --Slightly higher parallax strength than Nauvis{0.95,0.95} creates a sense of reduced scale
     light_direction = {-0.42, 0.23, 0.67},
     position = {-480, 401},
-
+    flight_approach_speed= 0.5
 
    
 }
