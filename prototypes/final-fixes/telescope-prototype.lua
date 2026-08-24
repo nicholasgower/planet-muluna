@@ -31,7 +31,19 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
             ["assembling-machine"] = entity.name,
             ["constant-combinator"] = telescope_combinator.name,
         }
+        data.raw["mod-data"]["bplib"].data.extract_entity_names[entity.name] = true
         entity.muluna_is_telescope = false
         Muluna:extend{telescope_combinator}
     end
 end
+
+data:extend {{
+    type = "sprite",
+    name = "muluna-telescope-obscured-warning",
+    filename = "__muluna-graphics__/graphics/icons/alerts/stars-obscured-icon.png",
+    width = 64,
+    height = 64,
+    scale = 0.5,
+    shift = {0, 0},
+    flags = {"no-crop", "no-scale", "icon"},
+}}

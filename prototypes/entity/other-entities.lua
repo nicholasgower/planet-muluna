@@ -31,6 +31,28 @@ if true then
         --     name = "steam",
 
         -- }
+        local old_smoke = steam_furnace.energy_source.smoke and steam_furnace.energy_source.smoke[1] or {}
+        local smoke_position
+        if name == "stone-furnace" then
+            smoke_position = {0.05, -0.9}
+        elseif name == "steel-furnace" then
+            smoke_position = {0.7, -1.0}
+        elseif name == "crusher" then
+
+        end
+        local new_smoke = {
+            {
+                    name = "light-smoke",
+                    north_position = smoke_position,
+                    south_position = smoke_position,
+                    east_position = smoke_position,
+                    west_position = smoke_position,
+                    --east_position = old_smoke.east_position or {-2.0, -2.0},
+                    frequency = old_smoke.frequency or 20,
+                    starting_vertical_speed = 0.08,
+                    starting_frame_deviation = 60
+            }
+        }
 
         steam_furnace.energy_source = {
             type = 'fluid',
@@ -52,7 +74,8 @@ if true then
                 },
                 pipe_picture = assembler2pipepictures,
                 pipe_covers = pipecoverspictures(),
-            }
+            },
+            smoke = new_smoke
         }
         if name == "crusher" then
             steam_furnace.energy_source.effectivity = 0.50
@@ -62,6 +85,54 @@ if true then
             }
             steam_furnace.next_upgrade = "crusher"
             steam_furnace.module_slots = 0
+            local new_smoke_position = {0, 0}
+            local new_smoke_position_left = {-0.5, 0}
+            local new_smoke_position_right = {0.5, 0}
+            local new_smoke_position_up = {0, -0.5}
+            local new_smoke_position_down = {0, 0.5}
+            steam_furnace.energy_source.smoke = {
+                {
+                    name = "light-smoke",
+                    north_position = new_smoke_position,
+                    south_position = new_smoke_position,
+                    east_position = new_smoke_position,
+                    west_position = new_smoke_position,
+                    frequency = old_smoke.frequency or 6,
+                    starting_vertical_speed = 0.08,
+                    starting_frame_deviation = 60
+                },
+                {
+                    name = "light-smoke",
+                    north_position = new_smoke_position_left,
+                    south_position = new_smoke_position_left,
+                    east_position = new_smoke_position_up,
+                    west_position = new_smoke_position_up,
+                    --east_position = old_smoke.east_position or {-2.0, -2.0},
+                    frequency = old_smoke.frequency or 6,
+                    starting_vertical_speed = 0.08,
+                    starting_frame_deviation = 60
+                },
+                {
+                    name = "light-smoke",
+                    north_position = new_smoke_position_right,
+                    south_position = new_smoke_position_right,
+                    east_position = new_smoke_position_down,
+                    west_position = new_smoke_position_down,
+                    --east_position = old_smoke.east_position or {-2.0, -2.0},
+                    frequency = old_smoke.frequency or 6,
+                    starting_vertical_speed = 0.08,
+                    starting_frame_deviation = 60
+                },
+                -- {
+                --     name = "light-smoke",
+                --     north_position = old_smoke.north_position or {0.9, 0.5},
+                --     --east_position = old_smoke.east_position or {-2.0, -2.0},
+                --     frequency = old_smoke.frequency or 10,
+                --     starting_vertical_speed = 0.08,
+                --     starting_frame_deviation = 60
+                -- }
+            }
+            
             --steam_furnace.energy_source.fluid_box.pipe_picture = images.pipe_picture
             --steam_furnace.energy_source.fluid_box.pipe_covers = images.pipe_covers
         end

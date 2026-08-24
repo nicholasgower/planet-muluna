@@ -40,10 +40,13 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     local button_name
     local enabled
     local add_horizontal_flip_button = false
+    local pollution
+    local pollution_tooltip
     if not storage.player_focus then storage.player_focus = {} end
     --game.print(entity_name)
     --game.print(serpent.block(Muluna.constants.telescopes))
     --game.print(serpent.block(Muluna.constants.heat_assembling_machines))
+    local combinator = rro.find_contains(Muluna.constants.telescopes,function(other) return entity_name == other["constant-combinator"] end )
     if entity_name == "muluna-satellite-radar" then
         satradar_gui = true
         gui_type = defines.relative_gui_type.accumulator_gui
@@ -59,22 +62,36 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         localised_button = {"muluna-gui.telescope-goto-button"}
         other_entity = storage.telescopes
         button_name = "telescope-unit"
-        if not storage.telescopes[entity.unit_number] then
-            local position = entity.position
-            local combinators = entity.surface.find_entities_filtered{area = {{position.x-1,position.y -1}, {position.x+1,position.y + 1}}, name = "muluna-telescope-combinator"}
-                    local combinator = combinators[1]
-                    storage.telescopes[entity.unit_number] = {
-                        ["assembling-machine"] = entity,
-                        ["constant-combinator"] = combinator,
-                        ["constant-combinator-control-behavior"] = combinator.get_control_behavior()
-                    }
+        if entity.surface.planet and entity.surface.planet.prototype.pollutant_type then
+            pollution = entity.surface.get_pollution(entity.position)
+            pollution_tooltip = entity.surface.planet.prototype.pollutant_type.localised_name
         end
-    elseif rro.contains(Muluna.constants.telescopes,function(other) return entity_name == other["constant-combinator"] end ) then
+        
+    -- elseif not storage.telescopes[entity.unit_number] then
+    --         local position = entity.position
+    --         local combinators = entity.surface.find_entities_filtered{area = {{position.x-1,position.y -1}, {position.x+1,position.y + 1}}, name = "muluna-telescope-combinator"}
+    --                 local combinator = combinators[1]
+    --                 storage.telescopes[entity.unit_number] = {
+    --                     ["assembling-machine"] = entity,
+    --                     ["constant-combinator"] = combinator,
+    --                     ["constant-combinator-control-behavior"] = combinator.get_control_behavior(),
+    --                     output_asteroid_signals = false
+    --                 }
+    elseif combinator then
         local telescope_data = storage.telescopes
+        --game.print(combinator)
+        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        --local telescope = storage.telescopes[combinator["assembling-machine"].unit_number]
+        --game.print(serpent.block(telescope))
+        if telescope.output_asteroid_signals == nil then
+            telescope.output_asteroid_signals = true
+        end
         other_entity_button = true
         gui_type = defines.relative_gui_type.constant_combinator_gui
         localised_button = {"muluna-gui.telescope-combinator-goto-button"}
         button_name = "telescope-combinator"
+        enabled = telescope.output_asteroid_signals
+        --game.print(enabled)
     elseif rro.contains(Muluna.constants.vacuum_roboports,function(other) return entity_name == other.roboport end ) then
         local telescope_data = storage.vacuum_roboports
         other_entity_button = true
@@ -103,7 +120,9 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         localised_button = {"muluna-gui.heat-assembling-machine-reactor-goto-button"}
         button_name = "heat-assembling-machine-reactor"
     end
-
+    if gui_type == defines.relative_gui_type.assembling_machine_gui and not entity.get_recipe() then
+        gui_type = defines.relative_gui_type.assembling_machine_select_recipe_gui
+    end
     if other_entity_button or satradar_gui then
         --game.print("Showing gui")
         local player = game.players[event.player_index]
@@ -157,6 +176,14 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                 --caption = localised_button,
                 })
             end
+            if button_name ==  "telescope-combinator" and entity.surface.platform then
+                local enable_asteroid_switch = frame.add({
+                    type = "checkbox",
+                    name = "muluna-telescope-combinator-enable-asteroid-signal-checkbox",
+                    caption = {"muluna-gui.telescope-combinator-enable-asteroid-signal-checkbox"},
+                    state = enabled,
+                })
+            end
             if entity.name ~= "muluna-burner-roboport" then
                 local red_wire_button = horizontal_space.add({
                 type = "sprite-button",
@@ -169,6 +196,25 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                     name = "muluna-drag-red",
                     sprite = "item/red-wire"
                     --caption = localised_button,
+                })
+            end
+            if pollution then
+                local pollution_info = frame.add({
+                    type = "label",
+                    name = "muluna-telescope-pollution-label",
+                    caption = {"",pollution_tooltip,": ",tostring(math.floor(pollution))}
+                })
+                local probability = Muluna.get_telescope_probability(pollution) * 100
+                if probability > 100 then
+                    probability = 100
+                end
+                if probability < 0 then
+                    probability = 0
+                end
+                local pollution_probability = frame.add({
+                    type = "label",
+                    name = "muluna-telescope-pollution-value-label",
+                    caption = {"muluna-gui.telescope-pollution-obscured_percent",tostring(math.floor(probability)),pollution_tooltip}
                 })
             end
             
@@ -307,11 +353,19 @@ end)
 
 Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(event)
     local checkbox = event.element
-
-    if not (checkbox.name and checkbox.name == "muluna-satellite-radar-enable-checkbox") then return end
-    local player = game.players[event.player_index]
-    local radar = player.opened --The currently selected entity (Satellite Radar)
-    storage.nav_beacons_other[radar.unit_number].gui.enabled = checkbox.state
+    --game.print(checkbox.name)
+    if (checkbox.name and checkbox.name == "muluna-satellite-radar-enable-checkbox") then
+        local player = game.players[event.player_index]
+        local radar = player.opened --The currently selected entity (Satellite Radar)
+        storage.nav_beacons_other[radar.unit_number].gui.enabled = checkbox.state
+    elseif (checkbox.name and checkbox.name == "muluna-telescope-combinator-enable-asteroid-signal-checkbox") then
+        local player = game.players[event.player_index]
+        local combinator = player.opened --The currently selected entity (Satellite Radar)
+        local telescope = rro.find_contains(storage.telescopes,function(other) return combinator.unit_number == other["constant-combinator"].unit_number end )
+        storage.telescopes[telescope["assembling-machine"].unit_number].output_asteroid_signals = checkbox.state
+        --game.print(storage.telescopes[telescope["assembling-machine"].unit_number].output_asteroid_signals)
+    end
+    
 
 
 

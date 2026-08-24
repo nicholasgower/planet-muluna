@@ -1,4 +1,53 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2026-08-24
+  Features:
+    - Telescopes now produce data more intermittently than before. Telescopes must have a clear view of the stars in order to produce data. Daylight can stop telescopes on planets without lightning, lightning can stop telescopes on planets with lightning, and pollution can stop telescopes when enough accumulates over the telescope's position.
+  Balancing:
+    - Increased the crafting time of telescope data recipes from 6 seconds to 10.
+    - Reduced the telescope data generation rate on Muluna from 10 to 5.
+  Compatibility:
+    - Raised required Factorio version to 2.1.15.
+    - Raised required Factorio version to 2.1.16.
+  Graphics:
+    - Raised required muluna-graphics version to 1.1.16.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.60
+Date: 2026-08-24
+  Bugfixes:
+    - Fixed crash on deleting surfaces with burner roboports or telescopes on them. https://github.com/nicholasgower/planet-muluna/issues/463
+---------------------------------------------------------------------------------------------------
+Version: 2.6.59
+Date: 2026-08-24
+  Compatibility:
+    - "bplib" is now a required dependency.
+  Changes:
+    - Added gui setting to space platform telescopes that toggles asteroid signals. Telescope settings can now be stored in blueprints and copy/pasted between telescopes.
+    - Copy/pasting entity settings on satellite radars is now possible.
+    - Entity settings of satellite radars are stored in blueprints.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.58
+Date: 2026-08-24
+  Graphics:
+    - Reduced the flight approach speed of Muluna to make the appearance of Muluna less sudden when a space platform approaches Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.57
+Date: 2026-08-24
+  Graphics:
+    - Reduced the amount of steam particles produced by steam crushers.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.56
+Date: 2026-08-24
+  Optimizations:
+    - Improved performance of telescope combinator on space platforms by reducing the frequency of asteroid checks from every 0.1 seconds to every 1 second on moving platforms and every 5 seconds on unmoving platforms. On space platforms with a huge number of asteroids, the frequency of asteroid checks is further reduced based on asteroid count to avoid performance issues. The distance calculation continues to run every 0.1 seconds.
+  Bugfixes:
+    - Custom gui elements for telescope assembling machine appear on space telescopes without an assigned recipe.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.55
+Date: 2026-08-22
+  Graphics:
+    - Added steam particle effects to steam furnaces and crushers.
+---------------------------------------------------------------------------------------------------
 Version: 2.6.54
 Date: 2026-08-22
   Bugfixes:

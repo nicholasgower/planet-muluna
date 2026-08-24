@@ -123,7 +123,7 @@ script.on_configuration_changed(function()
 end)
 
 ---@param entity LuaEntity
-local function built_nav_beacon(entity)
+local function built_nav_beacon(entity,tags)
     if debug_mode then
         game.print(DT .. "built nav beacon @ " .. entity.gps_tag)
     end
@@ -173,6 +173,23 @@ local function built_nav_beacon(entity)
         storage.nav_surfaces[nav.unit_number] = platform.space_location
         storage.nav_beacons[nav.unit_number] = nav
         storage.has_nav_beacons = true
+        
+        if not storage.nav_beacons_other then 
+                storage.nav_beacons_other = {}
+        end
+        if not storage.nav_beacons_other[nav.unit_number] then 
+            storage.nav_beacons_other[nav.unit_number] = {}
+        end
+            
+        if not storage.nav_beacons_other[nav.unit_number].gui then 
+            local enabled = true
+            if tags then
+                --game.print(serpent.block(tags))
+                enabled = tags.enabled
+                
+            end
+            storage.nav_beacons_other[nav.unit_number].gui = {enabled = enabled} 
+        end
     end
     --if #storage.nav_beacons > 0 then
         
@@ -191,6 +208,7 @@ local function destroyed_nav_beacon(entity)
     storage.beaconed_platforms[platform.index] = nil
     storage.nav_surfaces[entity.unit_number] = nil
     storage.nav_beacons[entity.unit_number] = nil
+    storage.nav_beacons_other[entity.unit_number] = nil
     if #storage.nav_beacons == 0 then
         storage.has_nav_beacons = false
     end
@@ -209,6 +227,18 @@ local filter_built = {
     --{filter = "name", name = "nav-beacon-platform"},
     --{filter = "name", name = "nav-beacon-planet"},
 }
+
+Muluna.events.on_event("bplib-extract", function(event)
+    for blueprint_index, entity in pairs(event.entities) do
+    -- The event is raised for all mods, so you must filter for your mod's entities
+    if entity.name == "muluna-satellite-radar" then
+        local enabled = storage.nav_beacons_other[entity.unit_number] and storage.nav_beacons_other[entity.unit_number].gui.enabled
+        --game.print(enabled)
+      event.blueprint.set_blueprint_entity_tags(blueprint_index, {enabled = enabled})
+    end
+  end
+end)
+
 
 
 
@@ -260,7 +290,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                         storage.nav_beacons_other[beacon_id] = {}
                                     end
                                     
-                                    if not storage.nav_beacons_other[beacon_id].gui then storage.nav_beacons_other[beacon_id].gui = {enabled = true} end
+                                   
                                     
                                     --game.print(beacon)
                                     if beacon ~= nil then if beacon.force == player.force then
@@ -326,7 +356,7 @@ Muluna.events.on_event(defines.events.on_space_platform_built_entity, function(e
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
     if entity.name ~= "muluna-satellite-radar" then return end
-    built_nav_beacon(entity)
+    built_nav_beacon(entity,event.tags)
 end, filter_built)
 
 ---@param event script_raised_built
@@ -334,7 +364,7 @@ Muluna.events.on_event(defines.events.script_raised_built, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
     if entity.name ~= "muluna-satellite-radar" then return end
-    built_nav_beacon(entity)
+    built_nav_beacon(entity,event.tags)
 end, filter_built)
 
 -- ---@param event on_built_entity
@@ -350,7 +380,7 @@ Muluna.events.on_event(defines.events.on_robot_built_entity, function(event)
     local entity = event.entity or event.created_entity
     if not entity or not entity.valid then return end
     if entity.name ~= "muluna-satellite-radar" then return end
-    built_nav_beacon(entity)
+    built_nav_beacon(entity,event.tags)
 end, filter_built)
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -398,3 +428,27 @@ Muluna.events.on_event(defines.events.on_robot_mined_entity, function(event)
     if entity.name ~= "muluna-satellite-radar" then return end
     destroyed_nav_beacon(entity)
 end, filter_built)
+
+
+local function get_nav_beacon(entity)
+    if storage.telescopes[entity.unit_number] then
+        return storage.telescopes[entity.unit_number]
+    else 
+        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        return telescope
+    end
+end
+
+Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
+    local source = event.source
+    local destination = event.destination
+
+    local source_beacon_settings = storage.nav_beacons_other[source.unit_number] or {}
+    local destination_beacon_settings = storage.nav_beacons_other[destination.unit_number] or {}
+    if source_beacon_settings.gui and destination_beacon_settings.gui then
+        destination_beacon_settings.gui.enabled = source_beacon_settings.gui.enabled
+    end
+
+
+end)
+

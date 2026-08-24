@@ -2,6 +2,124 @@ local rro = Muluna.rro
 
 local heat_assembling_machines = Muluna.constants.telescopes
 
+
+local stars_covered_during_day = {} 
+
+for name,planet in pairs(prototypes.space_location) do
+    stars_covered_during_day[name] = (planet.surface_properties and planet.surface_properties.pressure or prototypes.surface_property.pressure.default_value) > 300
+end
+
+local status_telescope_stars_not_visible_sun = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-telescopes-stars-covered-by-sun"}
+}
+
+local status_telescope_stars_not_visible_clouds = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-telescopes-stars-covered-by-clouds"}
+}
+
+local status_telescope_stars_not_visible_pollution = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-telescopes-stars-covered-by-pollution"}
+}
+
+local function obscured_sprite(entity) 
+    return{
+        sprite = "muluna-telescope-obscured-warning",
+        target = {
+            entity = entity,
+            offset = entity.prototype.alert_icon_shift
+        },
+        surface = entity.surface_index,
+        x_scale = 1.04,
+        y_scale = 1.04,
+        blink_interval = 30,
+    }
+end
+
+function Muluna.get_telescope_probability(pollution)
+    return (pollution-500)/3000
+end
+
+local function disable_telescope(telescope,telescope_data,disp_warning)
+    telescope.disabled_by_script = true
+    if disp_warning then
+        if not telescope_data.warning_icon then
+            telescope_data.warning_icon = rendering.draw_sprite(obscured_sprite(telescope))
+        end
+    end
+        
+end
+
+local function is_day(daytime,surface)
+    return (daytime < surface.dusk or daytime > surface.dawn)
+
+end
+
+--Updates the telescope based on whether stars are currently visible on this planet.
+function Muluna.update_telescope_daytime(telescope_data)
+    local telescope = telescope_data["assembling-machine"]
+    local surface = telescope.surface
+    local planet_prototype = surface.planet and surface.planet.prototype
+    local daytime = surface.daytime
+    local pollution = surface.get_pollution(telescope.position)
+    local probability = Muluna.get_telescope_probability(pollution)
+
+    
+    if probability > math.random() then
+        telescope.custom_status = status_telescope_stars_not_visible_pollution
+        disable_telescope(telescope,telescope_data,true)
+        goto continue
+    end
+    if Muluna.constants.planet_has_lightning[planet_prototype.name] and Muluna.constants.planet_has_lightning[planet_prototype.name] == true then
+        if stars_covered_during_day[surface.name] and not is_day(daytime,surface) then
+            telescope.custom_status = status_telescope_stars_not_visible_clouds
+            disable_telescope(telescope,telescope_data)
+            goto continue
+        end
+    else
+        if stars_covered_during_day[surface.name] and is_day(daytime,surface) then
+            telescope.custom_status = status_telescope_stars_not_visible_sun
+            disable_telescope(telescope,telescope_data)
+            goto continue
+        end
+    end
+    
+    telescope.custom_status = nil
+    telescope.disabled_by_script = false
+    if telescope_data.warning_icon then
+        telescope_data.warning_icon.destroy()
+        telescope_data.warning_icon = nil
+    end
+    
+    ::continue::
+end
+
+local function update_all_telescopes(surface)
+    if not storage.telescopes_on_surface[surface.name] then return end
+    for telescope_id,_ in pairs(storage.telescopes_on_surface[surface.name]) do
+        local telescope = storage.telescopes[telescope_id]
+        Muluna.update_telescope_daytime(telescope)
+    end
+
+end
+
+Muluna.events.register_delayed_function("update_all_telescopes",update_all_telescopes)
+
+local tolerance = 1
+Muluna.events.on_event(defines.events.on_next_day_started,function(event)
+    local surface = event.surface
+    update_all_telescopes(surface)
+    local day_length = surface.ticks_per_day
+    local dusk_tick = surface.dusk*day_length
+    local dawn_tick = surface.dawn*day_length
+    Muluna.events.execute_later("update_all_telescopes",dusk_tick+tolerance,surface)
+    Muluna.events.execute_later("update_all_telescopes",dawn_tick+tolerance,surface)
+
+end)
+
+
 local function move_entity_to_bottom_layer(entity)
 
     entity.rotate{reverse=false}
@@ -169,8 +287,19 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
-        
-        storage.telescopes[entity.unit_number] = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior}
+        local telescope_data = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior,output_asteroid_signals = false}
+        if event.tags then
+            if event.tags.output_asteroid_signals then
+                telescope_data.output_asteroid_signals = event.tags.output_asteroid_signals
+            end
+            if event.tags.combinator_enabled then
+                control_behavior.enabled = event.tags.combinator_enabled
+            end
+        end
+        storage.telescopes[entity.unit_number] = telescope_data
+        if not storage.telescopes_on_surface[entity.surface.name] then storage.telescopes_on_surface[entity.surface.name] = {} end
+        storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = true
+        Muluna.update_telescope_daytime(telescope_data)
     end
 
 
@@ -178,6 +307,40 @@ end,
 telescope_filters
 )
 
+Muluna.events.on_event("bplib-extract", function(event)
+    for blueprint_index, entity in pairs(event.entities) do
+    -- The event is raised for all mods, so you must filter for your mod's entities
+    if rro.contains(heat_assembling_machines, function(entry) return entry["assembling-machine"] == entity.name end) then
+        local telescope_data = storage.telescopes[entity.unit_number]
+      event.blueprint.set_blueprint_entity_tags(blueprint_index, {
+        output_asteroid_signals = telescope_data.output_asteroid_signals,
+        combinator_enabled = telescope_data["constant-combinator-control-behavior"].enabled
+    })
+    end
+  end
+end)
+
+local function get_telescope(entity)
+    if storage.telescopes[entity.unit_number] then
+        return storage.telescopes[entity.unit_number]
+    else 
+        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        return telescope
+    end
+end
+
+Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
+    local source = event.source
+    local destination = event.destination
+
+    local source_telescope = get_telescope(source)
+    local destination_telescope = get_telescope(destination)
+    if source_telescope and destination_telescope then
+        destination_telescope.output_asteroid_signals = source_telescope.output_asteroid_signals
+    end
+
+
+end)
 
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
@@ -214,11 +377,13 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             if storage.telescopes[entity.unit_number] then
                 reactor = storage.telescopes[entity.unit_number]["constant-combinator"]
                 storage.telescopes[entity.unit_number] = nil
+                storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = nil
             end
             for i,registered_machine in pairs(storage.telescopes) do
                 if registered_machine["assembling-machine"] == entity then
                     reactor = registered_machine["constant-combinator"]
                     storage.telescopes[i] = nil
+                    storage.telescopes_on_surface[entity.surface.name][i] = nil
                     break
                     
                 end
@@ -315,6 +480,24 @@ local function bool_to_int(state)
 
 end
 
+local function get_time_to_next_asteroid_check(telescope)
+    local platform = telescope["constant-combinator"].surface.platform
+    if platform.space_location then
+        return 300
+    end
+    if telescope.old_total_asteroid_count > 300 then
+            return math.floor(telescope.old_total_asteroid_count / 5)
+    end
+    return 60
+end
+
+
+local asteroid_entity_list = {}
+
+for _,asteroid in pairs(prototypes.get_entity_filtered{{filter="type",type="asteroid"}}) do
+    table.insert(asteroid_entity_list,asteroid.name)
+end
+
 local platform_list_signals = {}
 
 for _,signal in pairs(prototypes.virtual_signal) do
@@ -323,7 +506,7 @@ end
 local experimental = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
 local use_quality = script.active_mods["quality"]
 local debug = false
-local function get_telescope_combinator_signals(surface,force) --Intended to be memoized with cache resetting every on_nth_tick event
+local function get_telescope_combinator_signals(surface,force,telescope) --Intended to be memoized with cache resetting every on_nth_tick event
     if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
     local signals = {}
     local i = 1
@@ -379,36 +562,58 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
         signals[i]={value = {type = "virtual",name = "signal-I",quality = "normal"},min = platform.index} --Platform index, matched by terrestrial telescopes.
         i = i+1
         -- Also display number of asteroids on screen by type
-        local asteroids = surface.find_entities_filtered{type = {"asteroid"}}
-        local asteroid_counts = {}
-        for _,asteroid in pairs(asteroids) do --Make list of every name and quality of 
-            if asteroid_counts[asteroid.name] == nil then asteroid_counts[asteroid.name] = {} end
-            if asteroid_counts[asteroid.name][asteroid.quality.name] == nil then
-                asteroid_counts[asteroid.name][asteroid.quality.name] = 1
+        
+        if telescope.output_asteroid_signals == nil then telescope.output_asteroid_signals = true end
+        if telescope.output_asteroid_signals == true then
+            local asteroid_counts = {}
+            if (telescope.old_asteroid_counts_next_tick or 0) <= game.tick then
+            local asteroids = surface.find_entities_filtered{type = {"asteroid"}}
+            local total_asteroid_count = 0
+            for _,asteroid in pairs(asteroids) do --Make list of every name and quality of 
+                if asteroid_counts[asteroid.name] == nil then asteroid_counts[asteroid.name] = {} end
+                if asteroid_counts[asteroid.name][asteroid.quality.name] == nil then
+                    asteroid_counts[asteroid.name][asteroid.quality.name] = 1
+                else
+                    asteroid_counts[asteroid.name][asteroid.quality.name] = asteroid_counts[asteroid.name][asteroid.quality.name] + 1
+                end
+                total_asteroid_count = total_asteroid_count + 1
+            end
+            telescope.old_asteroid_counts = asteroid_counts
+            telescope.old_total_asteroid_count = total_asteroid_count
+            --game.print(total_asteroid_count)
+            telescope.old_asteroid_counts_next_tick = game.tick + get_time_to_next_asteroid_check(telescope)
             else
-                asteroid_counts[asteroid.name][asteroid.quality.name] = asteroid_counts[asteroid.name][asteroid.quality.name] + 1
+                asteroid_counts = telescope.old_asteroid_counts
+            end
+            for asteroid,asteroid_info in pairs(asteroid_counts) do
+                for quality,amount in pairs(asteroid_info) do
+                    signals[i]={value = {type = "entity",name = asteroid, quality = quality},min = amount}
+                    i = i+1
+                end
             end
         end
-        for asteroid,asteroid_info in pairs(asteroid_counts) do
-            for quality,amount in pairs(asteroid_info) do
-                signals[i]={value = {type = "entity",name = asteroid, quality = quality},min = amount}
-                i = i+1
-            end
-        end
+        
+        
+        
+        
+
+        
+        
     end
     return signals
 end
 
 
 
+
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
-    for _,telescope in pairs(storage.telescopes) do
+    for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
             if combinator.valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
                     local cached_signals = telescope.cached_signals or {} 
-                    local signals = get_telescope_combinator_signals(combinator.surface,combinator.force)
+                    local signals = get_telescope_combinator_signals(combinator.surface,combinator.force,telescope)
                     --if not rro.deep_equals(signals,cached_signals) then
                         --combinator_behavior.remove_section(1)
                         local section = combinator_behavior.get_section(1) or combinator_behavior.add_section()
@@ -420,6 +625,8 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                     
                     telescope.cached_signals = signals
                 end
+            else
+                storage.telescopes[key] = nil
             end
     end
 

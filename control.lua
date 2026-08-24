@@ -115,6 +115,7 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
         end
     end
     if not storage.telescopes then storage.telescopes = {} end 
+    if not storage.telescopes_on_surface then storage.telescopes_on_surface = {} end
     if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
     if not storage.burner_roboports then storage.burner_roboports = {} end
     if not storage.cached_direction_to_string then storage.cached_direction_to_string = {} end

@@ -225,17 +225,22 @@ Muluna.events.on_nth_tick(long_update_period, function()
         local roboport = entity_table["roboport"]
         local refueler = entity_table["refueler"]
         --local energy_percent = calc_energy_percent(roboport)
-
-        if roboport.energy <= roboport_cutoff_energy_low[roboport.name] and refueler.custom_status ~= status_burner_roboport_refueling then
-            --storage.active_burner_roboports[key] = refueler
-            refueler.disabled_by_script = false --Turns on refueler
-            if refueler.get_fluid_count() > 0 then
-                refueler.custom_status = status_burner_roboport_refueling
-            else
-                refueler.custom_status = status_burner_roboport_empty
-            end
-            roboport.custom_status = refueler.custom_status 
+        if roboport.valid and refueler.valid then
+           if roboport.energy <= roboport_cutoff_energy_low[roboport.name] and refueler.custom_status ~= status_burner_roboport_refueling then
+                --storage.active_burner_roboports[key] = refueler
+                refueler.disabled_by_script = false --Turns on refueler
+                if refueler.get_fluid_count() > 0 then
+                    refueler.custom_status = status_burner_roboport_refueling
+                else
+                    refueler.custom_status = status_burner_roboport_empty
+                end
+                roboport.custom_status = refueler.custom_status 
+            end 
+        else
+            storage.burner_roboports[key] = nil
         end
+        
+        ::continue::
     end
 
 

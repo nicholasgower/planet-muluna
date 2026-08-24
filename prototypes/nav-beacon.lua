@@ -259,7 +259,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                     or {{icon = data.raw["technology"]["radar"].icon, icon_size = data.raw["technology"]["radar"].icon_size}}
         }
     })
-    
+    data.raw["mod-data"]["bplib"].data.extract_entity_names[navBeaconEntity.name] = true
     Muluna:extend({
         -- navBeaconEntity_Planet,
         --navBeaconEntity_Platform,
