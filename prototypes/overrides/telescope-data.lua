@@ -33,7 +33,7 @@ for _,space_location in pairs(data.raw["planet"]) do
                 type = "recipe",
                 name = "muluna-telescope-observation-" .. space_location.name,
                 categories = {"muluna-telescope"},
-                energy_required = 6,
+                energy_required = 10,
                 ingredients = {},
                 results = {{type = "fluid", name = "muluna-astronomical-data",amount = 10 + math.floor(distance_factor)/1500}},
                 icons = Muluna.icons.dual_icon("muluna-astronomical-data",space_location.name),
