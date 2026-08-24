@@ -17,6 +17,7 @@
     "! tile-upgrade-planner",
     "alien-biomes-graphics >= 0.7.0",
     "flib",
+    "bplib >= 2.1.3",
     "+ enhanced-shadows",
     "space-exploration-graphics-5",
     "space-exploration-graphics-4",
