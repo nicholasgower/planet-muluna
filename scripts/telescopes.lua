@@ -315,6 +315,24 @@ local function bool_to_int(state)
 
 end
 
+local function get_time_to_next_asteroid_check(telescope)
+    local platform = telescope["constant-combinator"].surface.platform
+    if platform.space_location then
+        return 300
+    end
+    if telescope.old_total_asteroid_count > 300 then
+            return math.floor(telescope.old_total_asteroid_count / 5)
+    end
+    return 60
+end
+
+
+local asteroid_entity_list = {}
+
+for _,asteroid in pairs(prototypes.get_entity_filtered{{filter="type",type="asteroid"}}) do
+    table.insert(asteroid_entity_list,asteroid.name)
+end
+
 local platform_list_signals = {}
 
 for _,signal in pairs(prototypes.virtual_signal) do
@@ -323,7 +341,7 @@ end
 local experimental = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
 local use_quality = script.active_mods["quality"]
 local debug = false
-local function get_telescope_combinator_signals(surface,force) --Intended to be memoized with cache resetting every on_nth_tick event
+local function get_telescope_combinator_signals(surface,force,telescope) --Intended to be memoized with cache resetting every on_nth_tick event
     if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
     local signals = {}
     local i = 1
@@ -379,16 +397,32 @@ local function get_telescope_combinator_signals(surface,force) --Intended to be 
         signals[i]={value = {type = "virtual",name = "signal-I",quality = "normal"},min = platform.index} --Platform index, matched by terrestrial telescopes.
         i = i+1
         -- Also display number of asteroids on screen by type
-        local asteroids = surface.find_entities_filtered{type = {"asteroid"}}
+        
         local asteroid_counts = {}
-        for _,asteroid in pairs(asteroids) do --Make list of every name and quality of 
-            if asteroid_counts[asteroid.name] == nil then asteroid_counts[asteroid.name] = {} end
-            if asteroid_counts[asteroid.name][asteroid.quality.name] == nil then
-                asteroid_counts[asteroid.name][asteroid.quality.name] = 1
-            else
-                asteroid_counts[asteroid.name][asteroid.quality.name] = asteroid_counts[asteroid.name][asteroid.quality.name] + 1
+        if (telescope.old_asteroid_counts_next_tick or 0) <= game.tick then
+            local asteroids = surface.find_entities_filtered{type = {"asteroid"}}
+            local total_asteroid_count = 0
+            for _,asteroid in pairs(asteroids) do --Make list of every name and quality of 
+                if asteroid_counts[asteroid.name] == nil then asteroid_counts[asteroid.name] = {} end
+                if asteroid_counts[asteroid.name][asteroid.quality.name] == nil then
+                    asteroid_counts[asteroid.name][asteroid.quality.name] = 1
+                else
+                    asteroid_counts[asteroid.name][asteroid.quality.name] = asteroid_counts[asteroid.name][asteroid.quality.name] + 1
+                end
+                total_asteroid_count = total_asteroid_count + 1
             end
+            telescope.old_asteroid_counts = asteroid_counts
+            telescope.old_total_asteroid_count = total_asteroid_count
+            --game.print(total_asteroid_count)
+            telescope.old_asteroid_counts_next_tick = game.tick + get_time_to_next_asteroid_check(telescope)
+        else
+            asteroid_counts = telescope.old_asteroid_counts
         end
+        
+        
+        
+
+        
         for asteroid,asteroid_info in pairs(asteroid_counts) do
             for quality,amount in pairs(asteroid_info) do
                 signals[i]={value = {type = "entity",name = asteroid, quality = quality},min = amount}
@@ -408,7 +442,7 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
                     local cached_signals = telescope.cached_signals or {} 
-                    local signals = get_telescope_combinator_signals(combinator.surface,combinator.force)
+                    local signals = get_telescope_combinator_signals(combinator.surface,combinator.force,telescope)
                     --if not rro.deep_equals(signals,cached_signals) then
                         --combinator_behavior.remove_section(1)
                         local section = combinator_behavior.get_section(1) or combinator_behavior.add_section()
