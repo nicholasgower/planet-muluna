@@ -28,6 +28,10 @@ function Muluna:extend(new_data)
             if prototype.icons and not prototype.hide_from_recipe_gui then
                 prototype.hide_from_recipe_gui = false
             end
+        elseif prototype.type == "technology" then
+            if prototype.research_trigger and prototype.research_trigger.entity and not prototype.research_trigger.entities then
+                prototype.research_trigger.entities = {prototype.research_trigger.entity}
+            end
         end
     end
     data:extend(new_data)
