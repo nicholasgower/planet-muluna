@@ -12,7 +12,8 @@ local recycling_turbine=rro.merge(table.deepcopy(fusion_generator),
         selection_box = {{-1.5, -3.5}, {1.5, 3.5}},
         icon = "__muluna-graphics__/graphics/icons/advanced-steam-turbine.png",
         icon_size = 64,
-        next_upgrade = "_nil"
+        next_upgrade = "_nil",
+        smoke = turbine.smoke
     }
 
 )
