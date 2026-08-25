@@ -7,7 +7,7 @@
   "version": "2.7.4",
   "factorio_version": "2.1",
   "dependencies": [
-    "base >= 2.1.16",
+    "base >= 2.1.17",
     "space-age",
     "? quality",
     "PlanetsLib >= 1.25.1",
