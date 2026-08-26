@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.11
+Date: 2026-08-26
+  Balancing:
+    - Higher quality telescopes can tolerate higher pollution values than lower quality telescopes. Scaled down the pollution tolerance of all telescopes.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.10
 Date: 2026-08-26
   Bugfixes:
