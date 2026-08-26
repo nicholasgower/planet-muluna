@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.7
+Date: 2026-08-26
+  Compatibility:
+    - Raised required Factorio version to 2.1.17.
+  Bugfixes:
+    - Added migration to reset the logistic connections of burner roboports to account for the recent change to burner roboport's logistic range. https://github.com/nicholasgower/planet-muluna/issues/464
+---------------------------------------------------------------------------------------------------
 Version: 2.7.6
 Date: 2026-08-26
   Bugfixes:
