@@ -76,6 +76,7 @@ landfill_crushed_stone.name="landfill-stone-crushed"
 
 landfill_crushed_stone.icons=dual_icon("landfill","stone-crushed")
 landfill_crushed_stone.auto_recycle=false
+landfill_crushed_stone.allow_as_intermediate=false
 local bricks_crushed_stone=table.deepcopy(data.raw["recipe"]["stone-brick"])
 
 bricks_crushed_stone.ingredients = {{type = "item",name = "stone-crushed",amount = 2}}
