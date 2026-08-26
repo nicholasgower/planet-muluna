@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.8
+Date: 2026-08-26
+  Bugfixes:
+    - "Landfill from crushed stone" recipe is no longer allowed as an intermediate for hand-crafting.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.7
 Date: 2026-08-26
   Compatibility:
