@@ -6,8 +6,13 @@ local am3 = data.raw["assembling-machine"]["assembling-machine-3"]
 local max_fluid_boxes=30 --Assuming that no modded machines have this many fluidboxes.
 local dummy_fluidboxes = max_fluid_boxes-2
 
+local assembling_machine_fluid_recipe_categories = {
+    "crafting-with-fluid",
+    "ballon-recipe" -- Shchierbin
+}
+
 for _,recipe in pairs(data.raw["recipe"]) do
-    if rro.contains(recipe.categories,"crafting-with-fluid")  then
+    if rro.contains_any(recipe.categories,assembling_machine_fluid_recipe_categories)  then
         for _,input in pairs({recipe.ingredients,recipe.results}) do
             local i = 1
             if rro.count(input,function(entry) return entry.type == "fluid" end) <= 1 then
@@ -30,7 +35,6 @@ local function rotate_position(position)
 
     return {-y,x}
 end
-
 
 
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category

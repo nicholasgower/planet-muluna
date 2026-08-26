@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.6
+Date: 2026-08-26
+  Bugfixes:
+    - Data ports no longer erroneously appear on Shchierbin balloon recipes.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.5
+Date: 2026-08-25
+  Graphics:
+    - Added smoke particle field to the condenser turbine in preparation for a future version of Factorio to add support for smoke particles for fusion generator prototypes.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.4
 Date: 2026-08-25
   Bugfixes:
