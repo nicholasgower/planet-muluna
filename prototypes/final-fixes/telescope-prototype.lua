@@ -27,6 +27,30 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
 
         entity.selection_box = flib_bounding_box.resize(entity.selection_box,-0.4)
         entity.quality_indicator_shift = {-0.4,0.4}
+
+        if not entity.custom_tooltip_fields then
+            entity.custom_tooltip_fields = {}
+        end
+        local pollution_range_field = {}
+        for _,quality in pairs(data.raw.quality) do
+            local quality_effect = quality.name
+            pollution_range_field[quality.name] = {"tooltip-value.muluna-telescope-pollution-tolerance",tostring(Muluna.get_telescope_min_pollution(quality_effect)),
+            tostring(Muluna.get_telescope_max_pollution(quality_effect))}
+           
+        end
+        --error(serpent.block(pollution_range_field))
+        table.insert(entity.custom_tooltip_fields , {
+            name = {"description.effectivity"},
+            value = "100% - 0%",
+            order = 200,
+        })
+        table.insert(entity.custom_tooltip_fields , {
+            name = {"tooltip.muluna-telescope-pollution-tolerance"},
+            order = 201,
+            value = pollution_range_field["normal"],
+            quality_values = pollution_range_field,
+            quality_header = "quality-tooltip.increases"
+        })        
         Muluna.constants.telescopes[entity.name] = {
             ["assembling-machine"] = entity.name,
             ["constant-combinator"] = telescope_combinator.name,

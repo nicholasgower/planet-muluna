@@ -21,8 +21,37 @@ end
 --     update_graph(prototypes.space_connection)
 -- end
 
+local min_pollution = 100
+local max_pollution = 1000
+local divisor = max_pollution - min_pollution
+
+local get_quality_effect
 
 
+if Muluna.stage == "control" then
+    get_quality_effect = function(quality)
+        return 1 + 0.3 * quality.level
+    end
+else
+    get_quality_effect = function(quality)
+        return 1 + 0.3 * ((data.raw["quality"][quality] and data.raw["quality"][quality].level) or 0)
+    end
+end
+
+function Muluna.get_telescope_probability(pollution,quality)
+    local quality_effect = get_quality_effect(quality)
+    return (pollution/quality_effect-min_pollution)/divisor
+end
+
+function Muluna.get_telescope_min_pollution(quality)
+    local quality_effect = get_quality_effect(quality)
+    return min_pollution*quality_effect
+end
+
+function Muluna.get_telescope_max_pollution(quality)
+    local quality_effect = get_quality_effect(quality)
+    return max_pollution*quality_effect
+end
 
 --- Shortest path calculation using prebuilt graph
 -- Vibe-coded, but seems to work well.

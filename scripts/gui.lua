@@ -204,7 +204,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                     name = "muluna-telescope-pollution-label",
                     caption = {"",pollution_tooltip,": ",tostring(math.floor(pollution))}
                 })
-                local probability = Muluna.get_telescope_probability(pollution) * 100
+                local probability = Muluna.get_telescope_probability(pollution,entity.quality) * 100
                 if probability > 100 then
                     probability = 100
                 end

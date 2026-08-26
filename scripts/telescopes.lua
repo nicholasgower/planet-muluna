@@ -38,9 +38,7 @@ local function obscured_sprite(entity)
     }
 end
 
-function Muluna.get_telescope_probability(pollution)
-    return (pollution-500)/3000
-end
+
 
 local function disable_telescope(telescope,telescope_data,disp_warning)
     telescope.disabled_by_script = true
@@ -64,7 +62,7 @@ function Muluna.update_telescope_daytime(telescope_data)
     local planet_prototype = surface.planet and surface.planet.prototype
     local daytime = surface.daytime
     local pollution = surface.get_pollution(telescope.position)
-    local probability = Muluna.get_telescope_probability(pollution)
+    local probability = Muluna.get_telescope_probability(pollution,telescope.quality)
     if not planet_prototype then goto continue end
     
     if probability > math.random() then
