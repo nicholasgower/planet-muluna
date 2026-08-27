@@ -731,7 +731,7 @@ Muluna:extend{
     {
         type = "technology",
         name = "muluna-water-saving-wood-cultivation",
-        prerequisites = {"space-science-pack"},
+        prerequisites = {"production-science-pack","space-science-pack"},
         unit = {
             count = 250,
             time = 30,
