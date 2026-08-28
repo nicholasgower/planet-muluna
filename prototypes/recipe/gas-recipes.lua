@@ -97,6 +97,7 @@ Muluna:extend{
         auto_recycle=false,
         subgroup="muluna-forestry",
         max_productivity = 3,
+        allow_productivity = true,
         allow_quality = true,
         can_set_quality = false,
         hide_from_signal_gui = false,
