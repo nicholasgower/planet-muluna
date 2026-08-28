@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.13
+Date: 2026-08-28
+  Bugfixes:
+    - Water-saving greenhouse recipes allow productivity modules. https://github.com/nicholasgower/planet-muluna/issues/469
+---------------------------------------------------------------------------------------------------
 Version: 2.7.12
 Date: 2026-08-27
   Bugfixes:
