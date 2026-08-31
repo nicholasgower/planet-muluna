@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.14
+Date: 2026-08-31
+  Compatibility:
+    - Changed all compat checks for Maraxsis to check for the existence of the Maraxsis planet, rather than for the Maraxsis mod.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.13
 Date: 2026-08-28
   Bugfixes:
