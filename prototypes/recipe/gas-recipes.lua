@@ -586,7 +586,7 @@ local recipe_icons_heated = {dual_icon("muluna-sapling","fluoroketone-hot","carb
         end
     end 
 
-if mods["maraxsis"] then
+if data.raw.planet["maraxsis"] then
     
     Muluna:extend{{
         type = "recipe",

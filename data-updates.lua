@@ -266,7 +266,7 @@ if settings.startup["muluna-easy-vanilla-rocket-part-costs"].value == false then
         recipe.maximum_productivity = 7
     end
     --scalar_recipe_multiply(data.raw.recipe["rocket-part"].ingredients,2)
-    -- if mods["maraxsis"] then
+    -- if data.raw.planet["maraxsis"] then
     --     scalar_recipe_multiply(data.raw.recipe["maraxsis-rocket-part"].ingredients,2)
     --     data.raw["recipe"]["maraxsis-rocket-part"].maximum_productivity = 7
     -- end
@@ -283,7 +283,7 @@ end
 --   {type = "item", name = "low-density-structure", amount = 2},
 --   {type = "item", name = "rocket-fuel", amount = 2}
 -- }
--- if mods["maraxsis"] then
+-- if data.raw.planet["maraxsis"] then
 --     data.raw.recipe["rocket-part"].ingredients =
 --     {
 --     {type = "item", name = "processing-unit", amount = 2},
@@ -557,7 +557,7 @@ end
 
 --I'm losing hope that I will ever feel happy, or that I will ever regain the trust I once had in other people. Why do I write this stuff in code comments? Because I feel that the chance of anyone reading this is low, but the chance that these words end up on thousands of people's computers is quite high. Feels less scary.
 
-if mods["maraxsis"] then
+if data.raw.planet["maraxsis"] then
     for _,tech in pairs(data.raw["technology"]) do
         if string.find(tech.name,"rocket-part-productivity-",0,true) and tech.name ~= "rocket-part-productivity-aquilo" then
             rro.soft_insert(tech.effects,{
@@ -698,11 +698,11 @@ end
 local gases = {"oxygen","hydrogen","carbon-dioxide","maraxsis-atmosphere"}
 
 --Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
-if mods["maraxsis"] then
+if data.raw.planet["maraxsis"] then
     data.raw["fluid"]["hydrogen"].fuel_value="225kJ"
     
 end
-if mods["maraxsis"] then
+if data.raw.planet["maraxsis"] then
     for _,quality in pairs(data.raw["quality"]) do
         if quality.hidden then goto continue end
         local regulator = data.raw["assembling-machine"]["maraxsis-regulator-fluidbox-" .. quality.name]
