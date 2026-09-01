@@ -100,7 +100,7 @@ local function place_muluna_cargo_pods()
         {"cryogenic-plant",7,1},
 
     }
-    if data.raw.planet["maraxsis"] then
+    if prototypes.space_location["maraxsis"] then
         table.insert(random_chance_table,{"maraxsis-hydro-plant",8,1})
     end
     for i = 1,2 do 
