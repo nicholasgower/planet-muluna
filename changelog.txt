@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.15
+Date: 2026-09-01
+  Bugfixes:
+    - Fixed crash on creating new surface. https://github.com/nicholasgower/planet-muluna/issues/471
+---------------------------------------------------------------------------------------------------
 Version: 2.7.14
 Date: 2026-08-31
   Compatibility:
