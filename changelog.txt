@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.16
+Date: 2026-09-03
+  Changes:
+    - Added remote interface that exposes Muluna's entire storage table, enabling the smooth transition to a fork in case this mod is unexpectedly deprecated.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.15
 Date: 2026-09-01
   Bugfixes:
