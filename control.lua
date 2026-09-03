@@ -34,6 +34,7 @@ require("scripts.heat-assembling-machine")
 require("scripts.telescopes")
 require("scripts.gui")
 require("scripts.burner-roboports")
+require("scripts.remote")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()
