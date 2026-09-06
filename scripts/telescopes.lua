@@ -95,6 +95,7 @@ function Muluna.update_telescope_daytime(telescope_data)
 end
 
 local function update_all_telescopes(surface)
+    if not surface.valid then return end
     if not storage.telescopes_on_surface[surface.name] then return end
     for telescope_id,_ in pairs(storage.telescopes_on_surface[surface.name]) do
         local telescope = storage.telescopes[telescope_id]
