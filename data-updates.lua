@@ -826,6 +826,7 @@ data.raw["recipe"]["space-science-pack"].surface_conditions = {
     },
 }
 space_science_pack_advanced.name = "space-science-pack-muluna"
+space_science_pack_advanced.icon = nil
 space_science_pack_advanced.localised_name = {"item-name.space-science-pack"}
 --space_science_pack_advanced.icons = dual_icon("space-science-pack","asteroid-collector")
 Muluna:extend{space_science_pack_advanced}
