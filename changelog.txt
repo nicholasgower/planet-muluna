@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.20
+Date: 2026-09-06
+  Bugfixes:
+    - Fixed crash when surface is deleted with ongoing telescope delayed events.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.19
+Date: 2026-09-06
+  Balancing:
+    - All filled greenhouse items have a rocket capacity of 0.2.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.18
+Date: 2026-09-06
+  Compatibility:
+    - Raised required PlanetsLib version to 1.26.1.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.17
+Date: 2026-09-06
+  Bugfixes:
+    - Fixed incorrect icon for space science pack recipe used when  "Colour Blind Friendly Science Packs" is installed.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.16
 Date: 2026-09-03
   Changes:

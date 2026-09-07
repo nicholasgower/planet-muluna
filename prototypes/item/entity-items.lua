@@ -125,6 +125,7 @@ local greenhouse_wood = util.merge{table.deepcopy(data.raw["item"]["chemical-pla
         place_result = "muluna-greenhouse-wood",
         order = "az-[muluna-greenhouse]-a[muluna-greenhouse-wood]",
         default_import_location = "muluna",
+        weight = 5000 * kg,
     }
     
 }
