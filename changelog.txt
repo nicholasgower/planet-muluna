@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.21
+Date: 2026-09-08
+  Compatibility:
+    - Added "maraxsis-classic" as an optional dependency of Muluna to fix load order issues.
+  Bugfixes:
+    - Disabled code modifying fuel values and atmosphere regulators on Maraxsis.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.20
 Date: 2026-09-06
   Bugfixes:
