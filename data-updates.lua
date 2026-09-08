@@ -697,19 +697,7 @@ end
 
 local gases = {"oxygen","hydrogen","carbon-dioxide","maraxsis-atmosphere"}
 
---Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
-if data.raw.planet["maraxsis"] then
-    data.raw["fluid"]["hydrogen"].fuel_value="225kJ"
-    
-end
-if data.raw.planet["maraxsis"] then
-    for _,quality in pairs(data.raw["quality"]) do
-        if quality.hidden then goto continue end
-        local regulator = data.raw["assembling-machine"]["maraxsis-regulator-fluidbox-" .. quality.name]
-        regulator.energy_source.fluid_box.volume = regulator.energy_source.fluid_box.volume*10
-        ::continue::
-    end
-end
+
     
 
 local function multiply_ingredients(recipe,ingredient,multiplier)
@@ -758,6 +746,19 @@ local subgroup_blacklist = {
 }
 
 if false and not mods["Krastorio2-spaced-out"] then
+    --Modifies values of gas fluids in Maraxsis entities to follow Factorio 2.0's convention of gas fluid units having 1/10 the matter of liquid fluid units(As in water vs. steam)
+    if data.raw.planet["maraxsis"] then
+        data.raw["fluid"]["hydrogen"].fuel_value="225kJ"
+        
+    end
+    if data.raw.planet["maraxsis"] then
+        for _,quality in pairs(data.raw["quality"]) do
+            if quality.hidden then goto continue end
+            local regulator = data.raw["assembling-machine"]["maraxsis-regulator-fluidbox-" .. quality.name]
+            regulator.energy_source.fluid_box.volume = regulator.energy_source.fluid_box.volume*10
+            ::continue::
+        end
+    end
     for _,gas in pairs(gases) do
         for _,recipe in pairs(data.raw["recipe"]) do --pairs(recipes_to_change) do
             if not (rro.contains(recipe_blacklist,recipe.name) or rro.contains_any(category_blacklist,recipe.categories) or rro.contains(subgroup_blacklist,recipe.subgroup)) then
