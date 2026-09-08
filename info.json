@@ -28,6 +28,7 @@
     "(?) orbital-transfer >= 0.2.3",
     "(?) alien-biomes",
     "(?) maraxsis >= 1.33.0",
+    "(?) maraxsis-classic >= 1.33.0",
     "(?) Tiered-Solar-System >= 1.1.3",
     "! MT-lib",
     "(?) modules-t4",
