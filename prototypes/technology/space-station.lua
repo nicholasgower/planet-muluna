@@ -838,7 +838,7 @@ Muluna:extend{
                 type = "unlock-recipe",
                 recipe = "oxygen-venting"
             },
-            mods["maraxsis"] and {
+            (mods["maraxsis"] or mods["maraxsis-classic"]) and {
                 type = "unlock-recipe",
                 recipe = "hydrogen-venting"
             } or nil,
