@@ -17,6 +17,23 @@ Muluna:extend({
 			order = "z[is-muluna]z",
 		},
 	})
+
+--CRATERS
+--Based on Planet Wit's crater algorithm
+local vulc_decoratives = {
+  --["vulcanus-dune-decal"] = {"bm-wit-dune-decal", "wit_vulcanus_dune_decal"},
+  ["crater-small"] = {"muluna-crater-small", "muluna_crater_small"},
+  ["crater-large"] = {"muluna-crater-large", "muluna_crater_large"},
+  --["waves-decal"] = {"bm-wit-waves-decal", "wit_waves_decal"}
+}
+
+for decor_name, decor_data in pairs(vulc_decoratives) do
+  local decor = util.table.deepcopy(data.raw["optimized-decorative"][decor_name])
+  decor.name = decor_data[1]
+  decor.autoplace.probability_expression  = decor_data[2]
+  Muluna:extend({decor})
+end
+
 Muluna:extend{
   {
     type = "autoplace-control",
@@ -24,6 +41,29 @@ Muluna:extend{
     name = "muluna_cliff",
     order = "c-z-a",
     category = "cliff"
+  },
+  {
+   type = "noise-expression",
+   name = "muluna_crater_small",
+   expression = "min(0.1, 0.3 - muluna_rock_noise - aux)"
+  },
+  {
+    type = "noise-expression",
+    name = "muluna_crater_large",
+    expression = "min(0.15, (0.2 - muluna_rock_noise - aux) * place_every_n(3,3,0,0))"
+  },
+  {
+    type = "noise-expression",
+    name = "muluna_rock_noise",
+    expression = "multioctave_noise{x = x,\z
+                                    y = y,\z
+                                    seed0 = 100+map_seed,\z
+                                    seed1 = 137,\z
+                                    octaves = 4,\z
+                                    persistence = 0.65,\z
+                                    input_scale = 0.1,\z
+                                    output_scale = 0.4}"
+    -- 0.1 / slider_rescale(var('control:bm_rocks:frequency'), 2),\z
   },
   {
     type = "noise-function", --Copy of Nauvis elevation 
@@ -239,6 +279,8 @@ local map_gen = {
           ["lunar-medium-rock"] = data.raw["optimized-decorative"]["lunar-medium-rock"] ~= nil and {} or nil,
           ["lunar-small-rock"] = data.raw["optimized-decorative"]["lunar-small-rock"] ~= nil and {} or nil,
           ["lunar-tiny-rock"] = data.raw["optimized-decorative"]["lunar-tiny-rock"] ~= nil and {} or nil,
+          ["muluna-crater-small"] = {},
+          ["muluna-crater-large"] = {},
           --["medium-sand-rock"] = {},
           --["small-sand-rock"] = {}
         }
