@@ -13,7 +13,7 @@ if settings.startup["enable-nav-beacon"].value == true then
 
 
 
-    local radarEntity = table.deepcopy(data.raw.accumulator.accumulator)
+    local radarEntity = table.deepcopy(data.raw.radar.radar)
     local radarItem = table.deepcopy(data.raw.item.radar)
     local radarRecipe = table.deepcopy(data.raw.recipe.radar)
     local radarTech = table.deepcopy(data.raw.technology.radar)
@@ -60,11 +60,11 @@ if settings.startup["enable-nav-beacon"].value == true then
             energy_per_nearby_scan = "1kJ",
             --localised_description = { "entity-description.muluna-satellite-radar"},
             localised_description = { "item-description.muluna-satellite-radar"},
-            energy_source =
-            {
-                type = "electric",
-                usage_priority = "secondary-input"
-            },
+            -- energy_source =
+            -- {
+            --     type = "electric",
+            --     usage_priority = "secondary-input"
+            -- },
             surface_conditions = {
                 {
                     property = "gravity",
@@ -72,7 +72,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                     max = 0,
                 }
             },
-            energy_usage = settings.startup["platform-power-consumption"].value .. "MW",
+            energy_usage = "1MW",
             icon = "__muluna-graphics__/graphics/icons/nav-beacon-icon.png",
             icon_size = 64,
             rotation_speed = 0.01,
@@ -107,7 +107,6 @@ if settings.startup["enable-nav-beacon"].value == true then
         energy_per_scan = settings.startup["platform-power-consumption"].value,
         scan_area = 100
     }
-
     navBeaconEntity.graphics_set = nil
     navBeaconEntity.circuit_connector = nil
     navBeaconEntity.next_upgrade = nil
@@ -184,6 +183,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                 
             }
     navBeaconEntity.chargable_graphics.discharge_animation = navBeaconEntity.chargable_graphics.charge_animation
+    navBeaconEntity.pictures = navBeaconEntity.chargable_graphics.charge_animation.charge_animation
     local navBeaconEntity_Platform = table.deepcopy(navBeaconEntity)
     navBeaconEntity_Platform.name = navBeaconEntity_Platform.name .. "-platform"
     navBeaconEntity_Platform.localised_name = { "entity-name.muluna-satellite-radar" }

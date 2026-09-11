@@ -1,7 +1,7 @@
 if settings.startup["enable-nav-beacon"].value == true then
     local satellite_radars = data.raw["mod-data"]["muluna-satellite-radar"].data
     for _,radar_data in pairs(satellite_radars.entities) do
-        local radar = data.raw["accumulator"][radar_data.name]
+        local radar = data.raw["radar"][radar_data.name]
         local tooltips = radar.custom_tooltip_fields
         
         tooltips[1] ={

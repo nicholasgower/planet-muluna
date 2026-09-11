@@ -25,7 +25,7 @@ for i,tab in pairs({telescope_keys,heat_assembling_machine_keys}) do
 end
 Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     
-    if not (event.entity and rro.contains({"assembling-machine","constant-combinator","reactor","accumulator","roboport"},event.entity.type)) then return end
+    if not (event.entity and rro.contains({"assembling-machine","constant-combinator","reactor","accumulator","roboport","radar"},event.entity.type)) then return end
     --game.print("gui opened")
     local player = game.players[event.player_index]
     local selected = (player or {}).opened --The currently selected entity
@@ -49,7 +49,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     local combinator = rro.find_contains(Muluna.constants.telescopes,function(other) return entity_name == other["constant-combinator"] end )
     if entity_name == "muluna-satellite-radar" then
         satradar_gui = true
-        gui_type = defines.relative_gui_type.accumulator_gui
+        gui_type = defines.relative_gui_type.radar_gui
         localised_button = {"muluna-gui.satellite-radar-enable-button"}
         if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
         if not storage.nav_beacons_other[entity.unit_number] then storage.nav_beacons_other[entity.unit_number] = {gui = {enabled = true}} end
