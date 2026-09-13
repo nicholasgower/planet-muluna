@@ -1296,7 +1296,7 @@ data:extend{
             }
         },
         prerequisites = {
-            "interstellar-science-pack", "production-science-pack", "space-science-pack", "agricultural-science-pack"
+            "interstellar-science-pack", "carbon-fiber"
         },
         effects = {
             {
