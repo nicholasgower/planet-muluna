@@ -93,7 +93,8 @@ heating_boiler.name = "muluna-vacuum-heating-tower"
 heating_boiler.minable.result = "muluna-vacuum-heating-tower"
 heating_boiler = util.merge{heating_boiler,
     {
-        type = "heat-assembling-machine",
+        type = "assembling-machine",
+        is_heat_assembling_machine = true,
         --heat_buffer = heating_tower.heat_buffer,
         crafting_categories = {recipe_category},
         fixed_recipe = "muluna-vacuum-heating",

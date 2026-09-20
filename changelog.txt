@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.25
+Date: 2026-09-19
+  Compatibility:
+    - The vacuum heating tower is now considered an assembling machine in data.raw for the entire data lifecycle, rather than a member of the "heat-assembling-machine" fake prototype. Should improve compatibility with other mods.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.24
 Date: 2026-09-14
   Bugfixes:
