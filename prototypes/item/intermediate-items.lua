@@ -280,7 +280,7 @@ if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true t
     --         tint = {1,0.8,0.4}
     --     },
     -- },
-    fuel_category = "chemical",
+    fuel_categories = {"chemical"},
     fuel_value = "1MJ",
     subgroup = "muluna-forestry",
     order = "a[wood]-c[chips]",
