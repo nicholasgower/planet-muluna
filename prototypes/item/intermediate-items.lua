@@ -108,7 +108,7 @@ Muluna:extend{{
     subgroup=data.raw.item["tree-seed"].subgroup,
     group=data.raw.item["tree-seed"].group,
     fuel_value = Muluna.multiply_energy(data.raw["item"]["wood"].fuel_value,4/0.95),
-    fuel_category=data.raw["item"]["wood"].fuel_category,
+    fuel_categories=data.raw["item"]["wood"].fuel_categories,
     weight=iron_ore.weight*50,
     default_import_location = "nauvis",
     --plant_result = "tree-01",
@@ -160,7 +160,7 @@ Muluna:extend{{
     drop_sound = item_sounds.wood_inventory_move,
     weight=iron_ore.weight*1/2,
     fuel_value = "1MJ",
-    fuel_category=data.raw["item"]["wood"].fuel_category,
+    fuel_categories=data.raw["item"]["wood"].fuel_categories,
 },
   {
     type = "item",
@@ -280,7 +280,7 @@ if settings.startup["muluna-hardcore-classic-wood-gasification"].value == true t
     --         tint = {1,0.8,0.4}
     --     },
     -- },
-    fuel_category = "chemical",
+    fuel_categories = {"chemical"},
     fuel_value = "1MJ",
     subgroup = "muluna-forestry",
     order = "a[wood]-c[chips]",
