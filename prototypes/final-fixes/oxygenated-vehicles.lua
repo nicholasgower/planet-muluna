@@ -1,7 +1,6 @@
 local surface_property_lib = require("__PlanetsLib__.lib.surface-property-lib")
 local categories = {"car","spider-vehicle","locomotive"}
 
-local nuclear_fuel_categories = {data.raw["item"]["nuclear-fuel"].fuel_category}
 local new_nuclear_fuel_category = "muluna-nuclear-chemical-fuel"
 
 data.raw["item"]["rocket-fuel"].muluna_oxygenated_fuel = true
@@ -12,13 +11,12 @@ local changed_items = {
 
 for _,item in pairs(data.raw.item) do
     if item.muluna_oxygenated_fuel == true then
-        Muluna.rro.soft_insert(nuclear_fuel_categories,item.fuel_category)
         Muluna.rro.soft_insert(changed_items,item.name)
     end
 end
 
 for _,item in pairs(changed_items) do
-    data.raw["item"][item].fuel_category=new_nuclear_fuel_category
+    Muluna.rro.soft_insert(data.raw["item"][item].fuel_categories,"muluna-oxygenated-fuel")
 end
 
 
@@ -34,7 +32,7 @@ for _,category in pairs(categories) do
         vehicle.energy_source.type == "burner" and 
         vehicle.energy_source.fuel_categories and Muluna.rro.contains_any(vehicle.energy_source.fuel_categories,{"chemical","kr-vehicle-fuel"}) then
             local new_energy_source = table.deepcopy(vehicle.energy_source)
-            new_energy_source.fuel_categories = {"muluna-oxygenated-fuel",new_nuclear_fuel_category}
+            new_energy_source.fuel_categories = {"muluna-oxygenated-fuel"}
             new_energy_source.burnt_inventory_size = new_energy_source.burnt_inventory_size or 2
             vehicle.fast_replaceable_group = vehicle.fast_replaceable_group or vehicle.name
             local new_placeable_by = data.raw.item[vehicle.name] and {{item = vehicle.name, count =1}} or nil
@@ -56,14 +54,3 @@ for _,category in pairs(categories) do
 
     end
 end
-
-
-for _,entity in pairs(Muluna.flib_prototypes.all("entity")) do
-    local energy_source = entity.energy_source 
-    if energy_source and energy_source.type == "burner" then
-        if Muluna.rro.contains_any(energy_source.fuel_categories,nuclear_fuel_categories) then
-            table.insert(energy_source.fuel_categories,new_nuclear_fuel_category)
-        end
-    end
-end
-
