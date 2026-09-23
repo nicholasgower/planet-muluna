@@ -340,11 +340,12 @@ local muluna=
     orbit = {
       orientation = 0.75, 
       distance = orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude),
+      draw_orbit = true,
       parent = {
         type = "planet",
         name = parent_planet,
         },
-        sprite = PlanetsLib.get_orbit_sprite(orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude))
+        --sprite = PlanetsLib.get_orbit_sprite(orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude))
     },
     platform_surface_render_parameters = {
       platform_backdrop = require("planet-appearance-21")
