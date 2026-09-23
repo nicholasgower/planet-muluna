@@ -205,7 +205,7 @@ local roboport_cutoff_energy_high = {}
 
 for _,roboport_name in pairs(burner_roboports) do
     local roboport = prototypes.entity[roboport_name]
-    if roboport.electric_energy_source_prototype and roboport.electric_energy_source_prototype.buffer_capacity then
+    if roboport and roboport.electric_energy_source_prototype and roboport.electric_energy_source_prototype.buffer_capacity then
         roboport_max_energy[roboport.name] = roboport.electric_energy_source_prototype.buffer_capacity
         roboport_cutoff_energy_low[roboport.name]=roboport.electric_energy_source_prototype.buffer_capacity*cutoff_energy_low
         roboport_cutoff_energy_high[roboport.name]=roboport.electric_energy_source_prototype.buffer_capacity*cutoff_energy_high
