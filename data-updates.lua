@@ -213,6 +213,10 @@ data.raw["recipe"]["advanced-thruster-fuel"].surface_conditions = nil
 data.raw["recipe"]["advanced-thruster-oxidizer"].surface_conditions = nil
 
 data.raw["fluid-turret"]["flamethrower-turret"].surface_conditions = ten_pressure_condition
+
+data.raw["mod-data"]["Planetslib-planet-rocket-part-recipe"].data["muluna"] = nil
+data.raw["mod-data"]["Planetslib-planet-rocket-part-recipe"].data["muluna"] = nil
+
 -- data.raw["reactor"]["heating-tower"].surface_conditions = ten_pressure_condition
 -- if data.raw["furnace"]["stone-furnace"] then
 --     data.raw["furnace"]["stone-furnace"].surface_conditions = ten_pressure_condition
