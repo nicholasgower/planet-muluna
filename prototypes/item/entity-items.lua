@@ -68,27 +68,41 @@ space_platform_advanced.place_as_tile.result = "advanced-space-platform-foundati
 space_platform_advanced.name = "advanced-space-platform-foundation"
 space_platform_advanced.weight = space_platform_advanced.weight / 2
 
+local steel_chest = data.raw["item"]["steel-chest"]
+
 local space_chest = table.deepcopy(data.raw["item"]["steel-chest"])
 
 space_chest=Muluna.rro.util_merge{space_chest,
     {
         name="space-chest-muluna",
         place_result="space-chest-muluna",
-        icons = {
-            {
-            icon=space_chest.icon,
-            icon_size=space_chest.icon_size,
-            tint = {0.7,0.7,0.7},
+        -- icons = {
+        --     {
+        --     icon=steel_chest.icon,
+        --     icon_size=steel_chest.icon_size,
+        --     tint = {0.7,0.7,0.7},
             
-            },
+        --     },
             
-        },
+        -- },
         subgroup = "space-platform",
         order = "ca[space-chest-muluna]",
         default_import_location = "muluna",
     }
 
 }
+
+space_chest.icons = space_chest.icons or {
+            {
+            icon=steel_chest.icon,
+            icon_size=steel_chest.icon_size,
+            
+            },
+            
+        }
+for _,icon in pairs(space_chest.icons) do
+    icon.tint = {0.7,0.7,0.7}
+end
 
 local greenhouse = Muluna.rro.util_merge{table.deepcopy(data.raw["item"]["chemical-plant"]),
     {
