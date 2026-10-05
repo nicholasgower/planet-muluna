@@ -70,7 +70,7 @@ data:extend{{
     subgroup="terrain",
     group=data.raw.item["stone"].group,
     weight=data.raw.item["stone"].weight/2,
-    place_as_tile = util.merge{data.raw["item"]["stone-brick"].place_as_tile,{result = "muluna-gravel"}},
+    place_as_tile = Muluna.rro.util_merge{data.raw["item"]["stone-brick"].place_as_tile,{result = "muluna-gravel"}},
 },
 {
     type="item",

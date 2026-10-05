@@ -246,6 +246,11 @@ function rro.merge(old, new)
     return old
 end
 
+-- Drop-in replacement for utils.merge
+function rro.util_merge(args)
+    return rro.merge(args[1],args[2])
+end
+
 function rro.ammend(old, new)
     old = rro.merge(old, new)
 end

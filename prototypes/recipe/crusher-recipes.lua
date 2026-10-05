@@ -113,7 +113,7 @@ anorthite_crushing.ingredients = {{type = "item",name = "anorthite-chunk",amount
 -- }
 
 
-local advanced_anorthite_crushing = util.merge{table.deepcopy(anorthite_crushing),
+local advanced_anorthite_crushing = Muluna.rro.util_merge{table.deepcopy(anorthite_crushing),
 
 {
     name = "advanced-anorthite-crushing",

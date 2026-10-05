@@ -89,7 +89,7 @@ heating_boiler.icons = data.raw["item"]["muluna-vacuum-heating-tower"].icons
 heating_boiler.graphics_set = nil
 heating_boiler.name = "muluna-vacuum-heating-tower"
 heating_boiler.minable.result = "muluna-vacuum-heating-tower"
-heating_boiler = util.merge{heating_boiler,
+heating_boiler = Muluna.rro.util_merge{heating_boiler,
     {
         type = "heat-assembling-machine",
         --heat_buffer = heating_tower.heat_buffer,
