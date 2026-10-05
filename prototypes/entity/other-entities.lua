@@ -14,7 +14,7 @@ if true then
         
 
         local steam_furnace = table.deepcopy(original)
-        steam_furnace = util.merge{steam_furnace ,
+        steam_furnace = Muluna.rro.util_merge{steam_furnace ,
             {
                 name = "muluna-steam-".. name,
             }
@@ -213,7 +213,7 @@ if true then
 
 
     -- Muluna:extend{
-    --     util.merge{),
+    --     Muluna.rro.util_merge{),
     --     {
     --         name = "muluna-steam-".. name,
     --         ingredients = {

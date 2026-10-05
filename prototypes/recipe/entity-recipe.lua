@@ -114,7 +114,7 @@ end
 
 local space_chest = table.deepcopy(data.raw["recipe"]["steel-chest"])
 
-space_chest = util.merge{space_chest,
+space_chest = Muluna.rro.util_merge{space_chest,
     {   
         name = "space-chest-muluna",
         results = {{type = "item", name = "space-chest-muluna", amount = 1}},
@@ -130,7 +130,7 @@ space_chest = util.merge{space_chest,
     }
 }
 
-local greenhouse = util.merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
+local greenhouse = Muluna.rro.util_merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
     {
         name = "muluna-greenhouse",
         
@@ -150,7 +150,7 @@ if mods["Age-of-Production"] then
     rro.soft_insert(greenhouse.categories, "woodworking")
 end
 
-local greenhouse_wood = util.merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
+local greenhouse_wood = Muluna.rro.util_merge{table.deepcopy(data.raw["recipe"]["chemical-plant"]),
     {
         name = "muluna-greenhouse-wood",
         categories = {"crafting"},
@@ -183,7 +183,7 @@ greenhouse_wood.ingredients = {
     {type = "item", name = "landfill", amount = 10},
 }
 
-local low_density_space_platform_foundation = util.merge{table.deepcopy(data.raw["recipe"]["space-platform-foundation"]),
+local low_density_space_platform_foundation = Muluna.rro.util_merge{table.deepcopy(data.raw["recipe"]["space-platform-foundation"]),
 {
     name = "low-density-space-platform-foundation",
     results = {{type = "item",name = "low-density-space-platform-foundation", amount = 2}},
@@ -210,7 +210,7 @@ local low_density_space_platform_foundation = util.merge{table.deepcopy(data.raw
 }
 }
 
-local recycling_turbine = util.merge{table.deepcopy(data.raw["recipe"]["fusion-generator"]),
+local recycling_turbine = Muluna.rro.util_merge{table.deepcopy(data.raw["recipe"]["fusion-generator"]),
 {
     name = "muluna-cycling-steam-turbine",
     results = {{type = "item",name = "muluna-cycling-steam-turbine", amount = 1}},

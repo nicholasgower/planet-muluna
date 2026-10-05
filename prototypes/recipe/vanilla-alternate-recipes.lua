@@ -127,7 +127,7 @@ end
 
 
 
-local solar_panel = util.merge{data.raw["recipe"]["solar-panel"],
+local solar_panel = Muluna.rro.util_merge{data.raw["recipe"]["solar-panel"],
     {
         name = "muluna-silicon-solar-panel",
         icons = dual_icon("solar-panel","silicon-cell"),

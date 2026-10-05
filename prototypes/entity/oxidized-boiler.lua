@@ -121,7 +121,7 @@ local space_boiling = {
   }
 }
 
-local space_boiling_atmosphere = util.merge{space_boiling,{
+local space_boiling_atmosphere = Muluna.rro.util_merge{space_boiling,{
   name = "advanced-water-boiling-atmosphere",
   hide_from_signal_gui = false,
   icons = dual_icon("steam","maraxsis-atmosphere"),
@@ -135,7 +135,7 @@ local space_boiling_atmosphere = util.merge{space_boiling,{
 
 -- local temperature_time_ratio = (500-15)/(165-15)
 
--- local space_boiling_high_temperature = util.merge{space_boiling,{
+-- local space_boiling_high_temperature = Muluna.rro.util_merge{space_boiling,{
 --   name = "advanced-water-boiling-high-temperature",
 --   hide_from_signal_gui = false,
 --   --icons = dual_icon("steam","oxygen","oxygen"),

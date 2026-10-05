@@ -136,7 +136,7 @@ for _,inserter in pairs(data.raw["inserter"]) do
         -- inserter[picture] = {
         --     layers = {
         --         table.deepcopy(inserter[picture]),
-        --         util.merge{table.deepcopy(inserter[shadow]){draw_as_shadow = true}}
+        --         Muluna.rro.util_merge{table.deepcopy(inserter[shadow]){draw_as_shadow = true}}
         --     }
         -- }
         if inserter[shadow] then

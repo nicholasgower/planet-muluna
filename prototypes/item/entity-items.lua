@@ -70,7 +70,7 @@ space_platform_advanced.weight = space_platform_advanced.weight / 2
 
 local space_chest = table.deepcopy(data.raw["item"]["steel-chest"])
 
-space_chest=util.merge{space_chest,
+space_chest=Muluna.rro.util_merge{space_chest,
     {
         name="space-chest-muluna",
         place_result="space-chest-muluna",
@@ -90,7 +90,7 @@ space_chest=util.merge{space_chest,
 
 }
 
-local greenhouse = util.merge{table.deepcopy(data.raw["item"]["chemical-plant"]),
+local greenhouse = Muluna.rro.util_merge{table.deepcopy(data.raw["item"]["chemical-plant"]),
     {
         name = "muluna-greenhouse",
         icon = "__muluna-graphics__/graphics/greenhouse/sprites/greenhouse-icon.png",
@@ -105,7 +105,7 @@ local greenhouse = util.merge{table.deepcopy(data.raw["item"]["chemical-plant"])
 
 greenhouse.place_result = nil
 
-local greenhouse_wood = util.merge{table.deepcopy(data.raw["item"]["chemical-plant"]),
+local greenhouse_wood = Muluna.rro.util_merge{table.deepcopy(data.raw["item"]["chemical-plant"]),
     {
         name = "muluna-greenhouse-wood",
         icons = {
@@ -131,7 +131,7 @@ local greenhouse_wood = util.merge{table.deepcopy(data.raw["item"]["chemical-pla
 }
 
 local low_density_space_platform_foundation = table.deepcopy(data.raw["item"]["space-platform-foundation"])
-low_density_space_platform_foundation = util.merge{low_density_space_platform_foundation,
+low_density_space_platform_foundation = Muluna.rro.util_merge{low_density_space_platform_foundation,
 {
     name = "low-density-space-platform-foundation",
     icon = "__muluna-graphics__/graphics/icons/low-density-space-platform-foundation.png",
@@ -143,7 +143,7 @@ low_density_space_platform_foundation = util.merge{low_density_space_platform_fo
 low_density_space_platform_foundation.place_as_tile.result = "low-density-space-platform-foundation"
 
 
-local recycling_turbine = util.merge{table.deepcopy(data.raw["item"]["fusion-generator"]),
+local recycling_turbine = Muluna.rro.util_merge{table.deepcopy(data.raw["item"]["fusion-generator"]),
     {
         name = "muluna-cycling-steam-turbine",
         place_result = "muluna-cycling-steam-turbine",
@@ -155,7 +155,7 @@ local recycling_turbine = util.merge{table.deepcopy(data.raw["item"]["fusion-gen
 
 }
 
-local buggy = util.merge{table.deepcopy(data.raw["item-with-entity-data"]["car"]),
+local buggy = Muluna.rro.util_merge{table.deepcopy(data.raw["item-with-entity-data"]["car"]),
 {
     name = "muluna-rocket-buggy",
     place_result = "muluna-rocket-buggy",
