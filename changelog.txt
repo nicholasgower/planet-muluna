@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.34
+Date: 2026-10-06
+  Balancing:
+    - Adjusted quality science pack drain multiplier to make cryolabs with only a few quality upgrades more powerful.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.33
 Date: 2026-10-05
   Bugfixes:
