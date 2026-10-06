@@ -48,11 +48,8 @@ end
 
 if settings.startup["muluna-change-quality-science-pack-drain"].value == true then
     for _,quality in pairs(data.raw["quality"]) do
-        if quality.level <=5 then
-            quality.science_pack_drain_multiplier = 1 - 0.1*quality.level
-        else
-            quality.science_pack_drain_multiplier = 1 - 0.1*5 -0.01*(quality.level-5)
-        end
+        quality.science_pack_drain_multiplier = 1 /(1+ 0.3*quality.level)
+        
         if quality.science_pack_drain_multiplier < 0.1 then
             quality.science_pack_drain_multiplier = 0.1
         end
