@@ -73,27 +73,10 @@ local interstellar_science_pack = require("scripts.interstellar-science-pack")
 -- end
 -- )
 
-Muluna.events.register_delayed_function('space-exploration-graphics-missing', function() 
-    game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics","0.7.5"})
-end)
 
-Muluna.events.register_delayed_function('space-exploration-graphics-4-missing', function() 
-    game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics-4","0.7.2"})
-end)
 
-Muluna.events.register_delayed_function('factorio-update-required', function() 
-    game.print({"console.factorio-update-required"})
-end)
 
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
-    if not script.active_mods["space-exploration-graphics"] then
-        Muluna.events.execute_later('space-exploration-graphics-missing',15)
-    end
-    if not script.active_mods["space-exploration-graphics-4"] then
-        Muluna.events.execute_later('space-exploration-graphics-4-missing',15)
-        --game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics-4","0.7.2"})
-    end
-    Muluna.events.execute_later('factorio-update-required',15)
     --init_storage() 
     storage.walking_tick_rates = {}
     for _,force in pairs(game.forces) do

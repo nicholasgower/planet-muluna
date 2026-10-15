@@ -492,5 +492,4 @@ end
 
 Muluna:extend{space_boiler_category,space_boiler_new,space_boiling,space_boiling_atmosphere}
 
-data.raw["generator"]["steam-engine"].fluid_box.minimum_temperature=50
-data.raw["generator"]["steam-turbine"].fluid_box.minimum_temperature=50
+

@@ -1,4 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.37
+Date: 2026-10-15
+  Compatibility:
+    - Removed "valves" as a recommended dependency.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.36
+Date: 2026-10-15
+  Changes:
+    - Removed some now-obsolete console warnings.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.35
+Date: 2026-10-15
+  Balancing:
+    - Removed minimum temperature changes from vanilla generator prototypes.
+  Compatibility:
+    - Raised required Factorio version to 2.1.22 and fixed breaking changes associated with this version.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.34
 Date: 2026-10-06
   Balancing:

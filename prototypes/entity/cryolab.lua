@@ -15,13 +15,13 @@ cryolab.selection_box = {{-3.5, -3.5}, {3.5, 3.5}}
 
 
 if mods["fluid-nutrients"] then
+  cryolab.minimum_input_temperature = 15
+  cryolab.maxiumum_temperature = 100
   cryolab.energy_source = { --Copied and modified from fluid-nutrients to make this mod compatible with its changes to biolabs..
     type = "fluid",
     fluid_box = {
         volume = 20,
         filter = "nutrient-solution",
-        minimum_temperature = 15,
-        maximum_temperature = 100,
         pipe_picture = {
             north = table.deepcopy(data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1].pipe_picture.north),
             east = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture.east,
