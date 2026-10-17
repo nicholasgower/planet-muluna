@@ -12,7 +12,7 @@
     "? quality",
     "? even-pickier-dollies",
     "PlanetsLib >= 2.0.8",
-    "muluna-graphics >= 1.1.16",
+    "muluna-graphics >= 1.1.18",
     "+ tile-upgrade-planner-muluna >= 1.0.8",
     "! tile-upgrade-planner",
     "alien-biomes-graphics >= 0.7.0",

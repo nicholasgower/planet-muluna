@@ -17,7 +17,7 @@ local recycling_turbine=rro.merge(table.deepcopy(fusion_generator),
         next_upgrade = "_nil",
         smoke = turbine.smoke,
         minimum_input_temperature=165,
-        maximum_input_temperature=max_temperature,
+        --maximum_input_temperature=max_temperature,
         maximum_temperature=max_temperature,
     }
 
