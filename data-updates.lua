@@ -739,7 +739,6 @@ local category_blacklist = {
     "double-boiler",
     "muluna-greenhouse",
     "muluna-vacuum-heating-tower",
-    "kr-fuel-burning"
 }
 
 local subgroup_blacklist = {
