@@ -233,7 +233,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 -- collision box, so make it non-colliding; the refueler keeps the
                 -- real collision. scripts/even-pickier-dollies.lua then moves the
                 -- roboport along with the refueler.
-                refueler.selection_priority = 51
+                refueler.selection_priority = 49
                 roboport.collision_mask = {layers = {}}
             end
         
