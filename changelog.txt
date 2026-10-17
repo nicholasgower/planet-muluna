@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.38
+Date: 2026-10-17
+  Compatibility:
+    - Raised required muluna-graphics version to 1.1.18.
+  Bugfixes:
+    - Condenser turbine will accept any steam above 165 degrees. Fixes incompatibility with K2SO. https://github.com/nicholasgower/planet-muluna/issues/489
+    - Creating Muluna no longer fails with "candidate_point_count too high" for cupric asteroid chunks when many ore and planet mods are installed
+  Graphics:
+    - Cryolab's graphics now uses Hurricane046's full spritesheet
+---------------------------------------------------------------------------------------------------
 Version: 2.7.37
 Date: 2026-10-15
   Compatibility:
