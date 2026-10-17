@@ -97,9 +97,8 @@ end
 local function register_epd_event()
     if not script.active_mods["even-pickier-dollies"] then return end
     if not remote.interfaces["PickerDollies"] then return end
-    script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), on_dolly_moved_entity)
+    Muluna.events.on_event("even-pickier-dollies-on-entity-moved", on_dolly_moved_entity)
 end
 
-script.on_init(register_epd_event)
-script.on_load(register_epd_event)
+register_epd_event()
 
