@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.39
+Date: 2026-10-17
+  Balancing:
+    - "Low density structure from aluminum" takes the same amount of time to craft as vanilla low density structure.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.38
 Date: 2026-10-17
   Compatibility:
