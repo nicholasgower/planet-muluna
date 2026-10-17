@@ -35,6 +35,7 @@ require("scripts.telescopes")
 require("scripts.gui")
 require("scripts.burner-roboports")
 require("scripts.remote")
+require("scripts.even-pickier-dollies")
 --local sd = require("scripts.project-seadragon")
 
 --muluna.finalize_events()

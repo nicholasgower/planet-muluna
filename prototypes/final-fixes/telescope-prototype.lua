@@ -19,6 +19,14 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
         PlanetsLib.constants.pipette_result[telescope_combinator.name] = entity.name
         telescope_combinator.selection_box = flib_bounding_box.resize(entity.selection_box,0.0)
         telescope_combinator.selection_priority=49 --Default is 50
+        if mods["even-pickier-dollies"] then
+            -- Even Pickier Dollies refuses to move an entity when another entity sits
+            -- in the destination box. The combinator shares the telescope's collision
+            -- box, so make it non-colliding; the telescope keeps the real collision.
+            -- scripts/even-pickier-dollies.lua then moves the combinator along with
+            -- the telescope.
+            telescope_combinator.collision_mask = {layers = {}}
+        end
         telescope_combinator.factoriopedia_description={"entity-factoriopedia-description.muluna-telescope-combinator"}
         if not mods["quality"] then
             telescope_combinator.factoriopedia_description={"entity-factoriopedia-description.muluna-telescope-combinator-no-quality"}

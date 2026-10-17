@@ -10,6 +10,7 @@
     "base >= 2.1.22",
     "space-age",
     "? quality",
+    "? even-pickier-dollies",
     "PlanetsLib >= 2.0.8",
     "muluna-graphics >= 1.1.16",
     "+ tile-upgrade-planner-muluna >= 1.0.8",
