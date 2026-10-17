@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.40
+Date: 2026-10-17
+  Compatibility:
+    - Removed gas venting when Krastorio 2 is loaded, as the flare stack makes it redundant. https://github.com/nicholasgower/planet-muluna/issues/474
+  Bugfixes:
+    - K2SO: Flaring speed of flare stack when burning Muluna gases is no longer modified by Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.39
 Date: 2026-10-17
   Balancing:
