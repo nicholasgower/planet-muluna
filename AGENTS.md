@@ -152,8 +152,10 @@ across ticks without re-validating `entity.valid`.
 - Prefer `rro.soft_insert` / `rro.replace_no_duplicates` over `table.insert` when touching
   shared lists to avoid duplicate ingredients/effects/prerequisites.
 - Deferred/last-resort patches belong in `prototypes/final-fixes/` and are required from both
-  `data-updates.lua` and `data-final-fixes.lua` when they need to run at both times (the
-  ground-digger module does this deliberately).
+  `data-updates.lua` and `data-final-fixes.lua` when they need to run at both times.
+- Ground diggers are provided by PlanetsLib: `PlanetsLib.enable_ground_diggers()` in
+  `prototypes/entity/ground-digger.lua` generates the shared `<drill>-ground-digger`
+  prototypes, and `prototypes/final-fixes/ground-digger.lua` only adds Muluna-specific data.
 - Localised names/descriptions use Factorio's LocalisedString tables, e.g.
   `localised_name = {"technology-name.rocket-part-productivity-muluna"}`.
 

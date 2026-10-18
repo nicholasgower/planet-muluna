@@ -30,7 +30,6 @@ require("prototypes.lunar-science-pack")
 require("prototypes.technology.interstellar-technologies") --Also runs during data-updates
 require("prototypes.nav-beacon")
 require("prototypes.decoratives.muluna-decoratives")
-require("prototypes.mod-data.ground-diggers")
 require("prototypes.achievements")
 
 

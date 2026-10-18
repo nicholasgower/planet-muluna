@@ -29,39 +29,13 @@ Muluna:extend {{
     --localised_description = {"item-description.sand"},
 }}
 
-
-
-Muluna:extend {{
-    type = "custom-input",
-    name = "build",
-    key_sequence = "",
-    linked_game_control = "build"
-}}
-
-Muluna:extend {{
-    type = "custom-input",
-    name = "rotate",
-    key_sequence = "",
-    linked_game_control = "rotate"
-}}
-
-Muluna:extend {{
-    type = "custom-input",
-    name = "reverse-rotate",
-    key_sequence = "",
-    linked_game_control = "rotate"
-}}
-
-Muluna:extend {{
-    type = "custom-input",
-    name = "build-ghost",
-    key_sequence = "",
-    linked_game_control = "build-ghost"
-}}
-
-Muluna:extend {{
-    type = "custom-input",
-    name = "super-forced-build",
-    key_sequence = "",
-    linked_game_control = "super-forced-build"
-}}
+-- PlanetsLib generates the shared "<drill>-ground-digger" prototypes and assigns this
+-- recipe when a digger is built on Muluna. Any square, placeable mining drill without a
+-- fluid output is eligible, including non-electric drills. Drills that output fluids
+-- (such as pumpjacks) and the blacklisted drills below are skipped.
+PlanetsLib.enable_ground_diggers("muluna", "muluna-regolith-digging", {
+    blacklist = {
+        ["seafloor-drill"] = true,
+        ["surface-drill"] = true,
+    },
+})
