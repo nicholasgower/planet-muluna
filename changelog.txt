@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.41
+Date: 2026-10-18
+  Compatibility:
+    - Raised required PlanetsLib version to 2.1.0. Offloaded regolith digger mechanic to PlanetsLib.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.40
 Date: 2026-10-17
   Compatibility:
