@@ -544,7 +544,7 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
             end
         end
         -- Other signals indicating planet and total number of platforms
-        local number_of_platforms = 1
+        local number_of_platforms = #space_platforms
         signals[i]={value = {type = "space-location",name = planet.name,quality = "normal"},min= number_of_platforms, }
         i = i+1
     elseif surface.platform then
