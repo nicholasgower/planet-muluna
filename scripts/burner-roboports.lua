@@ -266,6 +266,7 @@ local function short_update_roboport(refueler)
         local roboport = entity_table["roboport"]
         if not roboport or not roboport.valid then return end
         refueler.custom_status = status_burner_roboport_refueling
+        roboport.custom_status = refueler.custom_status
         roboport.energy = (roboport.energy or 0) + delta_energy
         if roboport.energy >= roboport_cutoff_energy_high[roboport.name] then
             --storage.active_burner_roboports[key] = nil --Deactivates roboport
