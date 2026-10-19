@@ -357,13 +357,15 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 heat_assembling_machine_data = machine
                 if entity.name == machine["constant-combinator"] then
                             --game.print("combinator!")
+                            local assembler
                             for i,telescope in pairs(storage.telescopes) do
                                 if entity == telescope["constant-combinator"]  then
-                                    entity = telescope["assembling-machine"]
+                                    assembler = telescope["assembling-machine"]
                                     break
                                 end
                             end
-                            assert(entity.type == "assembling-machine")
+                            if not assembler then return end
+                            entity = assembler
                 end
                 break
             end
@@ -392,7 +394,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
-        if reactor then
+        if reactor and reactor.valid then
             reactor.destroy()
         end
         if entity.valid then
