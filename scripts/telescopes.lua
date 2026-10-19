@@ -431,9 +431,9 @@ local state_integer_table = {
     [defines.space_platform_state.starter_pack_on_the_way] = 3,
     [defines.space_platform_state.on_the_path] = 4,
     [defines.space_platform_state.waiting_for_departure] = 5,
-    [defines.space_platform_state.no_path] = 6,
-    [defines.space_platform_state.waiting_at_station] = 7,
-    [defines.space_platform_state.paused] = 8,
+    [defines.space_platform_state.no_schedule] = 6,
+    [defines.space_platform_state.no_path] = 7,
+    [defines.space_platform_state.waiting_at_station] = 8,
     [defines.space_platform_state.paused] = 9,
 }
 
