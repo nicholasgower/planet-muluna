@@ -234,4 +234,8 @@ end
         
         end
         )
+
+    if script.active_mods["funit"] then
+        Muluna.funit.is_game_controller_input = is_game_controller_input
+    end
 end

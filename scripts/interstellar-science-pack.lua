@@ -108,6 +108,10 @@ script.on_event(defines.events.on_player_cheat_mode_enabled,function(event)
 
 end)
 
+if script.active_mods["funit"] then
+    Muluna.funit.set_cheat_mode = Public.set_cheat_mode
+end
+
 
 
 

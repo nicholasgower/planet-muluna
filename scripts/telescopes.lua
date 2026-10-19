@@ -606,7 +606,6 @@ end
 
 
 
-
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
     for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
@@ -634,3 +633,10 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
 
 
 end)
+
+if script.active_mods["funit"] then
+    Muluna.funit.get_telescope_combinator_signals = get_telescope_combinator_signals
+    Muluna.funit.get_state_integer = get_state_integer
+    Muluna.funit.get_time_to_next_asteroid_check = get_time_to_next_asteroid_check
+    Muluna.funit.bool_to_int = bool_to_int
+end

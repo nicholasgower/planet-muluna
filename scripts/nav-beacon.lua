@@ -463,3 +463,6 @@ Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
 
 end)
 
+if script.active_mods["funit"] then
+    Muluna.funit.get_nav_scan_area = get_nav_scan_area
+end

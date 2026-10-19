@@ -277,10 +277,13 @@ local function short_update_roboport(refueler)
         end
 
 end
-
 script.on_event(prototypes.recipe["burner-roboport-refuel-muluna"].on_crafted_event, function(event)
     short_update_roboport(event.entity)
 end)
+
+if script.active_mods["funit"] then
+    Muluna.funit.short_update_roboport = short_update_roboport
+end
 
 
 -- Muluna.events.on_nth_tick(short_update_period, function() 
