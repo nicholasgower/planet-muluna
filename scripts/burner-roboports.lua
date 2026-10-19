@@ -57,6 +57,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
+        if not roboport then return end
         entity.set_recipe("burner-roboport-refuel-muluna","normal")
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
@@ -90,14 +91,16 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             heat_assembling_machine_data = machine
             if entity.name == machine["roboport"] then
                 --game.print("roboport!")
-                for i,roboport in pairs(storage.burner_roboports) do
+                local found = false
+                for i,roboport in pairs(storage.burner_roboports or {}) do
                     if entity == roboport.roboport  then
                         entity = roboport.refueler
+                        found = true
                         break
                     end
                 
                 end
-                assert(entity.type == "assembling-machine")
+                if not found then return end
             end
             break
         end
@@ -125,7 +128,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
-        if reactor then
+        if reactor and reactor.valid then
             reactor.destroy()
         end
         
@@ -142,7 +145,9 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         --     snap_to_grid = true,
         -- }
     end
-    storage.active_burner_roboports[entity.unit_number] = nil
+    if storage.active_burner_roboports then
+        storage.active_burner_roboports[entity.unit_number] = nil
+    end
     if entity.valid then
         entity.destroy()
     end
@@ -254,9 +259,12 @@ local delta_energy = (fluid_removed_amount or 0) * energy_value
 --Pre 2.1.12, this function was used in a loop on every refueler with low energy in a table to periodically convert proxy fluid into energy. Now, it's done on crafting of a recipe that consumes fuel.
 local function short_update_roboport(refueler)
     --local roboport = entity_table["roboport"]
+        if not refueler or not refueler.valid then return end
         local key = refueler.unit_number
-        
-        local roboport = storage.burner_roboports[key]["roboport"]
+        local entity_table = storage.burner_roboports and storage.burner_roboports[key]
+        if not entity_table then return end
+        local roboport = entity_table["roboport"]
+        if not roboport or not roboport.valid then return end
         refueler.custom_status = status_burner_roboport_refueling
         roboport.energy = (roboport.energy or 0) + delta_energy
         if roboport.energy >= roboport_cutoff_energy_high[roboport.name] then
