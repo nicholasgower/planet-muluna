@@ -209,7 +209,7 @@ local function destroyed_nav_beacon(entity)
     storage.nav_surfaces[entity.unit_number] = nil
     storage.nav_beacons[entity.unit_number] = nil
     storage.nav_beacons_other[entity.unit_number] = nil
-    if #storage.nav_beacons == 0 then
+    if next(storage.nav_beacons) == nil then
         storage.has_nav_beacons = false
     end
 end
