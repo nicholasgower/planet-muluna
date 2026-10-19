@@ -5,7 +5,7 @@ local heat_assembling_machine_keys = rro.keys(Muluna.constants.heat_assembling_m
 local telescope_combinator_keys = {}
 local heat_element_keys = {}
 
-for i,tab in pairs({telescope_keys,heat_assembling_machine_keys}) do
+for i,tab in pairs({telescopes,heat_assembling_machine_keys}) do
     local element_table
     local table_write
     local field
