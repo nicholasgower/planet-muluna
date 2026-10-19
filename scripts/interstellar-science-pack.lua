@@ -89,10 +89,22 @@ function Public.update_interstellar_pack(force,display_notification)
 
 end
 
+---Unlock the gated technology directly, as cheat mode should.
+---@param force LuaForce
+function Public.set_cheat_mode(force)
+    local data = prototypes.mod_data["muluna-interstellar-science-pack-conditions"].data
+    local technology = force.technologies[data.gated_technology]
+    if technology then
+        technology.researched = true
+    end
+end
+
 script.on_event(defines.events.on_player_cheat_mode_enabled,function(event)
 
-    local force = game.players[event.player_index].force
-    force.technologies[interstellar_pack_name].researched = true
+    local player = game.players[event.player_index]
+    if player then
+        Public.set_cheat_mode(player.force)
+    end
 
 end)
 
