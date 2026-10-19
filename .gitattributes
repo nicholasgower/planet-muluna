@@ -27,3 +27,4 @@ docs export-ignore
 scenarios export-ignore
 bin export-ignore
 .env export-ignore
+*.py export-ignore
