@@ -16,7 +16,7 @@ for i,tab in pairs({telescopes,heat_assembling_machine_keys}) do
     elseif i == 2 then
         element_table = Muluna.constants.heat_assembling_machines
         field = "reactor"
-        table_write = telescope_combinator_keys
+        table_write = heat_element_keys
     end
     for j,key in pairs(element_table) do
         table_write[j] = key[field]
