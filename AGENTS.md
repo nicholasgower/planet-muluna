@@ -247,6 +247,15 @@ denies `git push`. The `Release` workflow publishes to the mod portal using `FAC
 LuaDoc annotations and `-- @module` headers. Add doc comments to new `lib/` modules to keep
 them in the generated API docs; do not hand-edit files under `docs/`.
 
+## Factorio API docs helper
+
+The `factorio-docs` agent answers questions from the Factorio prototype/runtime JSON
+under `/opt/factorio_space_age_21/doc-html`. Those lookups go through `tools/fdoc.py`, a
+single-file, stdlib-only CLI that resolves prototype/class inheritance and formats results
+readably instead of dumping raw JSON. Run `python3 tools/fdoc.py --help` for the commands
+(`prototype`, `type`, `class`, `event`, `concept`, `define`, `get`, `member`, `search`,
+`list`, `info`); the agent prompt in `prompts/factorio-docs.txt` points the agent at it.
+
 ## Working agreements
 
 - Keep changes consistent with surrounding style: `local rro = Muluna.rro` at the top of files
