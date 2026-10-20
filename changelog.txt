@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.44
+Date: 2026-10-20
+  Bugfixes:
+    - Fixed burner roboport lifecycle handling of stale entities.
+    - Fixed burner roboport refueling status not updating.
+    - Fixed cheat mode not unlocking the gated interstellar technology.
+    - Fixed heat assembling machine lifecycle handling of stale entities.
+    - Fixed heat GUI element keys being written to the telescope table.
+    - Fixed interstellar science pack progress with a missing gated technology.
+    - Fixed Maraxsis trench surfaces being included in telescope data.
+    - Fixed nav beacon scan size using energy cost instead of scan area.
+    - Fixed nav beacon storage checks using array length.
+    - Fixed singular-icon recipes being hidden from the recipe GUI.
+    - Fixed telescope destruction with stale entities.
+    - Fixed telescope GUI key table lookup.
+    - Fixed telescope platform state mapping.
+    - Fixed telescope signals reporting one space platform.
+    - Fixed the always-false crusher check in steam furnace generation.
+    - Fixed walking particle controller input checks.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.43
 Date: 2026-10-20
   Compatibility:
