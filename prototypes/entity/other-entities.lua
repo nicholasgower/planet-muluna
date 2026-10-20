@@ -191,7 +191,7 @@ if true then
         recipe.enabled = false
         item.name = "muluna-steam-".. name
         item.place_result = "muluna-steam-".. name
-        if not name == "crusher" then
+        if name ~= "crusher" then
             data.raw["item"][name].order = item.order .. "a"
         else 
             item.order = item.order .. "a"

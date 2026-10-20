@@ -1,5 +1,6 @@
 
 require("api")
+Muluna.funit = Muluna.funit or {}
 local rro = Muluna.rro
 -- script.on_configuration_changed(function()
 --     if debug_mode then
@@ -135,5 +136,10 @@ script.on_event(defines.events.on_research_finished, function(event) interstella
 
 
 
+
+if script.active_mods["funit"] then
+    require("scripts.funit")
+    require("__funit__.mock").register()
+end
 
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end

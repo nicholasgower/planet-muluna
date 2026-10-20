@@ -45,6 +45,7 @@ migrations/               Save-migration scripts (.lua) and one-shot data patche
 scripts/                  Control-stage feature modules (telescopes, nav-beacon, gui, ...)
 locale/                   Translations, one dir per language (en, ru, de, fr, zh-CN, ...)
 scenarios/__funit__...    A Factorio `funit` scenario used for in-game smoke tests
+test-mods/                Development-only companion mods (the FUnit suite; export-ignored)
 prompts/                  Prompt text for the opencode "docs" agents (factorio-docs, lua-docs)
 docs/                     Generated LDoc HTML output (do not hand-edit)
 ```
@@ -195,7 +196,7 @@ part of this mod while keeping its separate structure.
 
 ## Verifying changes
 
-There is no CI test suite. What you can do:
+There is no CI test suite wired into GitHub Actions. What you can do:
 
 1. **Static sanity**: re-read your Lua for stage mistakes (using `data.raw` in control,
    calling `data:extend` after `finalize_events`, etc.). There is no luacheck/stylua config
@@ -203,11 +204,16 @@ There is no CI test suite. What you can do:
    `lowercase-global`; globals list includes `game`, `data`, `script`, `storage`, `mods`, ...).
 2. **Loading the game**: the real check. Load a save with the mod enabled and confirm no
    startup crash. The PR checklist requires testing at least alone and with **Alien Biomes**.
-3. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
+3. **Headless FUnit suite**: `test-mods/planet-muluna-funit/` is a development-only
+   companion mod with data-stage fixtures and runtime behavioral tests. Run
+   `bash test-mods/planet-muluna-funit/run.sh`; it links the current worktree, uses the
+   installed dependency mods, and exits non-zero on any FUnit failure. See that mod's
+   `README.md` for prerequisites and the test-only `muluna_funit` remote interface.
+4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
    `__funit__` test that generates the Muluna surface and checks the Entity Replacement
    System. It needs the `funit` mod and a matching `mod-list.json`; it is a reference smoke
    test, not a general test runner.
-4. **Crash reports**: because this mod deep-modifies Space Age, most bugs are load-time or
+5. **Crash reports**: because this mod deep-modifies Space Age, most bugs are load-time or
    interaction crashes ("Fixed crash on load with ..." is the most common commit type).
 
 Because of the above, be conservative: guard prototype access, avoid assumptions about load

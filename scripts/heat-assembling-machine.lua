@@ -40,6 +40,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
+        if not reactor then return end
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
@@ -69,13 +70,15 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             heat_assembling_machine_data = machine
             if entity.name == machine["reactor"] then
                         --game.print("roboport!")
-                        for i,heat_assembling_machine in pairs(storage.heat_assembling_machines) do
+                        local found = false
+                        for i,heat_assembling_machine in pairs(storage.heat_assembling_machines or {}) do
                             if entity == heat_assembling_machine.reactor  then
                                 entity = heat_assembling_machine["assembling-machine"]
+                                found = true
                                 break
                             end
                         end
-                        assert(entity.type == "assembling-machine")
+                        if not found then return end
             end
             break
         end
@@ -101,7 +104,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
-        if reactor then
+        if reactor and reactor.valid then
             reactor.destroy()
         end
         if entity.valid then

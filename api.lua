@@ -25,7 +25,7 @@ Muluna.machine_scaling = require("lib.machine_scaling")
 function Muluna:extend(new_data)
     for _,prototype in pairs(new_data) do
         if prototype.type == "recipe" then
-            if prototype.icons and not prototype.hide_from_recipe_gui then
+            if (prototype.icon or prototype.icons) and not prototype.hide_from_recipe_gui then
                 prototype.hide_from_recipe_gui = false
             end
         elseif prototype.type == "technology" then

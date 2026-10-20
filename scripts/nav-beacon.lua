@@ -2,6 +2,17 @@ local debug_mode = false
 local DT = "[NavBeacon] "
 local radar_data 
 local rro = Muluna.rro
+---Compute the radar's scan size from the configured base area, not its energy cost.
+---@param navSat LuaEntity
+---@return number|nil
+local function get_nav_scan_area(navSat)
+    if not radar_data or not navSat or not navSat.valid then return nil end
+    return helpers.evaluate_expression(radar_data.scan_size_expression, {
+        base = radar_data.entities[navSat.name].scan_area,
+        quality_level = navSat.quality.level,
+    })
+end
+
 if settings.startup["enable-nav-beacon"].value == true then
     radar_data = prototypes.mod_data["muluna-satellite-radar"].data
 end
@@ -209,7 +220,7 @@ local function destroyed_nav_beacon(entity)
     storage.nav_surfaces[entity.unit_number] = nil
     storage.nav_beacons[entity.unit_number] = nil
     storage.nav_beacons_other[entity.unit_number] = nil
-    if #storage.nav_beacons == 0 then
+    if next(storage.nav_beacons) == nil then
         storage.has_nav_beacons = false
     end
 end
@@ -326,7 +337,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                     navSat.energy = navSat.energy - energy_cost
                                     --game.print(navSat.quality.level)
                                     --local offset = 100 * (1+0.3*navSat.quality.level)
-                                    local offset = helpers.evaluate_expression(radar_data.scan_size_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})
+                                    local offset = get_nav_scan_area(navSat)
                                     local chartBounds = {
                                         left_top = { pos.x - offset/2, pos.y - offset/2},
                                         right_bottom = { pos.x + offset/2, pos.y + offset/2}
@@ -452,3 +463,6 @@ Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
 
 end)
 
+if script.active_mods["funit"] then
+    Muluna.funit.get_nav_scan_area = get_nav_scan_area
+end
