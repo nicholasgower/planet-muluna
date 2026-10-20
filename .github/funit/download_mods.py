@@ -18,6 +18,11 @@ The paid Space Age mods are built into the factorio-docker image, and the main
 mod, test mod and FUnit are packaged from this repository.  Everything else is
 resolved to the newest release for the target Factorio version and downloaded
 into the test artifacts directory.
+
+The target version may be a concrete version (e.g. "2.1.22") or the label
+"latest", which matches the factorio-docker image's latest experimental build.
+"latest" is resolved from the game installed in this environment when possible
+and from factorio.com's latest-releases API otherwise.
 """
 
 from __future__ import annotations
@@ -27,6 +32,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -35,7 +41,13 @@ import zipfile
 from pathlib import Path
 
 PORTAL = "https://mods.factorio.com"
+FACTORIO_RELEASES = "https://factorio.com/api/latest-releases"
 USER_AGENT = "planet-muluna-funit-ci/1.0"
+
+# Labels accepted in place of a concrete Factorio version. The docker image
+# publishes "latest" as the newest experimental build.
+VERSION_LABELS = ("latest",)
+LATEST_CHANNEL = "experimental"
 
 BUILTIN_MODS = ["base", "elevated-rails", "quality", "recycler", "space-age"]
 LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
@@ -70,6 +82,79 @@ def version_ge(a: str, b: str) -> bool:
     right = version_tuple(b)
     width = max(len(left), len(right))
     return left + (0,) * (width - len(left)) >= right + (0,) * (width - len(right))
+
+
+def installed_factorio_version():
+    """Return the version of the Factorio install in this environment, if any.
+
+    The FUnit job runs inside the factorio-docker image, and that image's
+    "latest" tag selects whichever build it ships. Reading the installed
+    version keeps the mod selection in sync with the game that will load the
+    mods, even if factorio.com has already moved on to a newer release.
+    """
+    candidates = []
+    explicit = os.environ.get("FACTORIO_BIN")
+    if explicit:
+        candidates.append(Path(explicit))
+    on_path = shutil.which("factorio")
+    if on_path:
+        candidates.append(Path(on_path))
+    candidates.append(Path("/opt/factorio/bin/x64/factorio"))
+
+    for binary in candidates:
+        if not binary.is_file():
+            continue
+
+        # <install>/bin/x64/factorio -> <install>/data/base/info.json
+        data_info = binary.parent.parent.parent / "data" / "base" / "info.json"
+        try:
+            version = json.loads(data_info.read_text()).get("version")
+        except (OSError, ValueError):
+            version = None
+        if isinstance(version, str) and version:
+            return version
+
+        try:
+            result = subprocess.run(
+                [str(binary), "--version"],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+        match = re.search(r"Version:\s*(\d+\.\d+\.\d+)", result.stdout)
+        if match:
+            return match.group(1)
+
+    return None
+
+
+def latest_portal_version(channel: str = LATEST_CHANNEL) -> str:
+    """Resolve a release channel from factorio.com's latest-releases API."""
+    data = fetch_json(FACTORIO_RELEASES)
+    releases = data.get(channel) or {}
+    for key in ("headless", "alpha", "expansion", "demo"):
+        version = releases.get(key)
+        if version:
+            return str(version)
+    raise SystemExit(f"error: factorio.com lists no {channel} Factorio version")
+
+
+def resolve_version(label: str) -> str:
+    """Turn a version label such as "latest" into a concrete version number."""
+    if label.strip().lower() not in VERSION_LABELS:
+        return label
+
+    version = installed_factorio_version()
+    source = "installed game"
+    if not version:
+        version = latest_portal_version()
+        source = f"factorio.com {LATEST_CHANNEL} channel"
+
+    print(f"Resolved Factorio version '{label}' to {version} ({source}).")
+    return version
 
 
 def base_requirement_ok(info: dict, target: str) -> bool:
@@ -254,6 +339,7 @@ def main() -> int:
     parser.add_argument(
         "--factorio-version",
         default=os.environ.get("FACTORIO_VERSION", "2.1.22"),
+        help="target Factorio version, or 'latest' for the installed/experimental build",
     )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -271,6 +357,7 @@ def main() -> int:
     )
 
     dependencies = collect_dependencies([args.info, args.test_info])
+    factorio_version = resolve_version(args.factorio_version)
 
     if not args.dry_run:
         if not token:
@@ -280,12 +367,12 @@ def main() -> int:
             )
         check_credentials(username, token)
 
-    print(f"Required/recommended dependencies for Factorio {args.factorio_version}:")
+    print(f"Required/recommended dependencies for Factorio {factorio_version}:")
     print("  " + ", ".join(dependencies))
 
     releases = []
     for name in dependencies:
-        release = select_release(name, args.factorio_version)
+        release = select_release(name, factorio_version)
         releases.append((name, release))
         print(f"  {name}: {release.get('version', '?')} ({release.get('file_name', '?')})")
 
