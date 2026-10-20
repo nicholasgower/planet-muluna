@@ -23,6 +23,8 @@ jobs:
           npm install semantic-release@^24 \
           @semantic-release/git@^10 git+https://github.com/nicholasgower/semantic-release-factorio.git#info-check-skipped \
           conventional-changelog-conventionalcommits@^8
+      - name: Bump required PlanetsLib version
+        run: node .github/scripts/update-planetslib-dependency.js
       - name: Run semantic-release
         run: npx semantic-release
         env:
