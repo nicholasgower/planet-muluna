@@ -179,7 +179,7 @@ jobs:
       USERNAME: ${{ vars.FACTORIO_USERNAME || secrets.FACTORIO_USERNAME || 'MeteorSwarm' }}
       # Downloads require a Factorio *player* token from player-data.json.
       # FACTORIO_TOKEN is the ModPortal upload key and cannot download mods.
-      TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN || secrets.FACTORIO_TOKEN }}
+      TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN}}
       TIMEOUT: 10m
     defaults:
       run:
