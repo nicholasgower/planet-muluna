@@ -84,19 +84,31 @@ if [ -s "scenario_names.txt" ]; then
             rm -f "$MODS/mod-settings.dat"
         fi
 
+        missing_mods=""
         for next_mod in $(jq -r '.mods[] | select(.enabled == true) | .name'  "$MODS"/mod-list.json); do
             case "$next_mod" in
                 ("base"|"quality"|"elevated-rails"|"space-age"|"recycler") continue ;;
             esac
 
+            found=0
             for zipfile in /mods_cache/"${next_mod}"_*.zip; do
                 [ -f $zipfile ] || continue
                 cp $zipfile "$MODS"/
                 UPDATE_IGNORE="${UPDATE_IGNORE:+$UPDATE_IGNORE,}${next_mod}"
+                found=1
+                break
             done
+            if [ "$found" -eq 0 ]; then
+                missing_mods="${missing_mods} ${next_mod}"
+            fi
         done
         export UPDATE_IGNORE
-        /docker-update-mods.sh
+        if [ -n "$missing_mods" ]; then
+            echo "Downloading mods from the portal:${missing_mods}"
+            /docker-update-mods.sh
+        else
+            echo "All enabled mods were provided locally; skipping mod portal download."
+        fi
 
         export SCENARIO_NAME=$fn
         export EARLY_SUCCESS_FLAG

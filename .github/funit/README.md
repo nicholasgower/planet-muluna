@@ -23,11 +23,16 @@ Sources (FUnit commit `b69c2f277a467726e3a8c555d48df5b647ec5a64`):
 - `entrypoint.sh` renames `funit-report-muluna.json` to
   `funit-report-<scenario>.json` after the run. It also treats `recycler` as a
   built-in mod alongside `space-age`, `quality` and `elevated-rails`, so the
-  image's mod updater does not try to download it.
-- `.github/workflows/funit.yml` writes a single scenario mod list instead of
-  using `expand_dependencies.rb`. The paid DLC mods are supplied by the
-  headless server image; all other dependencies are downloaded by the image's
-  `docker-update-mods.sh` from the mod portal.
+  image's mod updater does not try to download it. If every enabled mod is
+  present in `/mods_cache`, the entrypoint skips the portal update entirely.
+- `.github/funit/download_mods.py` reads `info.json` and the companion test
+  mod's `info.json` and downloads every required dependency plus every
+  recommended (`+`) dependency for the target Factorio version. Optional (`?`
+  / `(?)`) and incompatible (`!`) entries are skipped. It writes the scenario's
+  `mod-list.json` from the downloaded set, so the list cannot drift from the
+  mod's declared dependencies.
+- The paid DLC mods are supplied by the headless server image; the main mod,
+  test mod and FUnit are packaged by the build job.
 - FUnit itself is packaged from a shallow GitLab clone at a pinned commit, so
   the test framework does not depend on a mod-portal release.
 
@@ -41,12 +46,18 @@ entrypoint can load it by name. Its `control.lua` still requires the suites from
 
 ## Credentials
 
-Public mod downloads now require a Factorio account. The workflow reads:
+Downloading public mods requires a Factorio account that owns the game. The
+workflow reads:
 
 - `FACTORIO_USERNAME` — repository variable or secret (falls back to
   `MeteorSwarm`, the mod-portal owner of Muluna).
-- `FACTORIO_TOKEN` — repository secret used by the release workflow.
+- `FACTORIO_PLAYER_TOKEN` — repository secret containing the `service-token`
+  from the Factorio client's `player-data.json`. This is a *player* token, not
+  the ModPortal upload API key used by the release workflow.
 
-If the token is missing, the workflow fails before running Factorio with a
-clear error. The paid Space Age mods are built into the headless server image
-and are not downloaded from the portal.
+`FACTORIO_TOKEN` is still used as a fallback in case a repository stores a
+player token under that name, but the existing upload key will get HTTP 403
+from the download endpoint. If the token is missing or invalid, the workflow
+fails before running Factorio with an actionable error. The paid Space Age mods
+are built into the headless server image and are not downloaded from the
+portal.

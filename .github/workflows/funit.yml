@@ -8,11 +8,11 @@
 #   * planet-muluna-funit (the companion test mod)
 #   * funit (pinned to the same revision PlanetsLib uses)
 #
-# and runs the __funit__muluna scenario in a factorio-docker container. Public
-# dependency mods are downloaded at runtime by the image's docker-update-mods.sh
-# using FACTORIO_USERNAME / FACTORIO_TOKEN. The paid Space Age mods (space-age,
-# quality, elevated-rails, recycler) are built into the headless server image and
-# are never downloaded from the portal.
+# and runs the __funit__muluna scenario in a factorio-docker container. The
+# required and recommended dependency mods are resolved from info.json and
+# downloaded by .github/funit/download_mods.py using FACTORIO_PLAYER_TOKEN.
+# The paid Space Age mods (space-age, quality, elevated-rails, recycler) are
+# built into the headless server image and are never downloaded from the portal.
 #
 # See .github/funit/README.md for the local adaptations to PlanetsLib's action.
 
@@ -105,40 +105,16 @@ jobs:
           }
           EOF
 
-          # space-age, quality, elevated-rails and recycler are built into the
-          # headless server image. All other mods are downloaded by the image's
-          # docker-update-mods.sh at test time.
-          cat > "$scenario_dir/mod-list.json" <<'EOF'
-          {
-            "mods": [
-              { "name": "base", "enabled": true },
-              { "name": "elevated-rails", "enabled": true },
-              { "name": "quality", "enabled": true },
-              { "name": "recycler", "enabled": true },
-              { "name": "space-age", "enabled": true },
-              { "name": "planet-muluna", "enabled": true },
-              { "name": "planet-muluna-funit", "enabled": true },
-              { "name": "funit", "enabled": true },
-              { "name": "PlanetsLib", "enabled": true },
-              { "name": "flib", "enabled": true },
-              { "name": "bplib", "enabled": true },
-              { "name": "rigor-module", "enabled": true },
-              { "name": "item-request-proxy-events", "enabled": true },
-              { "name": "module-category-defaults", "enabled": true },
-              { "name": "muluna-graphics", "enabled": true },
-              { "name": "space-exploration-graphics", "enabled": true },
-              { "name": "space-exploration-graphics-4", "enabled": true },
-              { "name": "space-exploration-graphics-5", "enabled": true },
-              { "name": "alien-biomes-graphics", "enabled": true }
-            ]
-          }
-          EOF
+          # The required/recommended dependency mods and the scenario
+          # mod-list.json are generated in the test job by
+          # .github/funit/download_mods.py. This keeps the downloaded set in
+          # sync with info.json instead of duplicating it here.
 
           : > "artifacts/${MOD_NAME}/save_names.txt"
           echo "__funit__muluna" > "artifacts/${MOD_NAME}/scenario_names.txt"
 
           # Config consumed by prepare_test_environment.sh. Placeholders are
-          # expanded from the FACTORIO_USERNAME / FACTORIO_TOKEN env vars.
+          # expanded from the FACTORIO_USERNAME / FACTORIO_PLAYER_TOKEN env vars.
           cat > "artifacts/${MOD_NAME}/test/server-settings.json" <<'EOF'
           {
             "name": "planet-muluna FUnit",
@@ -198,36 +174,28 @@ jobs:
       image: "factoriotools/factorio:${{ needs.build-archive-job.outputs.factorio_version }}"
     timeout-minutes: 30
     env:
-      UPDATE_MODS_ON_START: "true"
       # The username is public; prefer an explicit repo variable/secret, then
       # fall back to the account that owns the mod portal listing for Muluna.
       USERNAME: ${{ vars.FACTORIO_USERNAME || secrets.FACTORIO_USERNAME || 'MeteorSwarm' }}
-      TOKEN: ${{ secrets.FACTORIO_TOKEN }}
+      # Downloads require a Factorio *player* token from player-data.json.
+      # FACTORIO_TOKEN is the ModPortal upload key and cannot download mods.
+      TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN || secrets.FACTORIO_TOKEN }}
       TIMEOUT: 10m
     defaults:
       run:
         shell: bash
     steps:
-      - name: Install Git
+      - name: Install Git and Python
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends git
+          apt-get install -y --no-install-recommends git python3
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: build-archive-job
           path: artifacts
-      - name: Check mod portal credentials
-        run: |
-          set -euo pipefail
-          if [ -z "${TOKEN:-}" ]; then
-            echo "::error::FACTORIO_TOKEN is required to download the Muluna dependency mods."
-            exit 1
-          fi
-          if [ -z "${USERNAME:-}" ]; then
-            echo "::error::Set the FACTORIO_USERNAME variable/secret to the Factorio account that owns FACTORIO_TOKEN."
-            exit 1
-          fi
+      - name: Download required and recommended dependencies
+        run: python3 .github/funit/download_mods.py
       - name: Prepare test environment
         run: bash .github/funit/prepare_test_environment.sh
       - name: Run FUnit scenario
