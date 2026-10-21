@@ -1,4 +1,46 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.44
+Date: 2026-10-20
+  Bugfixes:
+    - Fixed burner roboport lifecycle handling of stale entities.
+    - Fixed burner roboport refueling status not updating.
+    - Fixed cheat mode not unlocking the gated interstellar technology.
+    - Fixed heat assembling machine lifecycle handling of stale entities.
+    - Fixed heat GUI element keys being written to the telescope table.
+    - Fixed interstellar science pack progress with a missing gated technology.
+    - Fixed Maraxsis trench surfaces being included in telescope data.
+    - Fixed nav beacon scan size using energy cost instead of scan area.
+    - Fixed nav beacon storage checks using array length.
+    - Fixed singular-icon recipes being hidden from the recipe GUI.
+    - Fixed telescope destruction with stale entities.
+    - Fixed telescope GUI key table lookup.
+    - Fixed telescope platform state mapping.
+    - Fixed telescope signals reporting one space platform.
+    - Fixed the always-false crusher check in steam furnace generation.
+    - Fixed walking particle controller input checks.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.43
+Date: 2026-10-20
+  Compatibility:
+    - Raised required PlanetsLib version to 2.2.1.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.42
+Date: 2026-10-19
+  Compatibility:
+    - Raised required PlanetsLib version to 2.1.2.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.41
+Date: 2026-10-18
+  Compatibility:
+    - Raised required PlanetsLib version to 2.1.0. Offloaded regolith digger mechanic to PlanetsLib.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.40
+Date: 2026-10-17
+  Compatibility:
+    - Removed gas venting when Krastorio 2 is loaded, as the flare stack makes it redundant. https://github.com/nicholasgower/planet-muluna/issues/474
+  Bugfixes:
+    - K2SO: Flaring speed of flare stack when burning Muluna gases is no longer modified by Muluna.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.39
 Date: 2026-10-17
   Balancing:

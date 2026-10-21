@@ -357,13 +357,15 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 heat_assembling_machine_data = machine
                 if entity.name == machine["constant-combinator"] then
                             --game.print("combinator!")
+                            local assembler
                             for i,telescope in pairs(storage.telescopes) do
                                 if entity == telescope["constant-combinator"]  then
-                                    entity = telescope["assembling-machine"]
+                                    assembler = telescope["assembling-machine"]
                                     break
                                 end
                             end
-                            assert(entity.type == "assembling-machine")
+                            if not assembler then return end
+                            entity = assembler
                 end
                 break
             end
@@ -392,7 +394,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
-        if reactor then
+        if reactor and reactor.valid then
             reactor.destroy()
         end
         if entity.valid then
@@ -431,9 +433,9 @@ local state_integer_table = {
     [defines.space_platform_state.starter_pack_on_the_way] = 3,
     [defines.space_platform_state.on_the_path] = 4,
     [defines.space_platform_state.waiting_for_departure] = 5,
-    [defines.space_platform_state.no_path] = 6,
-    [defines.space_platform_state.waiting_at_station] = 7,
-    [defines.space_platform_state.paused] = 8,
+    [defines.space_platform_state.no_schedule] = 6,
+    [defines.space_platform_state.no_path] = 7,
+    [defines.space_platform_state.waiting_at_station] = 8,
     [defines.space_platform_state.paused] = 9,
 }
 
@@ -544,7 +546,7 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
             end
         end
         -- Other signals indicating planet and total number of platforms
-        local number_of_platforms = 1
+        local number_of_platforms = #space_platforms
         signals[i]={value = {type = "space-location",name = planet.name,quality = "normal"},min= number_of_platforms, }
         i = i+1
     elseif surface.platform then
@@ -604,7 +606,6 @@ end
 
 
 
-
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
     for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
@@ -632,3 +633,10 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
 
 
 end)
+
+if script.active_mods["funit"] then
+    Muluna.funit.get_telescope_combinator_signals = get_telescope_combinator_signals
+    Muluna.funit.get_state_integer = get_state_integer
+    Muluna.funit.get_time_to_next_asteroid_check = get_time_to_next_asteroid_check
+    Muluna.funit.bool_to_int = bool_to_int
+end

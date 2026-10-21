@@ -33,7 +33,6 @@ if mods["bztitanium"] or mods["bzcarbon"] or mods["bztin"] or mods["bzlead"] or 
 end
 
 require("prototypes.technology.interstellar-technologies")
-require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
 require("prototypes.final-fixes.telescope-prototype")
 require("prototypes.final-fixes.burner-roboports")

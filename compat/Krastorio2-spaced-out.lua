@@ -28,5 +28,45 @@ if mods["Krastorio2-spaced-out"] then
             })
     data.raw["technology"]["muluna-wood-cultivation"].research_trigger.amount = 10
 
+    -- Krastorio 2's flare stack can burn any fluid, which makes Muluna's gas venting
+    -- technology and its recipes redundant and more expensive. Remove them.
+    -- https://github.com/nicholasgower/planet-muluna/issues/474
+    local gas_venting = data.raw["technology"]["muluna-gas-venting"]
+    if gas_venting then
+        local venting_recipes = {
+            ["oxygen-venting"] = true,
+            ["carbon-dioxide-venting"] = true,
+            ["hydrogen-venting"] = true,
+        }
+        --Also collect any other recipe the technology happens to unlock.
+        for _,effect in pairs(gas_venting.effects or {}) do
+            if effect.type == "unlock-recipe" then
+                venting_recipes[effect.recipe] = true
+            end
+        end
+
+        data.raw["technology"]["muluna-gas-venting"] = nil
+        for recipe_name in pairs(venting_recipes) do
+            if data.raw["recipe"][recipe_name] then
+                data.raw["recipe"][recipe_name] = nil
+            end
+        end
+
+        --Remove any references to the removed technology and recipes left by other mods.
+        for _,technology in pairs(data.raw["technology"]) do
+            if technology.prerequisites and rro.contains(technology.prerequisites,"muluna-gas-venting") then
+                rro.remove(technology.prerequisites,"muluna-gas-venting")
+                if #technology.prerequisites == 0 then
+                    technology.prerequisites = nil
+                end
+            end
+            if technology.effects then
+                for recipe_name in pairs(venting_recipes) do
+                    rro.remove(technology.effects,{type = "unlock-recipe", recipe = recipe_name})
+                end
+            end
+        end
+    end
+
     table.insert(Muluna.constants.cargo_drop_spawn_imports,"__planet-muluna__.scripts.cargo-drop-spawns.kr-electrolysis-plant")
 end

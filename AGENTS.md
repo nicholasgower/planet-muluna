@@ -45,6 +45,7 @@ migrations/               Save-migration scripts (.lua) and one-shot data patche
 scripts/                  Control-stage feature modules (telescopes, nav-beacon, gui, ...)
 locale/                   Translations, one dir per language (en, ru, de, fr, zh-CN, ...)
 scenarios/__funit__...    A Factorio `funit` scenario used for in-game smoke tests
+test-mods/                Development-only companion mods (the FUnit suite; export-ignored)
 prompts/                  Prompt text for the opencode "docs" agents (factorio-docs, lua-docs)
 docs/                     Generated LDoc HTML output (do not hand-edit)
 ```
@@ -152,8 +153,10 @@ across ticks without re-validating `entity.valid`.
 - Prefer `rro.soft_insert` / `rro.replace_no_duplicates` over `table.insert` when touching
   shared lists to avoid duplicate ingredients/effects/prerequisites.
 - Deferred/last-resort patches belong in `prototypes/final-fixes/` and are required from both
-  `data-updates.lua` and `data-final-fixes.lua` when they need to run at both times (the
-  ground-digger module does this deliberately).
+  `data-updates.lua` and `data-final-fixes.lua` when they need to run at both times.
+- Ground diggers are provided by PlanetsLib: `PlanetsLib.enable_ground_diggers()` in
+  `prototypes/entity/ground-digger.lua` generates the shared `<drill>-ground-digger`
+  prototypes, and `prototypes/final-fixes/ground-digger.lua` only adds Muluna-specific data.
 - Localised names/descriptions use Factorio's LocalisedString tables, e.g.
   `localised_name = {"technology-name.rocket-part-productivity-muluna"}`.
 
@@ -193,7 +196,7 @@ part of this mod while keeping its separate structure.
 
 ## Verifying changes
 
-There is no CI test suite. What you can do:
+There is no CI test suite wired into GitHub Actions. What you can do:
 
 1. **Static sanity**: re-read your Lua for stage mistakes (using `data.raw` in control,
    calling `data:extend` after `finalize_events`, etc.). There is no luacheck/stylua config
@@ -201,11 +204,16 @@ There is no CI test suite. What you can do:
    `lowercase-global`; globals list includes `game`, `data`, `script`, `storage`, `mods`, ...).
 2. **Loading the game**: the real check. Load a save with the mod enabled and confirm no
    startup crash. The PR checklist requires testing at least alone and with **Alien Biomes**.
-3. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
+3. **Headless FUnit suite**: `test-mods/planet-muluna-funit/` is a development-only
+   companion mod with data-stage fixtures and runtime behavioral tests. Run
+   `bash test-mods/planet-muluna-funit/run.sh`; it links the current worktree, uses the
+   installed dependency mods, and exits non-zero on any FUnit failure. See that mod's
+   `README.md` for prerequisites and the test-only `muluna_funit` remote interface.
+4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
    `__funit__` test that generates the Muluna surface and checks the Entity Replacement
    System. It needs the `funit` mod and a matching `mod-list.json`; it is a reference smoke
    test, not a general test runner.
-4. **Crash reports**: because this mod deep-modifies Space Age, most bugs are load-time or
+5. **Crash reports**: because this mod deep-modifies Space Age, most bugs are load-time or
    interaction crashes ("Fixed crash on load with ..." is the most common commit type).
 
 Because of the above, be conservative: guard prototype access, avoid assumptions about load
@@ -244,6 +252,15 @@ denies `git push`. The `Release` workflow publishes to the mod portal using `FAC
 `docs_templates/`). Library modules document public functions with `---@param`/`---@return`
 LuaDoc annotations and `-- @module` headers. Add doc comments to new `lib/` modules to keep
 them in the generated API docs; do not hand-edit files under `docs/`.
+
+## Factorio API docs helper
+
+The `factorio-docs` agent answers questions from the Factorio prototype/runtime JSON
+under `/opt/factorio_space_age_21/doc-html`. Those lookups go through `tools/fdoc.py`, a
+single-file, stdlib-only CLI that resolves prototype/class inheritance and formats results
+readably instead of dumping raw JSON. Run `python3 tools/fdoc.py --help` for the commands
+(`prototype`, `type`, `class`, `event`, `concept`, `define`, `get`, `member`, `search`,
+`list`, `info`); the agent prompt in `prompts/factorio-docs.txt` points the agent at it.
 
 ## Working agreements
 
