@@ -66,11 +66,10 @@ if settings.startup["enable-nav-beacon"].value == true then
                     max = 0,
                 }
             },
-            -- The script charges the buffer for each scan, so the radar itself
-            -- must not drain it while idle. Radar prototypes require a positive
-            -- energy_usage, so use the smallest useful idle draw instead of the
-            -- platform power setting (which would empty the buffer every minute).
-            energy_usage = "1W",
+            -- The radar has a deliberate 1 MW passive draw to keep the
+            -- satellite online. Scans are charged separately by
+            -- scripts/nav-beacon.lua from the energy buffer.
+            energy_usage = "1MW",
             icon = "__muluna-graphics__/graphics/icons/nav-beacon-icon.png",
             icon_size = 64,
             rotation_speed = 0.005,
@@ -82,7 +81,10 @@ if settings.startup["enable-nav-beacon"].value == true then
                 usage_priority = "secondary-input",
                 buffer_capacity = 3*settings.startup["platform-power-consumption"].value .. "MJ",
                 output_flow_limit = "0MW",
-                input_flow_limit = 3*settings.startup["platform-power-consumption"].value .. "MW",
+                -- Keep the input limit above the 1 MW passive draw even at the
+                -- lowest platform-power-consumption setting, otherwise the
+                -- buffer could never stay charged.
+                input_flow_limit = math.max(3*settings.startup["platform-power-consumption"].value, 2) .. "MW",
             },
             custom_tooltip_fields = {
                 {},
