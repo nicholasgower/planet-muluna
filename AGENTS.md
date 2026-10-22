@@ -366,6 +366,57 @@ by the `issue-bugfix` agent in `opencode.json`.
 Automated pull requests are proposals: a human still reviews and merges them. Do not treat
 a bot-authored pull request as pre-approved.
 
+## Operating the automated issue workflow
+
+Lessons from building and debugging the agent workflow:
+
+- **Verify the effective agent, not just the config.** `opencode github run` has fallen
+  back to the `build` agent even when the action's `agent` input was set, and `build` still
+  has `bash: "ask"`. The workflow runs `opencode run --agent issue-bugfix --auto` directly
+  and preflights with `opencode agent list`. After changing the agent setup, confirm the
+  log says `> issue-bugfix · <model>`.
+- **Headless Factorio is enough for CI.** The public
+  `https://factorio.com/get-download/latest/headless/linux64` tarball includes the Space
+  Age data; the Docker image is not required. `--disable-audio` is a client-only flag, so
+  `test-mods/planet-muluna-funit/run.sh` only passes it when the binary supports it. Mod
+  downloads need `FACTORIO_PLAYER_TOKEN` (a player token from `player-data.json`), not the
+  ModPortal upload key.
+- **No permission may remain `ask` in a headless run.** `doom_loop` and
+  `external_directory` default to `ask`. Give the CI agent `"*": "allow"` plus explicit
+  denies, and use `--auto` as a second layer. Explicit denies still apply.
+- **GitHub Actions logs are not live.** `gh run view --log` and the job-log API fail while
+  a job is in progress. Inspect a completed or cancelled run to see the permission or
+  agent decision, and use `tools/ci/run-debug.sh` instead of dumping the whole log.
+- **Test workflow changes from a temporary branch.** `issues` and `issue_comment`
+  workflows run from the default branch. Push a temporary branch and use
+  `gh workflow run ... --ref <branch> -f issue_number=N` to exercise a modified workflow
+  without touching `main` or triggering a release. The workflow file must already exist
+  on the default branch for `workflow_dispatch` to be available; the branch supplies the
+  modified version.
+- **Bound the agent step.** Set a step-level `timeout-minutes` so a permission prompt or
+  stuck tool call fails the job instead of consuming the 120-minute job timeout.
+- **The FUnit loop is fast enough for iteration, but use the helper.** The full suite is
+  about 108 tests and a couple of minutes. `tools/ci/funit.sh` can run the full suite,
+  filter to one suite, and summarize the log.
+- **Committing to local `main` from a detached worktree** requires committing on the
+  detached HEAD and fast-forwarding `main` in the worktree that has it checked out
+  (`git merge --ff-only <sha>`); do not update the ref behind another worktree's back.
+
+### CI helper scripts
+
+The `tools/ci/` helpers are development tools and are not shipped:
+
+- `run-debug.sh` — list runs, wait for one to finish, summarize step status, fetch and
+  filter logs, and cancel a run when explicitly asked.
+- `opencode-check.sh` — validate the agent, prompt file, primary mode, model, and
+  auto-approve permissions before burning a runner.
+- `funit.sh` — run the FUnit suite, filter to one suite, and summarize a log as text or
+  JSON.
+- `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
+  test links.
+- `workflow-test.sh` — push a temporary branch and dispatch a workflow against it for
+  safe testing of workflow changes.
+
 ## Documentation
 
 `docs/` is LDoc output generated from source comments (config in `config.ld`, templates in
