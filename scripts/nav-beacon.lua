@@ -58,6 +58,23 @@ local function init_storage_nav_beacons()
     
 end
 
+---Record an existing satellite radar as the nav beacon of a space platform.
+---@param nav LuaEntity
+---@param platform LuaSpacePlatform
+---@param enabled boolean|nil
+local function register_platform_beacon(nav, platform, enabled)
+    storage.beaconed_platforms[platform.index] = nav
+    storage.nav_surfaces[nav.unit_number] = platform.space_location
+    storage.nav_beacons[nav.unit_number] = nav
+    storage.has_nav_beacons = true
+    if not storage.nav_beacons_other then
+        storage.nav_beacons_other = {}
+    end
+    if not storage.nav_beacons_other[nav.unit_number] then
+        storage.nav_beacons_other[nav.unit_number] = { gui = { enabled = enabled ~= false } }
+    end
+end
+
 local function update_space_platform_beacon(platformBeacon,platform)
     if platformBeacon.valid == true then
             storage.nav_surfaces[platformBeacon.unit_number] = platform.space_location --this can be nil, which is acceptable
@@ -107,12 +124,21 @@ local function reset_storage_nav_beacons()
     
         storage.beacon_electric_interfaces = {}
 
-        --Search space platforms for nav beacons already placed
-        --Register those beacons using existing functions.
+        storage.nav_beacons_other = {}
+
+        -- Search space platforms for satellite radars that are already placed
+        -- and register those so players do not have to rebuild them.
         for _,force in pairs(game.forces) do
             
-            for _,platform in pairs(force.platforms) do 
-                update_space_platform(platform)
+            for _,platform in pairs(force.platforms) do
+                local surface = platform.surface
+                if surface and surface.valid then
+                    local radars = surface.find_entities_filtered({ name = "muluna-satellite-radar" })
+                    local nav = radars and radars[1]
+                    if nav and nav.valid then
+                        register_platform_beacon(nav, platform)
+                    end
+                end
             end
         end
 end
@@ -131,6 +157,22 @@ script.on_configuration_changed(function()
     end
     
     init_storage_nav_beacons()
+
+    -- Satellite radars used to be accumulator prototypes. Changing the
+    -- prototype type assigns new unit numbers to existing entities, so the
+    -- LuaEntity references saved in storage become invalid. Rebuild the
+    -- tracking data from the radars still on platforms rather than leaving
+    -- stale storage for the update tick to report to players.
+    local has_invalid_beacon = false
+    for _, beacon in pairs(storage.nav_beacons or {}) do
+        if not (beacon and beacon.valid) then
+            has_invalid_beacon = true
+            break
+        end
+    end
+    if has_invalid_beacon then
+        reset_storage_nav_beacons()
+    end
 end)
 
 ---@param entity LuaEntity

@@ -198,8 +198,8 @@ if data.raw["assembling-machine"]["muluna-advanced-boiler"] then
 end
 
 if helpers.compare_versions(helpers.game_version,"2.0.59") == -1 then
-  if data.raw["accumulator"]["muluna-satellite-radar"] then
-    data.raw["accumulator"]["muluna-satellite-radar"].factoriopedia_description = {"",{"entity-description.muluna-satellite-radar"},"\n",electricity_description}
+  if data.raw["radar"]["muluna-satellite-radar"] then
+    data.raw["radar"]["muluna-satellite-radar"].factoriopedia_description = {"",{"entity-description.muluna-satellite-radar"},"\n",electricity_description}
     end
     if data.raw["item"]["muluna-satellite-radar"] then
         data.raw["item"]["muluna-satellite-radar"].factoriopedia_description = {"",{"item-description.muluna-satellite-radar"},"\n",electricity_description}

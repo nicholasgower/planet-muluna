@@ -35,7 +35,6 @@ if settings.startup["enable-nav-beacon"].value == true then
     navBeaconItem.order = navBeaconItem.order .. "-z"
     navBeaconItem.weight = 2000*kg --One standard rocket on Muluna
 
-    radarEntity.pictures = nil
     ---@type RadarPrototype
     local navBeaconEntity = util.merge({
         radarEntity,
@@ -60,11 +59,6 @@ if settings.startup["enable-nav-beacon"].value == true then
             energy_per_nearby_scan = "1kJ",
             --localised_description = { "entity-description.muluna-satellite-radar"},
             localised_description = { "item-description.muluna-satellite-radar"},
-            -- energy_source =
-            -- {
-            --     type = "electric",
-            --     usage_priority = "secondary-input"
-            -- },
             surface_conditions = {
                 {
                     property = "gravity",
@@ -72,7 +66,11 @@ if settings.startup["enable-nav-beacon"].value == true then
                     max = 0,
                 }
             },
-            energy_usage = "1MW",
+            -- The script charges the buffer for each scan, so the radar itself
+            -- must not drain it while idle. Radar prototypes require a positive
+            -- energy_usage, so use the smallest useful idle draw instead of the
+            -- platform power setting (which would empty the buffer every minute).
+            energy_usage = "1W",
             icon = "__muluna-graphics__/graphics/icons/nav-beacon-icon.png",
             icon_size = 64,
             rotation_speed = 0.01,
@@ -81,6 +79,7 @@ if settings.startup["enable-nav-beacon"].value == true then
             
             energy_source = {
                 type = "electric",
+                usage_priority = "secondary-input",
                 buffer_capacity = 3*settings.startup["platform-power-consumption"].value .. "MJ",
                 output_flow_limit = "0MW",
                 input_flow_limit = 3*settings.startup["platform-power-consumption"].value .. "MW",
@@ -108,82 +107,44 @@ if settings.startup["enable-nav-beacon"].value == true then
         scan_area = 100
     }
     navBeaconEntity.graphics_set = nil
-    navBeaconEntity.circuit_connector = nil
+    -- Keep the base radar's circuit connector (and its surface/universe circuit
+    -- network behaviour) instead of removing it like accumulator-specific
+    -- fields. The only field inherited from the radar that is not wanted here
+    -- is `next_upgrade`.
     navBeaconEntity.next_upgrade = nil
-    navBeaconEntity.chargable_graphics =
-            {
-                charge_cooldown = 64,
-                discharge_cooldown = 64,
-                charge_animation_is_looped = true,
-                picture = {
-                    layers = mods["space-exploration-graphics-4"] and {
-                        {
-                            filename =  "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio.png",
-                            priority = "high",
-                            width = 4688/8,
-                            height = 5440/8,
-                            --frame_count = 64,
-                            line_length = 8,
-                            -- dice_x = 8,
-                            -- dice_y = 8,
-                            shift = util.by_pixel(1*8/9, -26*8/9),
-                            scale = 0.5*8/9,
-                            
-                        },
-                        {
-                            filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio-shadow.png",
-                            priority = "high",
-                            draw_as_shadow = true,
-                            width = 5440/8,
-                            height = 4800/8,
-                            --frame_count = 64,
-                            line_length = 8,
-                            -- dice_x = 8,
-                            -- dice_y = 8,
-                            shift = util.by_pixel(25*8/9, 19*8/9),
-                            scale = 0.5*8/9,
-                        }
-                    }
-                    or
-                    data.raw.accumulator.accumulator.chargable_graphics.picture.layers
-                    ,
+
+    -- Radar prototypes have no chargable_graphics, so use the telescope radio
+    -- sprite sheet as a rotating radar picture when its graphics mod is
+    -- available. Otherwise the vanilla radar pictures are used.
+    if mods["space-exploration-graphics-4"] then
+        navBeaconEntity.pictures = {
+            layers = {
+                {
+                    filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio.png",
+                    priority = "high",
+                    width = 4688/8,
+                    height = 5440/8,
+                    direction_count = 64,
+                    line_length = 8,
+                    shift = util.by_pixel(1*8/9, -26*8/9),
+                    scale = 0.5*8/9,
+                    apply_projection = false,
                 },
-                charge_animation = {
-                    layers = mods["space-exploration-graphics-4"] and {
-                        {
-                            filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio.png",
-                            priority = "high",
-                            width = 4688/8,
-                            height = 5440/8,
-                            frame_count = 64,
-                            line_length = 8,
-                            shift = util.by_pixel(1*8/9, -26*8/9),
-                            scale = 0.5*8/9,
-                            run_mode = "forward-then-backward",
-                            repeat_count = 1,
-                            animation_speed = 0.25,
-                        },
-                        {
-                            filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio-shadow.png",
-                            priority = "high",
-                            draw_as_shadow = true,
-                            width = 5440/8,
-                            height = 4800/8,
-                            frame_count = 64,
-                            line_length = 8,
-                            shift = util.by_pixel(25*8/9, 19*8/9),
-                            scale = 0.5*8/9,
-                            run_mode = "forward-then-backward",
-                            repeat_count = 1,
-                            animation_speed = 0.25,
-                        }
-                    } or
-                    data.raw.accumulator.accumulator.chargable_graphics.charge_animation.layers
+                {
+                    filename = "__space-exploration-graphics-4__/graphics/entity/telescope-radio/telescope-radio-shadow.png",
+                    priority = "high",
+                    draw_as_shadow = true,
+                    width = 5440/8,
+                    height = 4800/8,
+                    direction_count = 64,
+                    line_length = 8,
+                    shift = util.by_pixel(25*8/9, 19*8/9),
+                    scale = 0.5*8/9,
+                    apply_projection = false,
                 }
-                
             }
-    navBeaconEntity.chargable_graphics.discharge_animation = navBeaconEntity.chargable_graphics.charge_animation
-    navBeaconEntity.pictures = navBeaconEntity.chargable_graphics.charge_animation.charge_animation
+        }
+    end
     local navBeaconEntity_Platform = table.deepcopy(navBeaconEntity)
     navBeaconEntity_Platform.name = navBeaconEntity_Platform.name .. "-platform"
     navBeaconEntity_Platform.localised_name = { "entity-name.muluna-satellite-radar" }
