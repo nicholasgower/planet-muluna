@@ -1,4 +1,140 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.44
+Date: 2026-10-20
+  Bugfixes:
+    - Fixed burner roboport lifecycle handling of stale entities.
+    - Fixed burner roboport refueling status not updating.
+    - Fixed cheat mode not unlocking the gated interstellar technology.
+    - Fixed heat assembling machine lifecycle handling of stale entities.
+    - Fixed heat GUI element keys being written to the telescope table.
+    - Fixed interstellar science pack progress with a missing gated technology.
+    - Fixed Maraxsis trench surfaces being included in telescope data.
+    - Fixed nav beacon scan size using energy cost instead of scan area.
+    - Fixed nav beacon storage checks using array length.
+    - Fixed singular-icon recipes being hidden from the recipe GUI.
+    - Fixed telescope destruction with stale entities.
+    - Fixed telescope GUI key table lookup.
+    - Fixed telescope platform state mapping.
+    - Fixed telescope signals reporting one space platform.
+    - Fixed the always-false crusher check in steam furnace generation.
+    - Fixed walking particle controller input checks.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.43
+Date: 2026-10-20
+  Compatibility:
+    - Raised required PlanetsLib version to 2.2.1.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.42
+Date: 2026-10-19
+  Compatibility:
+    - Raised required PlanetsLib version to 2.1.2.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.41
+Date: 2026-10-18
+  Compatibility:
+    - Raised required PlanetsLib version to 2.1.0. Offloaded regolith digger mechanic to PlanetsLib.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.40
+Date: 2026-10-17
+  Compatibility:
+    - Removed gas venting when Krastorio 2 is loaded, as the flare stack makes it redundant. https://github.com/nicholasgower/planet-muluna/issues/474
+  Bugfixes:
+    - K2SO: Flaring speed of flare stack when burning Muluna gases is no longer modified by Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.39
+Date: 2026-10-17
+  Balancing:
+    - "Low density structure from aluminum" takes the same amount of time to craft as vanilla low density structure.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.38
+Date: 2026-10-17
+  Compatibility:
+    - Raised required muluna-graphics version to 1.1.18.
+  Bugfixes:
+    - Condenser turbine will accept any steam above 165 degrees. Fixes incompatibility with K2SO. https://github.com/nicholasgower/planet-muluna/issues/489
+    - Creating Muluna no longer fails with "candidate_point_count too high" for cupric asteroid chunks when many ore and planet mods are installed
+  Graphics:
+    - Cryolab's graphics now uses Hurricane046's full spritesheet
+---------------------------------------------------------------------------------------------------
+Version: 2.7.37
+Date: 2026-10-15
+  Compatibility:
+    - Removed "valves" as a recommended dependency.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.36
+Date: 2026-10-15
+  Changes:
+    - Removed some now-obsolete console warnings.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.35
+Date: 2026-10-15
+  Balancing:
+    - Removed minimum temperature changes from vanilla generator prototypes.
+  Compatibility:
+    - Raised required Factorio version to 2.1.22 and fixed breaking changes associated with this version.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.34
+Date: 2026-10-06
+  Balancing:
+    - Adjusted quality science pack drain multiplier to make cryolabs with only a few quality upgrades more powerful.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.33
+Date: 2026-10-05
+  Bugfixes:
+    - Fixed crash on load with AAI Containers & Warehouses.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.32
+Date: 2026-10-05
+  Bugfixes:
+    - Replaced all uses of util.merge with custom implementation of merge function to resolve incompatibility issues with other mods that modify vanilla prototypes. https://github.com/nicholasgower/planet-muluna/issues/484
+---------------------------------------------------------------------------------------------------
+Version: 2.7.31
+Date: 2026-10-02
+  Compatibility:
+    - Raised required PlanetsLib version to 2.0.8 to resolve a bug with the Entity Replacement System. https://github.com/nicholasgower/planet-muluna/issues/483
+---------------------------------------------------------------------------------------------------
+Version: 2.7.30
+Date: 2026-09-27
+  Bugfixes:
+    - Rocket part recipes are no longer always unlocked on Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.29
+Date: 2026-09-24
+  Locale:
+    - Updated German locale. By stef77stef.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.28
+Date: 2026-09-24
+  Compatibility:
+    - Raised required PlanetsLib version to 2.0.0.
+  Graphics:
+    - Replaced sprite-based orbit with vector-based orbit.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.27
+Date: 2026-09-23
+  Bugfixes:
+    - Update burner roboport scripting to improve compatibility with other mods.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.26
+Date: 2026-09-22
+  Compatibility:
+    - Raised Factorio version to 2.1.20 and replaced all instances of "fuel_category" with "fuel_categories".
+---------------------------------------------------------------------------------------------------
+Version: 2.7.25
+Date: 2026-09-19
+  Compatibility:
+    - The vacuum heating tower is now considered an assembling machine in data.raw for the entire data lifecycle, rather than a member of the "heat-assembling-machine" fake prototype. Should improve compatibility with other mods.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.24
+Date: 2026-09-14
+  Bugfixes:
+    - Krastorio 2: Steel pipes can connect to burner roboports. https://github.com/nicholasgower/planet-muluna/issues/467
+---------------------------------------------------------------------------------------------------
+Version: 2.7.23
+Date: 2026-09-14
+  Bugfixes:
+    - Added missing prerequisite to space chest tech, remove redundant ones.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.22
 Date: 2026-09-08
   Compatibility:

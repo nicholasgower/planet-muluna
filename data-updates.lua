@@ -1,6 +1,5 @@
 require("prototypes.recipe.vanilla-alternate-recipes")
 require("prototypes.planet.planet-position-update")
-require("prototypes.final-fixes.ground-digger") --Also called during final-fixes.
 local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 
@@ -48,11 +47,8 @@ end
 
 if settings.startup["muluna-change-quality-science-pack-drain"].value == true then
     for _,quality in pairs(data.raw["quality"]) do
-        if quality.level <=5 then
-            quality.science_pack_drain_multiplier = 1 - 0.1*quality.level
-        else
-            quality.science_pack_drain_multiplier = 1 - 0.1*5 -0.01*(quality.level-5)
-        end
+        quality.science_pack_drain_multiplier = 1 /(1+ 0.3*quality.level)
+        
         if quality.science_pack_drain_multiplier < 0.1 then
             quality.science_pack_drain_multiplier = 0.1
         end
@@ -213,6 +209,10 @@ data.raw["recipe"]["advanced-thruster-fuel"].surface_conditions = nil
 data.raw["recipe"]["advanced-thruster-oxidizer"].surface_conditions = nil
 
 data.raw["fluid-turret"]["flamethrower-turret"].surface_conditions = ten_pressure_condition
+
+data.raw["mod-data"]["Planetslib-planet-rocket-part-recipe"].data["muluna"] = nil
+data.raw["mod-data"]["Planetslib-planet-rocket-part-recipe"].data["muluna"] = nil
+
 -- data.raw["reactor"]["heating-tower"].surface_conditions = ten_pressure_condition
 -- if data.raw["furnace"]["stone-furnace"] then
 --     data.raw["furnace"]["stone-furnace"].surface_conditions = ten_pressure_condition
@@ -738,7 +738,6 @@ local category_blacklist = {
     "double-boiler",
     "muluna-greenhouse",
     "muluna-vacuum-heating-tower",
-    "kr-fuel-burning"
 }
 
 local subgroup_blacklist = {
@@ -920,7 +919,7 @@ if settings.startup["muluna-hardcore-remove-space-casino"] and settings.startup[
 end
 local propellant_barrel = data.raw["item"]["muluna-roboport-propellant-barrel"]
 propellant_barrel.fuel_value = Muluna.multiply_energy(data.raw["fluid"]["muluna-roboport-propellant"].fuel_value, 50)
-propellant_barrel.fuel_category = "muluna-oxygenated-fuel"
+propellant_barrel.fuel_categories = {"muluna-oxygenated-fuel"}
 propellant_barrel.burnt_result = "barrel" --No automatic way to remove barrels, so I will disable this for now
 --data.raw["recipe"]["muluna-roboport-propellant-barrel"].hide_from_player_crafting = false
 

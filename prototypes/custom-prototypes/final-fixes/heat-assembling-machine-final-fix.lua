@@ -27,12 +27,9 @@ local copied_fields = {
     "circuit_wire_max_distance",
 }
 
-if data.raw["heat-assembling-machine"] then
-    for _,machine in pairs(data.raw["heat-assembling-machine"]) do
-
-        local assembler = table.deepcopy(machine)
-        assembler.name =  machine.name
-        assembler.type = "assembling-machine"
+for _,machine in pairs(data.raw["assembling-machine"]) do
+    if machine.is_heat_assembling_machine then
+        local assembler = machine
         local reactor = {
             type = "reactor",
             name = "heat-assembling-machine-" .. machine.name .. "-reactor",

@@ -33,7 +33,6 @@ if mods["bztitanium"] or mods["bzcarbon"] or mods["bztin"] or mods["bzlead"] or 
 end
 
 require("prototypes.technology.interstellar-technologies")
-require("prototypes.final-fixes.ground-digger")
 require("prototypes.final-fixes.recipe-productivity-technology")
 require("prototypes.final-fixes.telescope-prototype")
 require("prototypes.final-fixes.burner-roboports")
@@ -369,3 +368,13 @@ require("prototypes.custom-prototypes.final-fixes.heat-assembling-machine-final-
 -- for _,location in pairs(Muluna.flib_prototypes.all("space-location")) do
 --     print(location.name .. ": " .. tostring(Muluna.telescopes.shortest_space_distance("nauvis",location.name)))
 -- end
+-- The engine refuses more than 10000 candidate points in a spot noise, and the regular ore patches take
+-- candidate_spot_count times the number of default ore patch sets of every installed mod. With about 90 sets
+-- (many planet and ore mods), the 112 spots of the cupric asteroid patches pass that limit and creating Muluna fails
+-- (#392). Cap them to what fits; below the limit nothing changes.
+local cupric_patches = data.raw["noise-expression"]["default-cupric-asteroid-chunk-patches"]
+local patch_set_count = tonumber(data.raw["noise-expression"]["default_regular_resource_patch_set_count"].expression)
+if cupric_patches and patch_set_count and 112 * patch_set_count > 10000 then
+    cupric_patches.expression = string.gsub(cupric_patches.expression, "candidate_spot_count = 112,",
+        "candidate_spot_count = " .. math.floor(10000 / patch_set_count) .. ",")
+end

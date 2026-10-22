@@ -19,10 +19,9 @@ end
 Muluna.constants.planet_has_lightning = {}
 -- Telescope data collection recipes
 for _,space_location in pairs(data.raw["planet"]) do
-    print(rro.safe_find(data.raw["mod-data"],{"maraxsis-constants","TRENCH_SURFACE_NAME"}))
     if       string.find(space_location.name,"factory%-floor") == nil and --Blacklist Factorissimo surfaces
              space_location.name~="factory-travel-surface" and
-             not space_location.name ~= rro.safe_find(data.raw["mod-data"],{"maraxsis-constants","TRENCH_SURFACE_NAME"})
+             space_location.name ~= rro.safe_find(data.raw["mod-data"],{"maraxsis-constants","TRENCH_SURFACE_NAME"})
 
              
              

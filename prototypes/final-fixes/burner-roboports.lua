@@ -50,6 +50,11 @@ Muluna:extend{
         name="muluna-burner-roboport",
     }
 }    
+local connection_categories = {"default"}
+if mods["Krastorio2"] then
+    table.insert(connection_categories,"kr-steel-pipe")
+end
+--error(serpent.block(connection_categories))
 for _,roboport in pairs(data.raw["roboport"]) do
     if roboport.is_vacuum_roboport then
         vacuum_roboports[roboport.name] = {}
@@ -155,10 +160,10 @@ for _,roboport in pairs(data.raw["roboport"]) do
                         filter = "muluna-roboport-propellant",
 
                         pipe_connections = {
-                            { flow_direction="input-output", direction = defines.direction.south, position = {0.5, 1.5} },
-                                            { flow_direction="input-output", direction = defines.direction.west, position = {-1.5, 0.5} },
-                                            { flow_direction="input-output", direction = defines.direction.east, position = {1.5, -0.5} },
-                                            { flow_direction="input-output", direction = defines.direction.north, position = {-0.5, -1.5} }}
+                            { flow_direction="input-output", direction = defines.direction.south, position = {0.5, 1.5},connection_category=connection_categories},
+                            { flow_direction="input-output", direction = defines.direction.west, position = {-1.5, 0.5},connection_category=connection_categories},
+                            { flow_direction="input-output", direction = defines.direction.east, position = {1.5, -0.5},connection_category=connection_categories},
+                            { flow_direction="input-output", direction = defines.direction.north, position = {-0.5, -1.5},connection_category=connection_categories}}
                         
                     },
                     

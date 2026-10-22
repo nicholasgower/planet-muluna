@@ -15,13 +15,13 @@ cryolab.selection_box = {{-3.5, -3.5}, {3.5, 3.5}}
 
 
 if mods["fluid-nutrients"] then
+  cryolab.minimum_input_temperature = 15
+  cryolab.maxiumum_temperature = 100
   cryolab.energy_source = { --Copied and modified from fluid-nutrients to make this mod compatible with its changes to biolabs..
     type = "fluid",
     fluid_box = {
         volume = 20,
         filter = "nutrient-solution",
-        minimum_temperature = 15,
-        maximum_temperature = 100,
         pipe_picture = {
             north = table.deepcopy(data.raw["assembling-machine"]["electromagnetic-plant"].fluid_boxes[1].pipe_picture.north),
             east = data.raw["assembling-machine"]["assembling-machine-2"].fluid_boxes[1].pipe_picture.east,
@@ -85,25 +85,35 @@ cryolab.on_animation = {
         --animation_speed = 0.2,
         --shift = util.by_pixel(0, -20),
         scale = 0.7,
-        repeat_count = 126,
+        repeat_count = 80,
         shift = {0,-1+shift},
       },
-      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-animation-1",{
-        frame_count = 64,
+      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-animation",{
+        frame_count = 80,
         scale = 0.7,
         animation_speed = 0.05,
-        run_mode="forward-then-backward",
+        run_mode="forward",
         shift = {0,shift},
         --tint = {r=0.7,g=0.7,b=1}
       }),
-      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-emission-1",{
-        frame_count = 64,
+      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-emission1",{
+        frame_count = 80,
         draw_as_glow = true,
         blend_mode = "additive",
         scale = 0.7,
         animation_speed = 0.05,
         shift = {0,shift},
-        run_mode="forward-then-backward",
+        run_mode="forward",
+        --tint = {r=0,g=0,b=0.2}
+      }),
+      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-emission2",{
+        frame_count = 80,
+        draw_as_glow = true,
+        blend_mode = "additive",
+        scale = 0.7,
+        animation_speed = 0.05,
+        shift = {0,shift},
+        run_mode="forward",
         --tint = {r=0,g=0,b=0.2}
       }),
       
@@ -124,25 +134,35 @@ cryolab.off_animation = {
         --shift = util.by_pixel(0, -20),
         draw_as_shadow = true,
         scale = 0.7,
-        repeat_count = 126,
+        repeat_count = 80,
         shift = {0,-1+shift},
       },
-      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-animation-1",{
-        frame_count = 64,
+      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-animation",{
+        frame_count = 80,
         scale = 0.7,
         animation_speed = 0.1,
         shift = {0,shift},
-        run_mode="forward-then-backward",
+        run_mode="forward",
         --tint = {r=0.7,g=0.7,b=1}
       }),
-      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-emission-1",{
-        frame_count = 64,
+      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-emission1",{
+        frame_count = 80,
         draw_as_glow = true,
         blend_mode = "additive",
         scale = 0.7,
         animation_speed = 0.1,
         shift = {0,shift},
-        run_mode="forward-then-backward",
+        run_mode="forward",
+        --tint = {r=0,g=0,b=0.2}
+      }),
+      util.sprite_load("__muluna-graphics__/graphics/photometric-lab/photometric-lab-hr-emission2",{
+        frame_count = 80,
+        draw_as_glow = true,
+        blend_mode = "additive",
+        scale = 0.7,
+        animation_speed = 0.1,
+        shift = {0,shift},
+        run_mode="forward",
         --tint = {r=0,g=0,b=0.2}
       }),
       

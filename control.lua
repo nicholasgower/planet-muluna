@@ -1,5 +1,6 @@
 
 require("api")
+Muluna.funit = Muluna.funit or {}
 local rro = Muluna.rro
 -- script.on_configuration_changed(function()
 --     if debug_mode then
@@ -27,7 +28,7 @@ local rro = Muluna.rro
 --muluna={}
 --require("lib.control-stage")
 
-local ground_digger = require("scripts.sand-extractor")
+require("scripts.ground-diggers")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
 require("scripts.heat-assembling-machine")
@@ -50,10 +51,6 @@ require("scripts.remote")
 --     end
 -- end) 
 
--- script.on_event(defines.events.on_built_entity, function(event)
---     ground_digger.construct_sand_extractor(event)
--- end)
-
 local function init_storage() 
     storage.players_on_muluna = {}
     if not storage.telescopes then 
@@ -73,27 +70,10 @@ local interstellar_science_pack = require("scripts.interstellar-science-pack")
 -- end
 -- )
 
-Muluna.events.register_delayed_function('space-exploration-graphics-missing', function() 
-    game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics","0.7.5"})
-end)
 
-Muluna.events.register_delayed_function('space-exploration-graphics-4-missing', function() 
-    game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics-4","0.7.2"})
-end)
 
-Muluna.events.register_delayed_function('factorio-update-required', function() 
-    game.print({"console.factorio-update-required"})
-end)
 
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
-    if not script.active_mods["space-exploration-graphics"] then
-        Muluna.events.execute_later('space-exploration-graphics-missing',15)
-    end
-    if not script.active_mods["space-exploration-graphics-4"] then
-        Muluna.events.execute_later('space-exploration-graphics-4-missing',15)
-        --game.print({"console.mod-missing-using-placeholder-graphics","space-exploration-graphics-4","0.7.2"})
-    end
-    Muluna.events.execute_later('factorio-update-required',15)
     --init_storage() 
     storage.walking_tick_rates = {}
     for _,force in pairs(game.forces) do
@@ -156,5 +136,10 @@ script.on_event(defines.events.on_research_finished, function(event) interstella
 
 
 
+
+if script.active_mods["funit"] then
+    require("scripts.funit")
+    require("__funit__.mock").register()
+end
 
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end

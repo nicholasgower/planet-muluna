@@ -14,7 +14,7 @@ if true then
         
 
         local steam_furnace = table.deepcopy(original)
-        steam_furnace = util.merge{steam_furnace ,
+        steam_furnace = Muluna.rro.util_merge{steam_furnace ,
             {
                 name = "muluna-steam-".. name,
             }
@@ -191,7 +191,7 @@ if true then
         recipe.enabled = false
         item.name = "muluna-steam-".. name
         item.place_result = "muluna-steam-".. name
-        if not name == "crusher" then
+        if name ~= "crusher" then
             data.raw["item"][name].order = item.order .. "a"
         else 
             item.order = item.order .. "a"
@@ -213,7 +213,7 @@ if true then
 
 
     -- Muluna:extend{
-    --     util.merge{),
+    --     Muluna.rro.util_merge{),
     --     {
     --         name = "muluna-steam-".. name,
     --         ingredients = {

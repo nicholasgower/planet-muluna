@@ -1,0 +1,26 @@
+{
+  "name": "planet-muluna-funit",
+  "version": "0.0.1",
+  "title": "Muluna FUnit test suite",
+  "author": "MeteorSwarm",
+  "description": "Development-only FUnit fixtures and scenario for planet-muluna. Not shipped with the mod.",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.22",
+    "space-age",
+    "? quality",
+    "planet-muluna",
+    "funit",
+    "PlanetsLib >= 2.1.2",
+    "flib",
+    "bplib >= 2.1.3",
+    "rigor-module >= 1.1.13",
+    "item-request-proxy-events >= 0.4.0",
+    "module-category-defaults >= 2.2.0",
+    "muluna-graphics >= 1.1.18",
+    "space-exploration-graphics",
+    "space-exploration-graphics-4",
+    "space-exploration-graphics-5",
+    "alien-biomes-graphics >= 0.7.0"
+  ]
+}

@@ -25,5 +25,7 @@ docs export-ignore
 *.ltp export-ignore
 *.css export-ignore
 scenarios export-ignore
+test-mods export-ignore
 bin export-ignore
 .env export-ignore
+*.py export-ignore

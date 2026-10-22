@@ -300,7 +300,7 @@ local muluna=
     type = "planet",
     name = "muluna",
     
-    draw_orbit = false,
+    --draw_orbit = false,
     solar_power_in_space = nauvis.solar_power_in_space,
     auto_save_on_first_trip = true,
     gravity_pull = 10,
@@ -340,11 +340,12 @@ local muluna=
     orbit = {
       orientation = 0.75, 
       distance = orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude),
+      --draw_orbit = true,
       parent = {
         type = "planet",
         name = parent_planet,
         },
-        sprite = PlanetsLib.get_orbit_sprite(orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude))
+        --sprite = PlanetsLib.get_orbit_sprite(orbit_radius*o_parent_planet.magnitude/(nauvis.magnitude))
     },
     platform_surface_render_parameters = {
       platform_backdrop = require("planet-appearance-21")
@@ -352,7 +353,7 @@ local muluna=
     surface_render_parameters = {
       shadow_opacity = 0.9,
       space_dust_foreground = data.raw["planet"]["nauvis"].platform_surface_render_parameters.space_dust_foreground,
-      -- clouds = util.merge{nauvis.surface_render_parameters.clouds,
+      -- clouds = Muluna.rro.util_merge{nauvis.surface_render_parameters.clouds,
       --                     opacity_at_day = 0.9,
       --                     opacity_at_night = 0.9,
       --                     density_at_day = 0.9,

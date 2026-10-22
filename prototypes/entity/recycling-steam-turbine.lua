@@ -3,6 +3,8 @@ local rro = Muluna.rro
 local turbine =data.raw["generator"]["steam-turbine"]
 local fusion_generator = data.raw["fusion-generator"]["fusion-generator"]
 
+local max_temperature = 500
+
 local recycling_turbine=rro.merge(table.deepcopy(fusion_generator),
 
     {
@@ -13,16 +15,19 @@ local recycling_turbine=rro.merge(table.deepcopy(fusion_generator),
         icon = "__muluna-graphics__/graphics/icons/advanced-steam-turbine.png",
         icon_size = 64,
         next_upgrade = "_nil",
-        smoke = turbine.smoke
+        smoke = turbine.smoke,
+        minimum_input_temperature=165,
+        --maximum_input_temperature=max_temperature,
+        maximum_temperature=max_temperature,
     }
 
 )
 
-recycling_turbine.input_fluid_box = util.merge{table.deepcopy(recycling_turbine.input_fluid_box),
+
+
+recycling_turbine.input_fluid_box = Muluna.rro.util_merge{table.deepcopy(recycling_turbine.input_fluid_box),
     {
         filter = "steam",
-        minimum_temperature=165,
-        maximum_temperature=1000,
         volume = 200,
         
     }
@@ -41,7 +46,7 @@ recycling_turbine.input_fluid_box.pipe_connections =
   --{ flow_direction="output", direction = defines.direction.east,  position = { 1, -1}, connection_category = {"fusion-plasma"} },
 }
 recycling_turbine.surface_conditions = nil
-recycling_turbine.output_fluid_box = util.merge{table.deepcopy(recycling_turbine.output_fluid_box),
+recycling_turbine.output_fluid_box = Muluna.rro.util_merge{table.deepcopy(recycling_turbine.output_fluid_box),
     {
         filter = "cooled-steam",
         temperature = 100,
@@ -75,7 +80,7 @@ recycling_turbine.max_health = 500
 -- recycling_turbine.output_fluid_box.filter = "water"
 recycling_turbine.minable.result = "muluna-cycling-steam-turbine"
 
-local cooled_steam = util.merge{table.deepcopy(data.raw["fluid"]["steam"]),
+local cooled_steam = Muluna.rro.util_merge{table.deepcopy(data.raw["fluid"]["steam"]),
     {
         name = "cooled-steam",
         default_temperature = 100,
