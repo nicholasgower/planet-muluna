@@ -18,6 +18,17 @@ TESTS_DIR="$REPO_DIR/test-mods/planet-muluna-funit/tests"
 MANIFEST="$TESTS_DIR/manifest.lua"
 MANIFEST_REL="test-mods/planet-muluna-funit/tests/manifest.lua"
 
+# FACTORIO_BIN/FACTORIO_MODS are local-development fallbacks. In GitHub
+# Actions, .github/opencode/setup-factorio.sh downloads the headless build and
+# writes the extracted paths to $GITHUB_ENV, so later steps (including this
+# helper) inherit them. The ${VAR:-default} form below only uses the local path
+# when the environment variable is absent. Remember whether each value came from
+# the environment so run mode can fail clearly if CI forgot to set it; parse-only
+# mode (--summary --no-run) does not need Factorio at all.
+FACTORIO_BIN_FROM_ENV=0
+FACTORIO_MODS_FROM_ENV=0
+[[ -n "${FACTORIO_BIN:-}" ]] && FACTORIO_BIN_FROM_ENV=1
+[[ -n "${FACTORIO_MODS:-}" ]] && FACTORIO_MODS_FROM_ENV=1
 FACTORIO_BIN="${FACTORIO_BIN:-/opt/factorio_space_age_21/bin/x64/factorio}"
 FACTORIO_MODS="${FACTORIO_MODS:-/opt/factorio_space_age_21/mods}"
 TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
@@ -87,10 +98,12 @@ Options:
   -h, --help         Show this help.
 
 Environment overrides:
-  FACTORIO_BIN       Factorio executable
-                     (default: /opt/factorio_space_age_21/bin/x64/factorio)
-  FACTORIO_MODS      Source mod directory containing dependencies
-                     (default: /opt/factorio_space_age_21/mods)
+  FACTORIO_BIN       Factorio executable. The /opt/... value is a local
+                     development default only; GitHub Actions supplies the
+                     extracted install path through $GITHUB_ENV.
+  FACTORIO_MODS      Source mod directory. The /opt/... value is a local
+                     development default only; GitHub Actions supplies it
+                     through $GITHUB_ENV.
   TMP_ROOT           Runner scratch directory
                      (default: /tmp/opencode/muluna-funit)
   TIMEOUT            Maximum run time in seconds; --timeout wins.
@@ -631,6 +644,16 @@ if (( NO_RUN == 1 )); then
   rc=0
   report || rc=$?
   exit "$rc"
+fi
+
+# A real run needs Factorio. In CI, setup-factorio.sh must have exported the
+# paths through $GITHUB_ENV; refuse to fall back to the local development paths,
+# which do not exist on a GitHub-hosted runner.
+if [[ "${GITHUB_ACTIONS:-}" == "true" ]]; then
+  (( FACTORIO_BIN_FROM_ENV == 1 )) ||
+    die "GitHub Actions did not set FACTORIO_BIN; run .github/opencode/setup-factorio.sh first."
+  (( FACTORIO_MODS_FROM_ENV == 1 )) ||
+    die "GitHub Actions did not set FACTORIO_MODS; run .github/opencode/setup-factorio.sh first."
 fi
 
 # ---------------------------------------------------------------------------

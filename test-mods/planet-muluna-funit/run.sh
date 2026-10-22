@@ -14,6 +14,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+# Local development defaults. In GitHub Actions, setup-factorio.sh exports the
+# downloaded install paths through $GITHUB_ENV before this runner is called.
 FACTORIO_BIN="${FACTORIO_BIN:-/opt/factorio_space_age_21/bin/x64/factorio}"
 FACTORIO_MODS="${FACTORIO_MODS:-/opt/factorio_space_age_21/mods}"
 TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
