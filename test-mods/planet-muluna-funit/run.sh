@@ -118,15 +118,24 @@ echo "  binary: $FACTORIO_BIN"
 echo "  mods:   $TMP_ROOT/mods"
 echo "  log:    $LOG"
 
+# The dedicated headless server build has no audio subsystem and rejects
+# --disable-audio, while the full client accepts it. Only pass the flag when
+# the binary advertises it so the same runner works with either install.
+FACTORIO_ARGS=(
+  --config "$TMP_ROOT/config.ini"
+  --mod-directory "$TMP_ROOT/mods"
+  --start-server-load-scenario planet-muluna-funit/__funit__muluna
+  --port "$FACTORIO_PORT"
+  --server-settings "$TMP_ROOT/server-settings.json"
+  --no-log-rotation
+)
+if "$FACTORIO_BIN" --help 2>&1 | grep -q -- '--disable-audio'; then
+  FACTORIO_ARGS+=(--disable-audio)
+fi
+
 set +e
 "$FACTORIO_BIN" \
-  --config "$TMP_ROOT/config.ini" \
-  --mod-directory "$TMP_ROOT/mods" \
-  --start-server-load-scenario planet-muluna-funit/__funit__muluna \
-  --port "$FACTORIO_PORT" \
-  --server-settings "$TMP_ROOT/server-settings.json" \
-  --disable-audio \
-  --no-log-rotation \
+  "${FACTORIO_ARGS[@]}" \
   >"$LOG" 2>&1 &
 FACTORIO_PID=$!
 set -e

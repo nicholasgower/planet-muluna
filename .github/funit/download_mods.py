@@ -341,6 +341,15 @@ def main() -> int:
         default=os.environ.get("FACTORIO_VERSION", "2.1.22"),
         help="target Factorio version, or 'latest' for the installed/experimental build",
     )
+    parser.add_argument(
+        "--skip-local-check",
+        action="store_true",
+        help=(
+            "do not require the locally packaged planet-muluna, "
+            "planet-muluna-funit and funit zips (used when only the "
+            "dependency mods are wanted)"
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -388,11 +397,12 @@ def main() -> int:
         downloaded.append(download_release(name, release, username, token, args.output_dir))
 
     # The three locally packaged mods come from the build job.
-    for name in LOCAL_MODS:
-        if not list(args.output_dir.glob(f"{name}_*.zip")):
-            raise SystemExit(
-                f"error: expected a locally packaged {name}_*.zip in {args.output_dir}"
-            )
+    if not args.skip_local_check:
+        for name in LOCAL_MODS:
+            if not list(args.output_dir.glob(f"{name}_*.zip")):
+                raise SystemExit(
+                    f"error: expected a locally packaged {name}_*.zip in {args.output_dir}"
+                )
 
     mod_list = args.mod_list or (
         args.output_dir / "scenarios" / "__funit__muluna" / "mod-list.json"

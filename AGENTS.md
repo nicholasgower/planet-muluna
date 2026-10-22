@@ -196,7 +196,8 @@ part of this mod while keeping its separate structure.
 
 ## Verifying changes
 
-There is no CI test suite wired into GitHub Actions. What you can do:
+There is no general-purpose test runner that works without Factorio, but the FUnit suite
+runs both locally and in GitHub Actions. What you can do:
 
 1. **Static sanity**: re-read your Lua for stage mistakes (using `data.raw` in control,
    calling `data:extend` after `finalize_events`, etc.). There is no luacheck/stylua config
@@ -206,9 +207,12 @@ There is no CI test suite wired into GitHub Actions. What you can do:
    startup crash. The PR checklist requires testing at least alone and with **Alien Biomes**.
 3. **Headless FUnit suite**: `test-mods/planet-muluna-funit/` is a development-only
    companion mod with data-stage fixtures and runtime behavioral tests. Run
-   `bash test-mods/planet-muluna-funit/run.sh`; it links the current worktree, uses the
+   `./test-mods/planet-muluna-funit/run.sh`; it links the current worktree, uses the
    installed dependency mods, and exits non-zero on any FUnit failure. See that mod's
-   `README.md` for prerequisites and the test-only `muluna_funit` remote interface.
+   `README.md` for prerequisites and the test-only `muluna_funit` remote interface. The
+   `FUnit` workflow (`.github/workflows/funit.yml`) runs the same suite in CI, and
+   `.github/opencode/setup-factorio.sh` prepares a headless install plus the dependency
+   mods for the issue-bugfix workflow.
 4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
    `__funit__` test that generates the Muluna surface and checks the Entity Replacement
    System. It needs the `funit` mod and a matching `mod-list.json`; it is a reference smoke
@@ -245,6 +249,119 @@ Do **not** edit `changelog.txt` or bump `info.json` by hand for a normal change 
 
 Do not push to `main` without intent to release, and note the opencode `build` agent config
 denies `git push`. The `Release` workflow publishes to the mod portal using `FACTORIO_TOKEN`.
+
+## Pull requests and AI-generated bugfixes
+
+Pull request bodies for bugfixes (especially AI-written ones) follow the review-oriented
+format established by
+[PlanetsLib PR #130](https://github.com/danielmartin0/PlanetsLib/pull/130). The automated
+issue triage workflow in `.github/workflows/opencode-bugfix.yml` uses the same format; the
+agent's step-by-step instructions are in `.github/opencode/bugfix-prompt.md`.
+
+Titles for AI-generated pull requests start with `(AI-generated)` and describe the change,
+for example `(AI-generated) Fix crash when loading a save with ...`.
+
+The body contains, in order:
+
+1. **Description** — state the source and target branches, explain that the test suite was
+   hardened first, and summarize the commit structure. Keep the original bugfix commits
+   separate from test infrastructure and CI changes; `test:` and `fix:` commits stay
+   separate.
+2. **Checklist** — use the repository's pull request checklist. Do not check items that
+   were not done. Muluna has no `changelog.txt` or version entry to add (CI generates both
+   from commits), so do not claim those were updated; mention documentation changes in
+   `docs/` or `locale/` separately when they exist.
+3. **Testing Notes** — list every tested Factorio scenario with the scenario name, test
+   count, and failures/errors. Include the Factorio version used locally and note that CI
+   runs the floating `latest` image. Also list the static checks run (`git diff --check`,
+   any syntax checks).
+4. **Bugfix review scope** — identify the bugfix commit(s) explicitly and state that
+   test-only commits are excluded from the bugfix checklist.
+5. **Categorized bugfix checklist** — group entries by area (for example load stages,
+   prototype overrides, control-stage events, compatibility). For every entry:
+   - start with an unchecked checkbox;
+   - link each relevant file to its GitHub commit diff;
+   - explain in plain language what behavior changed and what a reviewer should verify;
+   - include a **Tests:** line linking every relevant automated test, preferably to the
+     test file/section with a commit-pinned `blob` URL such as
+     `https://github.com/<owner>/<repo>/blob/<full-commit-sha>/<path>#L10-L25`, and list
+     the test IDs covered. If there is genuinely no direct automated test, say so
+     explicitly and link the closest related coverage instead of omitting the line;
+   - call out migration, save-compatibility, or event-contract risks rather than hiding
+     them;
+   - when editing an existing pull request checklist, preserve every checkbox that a human
+     has already marked `[x]`. Do not reset user-checked entries unless the user explicitly
+     asks.
+
+   Use a GitHub file-diff anchor rather than a generic repository link:
+
+   ```text
+   https://github.com/<owner>/<repo>/commit/<full-commit-sha>#diff-<sha256-of-file-path>
+   ```
+
+   Compute the `diff-` fragment with `printf %s "<repo-relative path>" | sha256sum`. Link
+   every file that contains a reviewable part of the bugfix, and use the commit that
+   introduced the change rather than the pull request's compare view.
+6. **Review note** — add a short section for any known limitation or follow-up check that
+   does not block the pull request but should be considered by a human reviewer.
+7. **Related Issues** — link related pull requests or issues and end with
+   `Fixes #<issue>` when the pull request closes one.
+
+When posting GitHub comments, reviews, or review replies under the repository owner's
+account, end the message with a signature that names the model used, for example:
+
+```text
+_Posted by DeepSeek V4.1 Flash._
+```
+
+AI-generated pull requests begin the body with the same signature.
+
+### Test-authoring principles for bugfixes
+
+- **A test must be capable of failing.** Do not use `runner.assert(true, ...)`, early
+  returns, or `pairs()` loops over whatever results happen to exist as a substitute for
+  coverage.
+- **Assert documented behavior, not current implementation details.** Derive expected
+  values independently; do not call the helper under test to compute its own expected
+  result.
+- **Use explicit test/fixture IDs and explicit skips.** A missing result or an unexpected
+  skip must fail the suite. Missing coverage is not a pass.
+- **Isolate mutable state.** Clear dedicated test areas, restore storage and migration
+  baselines, and make cleanup run on failure as well as success.
+- **Verify engine semantics before encoding them.** Prototype fields, ghost behavior,
+  fixed-point positions, data/control-stage globals, and `remote.call` limitations are
+  common sources of bogus tests.
+- **Treat test failures as possible test bugs first.** Check fixtures, assumptions, stage
+  ordering, and setup before changing production code.
+- Never weaken, delete, or skip an existing test to make a fix pass.
+
+## Automated issue triage
+
+`.github/workflows/opencode-bugfix.yml` runs the `issue-bugfix` OpenCode agent on every
+newly opened issue, and on demand for existing issues. It:
+
+- labels feature requests `enhancement` and does not open a pull request;
+- reproduces crash reports with a new or extended FUnit test, confirms the test fails
+  before the fix, fixes the crash, confirms the full suite passes, and opens a pull
+  request in the format above;
+- comments with its findings instead of opening a pull request for anything else,
+  including crashes that cannot be reproduced headlessly.
+
+Maintainers can re-run the bot on an existing issue by commenting `/opencode fix` (or
+`/oc fix`) or by starting the **Opencode Bugfix** workflow from the Actions tab with the
+issue number. Comment triggers are restricted to repository owners, members, and
+collaborators, and a bare `/opencode` does not trigger a run.
+
+The runner installs a headless Factorio build and the FUnit dependencies with
+`.github/opencode/setup-factorio.sh` before the agent starts. It needs the
+`FACTORIO_PLAYER_TOKEN` secret (a player token, not the mod-portal upload key) and an API
+key for the model named by the `OPENCODE_MODEL` repository variable (default:
+`opencode-go/deepseek-v4.1-flash`); see `.github/opencode/README.md`. The agent's
+instructions live in `.github/opencode/bugfix-prompt.md`, and its permissions are defined
+by the `issue-bugfix` agent in `opencode.json`.
+
+Automated pull requests are proposals: a human still reviews and merges them. Do not treat
+a bot-authored pull request as pre-approved.
 
 ## Documentation
 

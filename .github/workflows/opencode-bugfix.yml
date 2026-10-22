@@ -1,0 +1,164 @@
+# Triage issues with OpenCode.
+#
+# This workflow implements the automated bugfix policy in AGENTS.md:
+#
+#   * Feature requests are labelled `enhancement` and get no pull request.
+#   * Crash reports are reproduced with an FUnit regression test, fixed, and
+#     submitted as a review-ready pull request in the PlanetsLib bugfix format.
+#   * Every other issue gets a comment only.
+#
+# It runs automatically when an issue is opened, and can be invoked manually on
+# an existing issue by commenting `/opencode fix` (or `/oc fix`) or by running
+# the workflow from the Actions tab with an issue number.
+#
+# The runner prepares a headless Factorio install and the FUnit dependency mods
+# before OpenCode starts, so the agent can run
+# `./test-mods/planet-muluna-funit/run.sh` directly. See
+# .github/opencode/README.md for the required secrets and local usage.
+
+name: Opencode Bugfix
+
+on:
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Issue number to triage and fix
+        required: true
+        type: number
+
+concurrency:
+  # One run per issue; a later run for the same issue queues behind the first.
+  group: "opencode-bugfix-${{ github.event.issue.number || inputs.issue_number }}"
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+env:
+  ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+  # "latest" tracks the newest experimental build, matching the FUnit workflow.
+  FACTORIO_VERSION: ${{ vars.FACTORIO_VERSION || 'latest' }}
+
+jobs:
+  bugfix:
+    name: Triage issue and fix crash
+    # Automatic runs skip bot-authored issues. Manual comment runs require an
+    # explicit command from a repository owner, member, or collaborator.
+    if: >-
+      ${{
+        (github.event_name == 'issues' && github.event.issue.user.type != 'Bot') ||
+        (github.event_name == 'issue_comment' &&
+          github.event.issue.pull_request == null &&
+          github.event.issue.state == 'open' &&
+          github.event.comment.user.type != 'Bot' &&
+          (github.event.comment.author_association == 'OWNER' ||
+           github.event.comment.author_association == 'MEMBER' ||
+           github.event.comment.author_association == 'COLLABORATOR') &&
+          (contains(github.event.comment.body, '/opencode fix') ||
+           contains(github.event.comment.body, '/oc fix'))) ||
+        github.event_name == 'workflow_dispatch'
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        # GitHub-hosted Ubuntu runners include bash, and the test scripts use
+        # bash-only features. Declare it explicitly instead of relying on the
+        # platform default.
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install archive tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xz-utils zip unzip
+
+      - name: Configure git identity
+        run: |
+          git config --global user.name "opencode-agent"
+          git config --global user.email "opencode-agent@users.noreply.github.com"
+
+      - name: Prepare headless Factorio and FUnit dependencies
+        env:
+          # A player token from player-data.json; the mod-portal upload key
+          # cannot download mods. See .github/opencode/README.md.
+          FACTORIO_PLAYER_TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN }}
+          FACTORIO_USERNAME: ${{ vars.FACTORIO_USERNAME || 'MeteorSwarm' }}
+        run: ./.github/opencode/setup-factorio.sh
+
+      - name: Verify the FUnit harness
+        run: ./test-mods/planet-muluna-funit/run.sh
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # API key for the provider named by OPENCODE_MODEL. The default is the
+          # model configured for this repository in opencode.json.
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          OPENCODE_ZEN_API_KEY: ${{ secrets.OPENCODE_ZEN_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          model: ${{ vars.OPENCODE_MODEL || 'opencode-go/deepseek-v4.1-flash' }}
+          agent: issue-bugfix
+          use_github_token: true
+          share: "false"
+          prompt: |
+            Process issue #${{ github.event.issue.number || inputs.issue_number }} now.
+
+            This may be an automatically opened issue, a maintainer re-run on an
+            existing issue, or a `/opencode fix` request. Classify the current
+            issue and follow the issue triage and bugfix workflow in your agent
+            instructions exactly. Read AGENTS.md and
+            test-mods/planet-muluna-funit/README.md before changing anything.
+            Check for an existing pull request or a fix already on `main` first;
+            if the issue was already handled, link it and stop.
+
+            Feature requests must be labelled `enhancement` and must not get a
+            pull request. Only crash reports are fixed. Leave the worktree
+            clean and open the pull request yourself in the required format.
+
+      # Safety net: if the agent committed a fix but did not push it or open a
+      # pull request (for example the push failed), preserve the work. Test-only
+      # or abandoned branches are deliberately left alone.
+      - name: Ensure a committed fix has a pull request
+        if: ${{ always() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          branch="$(git branch --show-current)"
+          if [[ -z "$branch" || "$branch" == "main" || "$branch" == "master" ]]; then
+            exit 0
+          fi
+          if ! git log "origin/main..HEAD" --format=%s 2>/dev/null | grep -qE '^fix(\(|:|$)'; then
+            echo "No fix: commit on $branch; not opening a pull request."
+            exit 0
+          fi
+          git config --local credential.helper \
+            '!f() { echo username=x-access-token; echo password="${GITHUB_TOKEN}"; }; f'
+          # The OpenCode action restores the extraheader it replaced; clear it so
+          # it cannot conflict with the credential helper above.
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git push -u origin HEAD
+          if [[ -n "$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" \
+              --state open --json number --jq '.[0].number // empty')" ]]; then
+            echo "A pull request already exists for $branch."
+            exit 0
+          fi
+          gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
+            --title "(AI-generated) Fix issue #${ISSUE_NUMBER}" \
+            --body "$(printf '_Posted by DeepSeek V4.1 Flash._\n\nAutomated fix for #%s. The agent committed a fix but did not open a pull request, so this fallback was created from its branch. See the commit messages and the linked issue for the reproduction and test results.\n\nFixes #%s\n' "$ISSUE_NUMBER" "$ISSUE_NUMBER")"
