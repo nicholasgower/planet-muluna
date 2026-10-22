@@ -197,6 +197,50 @@ local function build_platform_radar(platform)
   return key, beacon
 end
 
+local function assert_nav_status(beacon, enabled, platform)
+  local status = beacon.custom_status
+  runner.assert(status, "nav beacon has no custom status")
+  if enabled then
+    runner.assert(
+      status.diode == defines.entity_status_diode.green,
+      "enabled nav beacon status should have a green diode"
+    )
+    local location = platform.space_location
+    if location then
+      runner.assert(
+        status.label and status.label[1] == "custom-status.muluna-satellite-radar-looking-at",
+        "enabled nav beacon status should be the looking-at status"
+      )
+      runner.assert(
+        status.label[2] and status.label[2][1] == "space-location-name." .. location.name,
+        "enabled nav beacon status does not name the platform's space location"
+      )
+    else
+      runner.assert(
+        status.label and status.label[1] == "custom-status.muluna-satellite-radar-looking-at-deep-space",
+        "enabled nav beacon in transit should use the deep-space status"
+      )
+    end
+    runner.assert(
+      beacon.disabled_by_script == false,
+      "enabled nav beacon should not be disabled_by_script"
+    )
+  else
+    runner.assert(
+      status.diode == defines.entity_status_diode.red,
+      "disabled nav beacon status should have a red diode"
+    )
+    runner.assert(
+      status.label and status.label[1] == "custom-status.muluna-satellite-radar-scanning-disabled",
+      "disabled nav beacon status should be the scanning-disabled status"
+    )
+    runner.assert(
+      beacon.disabled_by_script == true,
+      "disabled nav beacon should be disabled_by_script"
+    )
+  end
+end
+
 local function assert_planet_radar_is_inert(surface, area, expected_planet)
   local center = helpers.center(area)
   local position = { x = center.x - 20, y = center.y - 20 }
@@ -354,6 +398,31 @@ runner.test("space platform radar registers and survives the nav beacon update t
       error(callback_err, 0)
     end
   end)
+end)
+
+runner.test("nav beacon status follows the tile revealing setting", function()
+  clean_areas()
+  local platform = create_platform("funit-nav-platform-status")
+  local key, beacon = build_platform_radar(platform)
+
+  assert_nav_status(beacon, true, platform)
+
+  local disable_ok = helpers.funit_call("set_nav_beacon_enabled", key, false)
+  runner.assert(disable_ok, "could not disable the nav beacon")
+  assert_nav_status(beacon, false, platform)
+
+  local enable_ok = helpers.funit_call("set_nav_beacon_enabled", key, true)
+  runner.assert(enable_ok, "could not re-enable the nav beacon")
+  assert_nav_status(beacon, true, platform)
+
+  local destroy_ok, destroy_err = pcall(function()
+    beacon.destroy({ raise_destroy = true })
+  end)
+  runner.assert(destroy_ok, "destroying the status-test nav beacon errored: " .. tostring(destroy_err))
+  runner.assert(helpers.storage().nav_beacons[key] == nil, "destroyed status-test nav beacon is still registered")
+
+  destroy_platform(platform)
+  clean_areas()
 end)
 
 runner.test("destroying the lower unit number of two nav beacons leaves the other registered", function()
