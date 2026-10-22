@@ -358,6 +358,7 @@ Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(eve
         local player = game.players[event.player_index]
         local radar = player.opened --The currently selected entity (Satellite Radar)
         storage.nav_beacons_other[radar.unit_number].gui.enabled = checkbox.state
+        Muluna.update_nav_beacon_status(radar)
     elseif (checkbox.name and checkbox.name == "muluna-telescope-combinator-enable-asteroid-signal-checkbox") then
         local player = game.players[event.player_index]
         local combinator = player.opened --The currently selected entity (Satellite Radar)

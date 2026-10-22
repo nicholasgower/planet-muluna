@@ -58,6 +58,38 @@ local function init_storage_nav_beacons()
     
 end
 
+local status_nav_beacon_scanning_disabled = {
+    diode = defines.entity_status_diode.red,
+    label = {"custom-status.muluna-satellite-radar-scanning-disabled"}
+}
+
+---Update the satellite radar's custom status and animation state.
+---@param nav LuaEntity
+local function update_nav_beacon_status(nav)
+    if not (nav and nav.valid) then return end
+    local beacon_settings = storage.nav_beacons_other and storage.nav_beacons_other[nav.unit_number]
+    local enabled = not (beacon_settings and beacon_settings.gui and beacon_settings.gui.enabled == false)
+    if enabled then
+        local space_location = storage.nav_surfaces and storage.nav_surfaces[nav.unit_number]
+        local label
+        if space_location and space_location.valid then
+            label = {"custom-status.muluna-satellite-radar-looking-at", {"space-location-name." .. space_location.name}}
+        else
+            label = {"custom-status.muluna-satellite-radar-looking-at-deep-space"}
+        end
+        nav.custom_status = {
+            diode = defines.entity_status_diode.green,
+            label = label
+        }
+        nav.disabled_by_script = false
+    else
+        nav.custom_status = status_nav_beacon_scanning_disabled
+        nav.disabled_by_script = true
+    end
+end
+
+Muluna.update_nav_beacon_status = update_nav_beacon_status
+
 ---Record an existing satellite radar as the nav beacon of a space platform.
 ---@param nav LuaEntity
 ---@param platform LuaSpacePlatform
@@ -73,11 +105,13 @@ local function register_platform_beacon(nav, platform, enabled)
     if not storage.nav_beacons_other[nav.unit_number] then
         storage.nav_beacons_other[nav.unit_number] = { gui = { enabled = enabled ~= false } }
     end
+    update_nav_beacon_status(nav)
 end
 
 local function update_space_platform_beacon(platformBeacon,platform)
     if platformBeacon.valid == true then
             storage.nav_surfaces[platformBeacon.unit_number] = platform.space_location --this can be nil, which is acceptable
+            update_nav_beacon_status(platformBeacon)
         else
             storage.beaconed_platforms[platform.index] = nil
         end
@@ -167,7 +201,9 @@ script.on_configuration_changed(function()
     -- stale storage for the update tick to report to players.
     local has_invalid_beacon = false
     for _, beacon in pairs(storage.nav_beacons or {}) do
-        if not (beacon and beacon.valid) then
+        if beacon and beacon.valid then
+            update_nav_beacon_status(beacon)
+        else
             has_invalid_beacon = true
             break
         end
@@ -245,6 +281,7 @@ local function built_nav_beacon(entity,tags)
             end
             storage.nav_beacons_other[nav.unit_number].gui = {enabled = enabled} 
         end
+        update_nav_beacon_status(nav)
     end
     --if #storage.nav_beacons > 0 then
         
@@ -502,6 +539,7 @@ Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
     local destination_beacon_settings = storage.nav_beacons_other[destination.unit_number] or {}
     if source_beacon_settings.gui and destination_beacon_settings.gui then
         destination_beacon_settings.gui.enabled = source_beacon_settings.gui.enabled
+        update_nav_beacon_status(destination)
     end
 
 
