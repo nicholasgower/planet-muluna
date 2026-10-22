@@ -70,17 +70,7 @@ local function update_nav_beacon_status(nav)
     local beacon_settings = storage.nav_beacons_other and storage.nav_beacons_other[nav.unit_number]
     local enabled = not (beacon_settings and beacon_settings.gui and beacon_settings.gui.enabled == false)
     if enabled then
-        local space_location = storage.nav_surfaces and storage.nav_surfaces[nav.unit_number]
-        local label
-        if space_location and space_location.valid then
-            label = {"custom-status.muluna-satellite-radar-looking-at", {"space-location-name." .. space_location.name}}
-        else
-            label = {"custom-status.muluna-satellite-radar-looking-at-deep-space"}
-        end
-        nav.custom_status = {
-            diode = defines.entity_status_diode.green,
-            label = label
-        }
+        nav.custom_status = nil
         nav.disabled_by_script = false
     else
         nav.custom_status = status_nav_beacon_scanning_disabled
