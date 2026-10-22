@@ -34,20 +34,25 @@ results.check(SUITE, "nav-beacon-has-universal-circuit-network", function()
   )
 end)
 
-results.check(SUITE, "nav-beacon-does-not-drain-energy-while-idle", function()
+results.check(SUITE, "nav-beacon-has-passive-power-draw", function()
   local entity = data.raw["radar"]["muluna-satellite-radar"]
-  -- Radar prototypes reject energy_usage = 0, so allow only a negligible idle
-  -- draw. A value derived from platform-power-consumption (as the accumulator
-  -- version did not use) would empty the buffer between scans.
-  local energy_usage = util.parse_energy(entity.energy_usage)
+  -- Satellite radars pay a deliberate 1 MW to stay online, independent of the
+  -- per-scan cost configured by platform-power-consumption.
+  local energy_per_tick = util.parse_energy(entity.energy_usage)
   assert(
-    energy_usage > 0 and energy_usage <= 1000,
-    "satellite radar idle energy usage is not negligible, got "
+    math.abs(energy_per_tick * 60 - 1e6) < 1,
+    "satellite radar passive power draw should be 1 MW, got "
       .. tostring(entity.energy_usage)
   )
   assert(
     entity.energy_source and entity.energy_source.buffer_capacity,
     "satellite radar has no energy buffer to charge scans from"
+  )
+  local input_limit_per_tick = util.parse_energy(entity.energy_source.input_flow_limit)
+  assert(
+    input_limit_per_tick > energy_per_tick,
+    "satellite radar input flow limit must exceed its passive draw, got "
+      .. tostring(entity.energy_source.input_flow_limit)
   )
 end)
 

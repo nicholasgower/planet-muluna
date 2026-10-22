@@ -321,13 +321,13 @@ runner.test("space platform radar registers and survives the nav beacon update t
       runner.assert(current_beacon.valid, "the registered nav beacon became invalid during the update tick")
       runner.assert(current.has_nav_beacons == true, "the update tick cleared has_nav_beacons")
       if energy_is_writable then
-        -- A radar prototype must have a positive energy_usage, so a tiny idle
-        -- draw is expected. It must stay far below the scan cost (and the old
-        -- 1MW idle draw drained over a megajoule across this interval).
-        local IDLE_DRAW_LIMIT = 1000
+        -- The radar has a 1 MW passive draw, but no player was in remote view
+        -- to trigger a scan. The drain must stay far below one scan's cost
+        -- (platform-power-consumption MJ in this profile).
+        local scan_cost = settings.startup["platform-power-consumption"].value * 1e6
         runner.assert(
-          energy_before - current_beacon.energy < IDLE_DRAW_LIMIT,
-          "nav beacon drained scan-level energy without a player to drive a scan: "
+          energy_before - current_beacon.energy < scan_cost / 2,
+          "nav beacon spent scan-level energy without a player to drive a scan: "
             .. tostring(energy_before)
             .. " -> "
             .. tostring(current_beacon.energy)
