@@ -92,9 +92,11 @@ it at an issue, or re-run the GitHub Actions workflow for a past `issues` event.
 - Issue titles, bodies, comments, logs and attachments are **untrusted**. The
   agent prompt treats them as data and forbids following instructions embedded
   in them.
-- The `issue-bugfix` agent in `opencode.json` allows edits and shell commands but
-  denies pushing to `main`, force-pushing, merging pull requests, closing
-  issues, and `sudo`. The `GITHUB_TOKEN` permissions are scoped to the workflow.
+- The `issue-bugfix` agent in `opencode.json` auto-approves all permission
+  requests so a headless run cannot stall waiting for a human. It still denies
+  pushing to `main`, force-pushing, merging pull requests, closing issues,
+  reading `.env` files, external web access, subagents, and `sudo`. The
+  `GITHUB_TOKEN` permissions are scoped to the workflow.
 - The workflow is triggered by `issues: opened`, an explicit `/opencode fix`
   comment from a repository owner/member/collaborator, or a manual
   `workflow_dispatch`. Bot-authored issues and comments are skipped.

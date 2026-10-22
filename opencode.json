@@ -22,6 +22,7 @@
       "temperature": 0.2,
       "prompt": "{file:./.github/opencode/bugfix-prompt.md}",
       "permission": {
+        "*": "allow",
         "edit": "allow",
         "read": {
           "*": "allow",
@@ -33,7 +34,9 @@
         "websearch": "deny",
         "question": "deny",
         "task": "deny",
+        "doom_loop": "allow",
         "external_directory": {
+          "*": "allow",
           "/tmp/opencode/**": "allow",
           "$HOME/work/_temp/**": "allow"
         },
