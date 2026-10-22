@@ -197,35 +197,16 @@ local function build_platform_radar(platform)
   return key, beacon
 end
 
-local function assert_nav_status(beacon, enabled, platform)
+local function assert_nav_status(beacon, enabled)
   local status = beacon.custom_status
-  runner.assert(status, "nav beacon has no custom status")
   if enabled then
-    runner.assert(
-      status.diode == defines.entity_status_diode.green,
-      "enabled nav beacon status should have a green diode"
-    )
-    local location = platform.space_location
-    if location then
-      runner.assert(
-        status.label and status.label[1] == "custom-status.muluna-satellite-radar-looking-at",
-        "enabled nav beacon status should be the looking-at status"
-      )
-      runner.assert(
-        status.label[2] and status.label[2][1] == "space-location-name." .. location.name,
-        "enabled nav beacon status does not name the platform's space location"
-      )
-    else
-      runner.assert(
-        status.label and status.label[1] == "custom-status.muluna-satellite-radar-looking-at-deep-space",
-        "enabled nav beacon in transit should use the deep-space status"
-      )
-    end
+    runner.assert(status == nil, "enabled nav beacon should not have a custom status")
     runner.assert(
       beacon.disabled_by_script == false,
       "enabled nav beacon should not be disabled_by_script"
     )
   else
+    runner.assert(status, "disabled nav beacon has no custom status")
     runner.assert(
       status.diode == defines.entity_status_diode.red,
       "disabled nav beacon status should have a red diode"
@@ -405,15 +386,15 @@ runner.test("nav beacon status follows the tile revealing setting", function()
   local platform = create_platform("funit-nav-platform-status")
   local key, beacon = build_platform_radar(platform)
 
-  assert_nav_status(beacon, true, platform)
+  assert_nav_status(beacon, true)
 
   local disable_ok = helpers.funit_call("set_nav_beacon_enabled", key, false)
   runner.assert(disable_ok, "could not disable the nav beacon")
-  assert_nav_status(beacon, false, platform)
+  assert_nav_status(beacon, false)
 
   local enable_ok = helpers.funit_call("set_nav_beacon_enabled", key, true)
   runner.assert(enable_ok, "could not re-enable the nav beacon")
-  assert_nav_status(beacon, true, platform)
+  assert_nav_status(beacon, true)
 
   local destroy_ok, destroy_err = pcall(function()
     beacon.destroy({ raise_destroy = true })
