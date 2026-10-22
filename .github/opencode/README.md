@@ -46,6 +46,15 @@ The workflow uses `GITHUB_TOKEN` (with `contents: write`, `issues: write`, and
 `pull-requests: write`) instead of the OpenCode GitHub App OIDC exchange, so no
 app installation is required.
 
+The run executes the OpenCode CLI directly
+(`opencode run --agent issue-bugfix --auto`) rather than the
+`anomalyco/opencode/github` action. In OpenCode 1.19.x the action's `agent`
+input is not applied by `opencode github run`; it falls back to the `build`
+agent, whose `bash` permission is `ask` and therefore hangs a headless run.
+Running the CLI directly also guarantees the bugfix agent's system prompt and
+permissions are used. `--auto` approves any remaining asks; the agent's
+explicit deny rules still apply.
+
 ## How the runner is prepared
 
 `.github/opencode/setup-factorio.sh` runs before OpenCode and:

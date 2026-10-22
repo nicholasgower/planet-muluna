@@ -84,6 +84,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends xz-utils zip unzip
 
+      - name: Install OpenCode CLI
+        run: |
+          curl -fsSL https://opencode.ai/install | bash
+          echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
+          "$HOME/.opencode/bin/opencode" --version
+
+      - name: Verify the OpenCode agent
+        run: |
+          set -euo pipefail
+          opencode agent list | grep -q '^issue-bugfix (primary)'
+
       - name: Configure git identity
         run: |
           git config --global user.name "opencode-agent"
@@ -100,9 +111,16 @@ jobs:
       - name: Verify the FUnit harness
         run: ./test-mods/planet-muluna-funit/run.sh
 
+      - name: Create work branch
+        run: |
+          branch="opencode/issue${ISSUE_NUMBER}-$(date -u +%Y%m%d%H%M%S)"
+          git checkout -b "$branch"
+          echo "Created work branch: $branch"
+
       - name: Run OpenCode
-        uses: anomalyco/opencode/github@latest
+        timeout-minutes: 90
         env:
+          MODEL: ${{ vars.OPENCODE_MODEL || 'opencode-go/deepseek-v4.1-flash' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # API key for the provider named by OPENCODE_MODEL. The default is the
@@ -110,12 +128,7 @@ jobs:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           OPENCODE_ZEN_API_KEY: ${{ secrets.OPENCODE_ZEN_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        with:
-          model: ${{ vars.OPENCODE_MODEL || 'opencode-go/deepseek-v4.1-flash' }}
-          agent: issue-bugfix
-          use_github_token: true
-          share: "false"
-          prompt: |
+          PROMPT: |
             Process issue #${{ github.event.issue.number || inputs.issue_number }} now.
 
             This may be an automatically opened issue, a maintainer re-run on an
@@ -129,6 +142,13 @@ jobs:
             Feature requests must be labelled `enhancement` and must not get a
             pull request. Only crash reports are fixed. Leave the worktree
             clean and open the pull request yourself in the required format.
+        run: |
+          set -euo pipefail
+          # Run the agent directly. The OpenCode GitHub action currently falls
+          # back to the build agent, whose permission prompts cannot be answered
+          # in a headless runner. --auto approves any remaining asks while the
+          # agent's explicit deny rules still apply.
+          opencode run --agent issue-bugfix --model "$MODEL" --auto "$PROMPT"
 
       # Safety net: if the agent committed a fix but did not push it or open a
       # pull request (for example the push failed), preserve the work. Test-only

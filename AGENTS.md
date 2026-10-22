@@ -353,7 +353,10 @@ issue number. Comment triggers are restricted to repository owners, members, and
 collaborators, and a bare `/opencode` does not trigger a run.
 
 The runner installs a headless Factorio build and the FUnit dependencies with
-`.github/opencode/setup-factorio.sh` before the agent starts. It needs the
+`.github/opencode/setup-factorio.sh` before the agent starts. It executes
+`opencode run --agent issue-bugfix --auto` directly so the intended agent prompt
+and auto-approved permissions are used; the GitHub action's `agent` input
+currently falls back to the build agent in a headless run. It needs the
 `FACTORIO_PLAYER_TOKEN` secret (a player token, not the mod-portal upload key) and an API
 key for the model named by the `OPENCODE_MODEL` repository variable (default:
 `opencode-go/deepseek-v4.1-flash`); see `.github/opencode/README.md`. The agent's
