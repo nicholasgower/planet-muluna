@@ -73,7 +73,7 @@ if settings.startup["enable-nav-beacon"].value == true then
             energy_usage = "1W",
             icon = "__muluna-graphics__/graphics/icons/nav-beacon-icon.png",
             icon_size = 64,
-            rotation_speed = 0.01,
+            rotation_speed = 0.005,
             corpse = "medium-remnants",
             
             
