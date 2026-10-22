@@ -126,6 +126,8 @@ local function reset_storage_nav_beacons()
 
         storage.nav_beacons_other = {}
 
+        storage.has_nav_beacons = false
+
         -- Search space platforms for satellite radars that are already placed
         -- and register those so players do not have to rebuild them.
         for _,force in pairs(game.forces) do
