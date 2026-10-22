@@ -185,6 +185,15 @@ local function build_platform_radar(platform)
     beacon.surface.platform and beacon.surface.platform.index == platform.index,
     "registered nav beacon is not on platform " .. platform.name
   )
+  local connectors = beacon.get_wire_connectors(true)
+  runner.assert(
+    connectors[defines.wire_connector_id.circuit_red],
+    "registered nav beacon has no red circuit wire connector"
+  )
+  runner.assert(
+    connectors[defines.wire_connector_id.circuit_green],
+    "registered nav beacon has no green circuit wire connector"
+  )
   return key, beacon
 end
 
@@ -312,9 +321,13 @@ runner.test("space platform radar registers and survives the nav beacon update t
       runner.assert(current_beacon.valid, "the registered nav beacon became invalid during the update tick")
       runner.assert(current.has_nav_beacons == true, "the update tick cleared has_nav_beacons")
       if energy_is_writable then
+        -- A radar prototype must have a positive energy_usage, so a tiny idle
+        -- draw is expected. It must stay far below the scan cost (and the old
+        -- 1MW idle draw drained over a megajoule across this interval).
+        local IDLE_DRAW_LIMIT = 1000
         runner.assert(
-          math.abs(current_beacon.energy - energy_before) < 1e-6,
-          "nav beacon energy changed without a player to drive a scan: "
+          energy_before - current_beacon.energy < IDLE_DRAW_LIMIT,
+          "nav beacon drained scan-level energy without a player to drive a scan: "
             .. tostring(energy_before)
             .. " -> "
             .. tostring(current_beacon.energy)
