@@ -3,7 +3,7 @@
   "agent": {
     "build": {
       "description": "Default build agent for this project.",
-      "model": "opencode/deepseek-v4.1-flash-free",
+      "model": "opencode-go/deepseek-v4.1-flash",
       "mode": "primary",
       "temperature": 0.7,
       "permission": {
@@ -18,7 +18,7 @@
   "factorio-docs-agent": {
       "description": "Subagent that gets information from the Factorio documentation.",
       "mode": "subagent",
-      "model": "opencode/deepseek-v4.1-flash-free",
+      "model": "opencode-go/deepseek-v4.1-flash",
       "prompt": "{file:./prompts/factorio-docs.txt}",
       "permission": {
         "bash": "allow"
@@ -27,7 +27,7 @@
   "factorio-docs": {
       "mode": "primary",
       "description": "Subagent that gets information from the Factorio documentation.",
-      "model": "opencode/deepseek-v4.1-flash-free",
+      "model": "opencode-go/deepseek-v4.1-flash",
       "prompt": "{file:./prompts/factorio-docs.txt}",
       "temperature":0.1,
       "permission": {
@@ -38,7 +38,7 @@
   "lua-docs": {
       "mode": "primary",
       "description": "Subagent that gets information from the Lua documentation.",
-      "model": "opencode/deepseek-v4.1-flash-free",
+      "model": "opencode-go/deepseek-v4.1-flash",
       "prompt": "{file:./prompts/lua-docs.txt}",
       "temperature":0.1,
       "permission": {
