@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.45
+Date: 2026-10-23
+  Bugfixes:
+    - Preserve data-port fluidbox indexes for all fluid recipes craftable in advanced assembling machines. https://github.com/nicholasgower/planet-muluna/issues/494
+---------------------------------------------------------------------------------------------------
 Version: 2.7.44
 Date: 2026-10-20
   Bugfixes:
