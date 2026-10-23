@@ -298,6 +298,12 @@ graphics, locale, sound, gui, perf, control, other, info, translate) → patch. 
 `changelog.txt` is derived from the type (e.g. `fix` → *Bugfixes*, `compat` → *Compatibility*).
 Do **not** edit `changelog.txt` or bump `info.json` by hand for a normal change — CI does both.
 
+Internal documentation and agent guidance are not player-facing changes and must not be
+semantically labeled. Use a plain subject, for example
+`Document data-stage probing helpers.`, rather than `other:`/`docs:`. Any recognized
+Conventional Commit type becomes a changelog entry; the untyped form keeps internal
+repository notes out of `changelog.txt`.
+
 Do not push to `main` without intent to release, and note the opencode `build` agent config
 denies `git push`. The `Release` workflow publishes to the mod portal using `FACTORIO_TOKEN`.
 
