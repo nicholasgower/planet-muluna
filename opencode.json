@@ -15,6 +15,45 @@
         "git push *": "deny"
       }
     },
+    "issue-bugfix": {
+      "description": "Automated crash-report triage and bugfix agent for GitHub issues.",
+      "mode": "primary",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "temperature": 0.2,
+      "prompt": "{file:./.github/opencode/bugfix-prompt.md}",
+      "permission": {
+        "*": "allow",
+        "edit": "allow",
+        "read": {
+          "*": "allow",
+          "*.env": "deny",
+          "*.env.*": "deny",
+          "*.env.example": "allow"
+        },
+        "webfetch": "deny",
+        "websearch": "deny",
+        "question": "deny",
+        "task": "deny",
+        "doom_loop": "allow",
+        "external_directory": {
+          "*": "allow",
+          "/tmp/opencode/**": "allow",
+          "$HOME/work/_temp/**": "allow"
+        },
+        "bash": {
+          "*": "allow",
+          "git push *main*": "deny",
+          "git push --force*": "deny",
+          "git push -f*": "deny",
+          "git reset --hard*": "deny",
+          "git checkout main*": "deny",
+          "git switch main*": "deny",
+          "gh pr merge *": "deny",
+          "gh issue close *": "deny",
+          "sudo *": "deny"
+        }
+      }
+    },
   "factorio-docs-agent": {
       "description": "Subagent that gets information from the Factorio documentation.",
       "mode": "subagent",

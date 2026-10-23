@@ -14,6 +14,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+# Local development defaults. In GitHub Actions, setup-factorio.sh exports the
+# downloaded install paths through $GITHUB_ENV before this runner is called.
 FACTORIO_BIN="${FACTORIO_BIN:-/opt/factorio_space_age_21/bin/x64/factorio}"
 FACTORIO_MODS="${FACTORIO_MODS:-/opt/factorio_space_age_21/mods}"
 TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
@@ -118,15 +120,24 @@ echo "  binary: $FACTORIO_BIN"
 echo "  mods:   $TMP_ROOT/mods"
 echo "  log:    $LOG"
 
+# The dedicated headless server build has no audio subsystem and rejects
+# --disable-audio, while the full client accepts it. Only pass the flag when
+# the binary advertises it so the same runner works with either install.
+FACTORIO_ARGS=(
+  --config "$TMP_ROOT/config.ini"
+  --mod-directory "$TMP_ROOT/mods"
+  --start-server-load-scenario planet-muluna-funit/__funit__muluna
+  --port "$FACTORIO_PORT"
+  --server-settings "$TMP_ROOT/server-settings.json"
+  --no-log-rotation
+)
+if "$FACTORIO_BIN" --help 2>&1 | grep -q -- '--disable-audio'; then
+  FACTORIO_ARGS+=(--disable-audio)
+fi
+
 set +e
 "$FACTORIO_BIN" \
-  --config "$TMP_ROOT/config.ini" \
-  --mod-directory "$TMP_ROOT/mods" \
-  --start-server-load-scenario planet-muluna-funit/__funit__muluna \
-  --port "$FACTORIO_PORT" \
-  --server-settings "$TMP_ROOT/server-settings.json" \
-  --disable-audio \
-  --no-log-rotation \
+  "${FACTORIO_ARGS[@]}" \
   >"$LOG" 2>&1 &
 FACTORIO_PID=$!
 set -e

@@ -22,7 +22,7 @@ fixtures into FUnit tests, and loads every runtime suite in `tests/manifest.lua`
 From the repository root:
 
 ```sh
-bash test-mods/planet-muluna-funit/run.sh
+./test-mods/planet-muluna-funit/run.sh
 ```
 
 The runner is headless and self-contained:
@@ -31,6 +31,8 @@ The runner is headless and self-contained:
 - links the dependency mods from `FACTORIO_MODS`;
 - writes a scratch mod directory, config and logs under `TMP_ROOT`;
 - disables server auto-pause so FUnit can advance ticks without a player;
+- detects whether the Factorio binary supports `--disable-audio`, so it works
+  with both the full client and the dedicated headless server build;
 - stops Factorio after FUnit prints `====END====`;
 - exits non-zero on any FUnit `FAILURE` or `ERROR`.
 
