@@ -46,6 +46,7 @@ scripts/                  Control-stage feature modules (telescopes, nav-beacon,
 locale/                   Translations, one dir per language (en, ru, de, fr, zh-CN, ...)
 scenarios/__funit__...    A Factorio `funit` scenario used for in-game smoke tests
 test-mods/                Development-only companion mods (the FUnit suite; export-ignored)
+tools/                    Development helpers (prototype probe/query, CI scripts; see tools/README.md)
 prompts/                  Prompt text for the opencode "docs" agents (factorio-docs, lua-docs)
 docs/                     Generated LDoc HTML output (do not hand-edit)
 ```
@@ -208,9 +209,11 @@ runs both locally and in GitHub Actions. What you can do:
 3. **Headless FUnit suite**: `test-mods/planet-muluna-funit/` is a development-only
    companion mod with data-stage fixtures and runtime behavioral tests. Run
    `./test-mods/planet-muluna-funit/run.sh`; it links the current worktree, uses the
-   installed dependency mods, and exits non-zero on any FUnit failure. See that mod's
-   `README.md` for prerequisites and the test-only `muluna_funit` remote interface. The
-   `FUnit` workflow (`.github/workflows/funit.yml`) runs the same suite in CI, and
+   installed dependency mods, and exits non-zero on any FUnit failure. For iterating on
+   data-stage fixtures, `tools/ci/funit.sh --data-only` runs only the data stage and is
+   much faster. See that mod's `README.md` for prerequisites and the test-only
+   `muluna_funit` remote interface. The `FUnit` workflow
+   (`.github/workflows/funit.yml`) runs the same suite in CI, and
    `.github/opencode/setup-factorio.sh` prepares a headless install plus the dependency
    mods for the issue-bugfix workflow.
 4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
@@ -222,6 +225,54 @@ runs both locally and in GitHub Actions. What you can do:
 
 Because of the above, be conservative: guard prototype access, avoid assumptions about load
 order, and prefer the `rro` helpers over raw table surgery.
+
+## Data-stage prototype probing
+
+Data-stage compatibility bugs are usually invisible in the source: they depend on the
+final `data.raw` after every installed mod has run. Use the probe tools instead of
+guessing. See `tools/README.md` for complete usage.
+
+- **`python3 tools/factorio_probe.py dump`** builds a scratch mod directory from a
+  mod-list, links the highest version of each enabled mod, and runs Factorio with
+  `--dump-data`. This executes the full data stage without generating a map and writes
+  `data-raw-dump.json` under `/tmp/opencode/factorio-probe/`. `--add-mod PATH` appends a
+  development mod (for example `test-mods/planet-muluna-funit`) last.
+- **`python3 tools/proto_query.py --dump DUMP ...`** queries that dump:
+  `machines --data-ports`, `recipes --missing-fluidbox-index`,
+  `data-port-invariant`, and `funit-results`.
+- **`python3 tools/factorio_probe.py load-order LOG`** shows when each mod ran
+  `settings` / `data` / `data-updates` / `data-final-fixes`.
+- **`tools/ci/funit.sh --data-only`** runs only the FUnit data fixtures and reads the
+  result bag. Use it while editing `prototypes/fixtures/`; use the full suite before a PR.
+- **`tools/ci/lua-check.sh`** syntax-checks changed Lua files and runs `git diff --check`.
+
+Lessons from fixing data-port compatibility with Razi Protocol / K2SO:
+
+- **`data-final-fixes` is not globally last.** A mod that depends on Muluna can run its
+  own `data-final-fixes` afterwards and rewrite recipes. Check load order before blaming
+  the wrong file.
+- **Match behaviour, not category names.** The broken recipes used
+  `castra-crafting-with-fluid` and `advanced-crafting`, not only the literal
+  `crafting-with-fluid` category. Match recipes that are craftable in a machine with a
+  data port.
+- **Recipe categories are alternatives, not requirements.** A recipe is craftable in a
+  machine when the machine has any one of the recipe's categories. `electric-engine-unit`
+  has `crafting-with-fluid`, `mechanics`, and `maraxsis-hydro-plant`; AM3 still crafts it
+  through `crafting-with-fluid`. Do not require every recipe category to be present.
+- **Fluidbox indexes are per input/output and 1-based.** The data port is at ordinal `30`
+  because of the dummy fluidboxes. `fluidbox_index = 0` behaves like unset, and
+  `optional_fluidbox_indexes` only matters when a primary index is set.
+- **Do not use `fluid_box.filter` on an assembling machine.** Factorio ignores filters on
+  assembling-machine fluidboxes, and hard-coding one fluid would prevent future data
+  fluid types from using the port. Recipes that intend to use a data port must set
+  `fluidbox_index` explicitly.
+- **Expose a reapply seam when a pass can be invalidated.** If a mod rewrites recipe
+  ingredient/result tables after Muluna's pass, it can call
+  `Muluna.data_fluids.apply_recipe_fluidbox_indexes()` to restore the indexes.
+- **`connection_category` may be a string or a list.** Check both when detecting data
+  ports.
+- **Prefer a full-pack probe over a minimal-only test** when reproducing compatibility
+  bugs: order and extra categories are usually the point.
 
 ## Commits, changelog, and releases
 
@@ -411,11 +462,20 @@ The `tools/ci/` helpers are development tools and are not shipped:
 - `opencode-check.sh` — validate the agent, prompt file, primary mode, model, and
   auto-approve permissions before burning a runner.
 - `funit.sh` — run the FUnit suite, filter to one suite, and summarize a log as text or
-  JSON.
+  JSON. `--data-only` runs only the data stage and summarizes the fixture result bag.
+- `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
 - `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
   test links.
 - `workflow-test.sh` — push a temporary branch and dispatch a workflow against it for
   safe testing of workflow changes.
+
+The non-CI tools are documented in `tools/README.md`:
+
+- `factorio_probe.py` — build a scratch mod directory, dump final prototypes with
+  `--dump-data`, and inspect data-stage load order.
+- `proto_query.py` — query a prototype dump, including `machines`, `recipes`,
+  `data-port-invariant`, and `funit-results`.
+- `fdoc.py` — look up Factorio prototype/runtime API documentation (see below).
 
 ## Documentation
 
