@@ -293,6 +293,10 @@ graphics: ...
 other: Removed some now-obsolete console warnings.
 ```
 
+When a bugfix responds to a GitHub issue, include the issue URL in the commit subject, for
+example `fix: ... https://github.com/nicholasgower/planet-muluna/issues/416`. This keeps the
+generated changelog entry linked to the report.
+
 `feat`/`feature` → minor bump; breaking → major; everything else (fix, balance, compat,
 graphics, locale, sound, gui, perf, control, other, info, translate) → patch. The heading in
 `changelog.txt` is derived from the type (e.g. `fix` → *Bugfixes*, `compat` → *Compatibility*).
