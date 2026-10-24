@@ -29,6 +29,7 @@ local rro = Muluna.rro
 --require("lib.control-stage")
 
 require("scripts.ground-diggers")
+require("scripts.lunar-rock-removal")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
 require("scripts.heat-assembling-machine")
