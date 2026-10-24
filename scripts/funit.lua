@@ -92,6 +92,14 @@ remote.add_interface("muluna_funit", {
   apply_rock_removal_undo = function(actions)
     return stage().apply_rock_removal_undo(actions)
   end,
+
+  record_rock_floor_build = function(surface_index, tiles, tile_name, builder)
+    return stage().record_rock_floor_build(surface_index, tiles, tile_name, builder)
+  end,
+
+  clear_rock_removal_state = function(surface_index)
+    return stage().clear_rock_removal_state(surface_index)
+  end,
 })
 
 return Public

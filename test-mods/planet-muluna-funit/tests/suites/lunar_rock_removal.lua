@@ -114,6 +114,7 @@ end
 
 local function cleanup_area(surface, center)
   local area = test_area(center)
+  pcall(helpers.funit_call, "clear_rock_removal_state", surface.index)
   pcall(helpers.clear_area, surface, area)
   pcall(fill_area, surface, area, FLOOR)
 end
@@ -258,6 +259,104 @@ runner.test("lunar rock: undo removes queued floor ghosts", function()
       remaining_ghost_names["stone-path"],
       "undo removed the unrelated stone-path ghost"
     )
+  end)
+end)
+
+runner.test("lunar rock: only robot-built gravel is queued for cleanup", function()
+  with_rock_area(function(surface, center)
+    local rock, positions = queue_test_rock(surface, center)
+    local robot_positions = {}
+    local player_positions = {}
+    for index, position in ipairs(positions) do
+      if index % 2 == 0 then
+        robot_positions[#robot_positions + 1] = position
+      else
+        player_positions[#player_positions + 1] = position
+      end
+    end
+
+    local function event_tiles(source)
+      local tiles = {}
+      for _, position in ipairs(source) do
+        tiles[#tiles + 1] = {
+          position = { x = position.x, y = position.y },
+        }
+      end
+      return tiles
+    end
+
+    helpers.funit_call(
+      "record_rock_floor_build",
+      surface.index,
+      event_tiles(robot_positions),
+      FLOOR,
+      "robot"
+    )
+    helpers.funit_call(
+      "record_rock_floor_build",
+      surface.index,
+      event_tiles(player_positions),
+      FLOOR,
+      "player"
+    )
+
+    set_floor(surface, positions, FLOOR, true)
+    runner.assert(rock.to_be_deconstructed(), "rock was not re-marked after its floor was completed")
+
+    local storage = helpers.funit_call("get_storage")
+    runner.assert(
+      count_entries(storage.rocks_pending_gravel_cleanup) == 1,
+      "floor completion did not create a pending gravel cleanup entry"
+    )
+    local pending_index = next(storage.rocks_pending_gravel_cleanup)
+    local pending = storage.rocks_pending_gravel_cleanup[pending_index]
+    runner.assert(
+      table_size(pending.tiles) == #robot_positions,
+      "pending cleanup tracks " .. tostring(table_size(pending.tiles))
+        .. " tiles, expected " .. tostring(#robot_positions)
+    )
+
+    local expected = {}
+    for _, position in ipairs(robot_positions) do
+      expected[position.x .. ":" .. position.y] = true
+    end
+    for _, position in ipairs(pending.tiles) do
+      runner.assert(
+        expected[position.x .. ":" .. position.y],
+        "pending cleanup included player-built tile at ("
+          .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+    end
+
+    helpers.funit_call("apply_rock_removal_undo", {
+      {
+        type = "removed-entity",
+        target = {
+          name = ROCK,
+          position = { x = rock.position.x, y = rock.position.y },
+        },
+      },
+    })
+
+    local unreferenced = helpers.funit_call("get_storage")
+    runner.assert(
+      count_entries(unreferenced.rocks_pending_gravel_cleanup) == 0,
+      "undo left the pending robot-built gravel cleanup entry behind"
+    )
+    for _, position in ipairs(robot_positions) do
+      runner.assert(
+        surface.get_tile(position.x, position.y).to_be_deconstructed("player"),
+        "undo did not mark the robot-built gravel for removal at ("
+          .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+    end
+    for _, position in ipairs(player_positions) do
+      runner.assert(
+        not surface.get_tile(position.x, position.y).to_be_deconstructed("player"),
+        "undo marked player-built gravel for removal at ("
+          .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+    end
   end)
 end)
 
@@ -646,15 +745,20 @@ runner.test("lunar rock: construction robots deliver stone and sulfur (issue #49
       return false
     end
 
+    local center_tile = surface.get_tile(center.x, center.y).name
+    if center_tile == FLOOR then
+      return false
+    end
+
     runner.assert(
-      surface.get_tile(center.x, center.y).name == FLOOR,
-      "the rock floor was not replaced with " .. FLOOR
+      center_tile == DIRT,
+      "robot-built gravel was not removed back to the original floor; tile is " .. tostring(center_tile)
     )
     return true
   end, {
-    timeout = 6000,
+    timeout = 9000,
     interval = 30,
-    message = "construction robots did not deliver stone and sulfur after deconstructing the rock (issue #495)",
+    message = "construction robots did not deliver the rock drops and remove the robot-built gravel (issue #495)",
     on_success = cleanup,
     on_failure = cleanup,
   })
