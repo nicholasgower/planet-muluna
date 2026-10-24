@@ -5,7 +5,7 @@
 -- collecting them, so deconstructing a lunar rock over natural terrain used to
 -- destroy its stone. When a rock is marked for deconstruction, this module
 -- cancels the order, queues the rock, and places crushed stone tile ghosts
--- under and around it. Once every required tile has been built, the rock is
+-- under it. Once every required tile has been built, the rock is
 -- marked for deconstruction again. Undoing the original deconstruction order
 -- removes the queue entry and any tile ghosts this module created. After the
 -- rock is gone and its dropped items are picked up, robot-built gravel is
@@ -23,7 +23,6 @@ local ROCK_NAME_FILTER = {
 
 local REPLACEMENT_TILE = "muluna-gravel"
 local TILE_GHOST_NAME = "tile-ghost"
-local FLOOR_MARGIN = 1
 local RECHECK_RADIUS = 6
 local WAITING_MESSAGE = { "lunar-rock-removal.waiting-for-floor" }
 
@@ -71,7 +70,7 @@ local function get_floor_bounds(entity)
   -- Rocks are placeable off-grid, so a fractional position can make the raw
   -- bounding box clip into an extra tile by a few hundredths of a tile. Use the
   -- rock's nominal whole-tile footprint instead; this keeps a huge rock at
-  -- 3x3 floor tiles (5x5 with the margin) wherever the generator placed it.
+  -- 3x3 floor tiles wherever the generator placed it.
   local tile_width = math.max(1, math.ceil(bounding_box.right_bottom.x - bounding_box.left_top.x))
   local tile_height = math.max(1, math.ceil(bounding_box.right_bottom.y - bounding_box.left_top.y))
   local center_x = (bounding_box.left_top.x + bounding_box.right_bottom.x) / 2
@@ -79,10 +78,10 @@ local function get_floor_bounds(entity)
   local footprint_left = math.floor(center_x - (tile_width - 1) / 2)
   local footprint_top = math.floor(center_y - (tile_height - 1) / 2)
 
-  return footprint_left - FLOOR_MARGIN,
-    footprint_left + tile_width - 1 + FLOOR_MARGIN,
-    footprint_top - FLOOR_MARGIN,
-    footprint_top + tile_height - 1 + FLOOR_MARGIN
+  return footprint_left,
+    footprint_left + tile_width - 1,
+    footprint_top,
+    footprint_top + tile_height - 1
 end
 
 local function analyse_floor(entity)
