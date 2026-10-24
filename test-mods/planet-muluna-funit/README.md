@@ -25,6 +25,16 @@ From the repository root:
 ./test-mods/planet-muluna-funit/run.sh
 ```
 
+For a faster loop while editing data-stage fixtures, run only the data stage:
+
+```sh
+tools/ci/funit.sh --data-only
+```
+
+That uses the same scratch mod directory and `--dump-data`, then summarizes the
+`planet-muluna-funit-results` mod-data bag. The full runner below is still required
+before opening a pull request.
+
 The runner is headless and self-contained:
 
 - links the **current worktree** as `planet-muluna` (not the installed mod);
@@ -45,9 +55,11 @@ Useful environment variables:
 | `TMP_ROOT` | `/tmp/opencode/muluna-funit` | Scratch mod directory, config and logs |
 | `TIMEOUT` | `900` | Seconds to wait for `====END====` |
 | `FACTORIO_PORT` | `34198` | Local server port used by the headless instance |
+| `DATA_ONLY` | `0` | Run `--dump-data` instead of the scenario (used by `funit.sh --data-only`) |
 
 The full log is `$TMP_ROOT/stdout.log`; on failure the runner prints the relevant
-FUnit lines and the tail of the log.
+FUnit lines and the tail of the log. A data-only run also writes the prototype dump to
+`$TMP_ROOT/write-data/script-output/data-raw-dump.json`.
 
 ## Requirements
 
@@ -137,7 +149,9 @@ The suite covers:
   cleanup.
 - Walking-particle storage and controller-input precedence.
 - Prototype fixtures for planets, science, telescopes, nav beacons, heat/roboports,
-  ground diggers, cargo drops, and public API helpers.
+  ground diggers, cargo drops, public API helpers, and data-port fluidbox isolation
+  (including modded fluid recipe categories and recipes added after Muluna's
+  data-final-fixes).
 
 Some paths remain player- or graphics-bound and are only partially covered:
 

@@ -4,9 +4,12 @@
 -- required by the matching stage entry point (data.lua / data-updates.lua /
 -- data-final-fixes.lua).
 return {
-  data = {},
+  data = {
+    "data_cells_setup",
+  },
   data_updates = {},
   data_final_fixes = {
+    "data_cells",
     "planet",
     "science",
     "telescope",

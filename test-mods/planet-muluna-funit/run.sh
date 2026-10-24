@@ -9,6 +9,7 @@
 #   FACTORIO_MODS  Source mod directory containing dependencies
 #   TMP_ROOT       Scratch directory (default: /tmp/opencode/muluna-funit)
 #   TIMEOUT        Maximum run time in seconds (default: 900)
+#   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -21,6 +22,7 @@ FACTORIO_MODS="${FACTORIO_MODS:-/opt/factorio_space_age_21/mods}"
 TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
 TIMEOUT="${TIMEOUT:-900}"
 FACTORIO_PORT="${FACTORIO_PORT:-34198}"
+DATA_ONLY="${DATA_ONLY:-0}"
 
 if [[ ! -x "$FACTORIO_BIN" ]]; then
   echo "Factorio binary not found: $FACTORIO_BIN" >&2
@@ -115,6 +117,38 @@ locale=en
 EOF
 
 LOG="$TMP_ROOT/stdout.log"
+if [[ "$DATA_ONLY" == "1" ]]; then
+  echo "Running Muluna data-stage probe..."
+  echo "  binary: $FACTORIO_BIN"
+  echo "  mods:   $TMP_ROOT/mods"
+  echo "  log:    $LOG"
+
+  set +e
+  if command -v timeout >/dev/null 2>&1; then
+    timeout "${TIMEOUT}s" "$FACTORIO_BIN" \
+      --config "$TMP_ROOT/config.ini" \
+      --mod-directory "$TMP_ROOT/mods" \
+      --dump-data \
+      --no-log-rotation \
+      >"$LOG" 2>&1
+  else
+    "$FACTORIO_BIN" \
+      --config "$TMP_ROOT/config.ini" \
+      --mod-directory "$TMP_ROOT/mods" \
+      --dump-data \
+      --no-log-rotation \
+      >"$LOG" 2>&1
+  fi
+  FACTORIO_STATUS=$?
+  set -e
+
+  if [[ "$FACTORIO_STATUS" -ne 0 ]]; then
+    echo "Data-stage probe failed (Factorio exit $FACTORIO_STATUS)." >&2
+    tail -n 80 "$LOG" >&2 || true
+  fi
+  exit "$FACTORIO_STATUS"
+fi
+
 echo "Running Muluna FUnit suite..."
 echo "  binary: $FACTORIO_BIN"
 echo "  mods:   $TMP_ROOT/mods"

@@ -11,6 +11,7 @@ README_images export-ignore
 .vscode export-ignore
 .git export-ignore
 .github export-ignore
+tools export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
 graphics/mipgenerator export-ignore
