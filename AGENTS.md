@@ -493,6 +493,16 @@ The non-CI tools are documented in `tools/README.md`:
   `data-port-invariant`, and `funit-results`.
 - `fdoc.py` — look up Factorio prototype/runtime API documentation (see below).
 
+## Self-learning retrospective
+
+After a substantial task, run `/self-learn [focus]`. It calls the read-only `self-learn`
+subagent, which grounds the retrospective in `git` state and repository files and returns
+a brief for the primary agent: evidence, what worked, recurring friction, and a short list
+of helper scripts worth writing. The brief ends with a direct prompt that the primary agent
+then carries out, unless the user asked for analysis only. Definitions live in
+`.opencode/agents/self-learn.md` and `.opencode/commands/self-learn.md`; `.opencode/` is
+development-only and excluded from release zips.
+
 ## Documentation
 
 `docs/` is LDoc output generated from source comments (config in `config.ld`, templates in
