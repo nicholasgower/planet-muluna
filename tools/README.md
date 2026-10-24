@@ -19,6 +19,7 @@ Use `python3 <script> --help` for the complete option list.
 | Find fluid recipes without indexes | `python3 tools/proto_query.py --dump DUMP recipes --category crafting-with-fluid --missing-fluidbox-index` |
 | Run only the FUnit data-stage fixtures | `tools/ci/funit.sh --data-only` |
 | Syntax-check changed Lua files | `tools/ci/lua-check.sh` |
+| Check the release export boundary | `tools/ci/export-check.sh` |
 
 ## `factorio_probe.py`
 
@@ -182,6 +183,37 @@ LUAC=luac5.2 tools/ci/lua-check.sh --no-diff-check
 With no arguments it checks every changed/untracked `*.lua` file and also runs
 `git diff --check`. `--all` checks every tracked and untracked Lua file. It uses
 `luac5.2` when available, otherwise `luac`; set `LUAC` to override.
+
+## `tools/ci/export-check.sh`
+
+```sh
+tools/ci/export-check.sh
+tools/ci/export-check.sh --ref v2.7.45
+tools/ci/export-check.sh --json
+tools/ci/export-check.sh --require-path .opencode/agents/self-learn.md
+```
+
+The checker reads the tracked/untracked file list and `git check-attr` to verify
+that development-only paths are marked `export-ignore` and that runtime files and
+`locale/en/` are not. It catches non-recursive directory patterns such as
+`.opencode export-ignore`; use `.opencode/** export-ignore` instead.
+
+`--require-path PATH` asserts that `PATH` is *not* export-ignored. Passing a
+development path is therefore expected to exit `1`; it is the negative self-test
+that proves the detector is working.
+
+## `tools/ci/opencode-check.sh`
+
+```sh
+tools/ci/opencode-check.sh
+tools/ci/opencode-check.sh --agent self-learn \
+  --agent-file .opencode/agents/self-learn.md --mode subagent --require-read-only
+```
+
+The preflight validates the effective agent before a workflow run. It checks the
+JSON agent entry or the Markdown agent frontmatter, the expected mode, the
+`opencode agent list` result, and (with `--require-read-only`) that file-based
+agents deny edit, bash, network, task, and question permissions.
 
 ## Typical data-stage bug workflow
 
