@@ -62,10 +62,22 @@ end
 
 local function get_floor_bounds(entity)
   local bounding_box = entity.bounding_box
-  return math.floor(bounding_box.left_top.x) - FLOOR_MARGIN,
-    math.ceil(bounding_box.right_bottom.x),
-    math.floor(bounding_box.left_top.y) - FLOOR_MARGIN,
-    math.ceil(bounding_box.right_bottom.y)
+
+  -- Rocks are placeable off-grid, so a fractional position can make the raw
+  -- bounding box clip into an extra tile by a few hundredths of a tile. Use the
+  -- rock's nominal whole-tile footprint instead; this keeps a huge rock at
+  -- 3x3 floor tiles (5x5 with the margin) wherever the generator placed it.
+  local tile_width = math.max(1, math.ceil(bounding_box.right_bottom.x - bounding_box.left_top.x))
+  local tile_height = math.max(1, math.ceil(bounding_box.right_bottom.y - bounding_box.left_top.y))
+  local center_x = (bounding_box.left_top.x + bounding_box.right_bottom.x) / 2
+  local center_y = (bounding_box.left_top.y + bounding_box.right_bottom.y) / 2
+  local footprint_left = math.floor(center_x - (tile_width - 1) / 2)
+  local footprint_top = math.floor(center_y - (tile_height - 1) / 2)
+
+  return footprint_left - FLOOR_MARGIN,
+    footprint_left + tile_width - 1 + FLOOR_MARGIN,
+    footprint_top - FLOOR_MARGIN,
+    footprint_top + tile_height - 1 + FLOOR_MARGIN
 end
 
 local function analyse_floor(entity)

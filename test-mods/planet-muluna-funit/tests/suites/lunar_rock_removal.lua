@@ -19,9 +19,16 @@ local ROCK_AREA_HALF_SIZE = 30
 
 local function floor_positions_for_rock(rock)
   local bounding_box = rock.bounding_box
+  local tile_width = math.max(1, math.ceil(bounding_box.right_bottom.x - bounding_box.left_top.x))
+  local tile_height = math.max(1, math.ceil(bounding_box.right_bottom.y - bounding_box.left_top.y))
+  local center_x = (bounding_box.left_top.x + bounding_box.right_bottom.x) / 2
+  local center_y = (bounding_box.left_top.y + bounding_box.right_bottom.y) / 2
+  local left = math.floor(center_x - (tile_width - 1) / 2) - FLOOR_MARGIN
+  local top = math.floor(center_y - (tile_height - 1) / 2) - FLOOR_MARGIN
+
   local positions = {}
-  for x = math.floor(bounding_box.left_top.x) - FLOOR_MARGIN, math.ceil(bounding_box.right_bottom.x) do
-    for y = math.floor(bounding_box.left_top.y) - FLOOR_MARGIN, math.ceil(bounding_box.right_bottom.y) do
+  for x = left, left + tile_width - 1 + FLOOR_MARGIN * 2 do
+    for y = top, top + tile_height - 1 + FLOOR_MARGIN * 2 do
       positions[#positions + 1] = { x = x, y = y }
     end
   end
@@ -185,12 +192,12 @@ end)
 runner.test("lunar rock: huge rock uses its full expanded footprint", function()
   with_rock_area(function(surface, center)
     local rock, positions = queue_test_rock(surface, center, "lunar-huge-rock")
-    runner.assert(#positions == 36, "huge rock floor covers " .. tostring(#positions) .. " tiles, expected 36")
+    runner.assert(#positions == 25, "huge rock floor covers " .. tostring(#positions) .. " tiles, expected 25")
 
     local expected = {
-      { x = center.x - 3, y = center.y - 3 },
-      { x = center.x - 3, y = center.y + 2 },
-      { x = center.x + 2, y = center.y - 3 },
+      { x = center.x - 2, y = center.y - 2 },
+      { x = center.x - 2, y = center.y + 2 },
+      { x = center.x + 2, y = center.y - 2 },
       { x = center.x + 2, y = center.y + 2 },
     }
     local actual = {}
@@ -211,6 +218,48 @@ runner.test("lunar rock: huge rock uses its full expanded footprint", function()
       )
     end
     runner.assert(not rock.to_be_deconstructed(), "huge rock deconstruction was not cancelled")
+  end)
+end)
+
+runner.test("lunar rock: off-grid huge rock does not gain an edge tile", function()
+  with_rock_area(function(surface, center)
+    local position = { x = center.x + 0.4375, y = center.y + 0.1875 }
+    local rock = helpers.entity_at(surface, "lunar-huge-rock", position)
+    runner.assert(rock and rock.valid, "could not create off-grid lunar-huge-rock")
+
+    local positions = floor_positions_for_rock(rock)
+    runner.assert(
+      #positions == 25,
+      "off-grid huge rock floor covers " .. tostring(#positions) .. " tiles, expected 25"
+    )
+
+    local min_x, max_x = math.huge, -math.huge
+    local min_y, max_y = math.huge, -math.huge
+    for _, tile in ipairs(positions) do
+      min_x = math.min(min_x, tile.x)
+      max_x = math.max(max_x, tile.x)
+      min_y = math.min(min_y, tile.y)
+      max_y = math.max(max_y, tile.y)
+    end
+    runner.assert(min_x == center.x - 2, "off-grid huge rock floor starts at x=" .. tostring(min_x))
+    runner.assert(max_x == center.x + 2, "off-grid huge rock floor ends at x=" .. tostring(max_x))
+    runner.assert(min_y == center.y - 2, "off-grid huge rock floor starts at y=" .. tostring(min_y))
+    runner.assert(max_y == center.y + 2, "off-grid huge rock floor ends at y=" .. tostring(max_y))
+
+    set_floor(surface, positions, DIRT)
+    runner.assert(
+      rock.order_deconstruction("player"),
+      "could not mark off-grid lunar-huge-rock for deconstruction"
+    )
+    runner.assert(not rock.to_be_deconstructed(), "off-grid huge rock deconstruction was not cancelled")
+
+    local storage = helpers.funit_call("get_storage")
+    local _, entry = find_queue_entry(storage, surface, rock)
+    runner.assert(entry, "off-grid huge rock was not queued")
+    runner.assert(
+      table_size(entry.tiles) == 25,
+      "off-grid huge rock queue tracks " .. tostring(table_size(entry.tiles)) .. " tiles, expected 25"
+    )
   end)
 end)
 
