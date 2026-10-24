@@ -6,7 +6,8 @@
 -- destroy its stone. When a rock is marked for deconstruction, this module
 -- cancels the order, queues the rock, and places crushed stone tile ghosts
 -- under and around it. Once every required tile has been built, the rock is
--- marked for deconstruction again.
+-- marked for deconstruction again. Undoing the original deconstruction order
+-- removes the queue entry and any tile ghosts this module created.
 
 local ROCK_NAMES = {
   ["lunar-rock"] = true,
@@ -183,16 +184,34 @@ local function ensure_tile_ghost(surface, x, y, force_name)
   end
   for _, ghost in pairs(tile.get_tile_ghosts(force_name)) do
     if ghost.valid and ghost.ghost_name == REPLACEMENT_TILE then
-      return
+      return false
     end
   end
 
-  surface.create_entity({
+  return surface.create_entity({
     name = TILE_GHOST_NAME,
     inner_name = REPLACEMENT_TILE,
     position = { x + 0.5, y + 0.5 },
     force = force_name,
   })
+end
+
+local function queue_uses_tile(surface_index, x, y)
+  local by_surface = storage.tiles_queued_by_rock_remover[surface_index]
+  local by_x = by_surface and by_surface[x]
+  local by_y = by_x and by_x[y]
+  return by_y ~= nil and next(by_y) ~= nil
+end
+
+local function remove_created_ghosts(entry)
+  for _, created in pairs(entry.created_ghosts or {}) do
+    if not queue_uses_tile(entry.surface_index, created.x, created.y) then
+      local ghost = created.ghost
+      if ghost and ghost.valid and ghost.ghost_name == REPLACEMENT_TILE then
+        ghost.destroy({ raise_destroy = true })
+      end
+    end
+  end
 end
 
 local function cleanup_entry(index)
@@ -205,6 +224,7 @@ local function cleanup_entry(index)
     remove_inverted_tile(entry.surface_index, tile.x, tile.y, index)
   end
   storage.rocks_queued_for_removal[index] = nil
+  remove_created_ghosts(entry)
 end
 
 local function find_deconstruction_force(entity)
@@ -290,6 +310,7 @@ local function queue_rock(entity, force_name, player_index)
     player_index = player_index,
     tiles = {},
     remaining = {},
+    created_ghosts = {},
   }
   storage.rocks_queued_for_removal[index] = entry
 
@@ -304,7 +325,14 @@ local function queue_rock(entity, force_name, player_index)
 
   for _, tile in ipairs(unsafe) do
     entry.remaining[tile.key] = { x = tile.x, y = tile.y }
-    ensure_tile_ghost(surface, tile.x, tile.y, entry.force)
+    local ghost = ensure_tile_ghost(surface, tile.x, tile.y, entry.force)
+    if ghost then
+      entry.created_ghosts[tile.key] = {
+        ghost = ghost,
+        x = tile.x,
+        y = tile.y,
+      }
+    end
   end
 
   return index
@@ -347,9 +375,17 @@ local function refresh_queue_entry(index)
   end
 
   entry.remaining = {}
+  entry.created_ghosts = entry.created_ghosts or {}
   for _, tile in ipairs(unsafe) do
     entry.remaining[tile.key] = { x = tile.x, y = tile.y }
-    ensure_tile_ghost(surface, tile.x, tile.y, entry.force)
+    local ghost = ensure_tile_ghost(surface, tile.x, tile.y, entry.force)
+    if ghost then
+      entry.created_ghosts[tile.key] = {
+        ghost = ghost,
+        x = tile.x,
+        y = tile.y,
+      }
+    end
   end
 end
 
@@ -464,6 +500,39 @@ local function on_marked_for_deconstruction(event)
   queue_rock(entity, force_name, event.player_index)
 end
 
+local function apply_undo_actions(actions)
+  ensure_storage()
+  local removed = 0
+
+  for _, action in pairs(actions or {}) do
+    local target = action.target
+    if target and target.name and ROCK_NAMES[target.name] and target.position then
+      local surface_index = action.surface_index
+      for index, entry in pairs(storage.rocks_queued_for_removal) do
+        local entity = entry.entity
+        if
+          entity
+          and entity.valid
+          and entity.name == target.name
+          and entity.position.x == target.position.x
+          and entity.position.y == target.position.y
+          and (not surface_index or entry.surface_index == surface_index)
+        then
+          cleanup_entry(index)
+          removed = removed + 1
+          break
+        end
+      end
+    end
+  end
+
+  return removed
+end
+
+if script.active_mods["funit"] then
+  Muluna.funit.apply_rock_removal_undo = apply_undo_actions
+end
+
 Muluna.events.on_event(Muluna.events.events.on_init(), function()
   ensure_storage()
 end)
@@ -477,5 +546,8 @@ Muluna.events.on_event(defines.events.script_raised_set_tiles, function(event)
 end)
 Muluna.events.on_event(Muluna.events.events.on_mined_tile(), function(event)
   on_tiles_changed(event, true)
+end)
+Muluna.events.on_event(defines.events.on_undo_applied, function(event)
+  apply_undo_actions(event.actions)
 end)
 Muluna.events.on_nth_tick(60, prune_invalid_entries)

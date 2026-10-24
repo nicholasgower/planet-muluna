@@ -145,9 +145,10 @@ The suite covers:
 
 - Muluna surface creation, wind, cargo pods, lunar rocks, and storage.
 - Lunar rock deconstruction queueing, crushed stone floor ghosts, re-marking
-  after construction robots build the floor, huge-rock and off-grid footprint
-  coverage, unrelated tile ghosts, and the issue #495 regression that
-  deconstructing a rock over natural Muluna terrain preserves its stone.
+  after construction robots build the floor, undo cleanup, huge-rock and
+  off-grid footprint coverage, unrelated tile ghosts, and the issue #495
+  regression that deconstructing a rock over natural Muluna terrain preserves
+  its stone.
 - Telescope registration, power, recipe assignment, pollution state, combinator
   signals, platform-count signal, and space-platform state mapping.
 - Interstellar science-pack gating, partial progress, and cheat-mode behavior.

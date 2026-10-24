@@ -88,6 +88,10 @@ remote.add_interface("muluna_funit", {
   get_walking_controller_branch = function(input_method)
     return stage().is_game_controller_input(input_method)
   end,
+
+  apply_rock_removal_undo = function(actions)
+    return stage().apply_rock_removal_undo(actions)
+  end,
 })
 
 return Public

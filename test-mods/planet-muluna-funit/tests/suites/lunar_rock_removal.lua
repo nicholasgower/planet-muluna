@@ -189,6 +189,78 @@ runner.test("lunar rock: unsafe floor queues removal and ghosts the floor", func
   end)
 end)
 
+runner.test("lunar rock: undo removes queued floor ghosts", function()
+  with_rock_area(function(surface, center)
+    local rock = helpers.entity_at(surface, ROCK, center)
+    runner.assert(rock and rock.valid, "could not create " .. ROCK)
+    local positions = floor_positions_for_rock(rock)
+    set_floor(surface, positions, DIRT)
+
+    local unrelated_position = positions[1]
+    local unrelated_ghost = surface.create_entity({
+      name = "tile-ghost",
+      inner_name = "stone-path",
+      position = { unrelated_position.x + 0.5, unrelated_position.y + 0.5 },
+      force = "player",
+    })
+    runner.assert(unrelated_ghost and unrelated_ghost.valid, "could not create the unrelated tile ghost")
+
+    runner.assert(rock.order_deconstruction("player"), "could not mark " .. ROCK .. " for deconstruction")
+    runner.assert(not rock.to_be_deconstructed(), "rock deconstruction was not cancelled")
+
+    local before = helpers.funit_call("get_storage")
+    local _, entry = find_queue_entry(before, surface, rock)
+    runner.assert(entry, "rock was not queued before undo")
+    for _, position in ipairs(positions) do
+      runner.assert(
+        has_floor_ghost(surface, position),
+        "missing " .. FLOOR .. " ghost before undo at ("
+          .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+    end
+
+    local removed = helpers.funit_call("apply_rock_removal_undo", {
+      {
+        type = "removed-entity",
+        target = {
+          name = ROCK,
+          position = { x = rock.position.x, y = rock.position.y },
+        },
+      },
+    })
+    runner.assert(removed == 1, "undo removed " .. tostring(removed) .. " queued rocks, expected 1")
+
+    local after = helpers.funit_call("get_storage")
+    runner.assert(
+      count_entries(after.rocks_queued_for_removal) == 0,
+      "undo left an entry in the removal queue"
+    )
+    runner.assert(
+      not after.tiles_queued_by_rock_remover[surface.index],
+      "undo left entries in the inverted tile map"
+    )
+
+    for _, position in ipairs(positions) do
+      runner.assert(
+        not has_floor_ghost(surface, position),
+        "undo left a " .. FLOOR .. " ghost at ("
+          .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+    end
+
+    local remaining_ghost_names = {}
+    for _, ghost in pairs(tile_ghosts(surface, unrelated_position)) do
+      if ghost.valid then
+        remaining_ghost_names[ghost.ghost_name] = true
+      end
+    end
+    runner.assert(
+      remaining_ghost_names["stone-path"],
+      "undo removed the unrelated stone-path ghost"
+    )
+  end)
+end)
+
 runner.test("lunar rock: huge rock uses its full expanded footprint", function()
   with_rock_area(function(surface, center)
     local rock, positions = queue_test_rock(surface, center, "lunar-huge-rock")
