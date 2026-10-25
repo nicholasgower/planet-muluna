@@ -158,6 +158,9 @@ The suite covers:
   its stone.
 - Telescope registration, power, recipe assignment, pollution state, combinator
   signals, platform-count signal, and space-platform state mapping.
+- Telescope blueprint recipe replacement across surfaces preserves the captured
+  facing direction, including rotated placement and the supplied Muluna-to-Nauvis
+  blueprint regression.
 - Interstellar science-pack gating, partial progress, and cheat-mode behavior.
 - Heat assembling machines (reactor link and fixed recipe).
 - Burner/vacuum roboports (refueler link, propellant energy, statuses).

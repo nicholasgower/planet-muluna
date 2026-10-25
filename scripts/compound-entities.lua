@@ -15,6 +15,10 @@ local TAG_KEY = "muluna_compound"
 local PENDING_WIRE_LIFETIME = 60 * 60 * 10
 local ORIENTATION_LIFETIME = 60 * 60 * 60
 
+---@type table
+local Public = {}
+Muluna.compound_entities = Public
+
 -- Scalar/tabular control behavior settings that make sense to copy between two
 -- instances of the same entity. Derived or read-only fields such as `disabled`
 -- are deliberately omitted.
@@ -198,6 +202,7 @@ local function capture_compound_tags(parent, data, config)
     return {
         version = 1,
         direction = parent.valid and parent.direction or nil,
+        mirroring = parent.valid and parent.mirroring or nil,
         subentities = subentities,
     }
 end
@@ -244,9 +249,31 @@ local function orientation_from_event(event)
     }
 end
 
+---Transform a blueprint entity direction into the placed blueprint's space.
+---Flips happen before rotation, matching bplib's position transform.
+local function transform_blueprint_direction(direction, orientation)
+    if orientation.flip_horizontal then
+        if direction == defines.direction.east then
+            direction = defines.direction.west
+        elseif direction == defines.direction.west then
+            direction = defines.direction.east
+        end
+    end
+    if orientation.flip_vertical then
+        if direction == defines.direction.north then
+            direction = defines.direction.south
+        elseif direction == defines.direction.south then
+            direction = defines.direction.north
+        end
+    end
+    return (direction + (orientation.direction or 0)) % 16
+end
+
 Muluna.events.on_event("bplib-positions", function(event)
     storage.compound_placement_orientations = storage.compound_placement_orientations or {}
+    storage.compound_blueprint_directions = storage.compound_blueprint_directions or {}
     local orientations = storage.compound_placement_orientations
+    local directions = storage.compound_blueprint_directions
 
     -- Blueprint placements can be cancelled or stamped as ghosts that are never
     -- built. Prune entries that can no longer correspond to this placement.
@@ -255,18 +282,82 @@ Muluna.events.on_event("bplib-positions", function(event)
             orientations[key] = nil
         end
     end
+    for key, entry in pairs(directions) do
+        if game.tick - entry.tick > ORIENTATION_LIFETIME then
+            directions[key] = nil
+        end
+    end
 
     local orientation = orientation_from_event(event)
-    for _, position in pairs(event.positions or {}) do
+    local blueprint_entities = event.blueprint and event.blueprint.get_blueprint_entities()
+    for index, position in pairs(event.positions or {}) do
         local key = position_key(event.surface_index, position)
         if key then
             orientations[key] = {
                 tick = event.tick,
                 orientation = orientation,
             }
+            local blueprint_entity = blueprint_entities and blueprint_entities[index]
+            if blueprint_entity then
+                directions[key] = {
+                    tick = event.tick,
+                    direction = blueprint_entity.direction or defines.direction.north,
+                    mirroring = blueprint_entity.mirror or false,
+                    orientation = orientation,
+                }
+            end
         end
     end
 end)
+
+---Take the source direction of a compound parent from a pending blueprint.
+---bplib raises `bplib-positions` before entity ghosts are revived, so this lets
+---the build handler restore the direction before a recipe change can clear it.
+---@param entity LuaEntity
+---@return table|nil
+function Public.take_blueprint_direction(entity)
+    local directions = storage.compound_blueprint_directions
+    if not directions then return nil end
+
+    local key = position_key(entity.surface_index, entity.position)
+    local entry = key and directions[key]
+    if entry then
+        directions[key] = nil
+        return entry
+    end
+end
+
+---Restore a compound parent's direction and mirroring from a pending blueprint
+---or from the compound's own blueprint tags.
+---@param entity LuaEntity
+---@param tags Tags|nil
+---@return defines.direction|nil direction
+---@return boolean|nil mirroring
+function Public.restore_blueprint_direction(entity, tags)
+    local saved
+    if type(tags) == "table" then
+        saved = Public.take_blueprint_direction(entity)
+    end
+    local compound = type(tags) == "table" and tags[TAG_KEY]
+    local direction = saved and saved.direction
+        or (type(compound) == "table" and compound.direction)
+    local mirroring = saved and saved.mirroring
+        or (type(compound) == "table" and compound.mirroring)
+
+    if type(direction) == "number" and saved and saved.orientation then
+        direction = transform_blueprint_direction(direction, saved.orientation)
+    end
+    if type(direction) ~= "number" then direction = nil end
+    if type(mirroring) ~= "boolean" then mirroring = nil end
+
+    if direction and entity.direction ~= direction then
+        entity.direction = direction
+    end
+    if mirroring ~= nil and entity.mirroring ~= mirroring then
+        entity.mirroring = mirroring
+    end
+    return direction, mirroring
+end
 
 local function take_placement_orientation(parent)
     local orientations = storage.compound_placement_orientations
@@ -501,6 +592,7 @@ Muluna.events.on_nth_tick(30, retry_pending_wires)
 Muluna.events.on_event(Muluna.events.events.on_init(), function()
     storage.compound_pending_wires = storage.compound_pending_wires or {}
     storage.compound_placement_orientations = storage.compound_placement_orientations or {}
+    storage.compound_blueprint_directions = storage.compound_blueprint_directions or {}
 end)
 
 if script.active_mods["funit"] then

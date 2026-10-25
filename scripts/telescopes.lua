@@ -121,9 +121,12 @@ end)
 
 
 local function move_entity_to_bottom_layer(entity)
-
+    local direction = entity.direction
+    local mirroring = entity.mirroring
     entity.rotate{reverse=false}
     entity.rotate{reverse=true}
+    if entity.direction ~= direction then entity.direction = direction end
+    if entity.mirroring ~= mirroring then entity.mirroring = mirroring end
 end
 
 local function get_telescope_build_limit(entity)
@@ -174,6 +177,10 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     -- end
     local reactor = nil
     if is_heat_assembling_machine then
+        local blueprint_direction, blueprint_mirroring
+        if Muluna.compound_entities then
+            blueprint_direction, blueprint_mirroring = Muluna.compound_entities.restore_blueprint_direction(entity, event.tags)
+        end
         local telescope_build_limit = get_telescope_build_limit(entity)
         local builder
         if event.player_index then
@@ -253,6 +260,9 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
 
         local recipe_name
         local lock = true
+        local saved_direction = blueprint_direction or entity.direction
+        local saved_mirroring = blueprint_mirroring
+        if saved_mirroring == nil then saved_mirroring = entity.mirroring end
         if entity.surface.platform then
             --recipe_name = "muluna-telescope-observation-space-platform"
             lock = false
@@ -269,12 +279,15 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         if recipe_name and prototypes.recipe[recipe_name] then
             entity.set_recipe(recipe_name,"normal")
         end
+        if entity.direction ~= saved_direction then entity.direction = saved_direction end
+        if entity.mirroring ~= saved_mirroring then entity.mirroring = saved_mirroring end
         
         entity.recipe_locked = lock
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["constant-combinator"],
             position = entity.position,
             direction = entity.direction,
+            mirror = entity.mirroring,
             quality = entity.quality,
             force = entity.force,
             source = entity,

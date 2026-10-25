@@ -3,9 +3,12 @@ local rro = Muluna.rro
 local heat_assembling_machines = Muluna.constants.heat_assembling_machines
 
 local function move_entity_to_bottom_layer(entity)
-
+    local direction = entity.direction
+    local mirroring = entity.mirroring
     entity.rotate{reverse=false}
     entity.rotate{reverse=true}
+    if entity.direction ~= direction then entity.direction = direction end
+    if entity.mirroring ~= mirroring then entity.mirroring = mirroring end
 end
 local heat_assembler_filters = {}
 for entity_name,machine in pairs(heat_assembling_machines) do
@@ -29,10 +32,17 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     end
     local reactor = nil
     if is_heat_assembling_machine then
+        local blueprint_direction, blueprint_mirroring
+        if Muluna.compound_entities then
+            blueprint_direction, blueprint_mirroring = Muluna.compound_entities.restore_blueprint_direction(entity, event.tags)
+        end
+        if blueprint_direction ~= nil then entity.direction = blueprint_direction end
+        if blueprint_mirroring ~= nil then entity.mirroring = blueprint_mirroring end
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["reactor"],
             position = entity.position,
             direction = entity.direction,
+            mirror = entity.mirroring,
             quality = entity.quality,
             force = entity.force,
             source = entity,

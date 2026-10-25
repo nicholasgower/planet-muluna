@@ -159,7 +159,9 @@ towers, burner roboports):
 `scripts/compound-entities.lua` uses bplib to save subentity circuit wires and control
 behavior on the parent's blueprint tags and restores them when the blueprint is built. When
 adding a new compound entity type, register its parent for bplib extract/position events and
-add it to that module's type registry.
+add it to that module's type registry. The module also caches the source direction from
+`bplib-positions` so recipe replacement during blueprinted builds cannot reset a parent's
+facing direction.
 
 ## Prototype authoring conventions
 
