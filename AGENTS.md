@@ -511,6 +511,8 @@ The `tools/ci/` helpers are development tools and are not shipped:
 - `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
 - `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
   test links.
+- `pr-worktree.sh` — fetch a pull request head into a temporary worktree and print a
+  review summary without running PR code.
 - `workflow-test.sh` — push a temporary branch and dispatch a workflow against it for
   safe testing of workflow changes.
 
@@ -520,6 +522,8 @@ The non-CI tools are documented in `tools/README.md`:
   `--dump-data`, and inspect data-stage load order.
 - `proto_query.py` — query a prototype dump, including `machines`, `recipes`,
   `data-port-invariant`, and `funit-results`.
+- `pr_diff_links.py` — print commit-pinned GitHub file-diff anchors for a commit,
+  useful when editing an existing bugfix PR checklist.
 - `fdoc.py` — look up Factorio prototype/runtime API documentation (see below).
 
 ## Self-learning retrospective
