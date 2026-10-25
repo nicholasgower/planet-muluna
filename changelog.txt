@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.8.0
+Date: 2026-10-25
+  Features:
+    - Preserve compound entity subentity wires in blueprints.
+  Compatibility:
+    - Marked muluna-utility-constants as incompatible. This mod is now obsolete as of Factorio 2.1.
+  Locale:
+    - Updated German locale. By stef77stef.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.46
 Date: 2026-10-25
   Balancing:
