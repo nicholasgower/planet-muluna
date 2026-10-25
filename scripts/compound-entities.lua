@@ -235,7 +235,13 @@ end)
 -- blueprints that are built as ghosts some time later.
 
 local function position_key(surface_index, position)
-    return string.format("%d:%.2f,%.2f", surface_index, position.x, position.y)
+    if type(position) ~= "table" then return nil end
+    -- bplib returns positions as vector tables (`{x, y}`) in some code paths and
+    -- as map positions (`{x = x, y = y}`) in others.
+    local x = position.x ~= nil and position.x or position[1]
+    local y = position.y ~= nil and position.y or position[2]
+    if type(x) ~= "number" or type(y) ~= "number" then return nil end
+    return string.format("%d:%.2f,%.2f", surface_index, x, y)
 end
 
 local function orientation_from_event(event)
@@ -260,10 +266,13 @@ Muluna.events.on_event("bplib-positions", function(event)
 
     local orientation = orientation_from_event(event)
     for _, position in pairs(event.positions or {}) do
-        orientations[position_key(event.surface_index, position)] = {
-            tick = event.tick,
-            orientation = orientation,
-        }
+        local key = position_key(event.surface_index, position)
+        if key then
+            orientations[key] = {
+                tick = event.tick,
+                orientation = orientation,
+            }
+        end
     end
 end)
 

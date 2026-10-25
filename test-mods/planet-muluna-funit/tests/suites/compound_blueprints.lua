@@ -358,7 +358,7 @@ runner.test("compound blueprint: placement orientation rotates external wire tar
     local rotated_target = helpers.entity_at(surface, "constant-combinator", { x = parent_position.x, y = parent_position.y + 8 })
     runner.assert(rotated_target and rotated_target.valid, "could not create the rotated wire target")
     script.raise_event("bplib-positions", {
-      positions = { [1] = { x = parent_position.x, y = parent_position.y } },
+      positions = { [1] = { parent_position.x, parent_position.y } },
       orientation_info = { direction = defines.direction.east },
       surface_index = surface.index,
       tick = game.tick,
@@ -458,6 +458,21 @@ runner.test("compound blueprint: malformed tags do not break compound entity bui
     local data = get_compound_data("heat_assembling_machines", rebuilt.unit_number)
     runner.assert(data and data.reactor and data.reactor.valid, "malformed tags prevented the subentity from being created")
   end)
+end)
+
+runner.test("compound blueprint: bplib positions accepts vector-style coordinates", function()
+  local surface = helpers.get_muluna()
+  local position = { -12345.5, -12345.5 }
+  script.raise_event("bplib-positions", {
+    positions = { [1] = position },
+    orientation_info = { direction = defines.direction.north },
+    surface_index = surface.index,
+    tick = game.tick,
+  })
+
+  local key = string.format("%d:%.2f,%.2f", surface.index, position[1], position[2])
+  local orientations = helpers.storage().compound_placement_orientations or {}
+  runner.assert(orientations[key], "bplib vector-style position was not stored")
 end)
 
 runner.test("compound blueprint: wire offsets follow blueprint rotation and flips", function()
