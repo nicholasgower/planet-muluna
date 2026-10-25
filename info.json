@@ -57,7 +57,8 @@
     "(?) QualityEffectsFixed",
     "(?) space_age_galore >= 1.5.3",
     "! biological-machines-planet-wit",
-    "! k2so-void"
+    "! k2so-void",
+    "! muluna-utility-constants"
   ],
   "quality_required": false,
   "rail_bridges_required": true,
