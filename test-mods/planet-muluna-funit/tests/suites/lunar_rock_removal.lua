@@ -71,6 +71,16 @@ local function fill_area(surface, area, tile_name)
   helpers.set_tiles(surface, tiles, { remove_colliding_entities = false })
 end
 
+local function tile_events(positions)
+  local tiles = {}
+  for _, position in ipairs(positions) do
+    tiles[#tiles + 1] = {
+      position = { x = position.x, y = position.y },
+    }
+  end
+  return tiles
+end
+
 local function tile_ghosts(surface, position, force)
   return surface.get_tile(position.x, position.y).get_tile_ghosts(force or "player")
 end
@@ -273,27 +283,17 @@ runner.test("lunar rock: only robot-built gravel is queued for cleanup", functio
       end
     end
 
-    local function event_tiles(source)
-      local tiles = {}
-      for _, position in ipairs(source) do
-        tiles[#tiles + 1] = {
-          position = { x = position.x, y = position.y },
-        }
-      end
-      return tiles
-    end
-
     helpers.funit_call(
       "record_rock_floor_build",
       surface.index,
-      event_tiles(robot_positions),
+      tile_events(robot_positions),
       FLOOR,
       "robot"
     )
     helpers.funit_call(
       "record_rock_floor_build",
       surface.index,
-      event_tiles(player_positions),
+      tile_events(player_positions),
       FLOOR,
       "player"
     )
@@ -303,11 +303,11 @@ runner.test("lunar rock: only robot-built gravel is queued for cleanup", functio
 
     local storage = helpers.funit_call("get_storage")
     runner.assert(
-      count_entries(storage.rocks_pending_gravel_cleanup) == 1,
+      count_entries(storage.rocks_pending_tile_cleanup) == 1,
       "floor completion did not create a pending gravel cleanup entry"
     )
-    local pending_index = next(storage.rocks_pending_gravel_cleanup)
-    local pending = storage.rocks_pending_gravel_cleanup[pending_index]
+    local pending_index = next(storage.rocks_pending_tile_cleanup)
+    local pending = storage.rocks_pending_tile_cleanup[pending_index]
     runner.assert(
       table_size(pending.tiles) == #robot_positions,
       "pending cleanup tracks " .. tostring(table_size(pending.tiles))
@@ -338,7 +338,7 @@ runner.test("lunar rock: only robot-built gravel is queued for cleanup", functio
 
     local unreferenced = helpers.funit_call("get_storage")
     runner.assert(
-      count_entries(unreferenced.rocks_pending_gravel_cleanup) == 0,
+      count_entries(unreferenced.rocks_pending_tile_cleanup) == 0,
       "undo left the pending robot-built gravel cleanup entry behind"
     )
     for _, position in ipairs(robot_positions) do
@@ -355,6 +355,104 @@ runner.test("lunar rock: only robot-built gravel is queued for cleanup", functio
           .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
       )
     end
+  end)
+end)
+
+runner.test("lunar rock: replacement tile falls back to available tile items", function()
+  local function select(contents, crushed_count, required_count, in_range, is_character)
+    return helpers.funit_call(
+      "select_rock_replacement_tile",
+      contents,
+      crushed_count,
+      required_count,
+      in_range,
+      is_character
+    )
+  end
+
+  runner.assert(
+    select({ { name = "concrete", count = 20 } }, 0, 4, false, true) == "concrete",
+    "character outside roboport range did not fall back to concrete"
+  )
+  runner.assert(
+    select({ { name = "stone-brick", count = 20 } }, 0, 4, false, true) == "stone-path",
+    "character outside roboport range did not fall back to stone bricks"
+  )
+  runner.assert(
+    select({ { name = "concrete", count = 20 } }, 0, 4, true, true) == FLOOR,
+    "character inside stationary roboport range did not keep the default tile"
+  )
+  runner.assert(
+    select({ { name = "concrete", count = 20 } }, 0, 4, false, false) == FLOOR,
+    "non-character controller did not keep the default tile"
+  )
+  runner.assert(
+    select({ { name = "concrete", count = 20 } }, 4, 4, false, true) == FLOOR,
+    "player with enough crushed stone did not keep the default tile"
+  )
+  runner.assert(
+    select({}, 0, 4, false, true) == FLOOR,
+    "player with no tile items did not fall back to the default tile"
+  )
+end)
+
+runner.test("lunar rock: queued floor uses the selected replacement tile", function()
+  with_rock_area(function(surface, center)
+    local rock = helpers.entity_at(surface, ROCK, center)
+    runner.assert(rock and rock.valid, "could not create " .. ROCK)
+    local positions = floor_positions_for_rock(rock)
+    set_floor(surface, positions, DIRT)
+
+    local index = helpers.funit_call("queue_rock_with_replacement", rock, "concrete")
+    runner.assert(index, "could not queue the rock with a concrete replacement tile")
+
+    local storage = helpers.funit_call("get_storage")
+    local entry = storage.rocks_queued_for_removal[index]
+    runner.assert(entry, "rock queue entry is missing")
+    runner.assert(
+      entry.replacement_tile == "concrete",
+      "queue entry stored " .. tostring(entry.replacement_tile) .. " instead of concrete"
+    )
+    for _, position in ipairs(positions) do
+      local names = {}
+      for _, ghost in pairs(tile_ghosts(surface, position)) do
+        if ghost.valid then
+          names[ghost.ghost_name] = true
+        end
+      end
+      runner.assert(
+        names["concrete"],
+        "missing concrete ghost at (" .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+      runner.assert(
+        not names[FLOOR],
+        "gravel ghost was created for a concrete replacement at ("
+          .. tostring(position.x) .. ", " .. tostring(position.y) .. ")"
+      )
+    end
+
+    helpers.funit_call(
+      "record_rock_floor_build",
+      surface.index,
+      tile_events(positions),
+      "concrete",
+      "robot"
+    )
+    set_floor(surface, positions, "concrete", true)
+
+    local completed = helpers.funit_call("get_storage")
+    local pending_index = next(completed.rocks_pending_tile_cleanup)
+    local pending = completed.rocks_pending_tile_cleanup[pending_index]
+    runner.assert(pending, "completed concrete floor did not create a pending cleanup entry")
+    runner.assert(
+      pending.tile_name == "concrete",
+      "pending cleanup stored " .. tostring(pending.tile_name) .. " instead of concrete"
+    )
+    runner.assert(
+      table_size(pending.tiles) == #positions,
+      "pending concrete cleanup tracks " .. tostring(table_size(pending.tiles))
+        .. " tiles, expected " .. tostring(#positions)
+    )
   end)
 end)
 

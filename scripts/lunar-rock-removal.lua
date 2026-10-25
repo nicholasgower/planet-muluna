@@ -5,9 +5,11 @@
 -- collecting them, so deconstructing a lunar rock over natural terrain used to
 -- destroy its stone. When a rock is marked for deconstruction, this module
 -- cancels the order, queues the rock, and places crushed stone tile ghosts
--- under it. Once every required tile has been built, the rock is
--- marked for deconstruction again. Undoing the original deconstruction order
--- removes the queue entry and any tile ghosts this module created. After the
+-- under it. Out-of-network character players without crushed stone fall back
+-- to another tile item in their inventory. Once every required tile has been
+-- built, the rock is marked for deconstruction again. Undoing the original
+-- deconstruction order removes the queue entry and any tile ghosts this module
+-- created. After the
 -- rock is gone and its dropped items are picked up, robot-built gravel is
 -- ordered for deconstruction; gravel built by a player is left in place.
 
@@ -21,7 +23,8 @@ local ROCK_NAME_FILTER = {
   "lunar-huge-rock",
 }
 
-local REPLACEMENT_TILE = "muluna-gravel"
+local DEFAULT_REPLACEMENT_TILE = "muluna-gravel"
+local DEFAULT_TILE_ITEM = "stone-crushed"
 local TILE_GHOST_NAME = "tile-ghost"
 local RECHECK_RADIUS = 6
 local WAITING_MESSAGE = { "lunar-rock-removal.waiting-for-floor" }
@@ -30,8 +33,8 @@ local function ensure_storage()
   storage.rocks_queued_for_removal = storage.rocks_queued_for_removal or {}
   storage.tiles_queued_by_rock_remover = storage.tiles_queued_by_rock_remover or {}
   storage.rocks_queued_for_removal_next_index = storage.rocks_queued_for_removal_next_index or 1
-  storage.rocks_pending_gravel_cleanup = storage.rocks_pending_gravel_cleanup or {}
-  storage.rocks_pending_gravel_cleanup_next_index = storage.rocks_pending_gravel_cleanup_next_index or 1
+  storage.rocks_pending_tile_cleanup = storage.rocks_pending_tile_cleanup or {}
+  storage.rocks_pending_tile_cleanup_next_index = storage.rocks_pending_tile_cleanup_next_index or 1
 end
 
 local function tile_key(x, y)
@@ -47,6 +50,82 @@ local function player_from_index(player_index)
     return player
   end
   return nil
+end
+
+local function select_replacement_tile(
+  contents,
+  crushed_stone_count,
+  required_count,
+  in_stationary_roboport_range,
+  is_character
+)
+  if not is_character or in_stationary_roboport_range then
+    return DEFAULT_REPLACEMENT_TILE
+  end
+  if crushed_stone_count >= math.max(1, required_count) then
+    return DEFAULT_REPLACEMENT_TILE
+  end
+
+  local fallback
+  for _, item in ipairs(contents or {}) do
+    if item.count and item.count > 0 and item.name ~= DEFAULT_TILE_ITEM then
+      local prototype = prototypes.item[item.name]
+      local placement = prototype and prototype.place_as_tile_result
+      if placement and placement.result then
+        local tile = type(placement.result) == "string"
+          and prototypes.tile[placement.result]
+          or placement.result
+        local tile_name = tile and tile.name
+        if tile_name and tile_name ~= DEFAULT_REPLACEMENT_TILE and not tile.destroys_dropped_items then
+          if item.count >= math.max(1, required_count) then
+            return tile_name
+          end
+          if not fallback then
+            fallback = tile_name
+          end
+        end
+      end
+    end
+  end
+
+  return fallback or DEFAULT_REPLACEMENT_TILE
+end
+
+local function has_stationary_roboport_coverage(surface, force, position)
+  if not surface or not surface.valid or not force then
+    return false
+  end
+
+  for _, network in pairs(surface.find_logistic_networks_by_construction_area(force, position)) do
+    for _, cell in pairs(network.cells) do
+      if cell.valid and not cell.mobile and cell.is_in_construction_range(position) then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+local function choose_replacement_tile(player, entity, required_count, force_name)
+  if not player or not player.valid or player.controller_type ~= defines.controllers.character then
+    return DEFAULT_REPLACEMENT_TILE
+  end
+
+  local character = player.character
+  local inventory = player.get_main_inventory()
+  if not character or not character.valid or not inventory then
+    return DEFAULT_REPLACEMENT_TILE
+  end
+
+  local force = game.forces[force_name] or player.force
+  local in_stationary_range = has_stationary_roboport_coverage(entity.surface, force, entity.position)
+  return select_replacement_tile(
+    inventory.get_contents(),
+    inventory.get_item_count(DEFAULT_TILE_ITEM),
+    required_count,
+    in_stationary_range,
+    true
+  )
 end
 
 local function is_eligible_rock(entity)
@@ -186,20 +265,20 @@ local function queue_indices_at(surface_index, x, y)
   return by_x and by_x[y] or nil
 end
 
-local function ensure_tile_ghost(surface, x, y, force_name)
+local function ensure_tile_ghost(surface, x, y, force_name, tile_name)
   local tile = surface.get_tile(x, y)
   if not tile or not tile.prototype.destroys_dropped_items then
     return
   end
   for _, ghost in pairs(tile.get_tile_ghosts(force_name)) do
-    if ghost.valid and ghost.ghost_name == REPLACEMENT_TILE then
+    if ghost.valid and ghost.ghost_name == tile_name then
       return false
     end
   end
 
   return surface.create_entity({
     name = TILE_GHOST_NAME,
-    inner_name = REPLACEMENT_TILE,
+    inner_name = tile_name,
     position = { x + 0.5, y + 0.5 },
     force = force_name,
   })
@@ -216,7 +295,7 @@ local function remove_created_ghosts(entry)
   for _, created in pairs(entry.created_ghosts or {}) do
     if not queue_uses_tile(entry.surface_index, created.x, created.y) then
       local ghost = created.ghost
-      if ghost and ghost.valid and ghost.ghost_name == REPLACEMENT_TILE then
+      if ghost and ghost.valid and ghost.ghost_name == entry.replacement_tile then
         ghost.destroy({ raise_destroy = true })
       end
     end
@@ -301,7 +380,7 @@ local function warn_waiting_for_floor(entity, player, force_name)
   end
 end
 
-local function queue_rock(entity, force_name, player_index)
+local function queue_rock(entity, force_name, player_index, replacement_tile)
   local surface = entity.surface
   local unsafe, all_safe = analyse_floor(entity)
   if all_safe then
@@ -317,6 +396,7 @@ local function queue_rock(entity, force_name, player_index)
     position = { x = entity.position.x, y = entity.position.y },
     force = force_name or entity.force.name,
     player_index = player_index,
+    replacement_tile = replacement_tile or DEFAULT_REPLACEMENT_TILE,
     tiles = {},
     remaining = {},
     created_ghosts = {},
@@ -335,7 +415,7 @@ local function queue_rock(entity, force_name, player_index)
 
   for _, tile in ipairs(unsafe) do
     entry.remaining[tile.key] = { x = tile.x, y = tile.y }
-    local ghost = ensure_tile_ghost(surface, tile.x, tile.y, entry.force)
+    local ghost = ensure_tile_ghost(surface, tile.x, tile.y, entry.force, entry.replacement_tile)
     if ghost then
       entry.created_ghosts[tile.key] = {
         ghost = ghost,
@@ -359,7 +439,7 @@ local function reissue_deconstruction(entry)
   entity.order_deconstruction(force, player)
 end
 
-local function create_pending_gravel_cleanup(entry)
+local function create_pending_tile_cleanup(entry)
   local entity = entry.entity
   if not entity or not entity.valid then
     return
@@ -372,7 +452,7 @@ local function create_pending_gravel_cleanup(entry)
       local created = entry.created_ghosts and entry.created_ghosts[key]
       if created then
         local tile = surface.get_tile(created.x, created.y)
-        if tile and tile.name == REPLACEMENT_TILE then
+        if tile and tile.name == entry.replacement_tile then
           tiles[#tiles + 1] = { x = created.x, y = created.y }
         end
       end
@@ -384,12 +464,13 @@ local function create_pending_gravel_cleanup(entry)
   end
 
   local left, right, top, bottom = get_floor_bounds(entity)
-  local index = storage.rocks_pending_gravel_cleanup_next_index
-  storage.rocks_pending_gravel_cleanup_next_index = index + 1
-  storage.rocks_pending_gravel_cleanup[index] = {
+  local index = storage.rocks_pending_tile_cleanup_next_index
+  storage.rocks_pending_tile_cleanup_next_index = index + 1
+  storage.rocks_pending_tile_cleanup[index] = {
     entity = entity,
     surface_index = entry.surface_index,
     force = entry.force,
+    tile_name = entry.replacement_tile,
     area = {
       { left, top },
       { right + 1, bottom + 1 },
@@ -409,7 +490,7 @@ local function order_cleanup_tiles(pending)
   local remaining = {}
   for _, tile_position in pairs(pending.tiles or {}) do
     local tile = surface.get_tile(tile_position.x, tile_position.y)
-    if tile and tile.name == REPLACEMENT_TILE then
+    if tile and tile.name == pending.tile_name then
       if queue_uses_tile(pending.surface_index, tile_position.x, tile_position.y) then
         remaining[#remaining + 1] = tile_position
       elseif force and not tile.to_be_deconstructed(force) then
@@ -420,9 +501,9 @@ local function order_cleanup_tiles(pending)
   return remaining
 end
 
-local function process_pending_gravel_cleanup()
+local function process_pending_tile_cleanup()
   ensure_storage()
-  for index, pending in pairs(storage.rocks_pending_gravel_cleanup) do
+  for index, pending in pairs(storage.rocks_pending_tile_cleanup) do
     local entity = pending.entity
     if pending.state == "waiting_rock" then
       if not entity or not entity.valid then
@@ -434,7 +515,7 @@ local function process_pending_gravel_cleanup()
     if pending.state == "waiting_items" and game.tick >= (pending.wait_until or 0) then
       local surface = game.surfaces[pending.surface_index]
       if not surface or not surface.valid then
-        storage.rocks_pending_gravel_cleanup[index] = nil
+        storage.rocks_pending_tile_cleanup[index] = nil
       else
         local items = surface.find_entities_filtered({
           name = "item-on-ground",
@@ -451,7 +532,7 @@ local function process_pending_gravel_cleanup()
         if not has_items then
           local remaining = order_cleanup_tiles(pending)
           if #remaining == 0 then
-            storage.rocks_pending_gravel_cleanup[index] = nil
+            storage.rocks_pending_tile_cleanup[index] = nil
           else
             pending.tiles = remaining
           end
@@ -481,7 +562,7 @@ local function refresh_queue_entry(index)
 
   local unsafe, all_safe = analyse_floor(entity)
   if all_safe then
-    create_pending_gravel_cleanup(entry)
+    create_pending_tile_cleanup(entry)
     cleanup_entry(index)
     reissue_deconstruction(entry)
     return
@@ -491,7 +572,7 @@ local function refresh_queue_entry(index)
   entry.created_ghosts = entry.created_ghosts or {}
   for _, tile in ipairs(unsafe) do
     entry.remaining[tile.key] = { x = tile.x, y = tile.y }
-    local ghost = ensure_tile_ghost(surface, tile.x, tile.y, entry.force)
+    local ghost = ensure_tile_ghost(surface, tile.x, tile.y, entry.force, entry.replacement_tile)
     if ghost then
       entry.created_ghosts[tile.key] = {
         ghost = ghost,
@@ -556,7 +637,7 @@ local function prune_invalid_entries()
 end
 
 local function record_ghost_builders(event, builder)
-  if not builder or not event.tile or event.tile.name ~= REPLACEMENT_TILE then
+  if not builder or not event.tile then
     return
   end
 
@@ -566,7 +647,12 @@ local function record_ghost_builders(event, builder)
     local indices = queue_indices_at(event.surface_index, position.x, position.y)
     for index in pairs(indices or {}) do
       local entry = storage.rocks_queued_for_removal[index]
-      if entry and entry.created_ghosts and entry.created_ghosts[key] then
+      if
+        entry
+        and entry.created_ghosts
+        and entry.created_ghosts[key]
+        and entry.replacement_tile == event.tile.name
+      then
         entry.built_by = entry.built_by or {}
         entry.built_by[key] = builder
       end
@@ -622,16 +708,17 @@ local function on_marked_for_deconstruction(event)
     return
   end
 
-  local _, all_safe = analyse_floor(entity)
+  local unsafe, all_safe = analyse_floor(entity)
   if all_safe then
     return
   end
 
+  local replacement_tile = choose_replacement_tile(player, entity, #unsafe, force_name)
   cancel_entity_deconstruction(entity, force_name, player)
   if entity.valid and entity.to_be_deconstructed() then
     cancel_all_deconstruction(entity)
   end
-  queue_rock(entity, force_name, event.player_index)
+  queue_rock(entity, force_name, event.player_index, replacement_tile)
 end
 
 local function apply_undo_actions(actions)
@@ -658,7 +745,7 @@ local function apply_undo_actions(actions)
         end
       end
 
-      for pending_index, pending in pairs(storage.rocks_pending_gravel_cleanup or {}) do
+      for pending_index, pending in pairs(storage.rocks_pending_tile_cleanup or {}) do
         local entity = pending.entity
         if
           entity
@@ -669,7 +756,7 @@ local function apply_undo_actions(actions)
           and (not surface_index or pending.surface_index == surface_index)
         then
           order_cleanup_tiles(pending)
-          storage.rocks_pending_gravel_cleanup[pending_index] = nil
+          storage.rocks_pending_tile_cleanup[pending_index] = nil
         end
       end
     end
@@ -687,15 +774,34 @@ if script.active_mods["funit"] then
       tile = { name = tile_name },
     }, builder)
   end
+  Muluna.funit.select_rock_replacement_tile = function(
+    contents,
+    crushed_stone_count,
+    required_count,
+    in_stationary_roboport_range,
+    is_character
+  )
+    return select_replacement_tile(
+      contents,
+      crushed_stone_count,
+      required_count,
+      in_stationary_roboport_range,
+      is_character
+    )
+  end
+  Muluna.funit.queue_rock_with_replacement = function(entity, replacement_tile, force_name)
+    ensure_storage()
+    return queue_rock(entity, force_name or "player", nil, replacement_tile)
+  end
   Muluna.funit.clear_rock_removal_state = function(surface_index)
     for index, entry in pairs(storage.rocks_queued_for_removal or {}) do
       if entry.surface_index == surface_index then
         cleanup_entry(index)
       end
     end
-    for index, pending in pairs(storage.rocks_pending_gravel_cleanup or {}) do
+    for index, pending in pairs(storage.rocks_pending_tile_cleanup or {}) do
       if pending.surface_index == surface_index then
-        storage.rocks_pending_gravel_cleanup[index] = nil
+        storage.rocks_pending_tile_cleanup[index] = nil
       end
     end
     storage.tiles_queued_by_rock_remover = storage.tiles_queued_by_rock_remover or {}
@@ -721,5 +827,5 @@ end)
 Muluna.events.on_event(defines.events.on_undo_applied, function(event)
   apply_undo_actions(event.actions)
 end)
-Muluna.events.on_nth_tick(30, process_pending_gravel_cleanup)
+Muluna.events.on_nth_tick(30, process_pending_tile_cleanup)
 Muluna.events.on_nth_tick(60, prune_invalid_entries)

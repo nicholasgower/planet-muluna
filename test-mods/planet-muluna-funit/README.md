@@ -110,7 +110,9 @@ when the `funit` mod is active**:
 - `get_nav_scan_area`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
-- `apply_rock_removal_undo`, `record_rock_floor_build`, `clear_rock_removal_state`
+- `apply_rock_removal_undo`, `record_rock_floor_build`,
+  `select_rock_replacement_tile`, `queue_rock_with_replacement`,
+  `clear_rock_removal_state`
 
 The production modules export their internal helpers through `Muluna.funit` under
 the same `script.active_mods["funit"]` guard. They are inert in normal play.
@@ -145,11 +147,12 @@ conditions instead of copying a deadline loop. It supports `timeout`, `interval`
 The suite covers:
 
 - Muluna surface creation, wind, cargo pods, lunar rocks, and storage.
-- Lunar rock deconstruction queueing, crushed stone floor ghosts, re-marking
-  after construction robots build the floor, undo cleanup, robot-built gravel
-  removal after rock drops are collected, huge-rock and off-grid footprint
-  coverage, unrelated tile ghosts, and the issue #495 regression that
-  deconstructing a rock over natural Muluna terrain preserves its stone.
+- Lunar rock deconstruction queueing, crushed stone floor ghosts, replacement
+  tile selection from a character's inventory, re-marking after construction
+  robots build the floor, undo cleanup, robot-built gravel removal after rock
+  drops are collected, huge-rock and off-grid footprint coverage, unrelated
+  tile ghosts, and the issue #495 regression that deconstructing a rock over
+  natural Muluna terrain preserves its stone.
 - Telescope registration, power, recipe assignment, pollution state, combinator
   signals, platform-count signal, and space-platform state mapping.
 - Interstellar science-pack gating, partial progress, and cheat-mode behavior.

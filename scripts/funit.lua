@@ -97,6 +97,26 @@ remote.add_interface("muluna_funit", {
     return stage().record_rock_floor_build(surface_index, tiles, tile_name, builder)
   end,
 
+  select_rock_replacement_tile = function(
+    contents,
+    crushed_stone_count,
+    required_count,
+    in_stationary_roboport_range,
+    is_character
+  )
+    return stage().select_rock_replacement_tile(
+      contents,
+      crushed_stone_count,
+      required_count,
+      in_stationary_roboport_range,
+      is_character
+    )
+  end,
+
+  queue_rock_with_replacement = function(entity, replacement_tile, force_name)
+    return stage().queue_rock_with_replacement(entity, replacement_tile, force_name)
+  end,
+
   clear_rock_removal_state = function(surface_index)
     return stage().clear_rock_removal_state(surface_index)
   end,
