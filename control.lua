@@ -29,12 +29,14 @@ local rro = Muluna.rro
 --require("lib.control-stage")
 
 require("scripts.ground-diggers")
+require("scripts.lunar-rock-removal")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
 require("scripts.heat-assembling-machine")
 require("scripts.telescopes")
 require("scripts.gui")
 require("scripts.burner-roboports")
+require("scripts.compound-entities")
 require("scripts.remote")
 --local sd = require("scripts.project-seadragon")
 

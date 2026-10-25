@@ -62,3 +62,23 @@ results.check(SUITE, "heat-machine-fluid-categories", function()
     assert(data.raw["reactor"][machine.reactor], "reactor missing for " .. tostring(machine["assembling-machine"]))
   end
 end)
+
+results.check(SUITE, "compound-entities-registered-for-bplib", function()
+  local bplib = data.raw["mod-data"]["bplib"].data
+  local parents = {}
+  for _, machine in pairs(Muluna.constants.telescopes) do
+    parents[machine["assembling-machine"]] = true
+  end
+  for _, machine in pairs(Muluna.constants.heat_assembling_machines) do
+    parents[machine["assembling-machine"]] = true
+  end
+  for _, machine in pairs(Muluna.constants.vacuum_roboports) do
+    parents[machine.refueler] = true
+  end
+  assert(next(parents), "no compound entity parents were found")
+  for parent_name in pairs(parents) do
+    assert(bplib.extract_entity_names[parent_name], "compound parent is not registered for bplib extraction: " .. parent_name)
+    assert(bplib.position_entity_names[parent_name], "compound parent is not registered for bplib positions: " .. parent_name)
+    assert(bplib.overlap_entity_names[parent_name], "compound parent is not registered for bplib overlaps: " .. parent_name)
+  end
+end)

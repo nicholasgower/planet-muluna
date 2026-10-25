@@ -100,6 +100,9 @@ for _,machine in pairs(data.raw["assembling-machine"]) do
         reactor.consumption = Muluna.multiply_energy(machine.energy_usage,machine.effectivity)
         
         Muluna:extend{assembler,reactor}
+        data.raw["mod-data"]["bplib"].data.extract_entity_names[assembler.name] = true
+        data.raw["mod-data"]["bplib"].data.position_entity_names[assembler.name] = true
+        data.raw["mod-data"]["bplib"].data.overlap_entity_names[assembler.name] = true
         table.insert(Muluna.constants.heat_assembling_machines,
             {
                 name = machine.name,

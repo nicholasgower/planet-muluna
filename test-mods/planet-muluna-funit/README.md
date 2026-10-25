@@ -25,6 +25,16 @@ From the repository root:
 ./test-mods/planet-muluna-funit/run.sh
 ```
 
+For a faster loop while editing data-stage fixtures, run only the data stage:
+
+```sh
+tools/ci/funit.sh --data-only
+```
+
+That uses the same scratch mod directory and `--dump-data`, then summarizes the
+`planet-muluna-funit-results` mod-data bag. The full runner below is still required
+before opening a pull request.
+
 The runner is headless and self-contained:
 
 - links the **current worktree** as `planet-muluna` (not the installed mod);
@@ -45,9 +55,11 @@ Useful environment variables:
 | `TMP_ROOT` | `/tmp/opencode/muluna-funit` | Scratch mod directory, config and logs |
 | `TIMEOUT` | `900` | Seconds to wait for `====END====` |
 | `FACTORIO_PORT` | `34198` | Local server port used by the headless instance |
+| `DATA_ONLY` | `0` | Run `--dump-data` instead of the scenario (used by `funit.sh --data-only`) |
 
 The full log is `$TMP_ROOT/stdout.log`; on failure the runner prints the relevant
-FUnit lines and the tail of the log.
+FUnit lines and the tail of the log. A data-only run also writes the prototype dump to
+`$TMP_ROOT/write-data/script-output/data-raw-dump.json`.
 
 ## Requirements
 
@@ -95,9 +107,13 @@ when the `funit` mod is active**:
 - `get_state_integer`, `get_time_to_next_asteroid_check`
 - `get_burner_roboport_data`, `short_update_roboport`
 - `get_heat_assembling_machine_data`
+- `get_compound_blueprint_tags`, `transform_compound_offset`
 - `get_nav_scan_area`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
+- `apply_rock_removal_undo`, `record_rock_floor_build`,
+  `select_rock_replacement_tile`, `has_stationary_roboport_coverage`,
+  `queue_rock_with_replacement`, `clear_rock_removal_state`
 
 The production modules export their internal helpers through `Muluna.funit` under
 the same `script.active_mods["funit"]` guard. They are inert in normal play.
@@ -119,16 +135,38 @@ Runtime tests must not assume a player exists. Use `surface.create_entity`,
 to wait for real tick handlers. Tests that need many ticks should derive the delay
 from the relevant startup setting rather than hardcoding a value.
 
+Use `helpers.set_tiles(surface, tiles, options)` for tile changes. It keeps the
+five-argument `set_tiles` call in one place; pass `raise_event = true` to raise
+`script_raised_set_tiles` after the tiles have been applied, and
+`remove_colliding_entities = false` when a test intentionally builds beneath an
+entity. Use `helpers.wait_until(runner, predicate, options)` for asynchronous
+conditions instead of copying a deadline loop. It supports `timeout`, `interval`,
+`message`, and optional `on_success` / `on_failure` cleanup callbacks.
+
 ## Coverage notes and limitations
 
 The suite covers:
 
 - Muluna surface creation, wind, cargo pods, lunar rocks, and storage.
+- Lunar rock mining yields for big and huge rocks.
+- Lunar rock deconstruction queueing, crushed stone floor ghosts, replacement
+  tile selection from a character's inventory, stationary roboport coverage
+  checks, re-marking after construction robots build the floor, undo cleanup,
+  robot-built gravel removal after rock drops are collected, huge-rock and
+  off-grid footprint coverage, unrelated tile ghosts, and the issue #495
+  regression that deconstructing a rock over natural Muluna terrain preserves
+  its stone.
 - Telescope registration, power, recipe assignment, pollution state, combinator
   signals, platform-count signal, and space-platform state mapping.
+- Telescope blueprint recipe replacement across surfaces preserves the captured
+  facing direction, including rotated placement and the supplied Muluna-to-Nauvis
+  blueprint regression.
 - Interstellar science-pack gating, partial progress, and cheat-mode behavior.
 - Heat assembling machines (reactor link and fixed recipe).
 - Burner/vacuum roboports (refueler link, propellant energy, statuses).
+- Compound entity blueprints: subentity wires and control behavior, rotated
+  placement, overlap restoration, deferred wire targets, malformed tags, and
+  bplib's vector-style placement positions.
 - Nav beacons on planets vs. space platforms, registration cleanup, sparse storage
   keys, quality scaling, and scan-size base selection (the test profile deliberately
   makes `platform-power-consumption` differ from `scan_area` so the energy/area
@@ -137,7 +175,9 @@ The suite covers:
   cleanup.
 - Walking-particle storage and controller-input precedence.
 - Prototype fixtures for planets, science, telescopes, nav beacons, heat/roboports,
-  ground diggers, cargo drops, and public API helpers.
+  ground diggers, cargo drops, public API helpers, and data-port fluidbox isolation
+  (including modded fluid recipe categories and recipes added after Muluna's
+  data-final-fixes).
 
 Some paths remain player- or graphics-bound and are only partially covered:
 

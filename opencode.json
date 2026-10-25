@@ -84,7 +84,19 @@
         "bash": "allow"
         
       }
-  }
-  
+  },
+  "artcraft": { "disable": true },
+  "cadcraft": { "disable": true },
+  "deckcraft": { "disable": true },
+  "designcraft": { "disable": true },
+  "effectcraft": { "disable": true },
+  "figcraft": { "disable": true },
+  "filmcraft": { "disable": true },
+  "gridcraft": { "disable": true },
+  "lightcraft": { "disable": true },
+  "pdfcraft": { "disable": true },
+  "soundcraft": { "disable": true },
+  "vectorcraft": { "disable": true },
+  "wordcraft": { "disable": true }
 }
 }

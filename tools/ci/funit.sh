@@ -14,6 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 RUNNER="$REPO_DIR/test-mods/planet-muluna-funit/run.sh"
+PROTO_QUERY="$REPO_DIR/tools/proto_query.py"
 TESTS_DIR="$REPO_DIR/test-mods/planet-muluna-funit/tests"
 MANIFEST="$TESTS_DIR/manifest.lua"
 MANIFEST_REL="test-mods/planet-muluna-funit/tests/manifest.lua"
@@ -42,6 +43,7 @@ SUMMARY=0
 NO_RUN=0
 JSON=0
 BASELINE=0
+DATA_ONLY=0
 
 # Parse state.
 LOG=""
@@ -95,6 +97,11 @@ Options:
   --baseline         Run the full suite and require it to pass; labels the
                      summary as a baseline. Cannot be combined with --suite
                      or --no-run.
+  --data-only        Run only the data stage with --dump-data and summarize
+                     the planet-muluna-funit results. This is much faster than
+                     the runtime suite and is the right loop for prototype
+                     fixtures. Cannot be combined with --suite, --test,
+                     --baseline, or --no-run.
   -h, --help         Show this help.
 
 Environment overrides:
@@ -123,6 +130,8 @@ Exit status:
 Examples:
   tools/ci/funit.sh
   tools/ci/funit.sh --baseline --json
+  tools/ci/funit.sh --data-only
+  tools/ci/funit.sh --data-only --json
   tools/ci/funit.sh --suite smoke
   tools/ci/funit.sh --suite telescope --test "telescope probability"
   tools/ci/funit.sh --summary --no-run --log /tmp/opencode/muluna-funit/stdout.log
@@ -597,6 +606,10 @@ while (($# > 0)); do
       BASELINE=1
       shift
       ;;
+    --data-only)
+      DATA_ONLY=1
+      shift
+      ;;
     --)
       shift
       break
@@ -625,6 +638,13 @@ fi
 
 if (( NO_RUN == 1 )) && [[ -n "$SUITE" ]]; then
   die "--suite requires a run and cannot be combined with --no-run."
+fi
+
+if (( DATA_ONLY == 1 )); then
+  (( NO_RUN == 0 )) || die "--data-only requires a run and cannot be combined with --no-run."
+  (( BASELINE == 0 )) || die "--data-only cannot be combined with --baseline."
+  [[ -z "$SUITE" ]] || die "--data-only cannot be combined with --suite."
+  (( TEST_FILTER_SET == 0 )) || die "--data-only cannot be combined with --test."
 fi
 
 [[ -z "$SUITE" ]] || resolve_suite "$SUITE" || exit 2
@@ -664,6 +684,66 @@ fi
 [[ -x "$RUNNER" ]] || die "FUnit runner is not executable: $RUNNER"
 [[ -x "$FACTORIO_BIN" ]] || die "Factorio binary not found or not executable: $FACTORIO_BIN"
 [[ -d "$FACTORIO_MODS" ]] || die "Factorio mod directory not found: $FACTORIO_MODS"
+[[ -f "$PROTO_QUERY" ]] || die "Prototype query helper not found: $PROTO_QUERY"
+
+if (( DATA_ONLY == 1 )); then
+  RUN_OUTPUT="$(mktemp "${TMPDIR:-/tmp}/muluna-funit-data.XXXXXX")" ||
+    die "Could not create a temporary file for the data-probe output."
+
+  echo "Running Muluna data-stage fixtures (timeout ${TIMEOUT_VALUE}s)..." >&2
+  echo "  binary: $FACTORIO_BIN" >&2
+  echo "  mods:   $FACTORIO_MODS" >&2
+  echo "  tmp:    $TMP_ROOT" >&2
+
+  set +e
+  DATA_ONLY=1 \
+    FACTORIO_BIN="$FACTORIO_BIN" \
+    FACTORIO_MODS="$FACTORIO_MODS" \
+    TMP_ROOT="$TMP_ROOT" \
+    TIMEOUT="$TIMEOUT_VALUE" \
+    "$RUNNER" 2>&1 | tee "$RUN_OUTPUT" >&2
+  RUNNER_EXIT=${PIPESTATUS[0]}
+  set -e
+
+  RUN_LOG="$TMP_ROOT/stdout.log"
+  DUMP="$TMP_ROOT/write-data/script-output/data-raw-dump.json"
+  if [[ -n "$LOG_ARG" && -f "$RUN_LOG" && "$LOG_ARG" != "$RUN_LOG" ]]; then
+    mkdir -p -- "$(dirname -- "$LOG_ARG")"
+    cp -f -- "$RUN_LOG" "$LOG_ARG" || die "Could not copy $RUN_LOG to $LOG_ARG."
+    LOG="$LOG_ARG"
+  elif [[ -n "$LOG_ARG" ]]; then
+    LOG="$LOG_ARG"
+  else
+    LOG="$RUN_LOG"
+  fi
+
+  if (( RUNNER_EXIT != 0 )) && [[ ! -f "$DUMP" ]]; then
+    echo "funit.sh: data-stage run failed and produced no prototype dump (see $RUN_LOG)." >&2
+    tail -n 40 "$RUN_LOG" >&2 || true
+    exit 1
+  fi
+
+  QUERY_ARGS=(
+    python3 "$PROTO_QUERY"
+    --dump "$DUMP"
+    funit-results
+    --log "$LOG"
+  )
+  if (( JSON == 1 )); then
+    QUERY_ARGS+=(--json)
+  fi
+
+  set +e
+  "${QUERY_ARGS[@]}"
+  QUERY_EXIT=$?
+  set -e
+
+  if (( RUNNER_EXIT != 0 && QUERY_EXIT == 0 )); then
+    echo "funit.sh: data-stage dump exists but run.sh exited $RUNNER_EXIT." >&2
+    exit 1
+  fi
+  exit "$QUERY_EXIT"
+fi
 
 if [[ -n "$SUITE" ]]; then
   prepare_manifest "$SELECTED_SUITE"
