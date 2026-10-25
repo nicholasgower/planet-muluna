@@ -85,6 +85,14 @@ remote.add_interface("muluna_funit", {
     return storage.heat_assembling_machines and storage.heat_assembling_machines[unit_number]
   end,
 
+  get_compound_blueprint_tags = function(unit_number)
+    return stage().capture_compound_blueprint_tags(unit_number)
+  end,
+
+  transform_compound_offset = function(offset, direction, flip_horizontal, flip_vertical)
+    return stage().transform_compound_offset(offset, direction, flip_horizontal, flip_vertical)
+  end,
+
   get_walking_controller_branch = function(input_method)
     return stage().is_game_controller_input(input_method)
   end,

@@ -56,6 +56,8 @@ for _,entity in pairs(data.raw["assembling-machine"]) do
             ["constant-combinator"] = telescope_combinator.name,
         }
         data.raw["mod-data"]["bplib"].data.extract_entity_names[entity.name] = true
+        data.raw["mod-data"]["bplib"].data.position_entity_names[entity.name] = true
+        data.raw["mod-data"]["bplib"].data.overlap_entity_names[entity.name] = true
         entity.muluna_is_telescope = false
         Muluna:extend{telescope_combinator}
     end

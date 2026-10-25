@@ -142,6 +142,25 @@ State lives in the `storage` table. Initialize it defensively in the `on_init` h
 `control.lua` (guard with `if not storage.x then`). Never store references to `LuaEntity`
 across ticks without re-validating `entity.valid`.
 
+## Compound entities
+
+Shared vocabulary for the scripted multi-entity structures in this mod (telescopes, heating
+towers, burner roboports):
+
+- **Compound entity** — a Factorio entity that uses scripting to make a collection of entities
+  act as one collective unit. This pattern is used when a single prototype cannot provide all
+  the features the entity needs.
+- **Parent entity** — the part of a compound entity that the item places. When placed, it spawns
+  its child subentities. Blueprints physically save only the parent entity, so any subentity
+  state that must survive a blueprint is saved through blueprint tags using `bplib`.
+- **Subentity** — a child entity of a parent entity. It is spawned by the parent entity when
+  placed and cannot exist in a blueprint.
+
+`scripts/compound-entities.lua` uses bplib to save subentity circuit wires and control
+behavior on the parent's blueprint tags and restores them when the blueprint is built. When
+adding a new compound entity type, register its parent for bplib extract/position events and
+add it to that module's type registry.
+
 ## Prototype authoring conventions
 
 - New prototypes are added from `prototypes/*/index.lua` require chains rooted at `data.lua`.

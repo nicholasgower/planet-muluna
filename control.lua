@@ -36,6 +36,7 @@ require("scripts.heat-assembling-machine")
 require("scripts.telescopes")
 require("scripts.gui")
 require("scripts.burner-roboports")
+require("scripts.compound-entities")
 require("scripts.remote")
 --local sd = require("scripts.project-seadragon")
 

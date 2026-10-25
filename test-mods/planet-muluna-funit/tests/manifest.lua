@@ -8,6 +8,7 @@ return {
   "__planet-muluna-funit__.tests.suites.telescope",
   "__planet-muluna-funit__.tests.suites.heat_assembling_machine",
   "__planet-muluna-funit__.tests.suites.burner_roboport",
+  "__planet-muluna-funit__.tests.suites.compound_blueprints",
   "__planet-muluna-funit__.tests.suites.nav_beacon",
   "__planet-muluna-funit__.tests.suites.ground_diggers",
   "__planet-muluna-funit__.tests.suites.walking_particles",
