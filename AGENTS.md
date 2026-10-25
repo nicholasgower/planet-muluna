@@ -316,6 +316,11 @@ When a bugfix responds to a GitHub issue, include the issue URL in the commit su
 example `fix: ... https://github.com/nicholasgower/planet-muluna/issues/416`. This keeps the
 generated changelog entry linked to the report.
 
+Do not semantically tag a fix commit when the fixed code is not on `main` yet and already
+has a semantically tagged commit on the same branch. Use a plain subject instead, for
+example `Fix crash when ...`, so the unreleased change does not produce a second, redundant
+changelog entry. The original commit remains the changelog entry when the branch is merged.
+
 `feat`/`feature` → minor bump; breaking → major; everything else (fix, balance, compat,
 graphics, locale, sound, gui, perf, control, other, info, translate) → patch. The heading in
 `changelog.txt` is derived from the type (e.g. `fix` → *Bugfixes*, `compat` → *Compatibility*).
