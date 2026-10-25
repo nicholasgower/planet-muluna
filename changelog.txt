@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.46
+Date: 2026-10-25
+  Balancing:
+    - Adjusted lunar rock stone and crushed stone yields.
+  Bugfixes:
+    - Align huge lunar rock floor ghosts with their tile footprint. https://github.com/nicholasgower/planet-muluna/issues/495
+    - Fall back to available tile items for lunar rock floors. https://github.com/nicholasgower/planet-muluna/issues/495
+    - Fix the lunar rock replacement-tile roboport coverage crash. https://github.com/nicholasgower/planet-muluna/issues/495
+    - Preserve lunar rock drops when construction robots deconstruct them. https://github.com/nicholasgower/planet-muluna/issues/495
+    - Remove lunar rock floor ghosts when deconstruction is undone. https://github.com/nicholasgower/planet-muluna/issues/495
+    - Remove robot-built crushed stone after lunar rock drops are collected. https://github.com/nicholasgower/planet-muluna/issues/495
+    - Remove the outer margin from lunar rock floor ghosts. https://github.com/nicholasgower/planet-muluna/issues/495
+---------------------------------------------------------------------------------------------------
 Version: 2.7.45
 Date: 2026-10-23
   Bugfixes:

@@ -10,6 +10,7 @@ return {
   data_updates = {},
   data_final_fixes = {
     "data_cells",
+    "lunar_rocks",
     "planet",
     "science",
     "telescope",
