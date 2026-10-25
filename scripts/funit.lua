@@ -117,6 +117,10 @@ remote.add_interface("muluna_funit", {
     return stage().queue_rock_with_replacement(entity, replacement_tile, force_name)
   end,
 
+  has_stationary_roboport_coverage = function(surface_index, force_name, position)
+    return stage().has_stationary_roboport_coverage(surface_index, force_name, position)
+  end,
+
   clear_rock_removal_state = function(surface_index)
     return stage().clear_rock_removal_state(surface_index)
   end,

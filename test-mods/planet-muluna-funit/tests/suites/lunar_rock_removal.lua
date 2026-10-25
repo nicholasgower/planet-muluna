@@ -396,6 +396,44 @@ runner.test("lunar rock: replacement tile falls back to available tile items", f
   )
 end)
 
+runner.test("lunar rock: stationary roboport coverage is detected", function()
+  pcall(helpers.reset_test_areas)
+  local surface = helpers.get_muluna()
+  local center = helpers.center(helpers.muluna_area())
+  local area = test_area(center)
+  pcall(helpers.clear_area, surface, area)
+
+  local roboport = helpers.entity_at(surface, "roboport", { x = center.x + 10, y = center.y })
+  runner.assert(roboport and roboport.valid, "could not create the test roboport")
+
+  runner.after_n_ticks_do(1, function()
+    local ok, err = pcall(function()
+      runner.assert(
+        helpers.funit_call(
+          "has_stationary_roboport_coverage",
+          surface.index,
+          "player",
+          { x = center.x + 10, y = center.y }
+        ),
+        "stationary roboport position was not reported as covered"
+      )
+      runner.assert(
+        not helpers.funit_call(
+          "has_stationary_roboport_coverage",
+          surface.index,
+          "player",
+          { x = center.x + 100, y = center.y }
+        ),
+        "position outside the roboport construction area was reported as covered"
+      )
+    end)
+    cleanup_area(surface, center)
+    if not ok then
+      error(err, 0)
+    end
+  end)
+end)
+
 runner.test("lunar rock: queued floor uses the selected replacement tile", function()
   with_rock_area(function(surface, center)
     local rock = helpers.entity_at(surface, ROCK, center)

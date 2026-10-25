@@ -96,7 +96,7 @@ local function has_stationary_roboport_coverage(surface, force, position)
     return false
   end
 
-  for _, network in pairs(surface.find_logistic_networks_by_construction_area(force, position)) do
+  for _, network in pairs(surface.find_logistic_networks_by_construction_area(position, force)) do
     for _, cell in pairs(network.cells) do
       if cell.valid and not cell.mobile and cell.is_in_construction_range(position) then
         return true
@@ -787,6 +787,13 @@ if script.active_mods["funit"] then
       required_count,
       in_stationary_roboport_range,
       is_character
+    )
+  end
+  Muluna.funit.has_stationary_roboport_coverage = function(surface_index, force_name, position)
+    return has_stationary_roboport_coverage(
+      game.surfaces[surface_index],
+      game.forces[force_name],
+      position
     )
   end
   Muluna.funit.queue_rock_with_replacement = function(entity, replacement_tile, force_name)
