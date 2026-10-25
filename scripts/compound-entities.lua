@@ -10,6 +10,7 @@
 -- The registry is built from the constants for the three compound entity types:
 -- telescopes, heat assembling machines (including the vacuum heating tower), and
 -- burner roboports.
+local blueprint_tags = require("lib.blueprint-tags")
 local TAG_KEY = "muluna_compound"
 local PENDING_WIRE_LIFETIME = 60 * 60 * 10
 local ORIENTATION_LIFETIME = 60 * 60 * 60
@@ -201,15 +202,6 @@ local function capture_compound_tags(parent, data, config)
     }
 end
 
----Merge tags instead of overwriting the tags another handler or mod wrote.
-local function merge_blueprint_tags(blueprint, blueprint_index, tags)
-    local existing = blueprint.get_blueprint_entity_tags(blueprint_index) or {}
-    for key, value in pairs(tags) do
-        existing[key] = value
-    end
-    blueprint.set_blueprint_entity_tags(blueprint_index, existing)
-end
-
 Muluna.events.on_event("bplib-extract", function(event)
     for blueprint_index, entity in pairs(event.entities or {}) do
         if entity.valid then
@@ -217,7 +209,7 @@ Muluna.events.on_event("bplib-extract", function(event)
             if config then
                 local data = get_compound_data(config, entity)
                 if data then
-                    merge_blueprint_tags(event.blueprint, blueprint_index, {
+                    blueprint_tags.add_tags(event.blueprint, blueprint_index, {
                         [TAG_KEY] = capture_compound_tags(entity, data, config),
                     })
                 end
@@ -477,7 +469,7 @@ Muluna.events.on_event("bplib-overlaps", function(event)
             if config then
                 local data = get_compound_data(config, entity)
                 if data then
-                    local tags = event.blueprint.get_blueprint_entity_tags(blueprint_index)
+                    local tags = blueprint_tags.get_tags(event.blueprint, blueprint_index)
                     apply_compound_tags(entity, data, config, tags, orientation)
                 end
             end

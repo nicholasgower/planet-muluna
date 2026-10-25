@@ -19,6 +19,7 @@ Use `python3 <script> --help` for the complete option list.
 | Find fluid recipes without indexes | `python3 tools/proto_query.py --dump DUMP recipes --category crafting-with-fluid --missing-fluidbox-index` |
 | Run only the FUnit data-stage fixtures | `tools/ci/funit.sh --data-only` |
 | Syntax-check changed Lua files | `tools/ci/lua-check.sh` |
+| Check FUnit seam wiring and docs | `tools/ci/funit-seams-check.sh` |
 | Check the release export boundary | `tools/ci/export-check.sh` |
 
 ## `factorio_probe.py`
@@ -201,6 +202,30 @@ that development-only paths are marked `export-ignore` and that runtime files an
 `--require-path PATH` asserts that `PATH` is *not* export-ignored. Passing a
 development path is therefore expected to exit `1`; it is the negative self-test
 that proves the detector is working.
+
+## `tools/ci/funit-seams-check.sh`
+
+```sh
+tools/ci/funit-seams-check.sh
+tools/ci/funit-seams-check.sh --json
+tools/ci/funit-seams-check.sh --require-missing get_storage
+```
+
+The checker keeps the FUnit test seams in sync without starting Factorio. It
+compares:
+
+- `stage().NAME` calls in `scripts/funit.lua` with `Muluna.funit.NAME` exports in
+  `scripts/*.lua`;
+- `helpers.funit_call("NAME")` and `remote.call("muluna_funit", "NAME")` calls in
+  the FUnit suite with the remote keys in `scripts/funit.lua`;
+- every remote key with the `## Test-only production seams` list in
+  `test-mods/planet-muluna-funit/README.md`.
+
+It is read-only and exits `1` on drift.
+
+`--require-missing NAME` adds `NAME` to the required README list. Pass a name that
+is intentionally absent; the checker must report it missing and exit `1`. That is
+the negative self-test for the README detector.
 
 ## `tools/ci/opencode-check.sh`
 

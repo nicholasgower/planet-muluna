@@ -503,6 +503,9 @@ The `tools/ci/` helpers are development tools and are not shipped:
   `--require-path` is the negative self-test for the detector.
 - `funit.sh` — run the FUnit suite, filter to one suite, and summarize a log as text or
   JSON. `--data-only` runs only the data stage and summarizes the fixture result bag.
+- `funit-seams-check.sh` — verify `Muluna.funit` exports, FUnit remote calls, and the
+  test-only seam list in the FUnit README stay in sync. `--require-missing` is the
+  negative self-test.
 - `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
 - `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
   test links.

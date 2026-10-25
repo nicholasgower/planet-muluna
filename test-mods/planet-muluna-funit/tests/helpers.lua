@@ -181,4 +181,43 @@ function helpers.wait_until(runner, predicate, options)
   runner.after_n_ticks_do(1, check)
 end
 
+---Raise a bplib custom event with the standard event metadata.
+---
+---bplib raises `bplib-extract`, `bplib-positions`, and `bplib-overlaps` with
+---`name` and `tick` fields. Tests that model those events should use this helper
+---instead of copying the payload shape.
+---@param name string
+---@param payload table
+---@return table
+function helpers.raise_bplib_event(name, payload)
+  payload = payload or {}
+  payload.name = name
+  payload.tick = payload.tick or game.tick
+  script.raise_event(name, payload)
+  return payload
+end
+
+---Create a blueprint item containing the given entity table.
+---@param entities BlueprintEntity[]
+---@param tag_overrides table<uint32, Tags>|nil
+---@return LuaItemStack
+function helpers.blueprint_with_entities(entities, tag_overrides)
+  local inventory = game.create_inventory(1)
+  local blueprint = inventory[1]
+  blueprint.set_stack({ name = "blueprint", count = 1 })
+  blueprint.set_blueprint_entities(entities)
+  for index, tags in pairs(tag_overrides or {}) do
+    blueprint.set_blueprint_entity_tags(index, tags)
+  end
+  return blueprint
+end
+
+---Read the tags stored on a blueprint entity, or an empty table when unset.
+---@param blueprint LuaItemStack|LuaRecord
+---@param index uint32
+---@return Tags
+function helpers.blueprint_tags(blueprint, index)
+  return blueprint.get_blueprint_entity_tags(index) or {}
+end
+
 return helpers

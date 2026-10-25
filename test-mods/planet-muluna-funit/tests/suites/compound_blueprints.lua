@@ -298,26 +298,24 @@ runner.test("compound blueprint: bplib extract and overlap preserve subentity wi
     runner.assert(reactor_red.connect_to(combinator_red), "could not wire the reactor to the combinator")
 
     -- Build a minimal blueprint that already has an unrelated tag.
-    local inventory = game.create_inventory(1)
-    local blueprint = inventory[1]
-    blueprint.set_stack({ name = "blueprint", count = 1 })
-    blueprint.set_blueprint_entities({
+    local blueprint = helpers.blueprint_with_entities({
       { entity_number = 1, name = machine["assembling-machine"], position = { x = 0, y = 0 } },
+    }, {
+      [1] = { unrelated = "keep" },
     })
-    blueprint.set_blueprint_entity_tags(1, { unrelated = "keep" })
 
     -- Extraction must add the compound tag without dropping the existing tag.
-    script.raise_event("bplib-extract", {
+    helpers.raise_bplib_event("bplib-extract", {
       entities = { [1] = parent },
       blueprint = blueprint,
     })
-    local blueprint_tags = blueprint.get_blueprint_entity_tags(1)
+    local blueprint_tags = helpers.blueprint_tags(blueprint, 1)
     runner.assert(blueprint_tags.unrelated == "keep", "extraction dropped an unrelated blueprint tag")
     runner.assert(type(blueprint_tags.muluna_compound) == "table", "extraction did not add the compound tag")
 
     -- Simulate stamping the blueprint over the existing parent.
     reactor_red.disconnect_all()
-    script.raise_event("bplib-overlaps", {
+    helpers.raise_bplib_event("bplib-overlaps", {
       overlaps = { [1] = parent },
       blueprint = blueprint,
       orientation_info = { direction = defines.direction.north },
@@ -330,6 +328,33 @@ runner.test("compound blueprint: bplib extract and overlap preserve subentity wi
       restored_red and restored_combinator_red and restored_red.is_connected_to(restored_combinator_red),
       "overlap did not restore the subentity wire"
     )
+  end)
+end)
+
+runner.test("compound blueprint: telescope extract handlers merge tags", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local center = helpers.center(helpers.muluna_area())
+    local telescope = helpers.entity_at(surface, "muluna-telescope", center)
+    local data = get_compound_data("telescopes", telescope.unit_number)
+    runner.assert(data and data["constant-combinator"] and data["constant-combinator"].valid, "telescope has no combinator")
+
+    local blueprint = helpers.blueprint_with_entities({
+      { entity_number = 1, name = "muluna-telescope", position = { x = 0, y = 0 } },
+    }, {
+      [1] = { unrelated = "keep" },
+    })
+
+    helpers.raise_bplib_event("bplib-extract", {
+      entities = { [1] = telescope },
+      blueprint = blueprint,
+    })
+
+    local tags = helpers.blueprint_tags(blueprint, 1)
+    runner.assert(tags.unrelated == "keep", "telescope extraction dropped an unrelated blueprint tag")
+    runner.assert(type(tags.muluna_compound) == "table", "compound handler did not add its tags")
+    runner.assert(type(tags.output_asteroid_signals) == "boolean", "telescope handler did not add output_asteroid_signals")
+    runner.assert(type(tags.combinator_enabled) == "boolean", "telescope handler did not add combinator_enabled")
   end)
 end)
 
@@ -357,11 +382,10 @@ runner.test("compound blueprint: placement orientation rotates external wire tar
     -- Rotating the blueprint east turns the +8,0 offset into 0,+8.
     local rotated_target = helpers.entity_at(surface, "constant-combinator", { x = parent_position.x, y = parent_position.y + 8 })
     runner.assert(rotated_target and rotated_target.valid, "could not create the rotated wire target")
-    script.raise_event("bplib-positions", {
+    helpers.raise_bplib_event("bplib-positions", {
       positions = { [1] = { parent_position.x, parent_position.y } },
       orientation_info = { direction = defines.direction.east },
       surface_index = surface.index,
-      tick = game.tick,
     })
 
     local rebuilt = build_parent_from_tags(surface, machine["assembling-machine"], center, tags)
@@ -463,11 +487,10 @@ end)
 runner.test("compound blueprint: bplib positions accepts vector-style coordinates", function()
   local surface = helpers.get_muluna()
   local position = { -12345.5, -12345.5 }
-  script.raise_event("bplib-positions", {
+  helpers.raise_bplib_event("bplib-positions", {
     positions = { [1] = position },
     orientation_info = { direction = defines.direction.north },
     surface_index = surface.index,
-    tick = game.tick,
   })
 
   local key = string.format("%d:%.2f,%.2f", surface.index, position[1], position[2])

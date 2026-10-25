@@ -107,6 +107,7 @@ when the `funit` mod is active**:
 - `get_state_integer`, `get_time_to_next_asteroid_check`
 - `get_burner_roboport_data`, `short_update_roboport`
 - `get_heat_assembling_machine_data`
+- `get_compound_blueprint_tags`, `transform_compound_offset`
 - `get_nav_scan_area`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
@@ -160,6 +161,9 @@ The suite covers:
 - Interstellar science-pack gating, partial progress, and cheat-mode behavior.
 - Heat assembling machines (reactor link and fixed recipe).
 - Burner/vacuum roboports (refueler link, propellant energy, statuses).
+- Compound entity blueprints: subentity wires and control behavior, rotated
+  placement, overlap restoration, deferred wire targets, malformed tags, and
+  bplib's vector-style placement positions.
 - Nav beacons on planets vs. space platforms, registration cleanup, sparse storage
   keys, quality scaling, and scan-size base selection (the test profile deliberately
   makes `platform-power-consumption` differ from `scan_area` so the energy/area

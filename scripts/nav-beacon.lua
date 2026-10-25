@@ -2,6 +2,7 @@ local debug_mode = false
 local DT = "[NavBeacon] "
 local radar_data 
 local rro = Muluna.rro
+local blueprint_tags = require("lib.blueprint-tags")
 ---Compute the radar's scan size from the configured base area, not its energy cost.
 ---@param navSat LuaEntity
 ---@return number|nil
@@ -245,7 +246,7 @@ Muluna.events.on_event("bplib-extract", function(event)
     if entity.name == "muluna-satellite-radar" then
         local enabled = storage.nav_beacons_other[entity.unit_number] and storage.nav_beacons_other[entity.unit_number].gui.enabled
         --game.print(enabled)
-      event.blueprint.set_blueprint_entity_tags(blueprint_index, {enabled = enabled})
+      blueprint_tags.add_tags(event.blueprint, blueprint_index, {enabled = enabled})
     end
   end
 end)

@@ -1,4 +1,5 @@
 local rro = Muluna.rro
+local blueprint_tags = require("lib.blueprint-tags")
 
 local heat_assembling_machines = Muluna.constants.telescopes
 
@@ -311,7 +312,7 @@ Muluna.events.on_event("bplib-extract", function(event)
     -- The event is raised for all mods, so you must filter for your mod's entities
     if rro.contains(heat_assembling_machines, function(entry) return entry["assembling-machine"] == entity.name end) then
         local telescope_data = storage.telescopes[entity.unit_number]
-      event.blueprint.set_blueprint_entity_tags(blueprint_index, {
+      blueprint_tags.add_tags(event.blueprint, blueprint_index, {
         output_asteroid_signals = telescope_data.output_asteroid_signals,
         combinator_enabled = telescope_data["constant-combinator-control-behavior"].enabled
     })
