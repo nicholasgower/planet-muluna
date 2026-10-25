@@ -105,4 +105,80 @@ function helpers.funit_call(name, ...)
   return remote.call("muluna_funit", name, ...)
 end
 
+---Replace tiles and optionally raise the documented script tile-change event.
+---
+---`set_tiles` has five positional arguments and raises `script_raised_set_tiles`
+---inconsistently in the headless test harness. This helper keeps the argument
+---order in one place and raises the event after the tiles have been applied so
+---listeners observe the final world state.
+---@param surface LuaSurface
+---@param tiles Tile[]
+---@param options table|nil
+function helpers.set_tiles(surface, tiles, options)
+  options = options or {}
+  local correct_tiles = options.correct_tiles ~= false
+  local remove_colliding_entities = options.remove_colliding_entities
+  if remove_colliding_entities == nil then
+    remove_colliding_entities = false
+  end
+  local remove_colliding_decoratives = options.remove_colliding_decoratives ~= false
+
+  surface.set_tiles(
+    tiles,
+    correct_tiles,
+    remove_colliding_entities,
+    remove_colliding_decoratives,
+    false
+  )
+
+  if options.raise_event then
+    script.raise_event(defines.events.script_raised_set_tiles, {
+      surface_index = surface.index,
+      tiles = tiles,
+    })
+  end
+end
+
+---Poll a predicate on a tick interval until it succeeds or the timeout expires.
+---
+---The predicate may call `runner.assert` for an irreversible failure. Optional
+---`on_success` and `on_failure` callbacks run exactly once and are useful for
+---cleaning up entities in asynchronous tests.
+---@param runner table FUnit test runner
+---@param predicate fun(): boolean
+---@param options table|nil
+function helpers.wait_until(runner, predicate, options)
+  options = options or {}
+  local timeout = math.max(1, options.timeout or 600)
+  local interval = math.max(1, options.interval or 30)
+  local message = options.message or "condition was not met"
+  local deadline = game.tick + timeout
+
+  local function check()
+    local ok, err = pcall(function()
+      if predicate() then
+        if options.on_success then
+          options.on_success()
+        end
+        return
+      end
+
+      if game.tick >= deadline then
+        runner.assert(false, message .. " (timeout: " .. tostring(timeout) .. " ticks)")
+      end
+
+      runner.after_n_ticks_do(interval, check)
+    end)
+
+    if not ok then
+      if options.on_failure then
+        pcall(options.on_failure)
+      end
+      error(err, 0)
+    end
+  end
+
+  runner.after_n_ticks_do(1, check)
+end
+
 return helpers

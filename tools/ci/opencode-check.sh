@@ -3,19 +3,23 @@
 # opencode-check.sh - preflight checks for the OpenCode agent configuration.
 #
 # The issue-bugfix workflow runs `opencode run --agent issue-bugfix --auto`.
-# If the agent is missing, not primary, references a missing prompt file, or
+# If the agent is missing, has the wrong mode, references a missing prompt file, or
 # still has an `ask` permission, the job fails (or hangs) only after a runner
 # has been allocated. This script checks those conditions locally.
 #
 # Checks:
 #   1. `opencode` exists and `opencode --version` works.
-#   2. `opencode.json` exists, parses as JSON, and defines `agent.<agent>`.
-#   3. The agent's `mode` is "primary".
-#   4. A `{file:...}` prompt exists relative to the repository root.
-#   5. `opencode agent list` contains the exact `<agent> (primary)` line.
-#   6. With --require-auto-approve: the agent permission is effectively
+#   2. Either `opencode.json` defines `agent.<agent>` with the expected mode
+#      and a valid prompt, or --agent-file names a Markdown agent whose
+#      frontmatter declares the expected mode.
+#   3. A `{file:...}` prompt exists relative to the repository root (JSON
+#      agents only).
+#   4. `opencode agent list` contains the exact `<agent> (<mode>)` line.
+#   5. With --require-auto-approve: the JSON agent permission is effectively
 #      `allow` (`permission: "allow"` or `"*": "allow"`) and contains no
 #      remaining `ask` rules.
+#   6. With --require-read-only: a Markdown agent's permission map explicitly
+#      denies edit, bash, webfetch, websearch, task, question, and todowrite.
 #   7. With --model: `opencode models` lists the model.
 #
 # No network requests are made by this script, but `opencode` itself may load
@@ -28,8 +32,11 @@ set -euo pipefail
 PROG="$(basename "$0")"
 
 AGENT="issue-bugfix"
+AGENT_FILE=""
+EXPECTED_MODE="primary"
 MODEL=""
 REQUIRE_AUTO=0
+REQUIRE_READ_ONLY=0
 JSON_OUTPUT=0
 REPO=""
 
@@ -42,10 +49,18 @@ Preflight checks for the OpenCode agent used by the GitHub workflows.
 
 Options:
   --agent NAME            Agent to validate (default: $AGENT).
+  --agent-file PATH       Validate a Markdown agent definition instead of
+                          \`opencode.json\`. Relative paths are resolved from
+                          the repository root.
+  --mode MODE             Expected agent mode (default: $EXPECTED_MODE).
+                          Used for both JSON and Markdown agents.
   --model PROVIDER/MODEL  Verify the model appears in \`opencode models\`.
-  --require-auto-approve  Require the agent permission to resolve to allow:
-                          either \`"permission": "allow"\` or \`"*": "allow"\`,
-                          with no remaining \`ask\` rules.
+  --require-auto-approve  Require the JSON agent permission to resolve to
+                          allow: either \`"permission": "allow"\` or
+                          \`"*": "allow"\`, with no remaining \`ask\` rules.
+  --require-read-only     Require a Markdown agent's permission map to deny
+                          edit, bash, webfetch, websearch, task, question,
+                          and todowrite. Requires --agent-file.
   --json                  Emit a machine-readable JSON report on stdout
                           instead of human-readable lines.
   --repo DIR              Repository root. Defaults to the git top-level
@@ -61,6 +76,8 @@ Examples:
   $PROG
   $PROG --agent issue-bugfix --require-auto-approve
   $PROG --agent issue-bugfix --model opencode-go/deepseek-v4.1-flash --json
+  $PROG --agent self-learn --agent-file .opencode/agents/self-learn.md \\
+        --mode subagent --require-read-only
   $PROG --repo /path/to/checkout --require-auto-approve
 EOF
 }
@@ -110,6 +127,20 @@ while [ "$#" -gt 0 ]; do
     --agent=*)
       AGENT="${1#*=}"; shift
       ;;
+    --agent-file)
+      need_value "$1" "$#"
+      AGENT_FILE="$2"; shift 2
+      ;;
+    --agent-file=*)
+      AGENT_FILE="${1#*=}"; shift
+      ;;
+    --mode)
+      need_value "$1" "$#"
+      EXPECTED_MODE="$2"; shift 2
+      ;;
+    --mode=*)
+      EXPECTED_MODE="${1#*=}"; shift
+      ;;
     --model)
       need_value "$1" "$#"
       MODEL="$2"; shift 2
@@ -119,6 +150,9 @@ while [ "$#" -gt 0 ]; do
       ;;
     --require-auto-approve)
       REQUIRE_AUTO=1; shift
+      ;;
+    --require-read-only)
+      REQUIRE_READ_ONLY=1; shift
       ;;
     --json)
       JSON_OUTPUT=1; shift
@@ -148,6 +182,13 @@ if [ "$#" -gt 0 ]; then
 fi
 
 [ -n "$AGENT" ] || usage_error "--agent must not be empty"
+[ -n "$EXPECTED_MODE" ] || usage_error "--mode must not be empty"
+if [ "$REQUIRE_READ_ONLY" -eq 1 ] && [ -z "$AGENT_FILE" ]; then
+  usage_error "--require-read-only requires --agent-file"
+fi
+if [ "$REQUIRE_AUTO" -eq 1 ] && [ -n "$AGENT_FILE" ]; then
+  usage_error "--require-auto-approve is only supported for opencode.json agents"
+fi
 
 # ------------------------------------------------------------------ repo root
 
@@ -162,10 +203,20 @@ fi
 [ -d "$REPO" ] || usage_error "repository directory does not exist: $REPO"
 REPO="$(cd "$REPO" && pwd -P)"
 CONFIG_FILE="$REPO/opencode.json"
+if [ -n "$AGENT_FILE" ]; then
+  case "$AGENT_FILE" in
+    /*) ;;
+    *) AGENT_FILE="$REPO/$AGENT_FILE" ;;
+  esac
+  AGENT_FILE_DIR="$(dirname "$AGENT_FILE")"
+  if [ -d "$AGENT_FILE_DIR" ]; then
+    AGENT_FILE="$(cd "$AGENT_FILE_DIR" && pwd -P)/$(basename "$AGENT_FILE")"
+  fi
+fi
 
 if ! require_cmd python3; then
   if [ "$JSON_OUTPUT" -eq 1 ]; then
-    printf '%s\n' '{"agent":null,"repo":null,"model":null,"status":"FAIL","ok":false,"summary":{"pass":0,"fail":1,"warn":0},"checks":[{"name":"python3","status":"FAIL","detail":"python3 is required but was not found on PATH"}]}'
+    printf '%s\n' '{"agent":null,"agent_file":null,"mode":null,"repo":null,"model":null,"require_auto_approve":false,"require_read_only":false,"status":"FAIL","ok":false,"summary":{"pass":0,"fail":1,"warn":0},"checks":[{"name":"python3","status":"FAIL","detail":"python3 is required but was not found on PATH"}]}'
   else
     printf '[FAIL] python3: python3 is required but was not found on PATH\n' >&2
     printf '\nSummary: FAIL (0 passed, 1 failed, 0 warnings)\n' >&2
@@ -211,13 +262,13 @@ add_check() {
 # (after `opencode agent list`, so the output stays in a readable order).
 analyze_config() {
   local phase="$1"
-  python3 - "$CONFIG_FILE" "$AGENT" "$REQUIRE_AUTO" "$REPO" "$phase" <<'PY'
+  python3 - "$CONFIG_FILE" "$AGENT" "$REQUIRE_AUTO" "$REPO" "$EXPECTED_MODE" "$phase" <<'PY'
 import json
 import os
 import re
 import sys
 
-config_path, agent, require_auto_arg, repo, phase = sys.argv[1:6]
+config_path, agent, require_auto_arg, repo, expected_mode, phase = sys.argv[1:7]
 require_auto = require_auto_arg == "1"
 ALLOWED_ACTIONS = {"allow", "deny", "ask"}
 
@@ -395,10 +446,10 @@ if phase == "config":
         checks.append(("agent-prompt", "FAIL", "skipped: agent entry unavailable"))
     else:
         mode = entry.get("mode")
-        if mode == "primary":
-            checks.append(("agent-mode", "PASS", 'mode is "primary"'))
+        if mode == expected_mode:
+            checks.append(("agent-mode", "PASS", "mode is %r" % mode))
         else:
-            checks.append(("agent-mode", "FAIL", 'mode is %r; expected "primary"' % mode))
+            checks.append(("agent-mode", "FAIL", "mode is %r; expected %r" % (mode, expected_mode)))
         checks.append(check_prompt(entry))
 
     for check in checks:
@@ -421,12 +472,146 @@ else:
 PY
 }
 
+analyze_agent_file() {
+  python3 - "$AGENT_FILE" "$AGENT" "$EXPECTED_MODE" "$REQUIRE_READ_ONLY" <<'PY'
+import os
+import sys
+
+path, agent, expected_mode, require_read_only_arg = sys.argv[1:5]
+require_read_only = require_read_only_arg == "1"
+READ_ONLY_KEYS = ("edit", "bash", "webfetch", "websearch", "task", "question", "todowrite")
+
+
+def emit(name, status, detail=""):
+    detail = " ".join(str(detail).replace("\t", " ").split())
+    print("%s\t%s\t%s" % (name, status, detail))
+
+
+def unquote(value):
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+        return value[1:-1]
+    return value
+
+
+def parse_frontmatter(text):
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None, "missing opening '---'"
+    values = {}
+    permission = {}
+    current = None
+    closed = False
+    for line_number, raw in enumerate(lines[1:], start=2):
+        line = raw.rstrip()
+        stripped = line.strip()
+        if stripped == "---":
+            closed = True
+            break
+        if not stripped or stripped.startswith("#"):
+            continue
+        if line[:1] in (" ", "\t"):
+            if current != "permission":
+                return None, "unexpected indented line %d" % line_number
+            if ":" not in stripped:
+                return None, "invalid permission line %d" % line_number
+            key, value = stripped.split(":", 1)
+            permission[unquote(key)] = unquote(value)
+            continue
+        if ":" not in stripped:
+            return None, "invalid frontmatter line %d" % line_number
+        key, value = stripped.split(":", 1)
+        key = unquote(key)
+        value = value.strip()
+        current = key
+        if key == "permission":
+            if value:
+                return None, "inline permission maps are not supported"
+            values[key] = permission
+        else:
+            values[key] = unquote(value)
+    if not closed:
+        return None, "missing closing '---'"
+    return values, None
+
+
+if not os.path.isfile(path):
+    emit("agent-file", "FAIL", "file not found: %s" % path)
+    emit("agent-frontmatter", "FAIL", "skipped: agent file missing")
+    emit("agent-mode", "FAIL", "skipped: agent file missing")
+    if require_read_only:
+        emit("agent-read-only", "FAIL", "skipped: agent file missing")
+    sys.exit(0)
+
+emit("agent-file", "PASS", path)
+expected_name = agent + ".md"
+basename = os.path.basename(path)
+if basename == expected_name:
+    emit("agent-file-name", "PASS", "filename matches agent name")
+else:
+    emit("agent-file-name", "FAIL", "filename is %r; expected %r" % (basename, expected_name))
+
+try:
+    with open(path, "r", encoding="utf-8") as handle:
+        text = handle.read()
+except Exception as exc:
+    emit("agent-frontmatter", "FAIL", "could not read file: %s" % exc)
+    sys.exit(0)
+
+values, error = parse_frontmatter(text)
+if error:
+    emit("agent-frontmatter", "FAIL", error)
+    emit("agent-mode", "FAIL", "skipped: frontmatter unavailable")
+    if require_read_only:
+        emit("agent-read-only", "FAIL", "skipped: frontmatter unavailable")
+    sys.exit(0)
+
+emit("agent-frontmatter", "PASS", "parsed YAML frontmatter")
+description = values.get("description")
+if description:
+    emit("agent-description", "PASS", description)
+else:
+    emit("agent-description", "WARN", "no description in frontmatter")
+
+mode = values.get("mode")
+if mode == expected_mode:
+    emit("agent-mode", "PASS", "mode is %r" % mode)
+else:
+    emit("agent-mode", "FAIL", "mode is %r; expected %r" % (mode, expected_mode))
+
+if require_read_only:
+    permission = values.get("permission")
+    if not isinstance(permission, dict):
+        emit("agent-read-only", "FAIL", "permission map is missing")
+    else:
+        allowed = []
+        invalid = []
+        for key in READ_ONLY_KEYS:
+            action = permission.get(key)
+            if action == "deny":
+                allowed.append(key)
+            elif action is None:
+                invalid.append("%s is missing" % key)
+            else:
+                invalid.append("%s=%r" % (key, action))
+        if invalid:
+            emit("agent-read-only", "FAIL", "read-only permissions incomplete: %s" % ", ".join(invalid))
+        else:
+            emit("agent-read-only", "PASS", "permissions deny: %s" % ", ".join(allowed))
+
+sys.exit(0)
+PY
+}
+
 # --------------------------------------------------------------------- checks
 
 if [ "$JSON_OUTPUT" -eq 0 ]; then
   printf 'opencode preflight\n'
   printf '  repo:  %s\n' "$REPO"
-  printf '  agent: %s\n' "$AGENT"
+  printf '  agent: %s (%s)\n' "$AGENT" "$EXPECTED_MODE"
+  if [ -n "$AGENT_FILE" ]; then
+    printf '  file:  %s\n' "$AGENT_FILE"
+  fi
   if [ -n "$MODEL" ]; then
     printf '  model: %s\n' "$MODEL"
   fi
@@ -449,15 +634,27 @@ else
   add_check FAIL opencode-cli "opencode not found on PATH"
 fi
 
-# 2-4. opencode.json: exists, valid, agent entry, primary mode, prompt file.
-if CONFIG_OUT="$(analyze_config config)"; then
-  while IFS=$'\t' read -r name status detail; do
-    [ -n "${name:-}" ] || continue
-    add_check "$status" "$name" "${detail:-}"
-  done <<< "$CONFIG_OUT"
+# 2-4. Agent definition: opencode.json or a Markdown agent file.
+if [ -n "$AGENT_FILE" ]; then
+  if FILE_OUT="$(analyze_agent_file)"; then
+    while IFS=$'\t' read -r name status detail; do
+      [ -n "${name:-}" ] || continue
+      add_check "$status" "$name" "${detail:-}"
+    done <<< "$FILE_OUT"
+  else
+    rc=$?
+    add_check FAIL agent-file "agent file analysis failed (exit $rc)"
+  fi
 else
-  rc=$?
-  add_check FAIL config-json "config analysis failed (exit $rc)"
+  if CONFIG_OUT="$(analyze_config config)"; then
+    while IFS=$'\t' read -r name status detail; do
+      [ -n "${name:-}" ] || continue
+      add_check "$status" "$name" "${detail:-}"
+    done <<< "$CONFIG_OUT"
+  else
+    rc=$?
+    add_check FAIL config-json "config analysis failed (exit $rc)"
+  fi
 fi
 
 # 5. Effective agent list, as seen by the CLI that the workflow will use.
@@ -465,7 +662,7 @@ if [ "$OPENCODE_OK" -eq 1 ]; then
   if AGENT_LIST_OUT="$(cd "$REPO" && run_with_timeout 60 opencode agent list 2>&1)"; then
     ESC="$(printf '\033')"
     AGENT_LIST_CLEAN="$(printf '%s\n' "$AGENT_LIST_OUT" | sed -e "s/${ESC}\\[[0-9;]*[A-Za-z]//g" -e 's/\r$//')"
-    if printf '%s\n' "$AGENT_LIST_CLEAN" | awk -v want="$AGENT (primary)" '
+    if printf '%s\n' "$AGENT_LIST_CLEAN" | awk -v want="$AGENT ($EXPECTED_MODE)" '
       {
         line = $0
         gsub(/^[ \t]+/, "", line)
@@ -474,9 +671,9 @@ if [ "$OPENCODE_OK" -eq 1 ]; then
       }
       END { exit(found ? 0 : 1) }
     '; then
-      add_check PASS agent-list "'opencode agent list' contains '$AGENT (primary)'"
+      add_check PASS agent-list "'opencode agent list' contains '$AGENT ($EXPECTED_MODE)'"
     else
-      add_check FAIL agent-list "'opencode agent list' does not contain '$AGENT (primary)'"
+      add_check FAIL agent-list "'opencode agent list' does not contain '$AGENT ($EXPECTED_MODE)'"
     fi
   else
     rc=$?
@@ -486,15 +683,17 @@ else
   add_check WARN agent-list "skipped: opencode CLI unavailable"
 fi
 
-# 6. Auto-approve permissions.
-if PERMISSION_OUT="$(analyze_config permission)"; then
-  while IFS=$'\t' read -r name status detail; do
-    [ -n "${name:-}" ] || continue
-    add_check "$status" "$name" "${detail:-}"
-  done <<< "$PERMISSION_OUT"
-else
-  rc=$?
-  add_check FAIL auto-approve "permission analysis failed (exit $rc)"
+# 6. JSON auto-approve permissions. Markdown agents were checked above.
+if [ -z "$AGENT_FILE" ]; then
+  if PERMISSION_OUT="$(analyze_config permission)"; then
+    while IFS=$'\t' read -r name status detail; do
+      [ -n "${name:-}" ] || continue
+      add_check "$status" "$name" "${detail:-}"
+    done <<< "$PERMISSION_OUT"
+  else
+    rc=$?
+    add_check FAIL auto-approve "permission analysis failed (exit $rc)"
+  fi
 fi
 
 # 7. Requested model.
@@ -531,11 +730,21 @@ if [ "$FAIL_COUNT" -gt 0 ]; then
 fi
 
 if [ "$JSON_OUTPUT" -eq 1 ]; then
-  python3 - "$RESULTS_FILE" "$AGENT" "$MODEL" "$REPO" "$STATUS" "$REQUIRE_AUTO" <<'PY'
+  python3 - "$RESULTS_FILE" "$AGENT" "$MODEL" "$REPO" "$STATUS" "$REQUIRE_AUTO" "$AGENT_FILE" "$EXPECTED_MODE" "$REQUIRE_READ_ONLY" <<'PY'
 import json
 import sys
 
-results_path, agent, model, repo, status, require_auto = sys.argv[1:7]
+(
+    results_path,
+    agent,
+    model,
+    repo,
+    status,
+    require_auto,
+    agent_file,
+    mode,
+    require_read_only,
+) = sys.argv[1:10]
 
 checks = []
 with open(results_path, "r", encoding="utf-8", errors="replace") as handle:
@@ -559,9 +768,12 @@ print(
     json.dumps(
         {
             "agent": agent,
+            "agent_file": agent_file or None,
+            "mode": mode,
             "model": model or None,
             "repo": repo,
             "require_auto_approve": require_auto == "1",
+            "require_read_only": require_read_only == "1",
             "status": status,
             "ok": status == "OK",
             "summary": counts,

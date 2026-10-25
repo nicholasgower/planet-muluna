@@ -457,8 +457,9 @@ Lessons from building and debugging the agent workflow:
 - **Bound the agent step.** Set a step-level `timeout-minutes` so a permission prompt or
   stuck tool call fails the job instead of consuming the 120-minute job timeout.
 - **The FUnit loop is fast enough for iteration, but use the helper.** The full suite is
-  about 108 tests and a couple of minutes. `tools/ci/funit.sh` can run the full suite,
-  filter to one suite, and summarize the log.
+  about 120 tests and a couple of minutes. `tools/ci/funit.sh` can run the full suite,
+  filter to one suite, and summarize the log. Use `tools/ci/funit.sh --baseline` when a
+  green full-suite run is the required gate.
 - **Committing to local `main` from a detached worktree** requires committing on the
   detached HEAD and fast-forwarding `main` in the worktree that has it checked out
   (`git merge --ff-only <sha>`); do not update the ref behind another worktree's back.
@@ -469,8 +470,13 @@ The `tools/ci/` helpers are development tools and are not shipped:
 
 - `run-debug.sh` — list runs, wait for one to finish, summarize step status, fetch and
   filter logs, and cancel a run when explicitly asked.
-- `opencode-check.sh` — validate the agent, prompt file, primary mode, model, and
-  auto-approve permissions before burning a runner.
+- `opencode-check.sh` — validate the agent, prompt file, expected mode, model, and
+  auto-approve permissions before burning a runner. `--agent-file` also validates
+  file-based agents in `.opencode/agents/`, and `--require-read-only` checks their
+  read-only permission map.
+- `export-check.sh` — verify that development paths are `export-ignore`d and runtime
+  files are included in the release boundary. `--ref` checks a historical tree;
+  `--require-path` is the negative self-test for the detector.
 - `funit.sh` — run the FUnit suite, filter to one suite, and summarize a log as text or
   JSON. `--data-only` runs only the data stage and summarizes the fixture result bag.
 - `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
@@ -486,6 +492,16 @@ The non-CI tools are documented in `tools/README.md`:
 - `proto_query.py` — query a prototype dump, including `machines`, `recipes`,
   `data-port-invariant`, and `funit-results`.
 - `fdoc.py` — look up Factorio prototype/runtime API documentation (see below).
+
+## Self-learning retrospective
+
+After a substantial task, run `/self-learn [focus]`. It calls the read-only `self-learn`
+subagent, which grounds the retrospective in `git` state and repository files and returns
+a brief for the primary agent: evidence, what worked, recurring friction, and a short list
+of helper scripts worth writing. The brief ends with a direct prompt that the primary agent
+then carries out, unless the user asked for analysis only. Definitions live in
+`.opencode/agents/self-learn.md` and `.opencode/commands/self-learn.md`; `.opencode/` is
+development-only and excluded from release zips.
 
 ## Documentation
 
