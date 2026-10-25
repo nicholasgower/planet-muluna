@@ -24,6 +24,8 @@ local function extend_lunar_rock(copied_entity,results)
   
   if lunar_rock.minable then
     lunar_rock.minable.results = results
+    lunar_rock.minable.result = nil
+    lunar_rock.minable.count = nil
   end
   
 
@@ -51,7 +53,8 @@ end
 extend_lunar_rock("big-rock",
   {
         {type = "item", name = "sulfur", amount = 2},
-        {type = "item", name = "stone", amount = 20},
+        {type = "item", name = "stone", amount = 15},
+        {type = "item", name = "stone-crushed", amount = 5},
   }
 
 )
@@ -59,7 +62,8 @@ extend_lunar_rock("big-rock",
 extend_lunar_rock("huge-rock",
   {
         {type = "item", name = "sulfur", amount = 5},
-        {type = "item", name = "stone", amount = 40},
+        {type = "item", name = "stone", amount = 30},
+        {type = "item", name = "stone-crushed", amount = 10},
   }
 
 )

@@ -147,6 +147,7 @@ conditions instead of copying a deadline loop. It supports `timeout`, `interval`
 The suite covers:
 
 - Muluna surface creation, wind, cargo pods, lunar rocks, and storage.
+- Lunar rock mining yields for big and huge rocks.
 - Lunar rock deconstruction queueing, crushed stone floor ghosts, replacement
   tile selection from a character's inventory, stationary roboport coverage
   checks, re-marking after construction robots build the floor, undo cleanup,

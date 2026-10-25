@@ -796,7 +796,7 @@ runner.test("lunar rock: destroying a queued rock clears its queue entry", funct
   })
 end)
 
-runner.test("lunar rock: construction robots deliver stone and sulfur (issue #495)", function()
+runner.test("lunar rock: construction robots deliver stone, crushed stone, and sulfur (issue #495)", function()
   pcall(helpers.reset_test_areas)
   local surface = helpers.get_muluna()
   local center = helpers.center(helpers.muluna_area())
@@ -875,7 +875,11 @@ runner.test("lunar rock: construction robots deliver stone and sulfur (issue #49
     if not inventory then
       return false
     end
-    if inventory.get_item_count("stone") < 20 or inventory.get_item_count("sulfur") < 2 then
+    if
+      inventory.get_item_count("stone") < 15
+      or inventory.get_item_count("stone-crushed") < 5
+      or inventory.get_item_count("sulfur") < 2
+    then
       return false
     end
 
