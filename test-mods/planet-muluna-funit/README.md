@@ -111,9 +111,6 @@ when the `funit` mod is active**:
 - `get_nav_scan_area`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
-- `apply_rock_removal_undo`, `record_rock_floor_build`,
-  `select_rock_replacement_tile`, `has_stationary_roboport_coverage`,
-  `queue_rock_with_replacement`, `clear_rock_removal_state`
 
 The production modules export their internal helpers through `Muluna.funit` under
 the same `script.active_mods["funit"]` guard. They are inert in normal play.
@@ -149,13 +146,10 @@ The suite covers:
 
 - Muluna surface creation, wind, cargo pods, lunar rocks, and storage.
 - Lunar rock mining yields for big and huge rocks.
-- Lunar rock deconstruction queueing, crushed stone floor ghosts, replacement
-  tile selection from a character's inventory, stationary roboport coverage
-  checks, re-marking after construction robots build the floor, undo cleanup,
-  robot-built gravel removal after rock drops are collected, huge-rock and
-  off-grid footprint coverage, unrelated tile ghosts, and the issue #495
-  regression that deconstructing a rock over natural Muluna terrain preserves
-  its stone.
+- The PlanetsLib entity removal floor rule configured for both lunar rock
+  prototypes, including its gravel tile, crushed stone item, and Muluna waiting
+  message. The deconstruction queue behaviour itself is covered by PlanetsLib's
+  FUnit suite because the implementation lives there.
 - Telescope registration, power, recipe assignment, pollution state, combinator
   signals, platform-count signal, and space-platform state mapping.
 - Telescope blueprint recipe replacement across surfaces preserves the captured

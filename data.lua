@@ -20,6 +20,15 @@ require("prototypes.tiles.tiles")
 require("prototypes.combined_files.data-pump")
 
 require("prototypes.tiles.artificial-tiles")
+
+-- Muluna's natural tiles destroy dropped items. Lunar rocks drop stone and crushed
+-- stone, so PlanetsLib pauses their deconstruction and places gravel underneath
+-- before construction robots can spill the drops onto unsafe terrain.
+PlanetsLib.assign_entity_removal_floor("muluna", { "lunar-rock", "lunar-huge-rock" }, "muluna-gravel", {
+    default_tile_item = "stone-crushed",
+    waiting_message = { "lunar-rock-removal.waiting-for-floor" },
+})
+
 require("prototypes.radiation")
 require("prototypes.vacuum-robots")
 require("prototypes.entity.oxidized-boiler")
