@@ -229,6 +229,16 @@ for _,roboport in pairs(data.raw["roboport"]) do
             roboport.energy_source.input_flow_limit = "0W"
             roboport.energy_source.render_no_power_icon = false
             roboport.energy_source.render_no_network_icon = false
+            if mods["even-pickier-dollies"] then
+                -- Even Pickier Dollies performs its collision checks with the entity
+                -- it has selected, so the item-placed refueler must outrank the
+                -- script-created roboport. The roboport shares the refueler's
+                -- collision box, so make it non-colliding; the refueler keeps the
+                -- real collision. scripts/even-pickier-dollies.lua then moves the
+                -- roboport along with the refueler.
+                refueler.selection_priority = 51
+                roboport.collision_mask = {layers = {}}
+            end
         
         end
         

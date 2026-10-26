@@ -30,4 +30,5 @@ scenarios/** export-ignore
 test-mods/** export-ignore
 bin/** export-ignore
 .env export-ignore
+AGENTS.md export-ignore
 *.py export-ignore

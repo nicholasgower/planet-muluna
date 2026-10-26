@@ -98,6 +98,14 @@ for _,machine in pairs(data.raw["assembling-machine"]) do
         end
         reactor.localised_name = {"entity-name.heat-assembling-machine-x-reactor",{"entity-name."..assembler.name}}
         reactor.consumption = Muluna.multiply_energy(machine.energy_usage,machine.effectivity)
+        if mods["even-pickier-dollies"] then
+            -- Even Pickier Dollies refuses to move an entity when another entity sits
+            -- in the destination box. The reactor shares the assembler's collision
+            -- box, so make it non-colliding; the assembler keeps the real collision.
+            -- scripts/even-pickier-dollies.lua then moves the reactor along with the
+            -- assembler.
+            reactor.collision_mask = {layers = {}}
+        end
         
         Muluna:extend{assembler,reactor}
         data.raw["mod-data"]["bplib"].data.extract_entity_names[assembler.name] = true
