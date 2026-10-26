@@ -11,8 +11,8 @@
 -- burner-roboports.lua): the helper is made non-colliding, and the player-placed
 -- machine is guaranteed to be the entity EPD selects.
 --
--- This module subscribes to EPD's `dolly_moved_entity_id` event and teleports the
--- helper to keep it on top of the entity that was moved.
+-- This module subscribes to EPD's `even-pickier-dollies-on-entity-moved` custom
+-- event and teleports the helper to keep it on top of the entity that was moved.
 
 local muluna_constants = Muluna.constants
 
@@ -88,12 +88,10 @@ local function on_dolly_moved_entity(event)
     end
 end
 
--- EPD's remote interface can only be called from inside a callback: calling it from the
--- control-stage main chunk raises "Attempt to remote call outside of an event". The event
--- id therefore has to be fetched after loading has started. Register on both entry points
--- so the handler is present when a game is created (on_init) and every time an existing
--- save is loaded (on_load). `mods` only exists in the data stage, so use
--- `script.active_mods` here.
+-- EPD 3.2.0+ exposes the move event as the custom event
+-- `even-pickier-dollies-on-entity-moved`, so it can be registered by name during
+-- control-stage loading without calling the remote interface. `mods` only exists
+-- in the data stage, so use `script.active_mods` here.
 local function register_epd_event()
     if not script.active_mods["even-pickier-dollies"] then return end
     if not remote.interfaces["PickerDollies"] then return end
