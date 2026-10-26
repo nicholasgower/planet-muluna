@@ -7,6 +7,30 @@ Muluna:extend{
   }
 }
 
+-- Items dropped on Muluna soil burn away with a puff of smoke, like items
+-- dropped on Vulcanus lava. Vanilla's "smoke" lasts 600 ticks; this one
+-- disperses three times as fast, so it uses the same animation with a third
+-- of the lifetime.
+local dropped_item_smoke = table.deepcopy(data.raw["trivial-smoke"]["smoke"])
+dropped_item_smoke.name = "muluna-dropped-item-smoke"
+dropped_item_smoke.duration = math.floor(dropped_item_smoke.duration / 3)
+dropped_item_smoke.spread_duration = math.floor(dropped_item_smoke.spread_duration / 3)
+dropped_item_smoke.fade_away_duration = math.floor(dropped_item_smoke.fade_away_duration / 3)
+Muluna:extend{dropped_item_smoke}
+
+local destroyed_dropped_item_trigger = {
+  type = "direct",
+  action_delivery = {
+    type = "instant",
+    source_effects = {
+      type = "create-trivial-smoke",
+      smoke_name = dropped_item_smoke.name,
+      offset_deviation = {{-0.1, -0.1}, {0.1, 0.1}},
+      starting_frame_deviation = 5
+    }
+  }
+}
+
 local concrete = table.deepcopy(data.raw["tile"]["concrete"])
 local refined_concrete = table.deepcopy(data.raw["tile"]["refined-concrete"])
 
@@ -17,6 +41,7 @@ muluna_dirt_base.walking_speed_modifier = speed_modifier
 muluna_dirt_base.vehicle_friction_modifier = concrete.vehicle_friction_modifier
 muluna_dirt_base.walking_sound = "__space-age__/sound/walking/soft-sand-1.ogg"
 muluna_dirt_base.destroys_dropped_items = true
+muluna_dirt_base.default_destroyed_dropped_item_trigger = destroyed_dropped_item_trigger
 muluna_dirt_base.hidden = false
 muluna_dirt_base.hidden_in_factoriopedia = false
 muluna_dirt_base.subgroup = "muluna-tiles"
@@ -74,6 +99,7 @@ end
 
 
 local muluna_sand_base=table.deepcopy(data.raw["tile"]["dry-dirt"])
+muluna_sand_base.default_destroyed_dropped_item_trigger = destroyed_dropped_item_trigger
 
 local color_sand={
     {85,85,95},
