@@ -11,7 +11,7 @@
     "? quality",
     "planet-muluna",
     "funit",
-    "PlanetsLib >= 2.1.2",
+    "PlanetsLib >= 2.4.0",
     "flib",
     "bplib >= 2.1.3",
     "rigor-module >= 1.1.13",

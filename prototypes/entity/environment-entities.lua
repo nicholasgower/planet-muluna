@@ -72,6 +72,14 @@ extend_lunar_rock("medium-rock", nil)
 extend_lunar_rock("small-rock", nil)
 extend_lunar_rock("tiny-rock", nil)
 
+-- Muluna's natural tiles destroy dropped items. Lunar rocks drop stone and crushed
+-- stone, so PlanetsLib pauses their deconstruction and places gravel underneath
+-- before construction robots can spill the drops onto unsafe terrain.
+PlanetsLib.assign_entity_removal_floor("muluna", { "lunar-rock", "lunar-huge-rock" }, "muluna-gravel", {
+    default_tile_item = "stone-crushed",
+    waiting_message = { "lunar-rock-removal.waiting-for-floor" },
+})
+
 
 Muluna:extend{
     {

@@ -38,3 +38,19 @@ results.check(SUITE, "huge-rock-yields", function()
   )
   assert(yields.sulfur == 5, "lunar-huge-rock sulfur yield is " .. tostring(yields.sulfur) .. ", expected 5")
 end)
+
+results.check(SUITE, "planetslib-removal-floor-rules", function()
+  local constants = data.raw["mod-data"]["Planetslib"].data
+  local rules = constants.entity_removal_floors and constants.entity_removal_floors["muluna"]
+  assert(rules, "Muluna has no PlanetsLib entity removal floor rules")
+  for _, name in ipairs({ "lunar-rock", "lunar-huge-rock" }) do
+    local rule = rules[name]
+    assert(rule, name .. " has no entity removal floor rule")
+    assert(rule.default_tile == "muluna-gravel", name .. " uses the wrong default tile")
+    assert(rule.default_tile_item == "stone-crushed", name .. " uses the wrong default tile item")
+    assert(
+      rule.waiting_message and rule.waiting_message[1] == "lunar-rock-removal.waiting-for-floor",
+      name .. " uses the wrong waiting message"
+    )
+  end
+end)

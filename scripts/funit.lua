@@ -106,42 +106,6 @@ remote.add_interface("muluna_funit", {
   get_walking_controller_branch = function(input_method)
     return stage().is_game_controller_input(input_method)
   end,
-
-  apply_rock_removal_undo = function(actions)
-    return stage().apply_rock_removal_undo(actions)
-  end,
-
-  record_rock_floor_build = function(surface_index, tiles, tile_name, builder)
-    return stage().record_rock_floor_build(surface_index, tiles, tile_name, builder)
-  end,
-
-  select_rock_replacement_tile = function(
-    contents,
-    crushed_stone_count,
-    required_count,
-    in_stationary_roboport_range,
-    is_character
-  )
-    return stage().select_rock_replacement_tile(
-      contents,
-      crushed_stone_count,
-      required_count,
-      in_stationary_roboport_range,
-      is_character
-    )
-  end,
-
-  queue_rock_with_replacement = function(entity, replacement_tile, force_name)
-    return stage().queue_rock_with_replacement(entity, replacement_tile, force_name)
-  end,
-
-  has_stationary_roboport_coverage = function(surface_index, force_name, position)
-    return stage().has_stationary_roboport_coverage(surface_index, force_name, position)
-  end,
-
-  clear_rock_removal_state = function(surface_index)
-    return stage().clear_rock_removal_state(surface_index)
-  end,
 })
 
 return Public

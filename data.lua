@@ -20,6 +20,11 @@ require("prototypes.tiles.tiles")
 require("prototypes.combined_files.data-pump")
 
 require("prototypes.tiles.artificial-tiles")
+
+-- Lunar rocks are created after tiles and items so that PlanetsLib can validate
+-- the gravel floor and crushed-stone item used by their deconstruction rule.
+require("prototypes.entity.environment-entities")
+
 require("prototypes.radiation")
 require("prototypes.vacuum-robots")
 require("prototypes.entity.oxidized-boiler")
