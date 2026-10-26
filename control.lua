@@ -1,5 +1,6 @@
 
 require("api")
+Muluna.funit = Muluna.funit or {}
 local rro = Muluna.rro
 -- script.on_configuration_changed(function()
 --     if debug_mode then
@@ -27,13 +28,15 @@ local rro = Muluna.rro
 --muluna={}
 --require("lib.control-stage")
 
-local ground_digger = require("scripts.sand-extractor")
+require("scripts.ground-diggers")
+require("scripts.lunar-rock-removal")
 require("scripts.nav-beacon")
 require("scripts.walking_particles")
 require("scripts.heat-assembling-machine")
 require("scripts.telescopes")
 require("scripts.gui")
 require("scripts.burner-roboports")
+require("scripts.compound-entities")
 require("scripts.remote")
 require("scripts.even-pickier-dollies")
 --local sd = require("scripts.project-seadragon")
@@ -50,10 +53,6 @@ require("scripts.even-pickier-dollies")
 --       game.planets.muluna.surface.regenerate_entity("anorthite-chunk")
 --     end
 -- end) 
-
--- script.on_event(defines.events.on_built_entity, function(event)
---     ground_digger.construct_sand_extractor(event)
--- end)
 
 local function init_storage() 
     storage.players_on_muluna = {}
@@ -140,5 +139,10 @@ script.on_event(defines.events.on_research_finished, function(event) interstella
 
 
 
+
+if script.active_mods["funit"] then
+    require("scripts.funit")
+    require("__funit__.mock").register()
+end
 
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end

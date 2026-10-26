@@ -1,4 +1,5 @@
 local rro = Muluna.rro
+local blueprint_tags = require("lib.blueprint-tags")
 
 local heat_assembling_machines = Muluna.constants.telescopes
 
@@ -120,9 +121,12 @@ end)
 
 
 local function move_entity_to_bottom_layer(entity)
-
+    local direction = entity.direction
+    local mirroring = entity.mirroring
     entity.rotate{reverse=false}
     entity.rotate{reverse=true}
+    if entity.direction ~= direction then entity.direction = direction end
+    if entity.mirroring ~= mirroring then entity.mirroring = mirroring end
 end
 
 local function get_telescope_build_limit(entity)
@@ -173,6 +177,10 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     -- end
     local reactor = nil
     if is_heat_assembling_machine then
+        local blueprint_direction, blueprint_mirroring
+        if Muluna.compound_entities then
+            blueprint_direction, blueprint_mirroring = Muluna.compound_entities.restore_blueprint_direction(entity, event.tags)
+        end
         local telescope_build_limit = get_telescope_build_limit(entity)
         local builder
         if event.player_index then
@@ -252,6 +260,9 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
 
         local recipe_name
         local lock = true
+        local saved_direction = blueprint_direction or entity.direction
+        local saved_mirroring = blueprint_mirroring
+        if saved_mirroring == nil then saved_mirroring = entity.mirroring end
         if entity.surface.platform then
             --recipe_name = "muluna-telescope-observation-space-platform"
             lock = false
@@ -268,12 +279,15 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         if recipe_name and prototypes.recipe[recipe_name] then
             entity.set_recipe(recipe_name,"normal")
         end
+        if entity.direction ~= saved_direction then entity.direction = saved_direction end
+        if entity.mirroring ~= saved_mirroring then entity.mirroring = saved_mirroring end
         
         entity.recipe_locked = lock
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["constant-combinator"],
             position = entity.position,
             direction = entity.direction,
+            mirror = entity.mirroring,
             quality = entity.quality,
             force = entity.force,
             source = entity,
@@ -311,7 +325,7 @@ Muluna.events.on_event("bplib-extract", function(event)
     -- The event is raised for all mods, so you must filter for your mod's entities
     if rro.contains(heat_assembling_machines, function(entry) return entry["assembling-machine"] == entity.name end) then
         local telescope_data = storage.telescopes[entity.unit_number]
-      event.blueprint.set_blueprint_entity_tags(blueprint_index, {
+      blueprint_tags.add_tags(event.blueprint, blueprint_index, {
         output_asteroid_signals = telescope_data.output_asteroid_signals,
         combinator_enabled = telescope_data["constant-combinator-control-behavior"].enabled
     })
@@ -357,13 +371,15 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 heat_assembling_machine_data = machine
                 if entity.name == machine["constant-combinator"] then
                             --game.print("combinator!")
+                            local assembler
                             for i,telescope in pairs(storage.telescopes) do
                                 if entity == telescope["constant-combinator"]  then
-                                    entity = telescope["assembling-machine"]
+                                    assembler = telescope["assembling-machine"]
                                     break
                                 end
                             end
-                            assert(entity.type == "assembling-machine")
+                            if not assembler then return end
+                            entity = assembler
                 end
                 break
             end
@@ -392,7 +408,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
-        if reactor then
+        if reactor and reactor.valid then
             reactor.destroy()
         end
         if entity.valid then
@@ -431,9 +447,9 @@ local state_integer_table = {
     [defines.space_platform_state.starter_pack_on_the_way] = 3,
     [defines.space_platform_state.on_the_path] = 4,
     [defines.space_platform_state.waiting_for_departure] = 5,
-    [defines.space_platform_state.no_path] = 6,
-    [defines.space_platform_state.waiting_at_station] = 7,
-    [defines.space_platform_state.paused] = 8,
+    [defines.space_platform_state.no_schedule] = 6,
+    [defines.space_platform_state.no_path] = 7,
+    [defines.space_platform_state.waiting_at_station] = 8,
     [defines.space_platform_state.paused] = 9,
 }
 
@@ -544,7 +560,7 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
             end
         end
         -- Other signals indicating planet and total number of platforms
-        local number_of_platforms = 1
+        local number_of_platforms = #space_platforms
         signals[i]={value = {type = "space-location",name = planet.name,quality = "normal"},min= number_of_platforms, }
         i = i+1
     elseif surface.platform then
@@ -604,7 +620,6 @@ end
 
 
 
-
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
     for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
@@ -632,3 +647,10 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
 
 
 end)
+
+if script.active_mods["funit"] then
+    Muluna.funit.get_telescope_combinator_signals = get_telescope_combinator_signals
+    Muluna.funit.get_state_integer = get_state_integer
+    Muluna.funit.get_time_to_next_asteroid_check = get_time_to_next_asteroid_check
+    Muluna.funit.bool_to_int = bool_to_int
+end

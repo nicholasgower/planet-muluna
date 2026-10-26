@@ -1,5 +1,5 @@
 require("api")
-local rro = Muluna.rro
+local rro = Muluna.rro 
 require("prototypes.fuel-categories")
 require("prototypes.overrides.vanilla-overrides")
 require("prototypes.custom-inputs")
@@ -30,7 +30,6 @@ require("prototypes.lunar-science-pack")
 require("prototypes.technology.interstellar-technologies") --Also runs during data-updates
 require("prototypes.nav-beacon")
 require("prototypes.decoratives.muluna-decoratives")
-require("prototypes.mod-data.ground-diggers")
 require("prototypes.achievements")
 
 

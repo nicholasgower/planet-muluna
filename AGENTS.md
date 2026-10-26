@@ -45,6 +45,8 @@ migrations/               Save-migration scripts (.lua) and one-shot data patche
 scripts/                  Control-stage feature modules (telescopes, nav-beacon, gui, ...)
 locale/                   Translations, one dir per language (en, ru, de, fr, zh-CN, ...)
 scenarios/__funit__...    A Factorio `funit` scenario used for in-game smoke tests
+test-mods/                Development-only companion mods (the FUnit suite; export-ignored)
+tools/                    Development helpers (prototype probe/query, CI scripts; see tools/README.md)
 prompts/                  Prompt text for the opencode "docs" agents (factorio-docs, lua-docs)
 docs/                     Generated LDoc HTML output (do not hand-edit)
 ```
@@ -140,6 +142,27 @@ State lives in the `storage` table. Initialize it defensively in the `on_init` h
 `control.lua` (guard with `if not storage.x then`). Never store references to `LuaEntity`
 across ticks without re-validating `entity.valid`.
 
+## Compound entities
+
+Shared vocabulary for the scripted multi-entity structures in this mod (telescopes, heating
+towers, burner roboports):
+
+- **Compound entity** — a Factorio entity that uses scripting to make a collection of entities
+  act as one collective unit. This pattern is used when a single prototype cannot provide all
+  the features the entity needs.
+- **Parent entity** — the part of a compound entity that the item places. When placed, it spawns
+  its child subentities. Blueprints physically save only the parent entity, so any subentity
+  state that must survive a blueprint is saved through blueprint tags using `bplib`.
+- **Subentity** — a child entity of a parent entity. It is spawned by the parent entity when
+  placed and cannot exist in a blueprint.
+
+`scripts/compound-entities.lua` uses bplib to save subentity circuit wires and control
+behavior on the parent's blueprint tags and restores them when the blueprint is built. When
+adding a new compound entity type, register its parent for bplib extract/position events and
+add it to that module's type registry. The module also caches the source direction from
+`bplib-positions` so recipe replacement during blueprinted builds cannot reset a parent's
+facing direction.
+
 ## Prototype authoring conventions
 
 - New prototypes are added from `prototypes/*/index.lua` require chains rooted at `data.lua`.
@@ -152,8 +175,10 @@ across ticks without re-validating `entity.valid`.
 - Prefer `rro.soft_insert` / `rro.replace_no_duplicates` over `table.insert` when touching
   shared lists to avoid duplicate ingredients/effects/prerequisites.
 - Deferred/last-resort patches belong in `prototypes/final-fixes/` and are required from both
-  `data-updates.lua` and `data-final-fixes.lua` when they need to run at both times (the
-  ground-digger module does this deliberately).
+  `data-updates.lua` and `data-final-fixes.lua` when they need to run at both times.
+- Ground diggers are provided by PlanetsLib: `PlanetsLib.enable_ground_diggers()` in
+  `prototypes/entity/ground-digger.lua` generates the shared `<drill>-ground-digger`
+  prototypes, and `prototypes/final-fixes/ground-digger.lua` only adds Muluna-specific data.
 - Localised names/descriptions use Factorio's LocalisedString tables, e.g.
   `localised_name = {"technology-name.rocket-part-productivity-muluna"}`.
 
@@ -193,7 +218,8 @@ part of this mod while keeping its separate structure.
 
 ## Verifying changes
 
-There is no CI test suite. What you can do:
+There is no general-purpose test runner that works without Factorio, but the FUnit suite
+runs both locally and in GitHub Actions. What you can do:
 
 1. **Static sanity**: re-read your Lua for stage mistakes (using `data.raw` in control,
    calling `data:extend` after `finalize_events`, etc.). There is no luacheck/stylua config
@@ -201,15 +227,73 @@ There is no CI test suite. What you can do:
    `lowercase-global`; globals list includes `game`, `data`, `script`, `storage`, `mods`, ...).
 2. **Loading the game**: the real check. Load a save with the mod enabled and confirm no
    startup crash. The PR checklist requires testing at least alone and with **Alien Biomes**.
-3. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
+3. **Headless FUnit suite**: `test-mods/planet-muluna-funit/` is a development-only
+   companion mod with data-stage fixtures and runtime behavioral tests. Run
+   `./test-mods/planet-muluna-funit/run.sh`; it links the current worktree, uses the
+   installed dependency mods, and exits non-zero on any FUnit failure. For iterating on
+   data-stage fixtures, `tools/ci/funit.sh --data-only` runs only the data stage and is
+   much faster. See that mod's `README.md` for prerequisites and the test-only
+   `muluna_funit` remote interface. The `FUnit` workflow
+   (`.github/workflows/funit.yml`) runs the same suite in CI, and
+   `.github/opencode/setup-factorio.sh` prepares a headless install plus the dependency
+   mods for the issue-bugfix workflow.
+4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
    `__funit__` test that generates the Muluna surface and checks the Entity Replacement
    System. It needs the `funit` mod and a matching `mod-list.json`; it is a reference smoke
    test, not a general test runner.
-4. **Crash reports**: because this mod deep-modifies Space Age, most bugs are load-time or
+5. **Crash reports**: because this mod deep-modifies Space Age, most bugs are load-time or
    interaction crashes ("Fixed crash on load with ..." is the most common commit type).
 
 Because of the above, be conservative: guard prototype access, avoid assumptions about load
 order, and prefer the `rro` helpers over raw table surgery.
+
+## Data-stage prototype probing
+
+Data-stage compatibility bugs are usually invisible in the source: they depend on the
+final `data.raw` after every installed mod has run. Use the probe tools instead of
+guessing. See `tools/README.md` for complete usage.
+
+- **`python3 tools/factorio_probe.py dump`** builds a scratch mod directory from a
+  mod-list, links the highest version of each enabled mod, and runs Factorio with
+  `--dump-data`. This executes the full data stage without generating a map and writes
+  `data-raw-dump.json` under `/tmp/opencode/factorio-probe/`. `--add-mod PATH` appends a
+  development mod (for example `test-mods/planet-muluna-funit`) last.
+- **`python3 tools/proto_query.py --dump DUMP ...`** queries that dump:
+  `machines --data-ports`, `recipes --missing-fluidbox-index`,
+  `data-port-invariant`, and `funit-results`.
+- **`python3 tools/factorio_probe.py load-order LOG`** shows when each mod ran
+  `settings` / `data` / `data-updates` / `data-final-fixes`.
+- **`tools/ci/funit.sh --data-only`** runs only the FUnit data fixtures and reads the
+  result bag. Use it while editing `prototypes/fixtures/`; use the full suite before a PR.
+- **`tools/ci/lua-check.sh`** syntax-checks changed Lua files and runs `git diff --check`.
+
+Lessons from fixing data-port compatibility with Razi Protocol / K2SO:
+
+- **`data-final-fixes` is not globally last.** A mod that depends on Muluna can run its
+  own `data-final-fixes` afterwards and rewrite recipes. Check load order before blaming
+  the wrong file.
+- **Match behaviour, not category names.** The broken recipes used
+  `castra-crafting-with-fluid` and `advanced-crafting`, not only the literal
+  `crafting-with-fluid` category. Match recipes that are craftable in a machine with a
+  data port.
+- **Recipe categories are alternatives, not requirements.** A recipe is craftable in a
+  machine when the machine has any one of the recipe's categories. `electric-engine-unit`
+  has `crafting-with-fluid`, `mechanics`, and `maraxsis-hydro-plant`; AM3 still crafts it
+  through `crafting-with-fluid`. Do not require every recipe category to be present.
+- **Fluidbox indexes are per input/output and 1-based.** The data port is at ordinal `30`
+  because of the dummy fluidboxes. `fluidbox_index = 0` behaves like unset, and
+  `optional_fluidbox_indexes` only matters when a primary index is set.
+- **Do not use `fluid_box.filter` on an assembling machine.** Factorio ignores filters on
+  assembling-machine fluidboxes, and hard-coding one fluid would prevent future data
+  fluid types from using the port. Recipes that intend to use a data port must set
+  `fluidbox_index` explicitly.
+- **Expose a reapply seam when a pass can be invalidated.** If a mod rewrites recipe
+  ingredient/result tables after Muluna's pass, it can call
+  `Muluna.data_fluids.apply_recipe_fluidbox_indexes()` to restore the indexes.
+- **`connection_category` may be a string or a list.** Check both when detecting data
+  ports.
+- **Prefer a full-pack probe over a minimal-only test** when reproducing compatibility
+  bugs: order and extra categories are usually the point.
 
 ## Commits, changelog, and releases
 
@@ -230,13 +314,227 @@ graphics: ...
 other: Removed some now-obsolete console warnings.
 ```
 
+When a bugfix responds to a GitHub issue, include the issue URL in the commit subject, for
+example `fix: ... https://github.com/nicholasgower/planet-muluna/issues/416`. This keeps the
+generated changelog entry linked to the report.
+
+Do not semantically tag a fix commit when the fixed code is not on `main` yet and already
+has a semantically tagged commit on the same branch. Use a plain subject instead, for
+example `Fix crash when ...`, so the unreleased change does not produce a second, redundant
+changelog entry. The original commit remains the changelog entry when the branch is merged.
+
 `feat`/`feature` → minor bump; breaking → major; everything else (fix, balance, compat,
 graphics, locale, sound, gui, perf, control, other, info, translate) → patch. The heading in
 `changelog.txt` is derived from the type (e.g. `fix` → *Bugfixes*, `compat` → *Compatibility*).
 Do **not** edit `changelog.txt` or bump `info.json` by hand for a normal change — CI does both.
 
+Internal documentation and agent guidance are not player-facing changes and must not be
+semantically labeled. Use a plain subject, for example
+`Document data-stage probing helpers.`, rather than `other:`/`docs:`. Any recognized
+Conventional Commit type becomes a changelog entry; the untyped form keeps internal
+repository notes out of `changelog.txt`.
+
 Do not push to `main` without intent to release, and note the opencode `build` agent config
 denies `git push`. The `Release` workflow publishes to the mod portal using `FACTORIO_TOKEN`.
+
+## Pull requests and AI-generated bugfixes
+
+Pull request bodies for bugfixes (especially AI-written ones) follow the review-oriented
+format established by
+[PlanetsLib PR #130](https://github.com/danielmartin0/PlanetsLib/pull/130). The automated
+issue triage workflow in `.github/workflows/opencode-bugfix.yml` uses the same format; the
+agent's step-by-step instructions are in `.github/opencode/bugfix-prompt.md`.
+
+Titles for AI-generated pull requests start with `(AI-generated)` and describe the change,
+for example `(AI-generated) Fix crash when loading a save with ...`.
+
+The body contains, in order:
+
+1. **Description** — state the source and target branches, explain that the test suite was
+   hardened first, and summarize the commit structure. Keep the original bugfix commits
+   separate from test infrastructure and CI changes; `test:` and `fix:` commits stay
+   separate.
+2. **Checklist** — use the repository's pull request checklist. Do not check items that
+   were not done. Muluna has no `changelog.txt` or version entry to add (CI generates both
+   from commits), so do not claim those were updated; mention documentation changes in
+   `docs/` or `locale/` separately when they exist.
+3. **Testing Notes** — list every tested Factorio scenario with the scenario name, test
+   count, and failures/errors. Include the Factorio version used locally and note that CI
+   runs the floating `latest` image. Also list the static checks run (`git diff --check`,
+   any syntax checks).
+4. **Bugfix review scope** — identify the bugfix commit(s) explicitly and state that
+   test-only commits are excluded from the bugfix checklist.
+5. **Categorized bugfix checklist** — group entries by area (for example load stages,
+   prototype overrides, control-stage events, compatibility). For every entry:
+   - start with an unchecked checkbox;
+   - link each relevant file to its GitHub commit diff;
+   - explain in plain language what behavior changed and what a reviewer should verify;
+   - include a **Tests:** line linking every relevant automated test, preferably to the
+     test file/section with a commit-pinned `blob` URL such as
+     `https://github.com/<owner>/<repo>/blob/<full-commit-sha>/<path>#L10-L25`, and list
+     the test IDs covered. If there is genuinely no direct automated test, say so
+     explicitly and link the closest related coverage instead of omitting the line;
+   - call out migration, save-compatibility, or event-contract risks rather than hiding
+     them;
+   - when editing an existing pull request checklist, preserve every checkbox that a human
+     has already marked `[x]`. Do not reset user-checked entries unless the user explicitly
+     asks.
+
+   Use a GitHub file-diff anchor rather than a generic repository link:
+
+   ```text
+   https://github.com/<owner>/<repo>/commit/<full-commit-sha>#diff-<sha256-of-file-path>
+   ```
+
+   Compute the `diff-` fragment with `printf %s "<repo-relative path>" | sha256sum`. Link
+   every file that contains a reviewable part of the bugfix, and use the commit that
+   introduced the change rather than the pull request's compare view.
+6. **Review note** — add a short section for any known limitation or follow-up check that
+   does not block the pull request but should be considered by a human reviewer.
+7. **Related Issues** — link related pull requests or issues and end with
+   `Fixes #<issue>` when the pull request closes one.
+
+When posting GitHub comments, reviews, or review replies under the repository owner's
+account, end the message with a signature that names the model used, for example:
+
+```text
+_Posted by DeepSeek V4.1 Flash._
+```
+
+AI-generated pull requests begin the body with the same signature.
+
+### Test-authoring principles for bugfixes
+
+- **A test must be capable of failing.** Do not use `runner.assert(true, ...)`, early
+  returns, or `pairs()` loops over whatever results happen to exist as a substitute for
+  coverage.
+- **Assert documented behavior, not current implementation details.** Derive expected
+  values independently; do not call the helper under test to compute its own expected
+  result.
+- **Use explicit test/fixture IDs and explicit skips.** A missing result or an unexpected
+  skip must fail the suite. Missing coverage is not a pass.
+- **Isolate mutable state.** Clear dedicated test areas, restore storage and migration
+  baselines, and make cleanup run on failure as well as success.
+- **Verify engine semantics before encoding them.** Prototype fields, ghost behavior,
+  fixed-point positions, data/control-stage globals, and `remote.call` limitations are
+  common sources of bogus tests.
+- **Treat test failures as possible test bugs first.** Check fixtures, assumptions, stage
+  ordering, and setup before changing production code.
+- Never weaken, delete, or skip an existing test to make a fix pass.
+
+## Automated issue triage
+
+`.github/workflows/opencode-bugfix.yml` runs the `issue-bugfix` OpenCode agent on every
+newly opened issue, and on demand for existing issues. It:
+
+- labels feature requests `enhancement` and does not open a pull request;
+- reproduces crash reports with a new or extended FUnit test, confirms the test fails
+  before the fix, fixes the crash, confirms the full suite passes, and opens a pull
+  request in the format above;
+- comments with its findings instead of opening a pull request for anything else,
+  including crashes that cannot be reproduced headlessly.
+
+Maintainers can re-run the bot on an existing issue by commenting `/opencode fix` (or
+`/oc fix`) or by starting the **Opencode Bugfix** workflow from the Actions tab with the
+issue number. Comment triggers are restricted to repository owners, members, and
+collaborators, and a bare `/opencode` does not trigger a run.
+
+The runner installs a headless Factorio build and the FUnit dependencies with
+`.github/opencode/setup-factorio.sh` before the agent starts. It executes
+`opencode run --agent issue-bugfix --auto` directly so the intended agent prompt
+and auto-approved permissions are used; the GitHub action's `agent` input
+currently falls back to the build agent in a headless run. It needs the
+`FACTORIO_PLAYER_TOKEN` secret (a player token, not the mod-portal upload key) and an API
+key for the model named by the `OPENCODE_MODEL` repository variable (default:
+`opencode-go/deepseek-v4.1-flash`); see `.github/opencode/README.md`. The agent's
+instructions live in `.github/opencode/bugfix-prompt.md`, and its permissions are defined
+by the `issue-bugfix` agent in `opencode.json`.
+
+Automated pull requests are proposals: a human still reviews and merges them. Do not treat
+a bot-authored pull request as pre-approved.
+
+## Operating the automated issue workflow
+
+Lessons from building and debugging the agent workflow:
+
+- **Verify the effective agent, not just the config.** `opencode github run` has fallen
+  back to the `build` agent even when the action's `agent` input was set, and `build` still
+  has `bash: "ask"`. The workflow runs `opencode run --agent issue-bugfix --auto` directly
+  and preflights with `opencode agent list`. After changing the agent setup, confirm the
+  log says `> issue-bugfix · <model>`.
+- **Headless Factorio is enough for CI.** The public
+  `https://factorio.com/get-download/latest/headless/linux64` tarball includes the Space
+  Age data; the Docker image is not required. `--disable-audio` is a client-only flag, so
+  `test-mods/planet-muluna-funit/run.sh` only passes it when the binary supports it. Mod
+  downloads need `FACTORIO_PLAYER_TOKEN` (a player token from `player-data.json`), not the
+  ModPortal upload key.
+- **No permission may remain `ask` in a headless run.** `doom_loop` and
+  `external_directory` default to `ask`. Give the CI agent `"*": "allow"` plus explicit
+  denies, and use `--auto` as a second layer. Explicit denies still apply.
+- **GitHub Actions logs are not live.** `gh run view --log` and the job-log API fail while
+  a job is in progress. Inspect a completed or cancelled run to see the permission or
+  agent decision, and use `tools/ci/run-debug.sh` instead of dumping the whole log.
+- **Test workflow changes from a temporary branch.** `issues` and `issue_comment`
+  workflows run from the default branch. Push a temporary branch and use
+  `gh workflow run ... --ref <branch> -f issue_number=N` to exercise a modified workflow
+  without touching `main` or triggering a release. The workflow file must already exist
+  on the default branch for `workflow_dispatch` to be available; the branch supplies the
+  modified version.
+- **Bound the agent step.** Set a step-level `timeout-minutes` so a permission prompt or
+  stuck tool call fails the job instead of consuming the 120-minute job timeout.
+- **The FUnit loop is fast enough for iteration, but use the helper.** The full suite is
+  about 120 tests and a couple of minutes. `tools/ci/funit.sh` can run the full suite,
+  filter to one suite, and summarize the log. Use `tools/ci/funit.sh --baseline` when a
+  green full-suite run is the required gate.
+- **Committing to local `main` from a detached worktree** requires committing on the
+  detached HEAD and fast-forwarding `main` in the worktree that has it checked out
+  (`git merge --ff-only <sha>`); do not update the ref behind another worktree's back.
+
+### CI helper scripts
+
+The `tools/ci/` helpers are development tools and are not shipped:
+
+- `run-debug.sh` — list runs, wait for one to finish, summarize step status, fetch and
+  filter logs, and cancel a run when explicitly asked.
+- `opencode-check.sh` — validate the agent, prompt file, expected mode, model, and
+  auto-approve permissions before burning a runner. `--agent-file` also validates
+  file-based agents in `.opencode/agents/`, and `--require-read-only` checks their
+  read-only permission map.
+- `export-check.sh` — verify that development paths are `export-ignore`d and runtime
+  files are included in the release boundary. `--ref` checks a historical tree;
+  `--require-path` is the negative self-test for the detector.
+- `funit.sh` — run the FUnit suite, filter to one suite, and summarize a log as text or
+  JSON. `--data-only` runs only the data stage and summarizes the fixture result bag.
+- `funit-seams-check.sh` — verify `Muluna.funit` exports, FUnit remote calls, and the
+  test-only seam list in the FUnit README stay in sync. `--require-missing` is the
+  negative self-test.
+- `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
+- `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
+  test links.
+- `pr-worktree.sh` — fetch a pull request head into a temporary worktree and print a
+  review summary without running PR code.
+- `workflow-test.sh` — push a temporary branch and dispatch a workflow against it for
+  safe testing of workflow changes.
+
+The non-CI tools are documented in `tools/README.md`:
+
+- `factorio_probe.py` — build a scratch mod directory, dump final prototypes with
+  `--dump-data`, and inspect data-stage load order.
+- `proto_query.py` — query a prototype dump, including `machines`, `recipes`,
+  `data-port-invariant`, and `funit-results`.
+- `pr_diff_links.py` — print commit-pinned GitHub file-diff anchors for a commit,
+  useful when editing an existing bugfix PR checklist.
+- `fdoc.py` — look up Factorio prototype/runtime API documentation (see below).
+
+## Self-learning retrospective
+
+After a substantial task, run `/self-learn [focus]`. It calls the read-only `self-learn`
+subagent, which grounds the retrospective in `git` state and repository files and returns
+a brief for the primary agent: evidence, what worked, recurring friction, and a short list
+of helper scripts worth writing. The brief ends with a direct prompt that the primary agent
+then carries out, unless the user asked for analysis only. Definitions live in
+`.opencode/agents/self-learn.md` and `.opencode/commands/self-learn.md`; `.opencode/` is
+development-only and excluded from release zips.
 
 ## Documentation
 
@@ -244,6 +542,15 @@ denies `git push`. The `Release` workflow publishes to the mod portal using `FAC
 `docs_templates/`). Library modules document public functions with `---@param`/`---@return`
 LuaDoc annotations and `-- @module` headers. Add doc comments to new `lib/` modules to keep
 them in the generated API docs; do not hand-edit files under `docs/`.
+
+## Factorio API docs helper
+
+The `factorio-docs` agent answers questions from the Factorio prototype/runtime JSON
+under `/opt/factorio_space_age_21/doc-html`. Those lookups go through `tools/fdoc.py`, a
+single-file, stdlib-only CLI that resolves prototype/class inheritance and formats results
+readably instead of dumping raw JSON. Run `python3 tools/fdoc.py --help` for the commands
+(`prototype`, `type`, `class`, `event`, `concept`, `define`, `get`, `member`, `search`,
+`list`, `info`); the agent prompt in `prompts/factorio-docs.txt` points the agent at it.
 
 ## Working agreements
 

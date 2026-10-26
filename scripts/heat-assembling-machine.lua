@@ -3,9 +3,12 @@ local rro = Muluna.rro
 local heat_assembling_machines = Muluna.constants.heat_assembling_machines
 
 local function move_entity_to_bottom_layer(entity)
-
+    local direction = entity.direction
+    local mirroring = entity.mirroring
     entity.rotate{reverse=false}
     entity.rotate{reverse=true}
+    if entity.direction ~= direction then entity.direction = direction end
+    if entity.mirroring ~= mirroring then entity.mirroring = mirroring end
 end
 local heat_assembler_filters = {}
 for entity_name,machine in pairs(heat_assembling_machines) do
@@ -29,10 +32,17 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     end
     local reactor = nil
     if is_heat_assembling_machine then
+        local blueprint_direction, blueprint_mirroring
+        if Muluna.compound_entities then
+            blueprint_direction, blueprint_mirroring = Muluna.compound_entities.restore_blueprint_direction(entity, event.tags)
+        end
+        if blueprint_direction ~= nil then entity.direction = blueprint_direction end
+        if blueprint_mirroring ~= nil then entity.mirroring = blueprint_mirroring end
         reactor = entity.surface.create_entity{
             name = heat_assembling_machine_data["reactor"],
             position = entity.position,
             direction = entity.direction,
+            mirror = entity.mirroring,
             quality = entity.quality,
             force = entity.force,
             source = entity,
@@ -40,6 +50,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             cause = entity,
             --snap_to_grid = true,
         }
+        if not reactor then return end
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_red,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_red,true))
         --reactor.get_wire_connector(defines.wire_connector_id.circuit_green,true).connect_to(entity.get_wire_connector(defines.wire_connector_id.circuit_green,true))
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
@@ -69,13 +80,15 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             heat_assembling_machine_data = machine
             if entity.name == machine["reactor"] then
                         --game.print("roboport!")
-                        for i,heat_assembling_machine in pairs(storage.heat_assembling_machines) do
+                        local found = false
+                        for i,heat_assembling_machine in pairs(storage.heat_assembling_machines or {}) do
                             if entity == heat_assembling_machine.reactor  then
                                 entity = heat_assembling_machine["assembling-machine"]
+                                found = true
                                 break
                             end
                         end
-                        assert(entity.type == "assembling-machine")
+                        if not found then return end
             end
             break
         end
@@ -101,7 +114,7 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
-        if reactor then
+        if reactor and reactor.valid then
             reactor.destroy()
         end
         if entity.valid then

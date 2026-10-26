@@ -1,6 +1,5 @@
 require("prototypes.recipe.vanilla-alternate-recipes")
 require("prototypes.planet.planet-position-update")
-require("prototypes.final-fixes.ground-digger") --Also called during final-fixes.
 local rro = Muluna.rro
 local dual_icon = require("lib.dual-item-icon").dual_icon
 
@@ -739,7 +738,6 @@ local category_blacklist = {
     "double-boiler",
     "muluna-greenhouse",
     "muluna-vacuum-heating-tower",
-    "kr-fuel-burning"
 }
 
 local subgroup_blacklist = {

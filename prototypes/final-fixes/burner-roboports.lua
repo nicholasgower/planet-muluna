@@ -220,6 +220,9 @@ for _,roboport in pairs(data.raw["roboport"]) do
             PlanetsLib.constants.pipette_result[roboport.name] = refueler.name
             roboport.is_vacuum_roboport = false
             Muluna:extend{roboport,refueler}
+            data.raw["mod-data"]["bplib"].data.extract_entity_names[refueler.name] = true
+            data.raw["mod-data"]["bplib"].data.position_entity_names[refueler.name] = true
+            data.raw["mod-data"]["bplib"].data.overlap_entity_names[refueler.name] = true
             data.raw["roboport"][refueler.name] = nil
             roboport_data["refueler"] = refueler.name
             roboport_data["roboport"] = roboport.name

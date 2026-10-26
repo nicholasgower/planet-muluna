@@ -164,7 +164,13 @@ if settings.startup["aps-planet"] and settings.startup["aps-planet"].value == "m
     end
     if mods["Krastorio2-spaced-out"] then
         delete_tech("kr-advanced-chemistry","muluna-oxygen")
-        data.raw["technology"]["kr-fluid-excess-handling"].prerequisites = {"muluna-gas-venting"}
+        --Gas venting is removed when Krastorio 2 is loaded, so only gate the flare
+        --stack behind it if it still exists.
+        if data.raw["technology"]["muluna-gas-venting"] then
+            data.raw["technology"]["kr-fluid-excess-handling"].prerequisites = {"muluna-gas-venting"}
+        else
+            data.raw["technology"]["kr-fluid-excess-handling"].prerequisites = nil
+        end
         data.raw["technology"]["kr-fluid-excess-handling"].research_trigger = {type = "craft-item",item="iron-plate"}
         data.raw["technology"]["kr-fluid-excess-handling"].unit = nil
     end

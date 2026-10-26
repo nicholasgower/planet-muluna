@@ -1,0 +1,256 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later WITH FUnit-CI-Exception
+#
+# Headless FUnit test suite for planet-muluna, adapted from PlanetsLib's
+# .github/workflows/funit.yml (branch funit-test-suite).
+#
+# The suite lives in test-mods/planet-muluna-funit. This workflow packages:
+#   * planet-muluna (the repository root, with test-mods/ excluded by .gitattributes)
+#   * planet-muluna-funit (the companion test mod)
+#   * funit (pinned to the same revision PlanetsLib uses)
+#
+# and runs the __funit__muluna scenario in a factorio-docker container. The
+# required and recommended dependency mods are resolved from info.json and
+# downloaded by .github/funit/download_mods.py using FACTORIO_PLAYER_TOKEN.
+# The paid Space Age mods (space-age, quality, elevated-rails, recycler) are
+# built into the headless server image and are never downloaded from the portal.
+#
+# See .github/funit/README.md for the local adaptations to PlanetsLib's action.
+
+name: FUnit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FACTORIO_VERSION: "latest"
+  MOD_NAME: planet-muluna
+  TEST_MOD_NAME: planet-muluna-funit
+  TEST_MOD_DIR: test-mods/planet-muluna-funit
+  FUNIT_COMMIT: b69c2f277a467726e3a8c555d48df5b647ec5a64
+
+jobs:
+  build-archive-job:
+    name: Build test artifacts
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:4-alpine
+    timeout-minutes: 30
+    outputs:
+      factorio_version: ${{ env.FACTORIO_VERSION }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: apk add --no-cache bash git jq zip
+        shell: sh
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Build archives, scenario and test config
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+          mod_version="$(jq -r '.version' info.json)"
+          mod_folder="${MOD_NAME}_${mod_version}"
+          mod_archive="${mod_folder}.zip"
+          test_version="$(jq -r '.version' "$TEST_MOD_DIR/info.json")"
+          test_folder="${TEST_MOD_NAME}_${test_version}"
+          test_archive="${test_folder}.zip"
+
+          mkdir -p "artifacts/${MOD_NAME}/scenarios" "artifacts/${MOD_NAME}/test"
+
+          # The repository root is the mod. .gitattributes excludes test-mods/,
+          # .github/, docs/ and other development-only files from this archive.
+          git archive --worktree-attributes --format=zip HEAD \
+            -o "artifacts/${MOD_NAME}/${mod_archive}" \
+            --prefix="${mod_folder}/"
+
+          git archive --format=zip "HEAD:${TEST_MOD_DIR}" \
+            -o "artifacts/${MOD_NAME}/${test_archive}" \
+            --prefix="${test_folder}/"
+
+          # FUnit is public, so package it locally instead of requiring mod
+          # portal credentials just to download the test framework. Pin the
+          # commit so the packaged mod matches the vendored CI helpers.
+          git clone --depth 1 https://gitlab.com/jfletcher94/funit.git funit-src
+          git -C funit-src fetch --depth 1 origin "$FUNIT_COMMIT"
+          git -C funit-src checkout --detach "$FUNIT_COMMIT"
+          funit_version="$(jq -r '.version' funit-src/funit/info.json)"
+          test -n "$funit_version"
+          (cd funit-src && zip -qr "../artifacts/${MOD_NAME}/funit_${funit_version}.zip" funit)
+
+          # Muluna's scenario lives inside the companion mod. Copy it to the
+          # top-level scenarios directory so the shared entrypoint can load it
+          # as a normal scenario and give it its own mod-list.json.
+          scenario_dir="artifacts/${MOD_NAME}/scenarios/__funit__muluna"
+          mkdir -p "$scenario_dir"
+          cp -a "$TEST_MOD_DIR/scenarios/__funit__muluna/." "$scenario_dir/"
+
+          cat > "$scenario_dir/description.json" <<'EOF'
+          {
+            "multiplayer-compatible": true,
+            "is-main-game": false,
+            "order": "d"
+          }
+          EOF
+
+          # The required/recommended dependency mods and the scenario
+          # mod-list.json are generated in the test job by
+          # .github/funit/download_mods.py. This keeps the downloaded set in
+          # sync with info.json instead of duplicating it here.
+
+          : > "artifacts/${MOD_NAME}/save_names.txt"
+          echo "__funit__muluna" > "artifacts/${MOD_NAME}/scenario_names.txt"
+
+          # Config consumed by prepare_test_environment.sh. Placeholders are
+          # expanded from the FACTORIO_USERNAME / FACTORIO_PLAYER_TOKEN env vars.
+          cat > "artifacts/${MOD_NAME}/test/server-settings.json" <<'EOF'
+          {
+            "name": "planet-muluna FUnit",
+            "description": "Headless planet-muluna FUnit run",
+            "tags": [],
+            "max_players": 1,
+            "visibility": {
+              "public": false,
+              "lan": false
+            },
+            "username": "${USERNAME}",
+            "token": "${TOKEN}",
+            "game_password": "",
+            "require_user_verification": false,
+            "max_upload_in_kilobytes_per_second": 0,
+            "max_upload_slots": 5,
+            "minimum_latency_in_ticks": 0,
+            "max_heartbeats_per_second": 60,
+            "ignore_player_limit_for_returning_players": false,
+            "allow_commands": "admins-only",
+            "autosave_interval": 0,
+            "autosave_slots": 1,
+            "afk_autokick_interval": 0,
+            "auto_pause": false,
+            "auto_pause_when_players_connect": false,
+            "only_admins_can_pause_the_game": true,
+            "autosave_only_on_server": true,
+            "non_blocking_saving": false,
+            "_comment_segmentsize": 25,
+            "minimum_segment_size_peer_count": 20,
+            "maximum_segment_size": 100,
+            "maximum_segment_size_peer_count": 10
+          }
+          EOF
+
+          cat > "artifacts/${MOD_NAME}/test/player-data.json" <<'EOF'
+          {
+            "service-username": "${USERNAME}",
+            "service-token": "${TOKEN}"
+          }
+          EOF
+
+          echo "Built artifacts:"
+          find "artifacts/${MOD_NAME}" -maxdepth 2 -type f | sort
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-archive-job
+          retention-days: 1
+          path: artifacts/
+          if-no-files-found: error
+
+  unit-test-job:
+    name: Run FUnit scenario
+    needs: build-archive-job
+    runs-on: ubuntu-latest
+    container:
+      image: "factoriotools/factorio:${{ needs.build-archive-job.outputs.factorio_version }}"
+    timeout-minutes: 30
+    env:
+      # The username is public; prefer an explicit repo variable/secret, then
+      # fall back to the account that owns the mod portal listing for Muluna.
+      USERNAME: ${{ vars.FACTORIO_USERNAME || secrets.FACTORIO_USERNAME || 'MeteorSwarm' }}
+      # Downloads require a Factorio *player* token from player-data.json.
+      # FACTORIO_TOKEN is the ModPortal upload key and cannot download mods.
+      TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN}}
+      TIMEOUT: 10m
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install Git and Python
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git python3
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-archive-job
+          path: artifacts
+      - name: Download required and recommended dependencies
+        run: python3 .github/funit/download_mods.py
+      - name: Prepare test environment
+        run: bash .github/funit/prepare_test_environment.sh
+      - name: Run FUnit scenario
+        run: |
+          set -euo pipefail
+          mkdir -p "test_artifacts/${MOD_NAME}"
+          (cd / && bash "$GITHUB_WORKSPACE/.github/funit/entrypoint.sh") \
+            2>&1 | tee "$GITHUB_WORKSPACE/test_artifacts/${MOD_NAME}/funit.log"
+      - name: Collect JSON reports
+        if: always()
+        run: |
+          mkdir -p "test_artifacts/${MOD_NAME}/reports"
+          if [ -d /factorio/script-output ]; then
+            cp -a /factorio/script-output/. "test_artifacts/${MOD_NAME}/reports/"
+          fi
+      - name: Verify the scenario produced a report
+        if: always()
+        run: |
+          expected="$(wc -l < "artifacts/${MOD_NAME}/scenario_names.txt")"
+          actual="$(find "test_artifacts/${MOD_NAME}/reports" -maxdepth 1 -name 'funit-report-*.json' | wc -l)"
+          echo "Expected ${expected} report(s), found ${actual}."
+          if [ "$actual" -ne "$expected" ]; then
+            echo "::error::Expected ${expected} FUnit report(s), found ${actual}."
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-job
+          retention-days: 30
+          path: test_artifacts
+
+  parse-results-job:
+    name: Parse FUnit results
+    needs: unit-test-job
+    if: ${{ !cancelled() && needs.unit-test-job.result != 'skipped' }}
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:4-alpine
+    timeout-minutes: 30
+    steps:
+      - run: apk add --no-cache git
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: unit-test-job
+          path: test_artifacts
+      - name: Convert FUnit reports to JUnit XML
+        run: |
+          ruby .github/funit/parse_funit_json.rb \
+            "test_artifacts/${MOD_NAME}/reports" \
+            -o "funit-report-${MOD_NAME}.xml"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: parse-results-job
+          retention-days: 30
+          path: funit-report-*.xml

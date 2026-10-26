@@ -30,6 +30,10 @@ local function cached_direction_to_string(x)
     return s
 end
 
+local function is_game_controller_input(input_method)
+    return input_method == defines.input_method.game_controller
+end
+
     
 local step_process_tick_rate = 1
 local function update_player_step_tick_rate(i,player_table)
@@ -37,7 +41,7 @@ local function update_player_step_tick_rate(i,player_table)
         --player.print(player.name)
         local player = player_table.player
         local speed
-        if storage.player_control_method[i] == defines.input_method.game_controller then
+        if is_game_controller_input(storage.player_control_method[i]) then
             speed = player_table.delta_position and math.sqrt( player_table.delta_position.x^2 + player_table.delta_position.y^2) or player.character_running_speed
         else
             speed = player.character_running_speed or 0
@@ -142,7 +146,7 @@ end
         end
     end)
     Muluna.events.on_event(defines.events.on_player_changed_position, function(event)
-        if not storage.player_control_method[event.player_index] == defines.input_method.game_controller then return end
+        if not is_game_controller_input(storage.player_control_method[event.player_index]) then return end
             if not storage.players_on_muluna[event.player_index] then return end
             local player = game.players[event.player_index]
             if player.controller_type == defines.controllers.character and player.physical_surface.name == "muluna" then
@@ -159,7 +163,7 @@ end
             for i,player in pairs(storage.players_walking_on_muluna) do
                 --profiler.reset()
                 local player_info = storage.players_on_muluna[i]
-                if storage.player_control_method[i] == defines.input_method.game_controller then
+                if is_game_controller_input(storage.player_control_method[i]) then
                     if not player_info.cached_position then player_info.cached_position = player.physical_position end
                     player_info.delta_position = {x = player.physical_position.x-player_info.cached_position.x,y = player.physical_position.y - player_info.cached_position.y}
                     player_info.cached_position = player.character.position
@@ -230,4 +234,8 @@ end
         
         end
         )
+
+    if script.active_mods["funit"] then
+        Muluna.funit.is_game_controller_input = is_game_controller_input
+    end
 end
