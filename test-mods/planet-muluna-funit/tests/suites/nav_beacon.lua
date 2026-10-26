@@ -185,7 +185,41 @@ local function build_platform_radar(platform)
     beacon.surface.platform and beacon.surface.platform.index == platform.index,
     "registered nav beacon is not on platform " .. platform.name
   )
+  local connectors = beacon.get_wire_connectors(true)
+  runner.assert(
+    connectors[defines.wire_connector_id.circuit_red],
+    "registered nav beacon has no red circuit wire connector"
+  )
+  runner.assert(
+    connectors[defines.wire_connector_id.circuit_green],
+    "registered nav beacon has no green circuit wire connector"
+  )
   return key, beacon
+end
+
+local function assert_nav_status(beacon, enabled)
+  local status = beacon.custom_status
+  if enabled then
+    runner.assert(status == nil, "enabled nav beacon should not have a custom status")
+    runner.assert(
+      beacon.disabled_by_script == false,
+      "enabled nav beacon should not be disabled_by_script"
+    )
+  else
+    runner.assert(status, "disabled nav beacon has no custom status")
+    runner.assert(
+      status.diode == defines.entity_status_diode.red,
+      "disabled nav beacon status should have a red diode"
+    )
+    runner.assert(
+      status.label and status.label[1] == "custom-status.muluna-satellite-radar-scanning-disabled",
+      "disabled nav beacon status should be the scanning-disabled status"
+    )
+    runner.assert(
+      beacon.disabled_by_script == true,
+      "disabled nav beacon should be disabled_by_script"
+    )
+  end
 end
 
 local function assert_planet_radar_is_inert(surface, area, expected_planet)
@@ -312,9 +346,13 @@ runner.test("space platform radar registers and survives the nav beacon update t
       runner.assert(current_beacon.valid, "the registered nav beacon became invalid during the update tick")
       runner.assert(current.has_nav_beacons == true, "the update tick cleared has_nav_beacons")
       if energy_is_writable then
+        -- The radar has a 1 MW passive draw, but no player was in remote view
+        -- to trigger a scan. The drain must stay far below one scan's cost
+        -- (platform-power-consumption MJ in this profile).
+        local scan_cost = settings.startup["platform-power-consumption"].value * 1e6
         runner.assert(
-          math.abs(current_beacon.energy - energy_before) < 1e-6,
-          "nav beacon energy changed without a player to drive a scan: "
+          energy_before - current_beacon.energy < scan_cost / 2,
+          "nav beacon spent scan-level energy without a player to drive a scan: "
             .. tostring(energy_before)
             .. " -> "
             .. tostring(current_beacon.energy)
@@ -341,6 +379,31 @@ runner.test("space platform radar registers and survives the nav beacon update t
       error(callback_err, 0)
     end
   end)
+end)
+
+runner.test("nav beacon status follows the tile revealing setting", function()
+  clean_areas()
+  local platform = create_platform("funit-nav-platform-status")
+  local key, beacon = build_platform_radar(platform)
+
+  assert_nav_status(beacon, true)
+
+  local disable_ok = helpers.funit_call("set_nav_beacon_enabled", key, false)
+  runner.assert(disable_ok, "could not disable the nav beacon")
+  assert_nav_status(beacon, false)
+
+  local enable_ok = helpers.funit_call("set_nav_beacon_enabled", key, true)
+  runner.assert(enable_ok, "could not re-enable the nav beacon")
+  assert_nav_status(beacon, true)
+
+  local destroy_ok, destroy_err = pcall(function()
+    beacon.destroy({ raise_destroy = true })
+  end)
+  runner.assert(destroy_ok, "destroying the status-test nav beacon errored: " .. tostring(destroy_err))
+  runner.assert(helpers.storage().nav_beacons[key] == nil, "destroyed status-test nav beacon is still registered")
+
+  destroy_platform(platform)
+  clean_areas()
 end)
 
 runner.test("destroying the lower unit number of two nav beacons leaves the other registered", function()

@@ -5,9 +5,55 @@ local SUITE = "nav_beacon"
 
 results.check(SUITE, "nav-beacon-prototypes", function()
   assert(data.raw["item"]["muluna-satellite-radar"], "muluna-satellite-radar item is missing")
-  assert(data.raw["accumulator"]["muluna-satellite-radar"], "muluna-satellite-radar entity is missing")
+  assert(data.raw["radar"]["muluna-satellite-radar"], "muluna-satellite-radar entity is missing")
   assert(data.raw["recipe"]["muluna-satellite-radar"], "muluna-satellite-radar recipe is missing")
   assert(data.raw["technology"]["muluna-satellite-radar"], "muluna-satellite-radar technology is missing")
+end)
+
+results.check(SUITE, "nav-beacon-is-radar-prototype", function()
+  assert(
+    data.raw["accumulator"]["muluna-satellite-radar"] == nil,
+    "satellite radar is still an accumulator prototype"
+  )
+  local entity = data.raw["radar"]["muluna-satellite-radar"]
+  assert(entity and entity.type == "radar", "satellite radar entity is not a radar prototype")
+end)
+
+results.check(SUITE, "nav-beacon-has-universal-circuit-network", function()
+  local entity = data.raw["radar"]["muluna-satellite-radar"]
+  local vanilla_radar = data.raw["radar"]["radar"]
+  assert(entity.circuit_connector, "satellite radar has no circuit connector")
+  assert(
+    entity.circuit_wire_max_distance and entity.circuit_wire_max_distance > 0,
+    "satellite radar cannot connect circuit wires (circuit_wire_max_distance is not positive)"
+  )
+  assert(vanilla_radar.circuit_connector, "vanilla radar has no circuit connector to compare against")
+  assert(
+    #entity.circuit_connector.points == #vanilla_radar.circuit_connector.points,
+    "satellite radar circuit connector does not match the radar connector layout"
+  )
+end)
+
+results.check(SUITE, "nav-beacon-has-passive-power-draw", function()
+  local entity = data.raw["radar"]["muluna-satellite-radar"]
+  -- Satellite radars pay a deliberate 1 MW to stay online, independent of the
+  -- per-scan cost configured by platform-power-consumption.
+  local energy_per_tick = util.parse_energy(entity.energy_usage)
+  assert(
+    math.abs(energy_per_tick * 60 - 1e6) < 1,
+    "satellite radar passive power draw should be 1 MW, got "
+      .. tostring(entity.energy_usage)
+  )
+  assert(
+    entity.energy_source and entity.energy_source.buffer_capacity,
+    "satellite radar has no energy buffer to charge scans from"
+  )
+  local input_limit_per_tick = util.parse_energy(entity.energy_source.input_flow_limit)
+  assert(
+    input_limit_per_tick > energy_per_tick,
+    "satellite radar input flow limit must exceed its passive draw, got "
+      .. tostring(entity.energy_source.input_flow_limit)
+  )
 end)
 
 results.check(SUITE, "nav-beacon-radar-data", function()
@@ -25,7 +71,7 @@ results.check(SUITE, "nav-beacon-test-profile-has-distinct-scan-energy", functio
 end)
 
 results.check(SUITE, "nav-beacon-surface-condition", function()
-  local entity = data.raw["accumulator"]["muluna-satellite-radar"]
+  local entity = data.raw["radar"]["muluna-satellite-radar"]
   local has_gravity = false
   for _, condition in pairs(entity.surface_conditions or {}) do
     if condition.property == "gravity" then has_gravity = true end

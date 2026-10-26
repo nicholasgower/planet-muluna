@@ -81,6 +81,16 @@ remote.add_interface("muluna_funit", {
     return stage().get_nav_scan_area(beacon)
   end,
 
+  set_nav_beacon_enabled = function(unit_number, enabled)
+    local settings = storage.nav_beacons_other and storage.nav_beacons_other[unit_number]
+    local beacon = storage.nav_beacons and storage.nav_beacons[unit_number]
+    if not settings or not beacon or not beacon.valid then return false end
+    settings.gui = settings.gui or {}
+    settings.gui.enabled = enabled
+    Muluna.update_nav_beacon_status(beacon)
+    return true
+  end,
+
   get_heat_assembling_machine_data = function(unit_number)
     return storage.heat_assembling_machines and storage.heat_assembling_machines[unit_number]
   end,
