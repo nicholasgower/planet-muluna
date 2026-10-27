@@ -89,6 +89,41 @@ runner.test("burner roboport: build links a roboport and locks the refuel recipe
   end)
 end)
 
+runner.test("burner roboport: placement preserves the refueler's rotation and flip", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+
+    -- Model a player placing a flipped refueler: the engine applies the flip
+    -- before the build event, and the handler's fixed recipe must not clear it.
+    local refueler = helpers.entity_at(surface, machine.refueler, center, {
+      direction = defines.direction.west,
+      raise_built = false,
+    })
+    runner.assert(refueler and refueler.valid, "could not create a rotated refueler")
+    runner.assert(refueler.flip({ horizontal = true }), "could not flip the refueler")
+    local expected_direction = refueler.direction
+    runner.assert(
+      refueler.mirroring == true,
+      "refueler did not report its flip before building, mirroring=" .. tostring(refueler.mirroring)
+    )
+
+    script.raise_event(defines.events.script_raised_built, { entity = refueler, tick = game.tick })
+
+    local data = helpers.funit_call("get_burner_roboport_data", refueler.unit_number)
+    runner.assert(data ~= nil, "rotated and flipped burner roboport was not registered in storage")
+    runner.assert(
+      refueler.direction == expected_direction,
+      "refueler direction changed from " .. tostring(expected_direction) .. " to " .. tostring(refueler.direction)
+    )
+    runner.assert(
+      refueler.mirroring == true,
+      "refueler lost its flip during placement, mirroring=" .. tostring(refueler.mirroring)
+    )
+  end)
+end)
+
 runner.test("burner roboport: propellant crafting transfers energy into the roboport", function()
   with_clean_areas(function()
     local surface = helpers.get_muluna()
