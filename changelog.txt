@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.0
+Date: 2026-10-27
+  Features:
+    - Satellite radar status now reflects the tile revealing setting.
+  Balancing:
+    - Satellite radars now draw 1 MW passively.
+  Compatibility:
+    - Added Even Pickier Dollies support for moving Muluna's compound machines.
+  Bugfixes:
+    - Reset nav beacon tracking state when rebuilding stale storage.
+  Graphics:
+    - Added a fast-dispersing smoke cloud when items are destroyed on Muluna soil.
+    - Slowed satellite radar animation by half.
+  Changes:
+    - Moved lunar rock deconstruction floors into PlanetsLib.
+    - Removed the satellite radar looking-at status.
+    - Satellite radars are now radar prototypes.
+    - Satellite radars now have the universal circuit network.
+---------------------------------------------------------------------------------------------------
 Version: 2.8.2
 Date: 2026-10-25
   Bugfixes:
