@@ -585,3 +585,29 @@ results.check(SUITE, "planet-map-gen-names-resolve", function()
   assert(decorative_names > 0, "no planet decorative autoplace settings were examined")
   assert(control_names > 0, "no planet autoplace controls were examined")
 end)
+
+results.check(SUITE, "quality-prototypes-match-modset", function()
+  -- The no-quality FUnit leg must actually run without the quality mod. The
+  -- engine always defines "normal" and "quality-unknown"; any other tier means
+  -- the quality mod is loaded.
+  local has_quality = mods["quality"] ~= nil
+  local names = {}
+  for name in pairs(data.raw.quality or {}) do
+    names[#names + 1] = name
+  end
+  table.sort(names)
+
+  if has_quality then
+    assert(
+      #names >= 3,
+      "quality mod is active but only " .. #names .. " quality prototypes exist: " .. table.concat(names, ", ")
+    )
+  else
+    for _, name in ipairs(names) do
+      assert(
+        name == "normal" or name == "quality-unknown",
+        "quality mod is disabled but quality prototype '" .. name .. "' exists"
+      )
+    end
+  end
+end)

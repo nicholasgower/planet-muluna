@@ -18,6 +18,7 @@
 #   * stable       -> factoriotools/factorio:stable (newest stable release)
 #   * experimental -> factoriotools/factorio:latest (newest experimental release)
 #   * vanilla      -> only Muluna and its declared dependencies
+#   * no-quality   -> vanilla without the quality mod
 #   * k2so         -> additionally loads Krastorio 2 Spaced Out and its
 #                     dependencies, to keep the compatibility patches covered
 # Mods are resolved against the version installed in each image, so a
@@ -187,10 +188,16 @@ jobs:
             modset: vanilla
           - channel: stable
             image_tag: stable
+            modset: no-quality
+          - channel: stable
+            image_tag: stable
             modset: k2so
           - channel: experimental
             image_tag: latest
             modset: vanilla
+          - channel: experimental
+            image_tag: latest
+            modset: no-quality
           - channel: experimental
             image_tag: latest
             modset: k2so
@@ -268,9 +275,13 @@ jobs:
           - channel: stable
             modset: vanilla
           - channel: stable
+            modset: no-quality
+          - channel: stable
             modset: k2so
           - channel: experimental
             modset: vanilla
+          - channel: experimental
+            modset: no-quality
           - channel: experimental
             modset: k2so
     container:

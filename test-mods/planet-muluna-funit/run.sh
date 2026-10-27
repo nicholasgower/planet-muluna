@@ -10,8 +10,9 @@
 #   TMP_ROOT       Scratch directory (default: /tmp/opencode/muluna-funit)
 #   TIMEOUT        Maximum run time in seconds (default: 900)
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
-#   FUNIT_MODSET   Mod set to load: "vanilla" (default) or "k2so" (Krastorio 2
-#                  Spaced Out and its dependencies)
+#   FUNIT_MODSET   Mod set to load: "vanilla" (default), "k2so" (Krastorio 2
+#                  Spaced Out and its dependencies), or "no-quality" (vanilla
+#                  without the quality mod)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -28,9 +29,9 @@ DATA_ONLY="${DATA_ONLY:-0}"
 FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
 case "$FUNIT_MODSET" in
-  vanilla | k2so) ;;
+  vanilla | k2so | no-quality) ;;
   *)
-    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla or k2so)" >&2
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, k2so or no-quality)" >&2
     exit 2
     ;;
 esac
@@ -132,7 +133,14 @@ fi
 {
   printf '{\n  "mods": [\n'
   for i in "${!MOD_NAMES[@]}"; do
-    printf '    { "name": "%s", "enabled": true }' "${MOD_NAMES[$i]}"
+    enabled="true"
+    # Factorio auto-enables an installed mod that is recommended by an enabled
+    # mod, so the no-quality set must write quality as explicitly disabled
+    # rather than omitting it from the list.
+    if [[ "$FUNIT_MODSET" == "no-quality" && "${MOD_NAMES[$i]}" == "quality" ]]; then
+      enabled="false"
+    fi
+    printf '    { "name": "%s", "enabled": %s }' "${MOD_NAMES[$i]}" "$enabled"
     if (( i < ${#MOD_NAMES[@]} - 1 )); then
       printf ','
     fi

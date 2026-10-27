@@ -63,15 +63,23 @@ LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
 # info.json; a new required dependency will fail the run with a missing mod
 # instead of being silently skipped.
 MODSETS = {
-    "vanilla": [],
-    "k2so": [
-        "Krastorio2-spaced-out",
-        "Krastorio2",
-        "Krastorio2Assets",
-        "Krastorio2MenuSimulations",
-        "k2so-assets",
-        "ChangeInserterDropLane",
-    ],
+    "vanilla": {"add": [], "disable": []},
+    "k2so": {
+        "add": [
+            "Krastorio2-spaced-out",
+            "Krastorio2",
+            "Krastorio2Assets",
+            "Krastorio2MenuSimulations",
+            "k2so-assets",
+            "ChangeInserterDropLane",
+        ],
+        "disable": [],
+    },
+    # Quality is optional for both space-age and Muluna. Disable it to keep the
+    # no-quality code paths covered. It must stay in mod-list.json with
+    # enabled=false: Factorio auto-enables an installed mod that an enabled mod
+    # recommends, so omitting it is not enough.
+    "no-quality": {"add": [], "disable": ["quality"]},
 }
 
 
@@ -328,7 +336,10 @@ def download_release(name: str, release: dict, username: str, token: str, output
     return name
 
 
-def write_mod_list(path: Path, downloaded: list[str]) -> None:
+def write_mod_list(
+    path: Path, downloaded: list[str], disable: list[str] | None = None
+) -> None:
+    disabled = {name.lower() for name in (disable or [])}
     ordered = list(BUILTIN_MODS) + list(LOCAL_MODS) + sorted(
         downloaded, key=str.lower
     )
@@ -339,7 +350,7 @@ def write_mod_list(path: Path, downloaded: list[str]) -> None:
         if key in seen:
             continue
         seen.add(key)
-        mods.append({"name": name, "enabled": True})
+        mods.append({"name": name, "enabled": key not in disabled})
 
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"mods": mods}, indent=2) + "\n")
@@ -380,8 +391,9 @@ def main() -> int:
         default="vanilla",
         choices=sorted(MODSETS),
         help=(
-            "extra mod set to download and enable: 'vanilla' (default) or "
-            "'k2so' (Krastorio 2 Spaced Out and its dependencies)"
+            "mod set to download and enable: 'vanilla' (default), 'k2so' "
+            "(Krastorio 2 Spaced Out and its dependencies), or 'no-quality' "
+            "(vanilla without the quality mod)"
         ),
     )
     parser.add_argument(
@@ -408,8 +420,9 @@ def main() -> int:
         or ""
     )
 
+    modset = MODSETS[args.modset]
     dependencies = collect_dependencies(
-        [args.info, args.test_info], extra=MODSETS[args.modset]
+        [args.info, args.test_info], extra=modset["add"]
     )
     factorio_version = resolve_version(args.factorio_version)
 
@@ -453,7 +466,7 @@ def main() -> int:
     mod_list = args.mod_list or (
         args.output_dir / "scenarios" / "__funit__muluna" / "mod-list.json"
     )
-    write_mod_list(mod_list, downloaded)
+    write_mod_list(mod_list, downloaded, disable=modset["disable"])
     print(f"Wrote mod list to {mod_list}")
     print("Downloaded mods:")
     for name in sorted(downloaded, key=str.lower):
