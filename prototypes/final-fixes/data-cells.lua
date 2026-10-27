@@ -13,11 +13,25 @@ local function rotate_position(position)
     return {-y,x}
 end
 
+-- Mini and Micro Machines resize their assembling machines after Muluna has
+-- run. They only adjust the fluidboxes they created themselves, so a data port
+-- added here would keep vanilla-sized pipe connection positions and end up
+-- outside the resized collision box, crashing on load.
+local resized_machine_prefixes={"mini-","micro-"}
+local function is_resized_machine(machine)
+    for _,prefix in pairs(resized_machine_prefixes) do
+        if machine.name:sub(1,#prefix)==prefix then
+            return true
+        end
+    end
+    return false
+end
+
 
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 for _,am3 in pairs(data.raw["assembling-machine"]) do
-    if rro.contains({"assembling-machine-3","mini-assembler-3","micro-assembler-3","aop-advanced-assembling-machine"},am3.name) or 
-    rro.contains_all(am3.crafting_categories,{"crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.energy_source.type == "electric" and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 and (am3.fluid_boxes and #am3.fluid_boxes == 2) then
+    if not is_resized_machine(am3) and (rro.contains({"assembling-machine-3","aop-advanced-assembling-machine"},am3.name) or
+    rro.contains_all(am3.crafting_categories,{"crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.energy_source.type == "electric" and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 and (am3.fluid_boxes and #am3.fluid_boxes == 2)) then
         local linked_connection_id=100
         if am3.fluid_boxes then
             local input=table.deepcopy(am3.fluid_boxes[1])
