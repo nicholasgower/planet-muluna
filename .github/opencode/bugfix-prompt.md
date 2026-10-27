@@ -22,9 +22,10 @@ rules below. Never print environment variables, tokens, or `.env` contents.
 
 ## Start here
 
-1. Read `AGENTS.md` (especially "The Factorio load stages", "Prototype
-   authoring conventions", "Verifying changes", and "Pull requests and
-   AI-generated bugfixes") and `test-mods/planet-muluna-funit/README.md`.
+1. Read `AGENTS.md` (especially "The Factorio load stages", "Factorio version
+   support (stable and experimental)", "Prototype authoring conventions",
+   "Verifying changes", and "Pull requests and AI-generated bugfixes") and
+   `test-mods/planet-muluna-funit/README.md`.
 2. Read the issue and its comments:
    `gh issue view "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --comments`
 3. Check whether another pull request already addresses it:
@@ -180,6 +181,11 @@ tests, or files you added for the attempt. Do not open a pull request.
 - Never push to `main`, never force-push, and never merge a pull request.
 - Never edit `changelog.txt` or the `info.json` version.
 - Never weaken or delete existing tests to make a fix look correct.
+- The fix must still load and run on the latest stable Factorio release. If it
+  depends on behavior that only exists in the latest experimental build,
+  version-gate it with
+  `helpers.compare_versions(helpers.game_version, "...") >= 0` (see `AGENTS.md`,
+  "Factorio version support (stable and experimental)").
 - One issue per run: fix only the reported crash, with no unrelated changes.
 - Begin the pull request body and end every issue comment with
   `_Posted by <model>._`, using the model named in `$MODEL` when it is set

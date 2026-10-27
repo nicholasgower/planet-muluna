@@ -61,6 +61,11 @@ The full log is `$TMP_ROOT/stdout.log`; on failure the runner prints the relevan
 FUnit lines and the tail of the log. A data-only run also writes the prototype dump to
 `$TMP_ROOT/write-data/script-output/data-raw-dump.json`.
 
+CI runs the suite once against the latest stable Factorio release and once against the
+latest experimental release. To reproduce either leg locally, point `FACTORIO_BIN` and
+`FACTORIO_MODS` at a matching install; the mod must pass on both (see `AGENTS.md`,
+"Factorio version support (stable and experimental)").
+
 ## Requirements
 
 - Factorio 2.1 with Space Age.
