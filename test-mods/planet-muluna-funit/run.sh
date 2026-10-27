@@ -10,6 +10,10 @@
 #   TMP_ROOT       Scratch directory (default: /tmp/opencode/muluna-funit)
 #   TIMEOUT        Maximum run time in seconds (default: 900)
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
+#   MOD_LIST_ONLY  Set to 1 to write the scratch mod-list.json and exit without
+#                  launching Factorio. Factorio does not need to be installed
+#                  (FACTORIO_BIN is not checked), but FACTORIO_MODS must still
+#                  contain the dependencies so the mod links can be created.
 #   FUNIT_MODSET   Mod set to load: "vanilla" (default), "aai" (vanilla plus
 #                  aai-industry), "bz" (Brevven's BZ mods with 2.1 releases),
 #                  "k2so" (Krastorio 2 Spaced Out and its dependencies),
@@ -28,6 +32,7 @@ TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
 TIMEOUT="${TIMEOUT:-900}"
 FACTORIO_PORT="${FACTORIO_PORT:-34198}"
 DATA_ONLY="${DATA_ONLY:-0}"
+MOD_LIST_ONLY="${MOD_LIST_ONLY:-0}"
 FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
 case "$FUNIT_MODSET" in
@@ -38,7 +43,10 @@ case "$FUNIT_MODSET" in
     ;;
 esac
 
-if [[ ! -x "$FACTORIO_BIN" ]]; then
+# The mod list can be generated without Factorio: MOD_LIST_ONLY=1 skips both
+# this check and the launch below. The mod directory is still required because
+# the mod links are created before the list is written.
+if [[ "$MOD_LIST_ONLY" != "1" && ! -x "$FACTORIO_BIN" ]]; then
   echo "Factorio binary not found: $FACTORIO_BIN" >&2
   exit 1
 fi
@@ -234,6 +242,14 @@ fi
   done
   printf '  ]\n}\n'
 } > "$TMP_ROOT/mods/mod-list.json"
+
+# Print the generated list and stop before touching server-settings.json, which
+# is read from the Factorio install and therefore needs FACTORIO_BIN.
+if [[ "$MOD_LIST_ONLY" == "1" ]]; then
+  echo "Wrote mod list for modset '$FUNIT_MODSET': $TMP_ROOT/mods/mod-list.json" >&2
+  echo "$TMP_ROOT/mods/mod-list.json"
+  exit 0
+fi
 
 sed 's/"auto_pause": true/"auto_pause": false/' "$(dirname "$FACTORIO_BIN")/../../data/server-settings.example.json" > "$TMP_ROOT/server-settings.json"
 
