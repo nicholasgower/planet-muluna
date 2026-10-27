@@ -328,7 +328,9 @@ function Public.take_blueprint_direction(entity)
 end
 
 ---Restore a compound parent's direction and mirroring from a pending blueprint
----or from the compound's own blueprint tags.
+---or from the compound's own blueprint tags. Returns nil for a value that has
+---no saved source (a normal player placement); the caller must keep the
+---entity's own orientation in that case.
 ---@param entity LuaEntity
 ---@param tags Tags|nil
 ---@return defines.direction|nil direction
@@ -338,11 +340,13 @@ function Public.restore_blueprint_direction(entity, tags)
     if type(tags) == "table" then
         saved = Public.take_blueprint_direction(entity)
     end
-    local compound = type(tags) == "table" and tags[TAG_KEY]
+    local compound = type(tags) == "table" and tags[TAG_KEY] or nil
     local direction = saved and saved.direction
-        or (type(compound) == "table" and compound.direction)
     local mirroring = saved and saved.mirroring
-        or (type(compound) == "table" and compound.mirroring)
+    if type(compound) == "table" then
+        if direction == nil then direction = compound.direction end
+        if mirroring == nil then mirroring = compound.mirroring end
+    end
 
     if type(direction) == "number" and saved and saved.orientation then
         direction = transform_blueprint_direction(direction, saved.orientation)

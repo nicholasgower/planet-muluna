@@ -53,9 +53,14 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         end
         if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
         storage.active_burner_roboports[entity.unit_number] = entity
+        -- Assigning the fixed recipe resets the machine's flip, so remember the
+        -- orientation the player (or the blueprint) actually placed.
+        local saved_direction = blueprint_direction or entity.direction
+        local saved_mirroring = blueprint_mirroring
+        if saved_mirroring == nil then saved_mirroring = entity.mirroring end
         entity.set_recipe("burner-roboport-refuel-muluna","normal")
-        if blueprint_direction ~= nil then entity.direction = blueprint_direction end
-        if blueprint_mirroring ~= nil then entity.mirroring = blueprint_mirroring end
+        if entity.direction ~= saved_direction then entity.direction = saved_direction end
+        if entity.mirroring ~= saved_mirroring then entity.mirroring = saved_mirroring end
         roboport = entity.surface.create_entity{
             name = heat_assembling_machine_data["roboport"],
             position = entity.position,
