@@ -23,13 +23,17 @@ for i,tab in pairs({telescopes,heat_assembling_machine_keys}) do
         
     end
 end
-Muluna.events.on_event(defines.events.on_gui_opened, function(event)
-    
-    if not (event.entity and rro.contains({"assembling-machine","constant-combinator","reactor","accumulator","roboport","radar"},event.entity.type)) then return end
+---Build the Muluna relative GUI for an opened entity.
+---
+---Split from the event handler so the FUnit suite can exercise the frame
+---construction with a stub GUI root: the headless scenario has no player.
+---@param player LuaPlayer|table
+---@param entity LuaEntity
+---@param selected LuaEntity|nil
+local function build_entity_gui(player, entity, selected)
+    if not (entity and rro.contains({"assembling-machine","constant-combinator","reactor","accumulator","roboport","radar"},entity.type)) then return end
     --game.print("gui opened")
-    local player = game.players[event.player_index]
-    local selected = (player or {}).opened --The currently selected entity
-    local entity = event.entity
+    selected = selected or (player or {}).opened --The currently selected entity
     local entity_name = entity.name
     local other_entity_button
     local satradar_gui
@@ -123,7 +127,6 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     end
     if other_entity_button or satradar_gui then
         --game.print("Showing gui")
-        local player = game.players[event.player_index]
         local frame = player.gui.relative.add{type="frame", name="muluna-entity-gui", caption=localised_title, direction = "vertical",
         
         anchor = {
@@ -223,7 +226,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
                 caption = localised_button,
                 state = enabled,
             })
-            if storage.nav_surfaces[selected.unit_number] then
+            if selected and storage.nav_surfaces[selected.unit_number] then
                 local goto_planet_button = frame.add({
                     type = "button",
                     name = "muluna-goto-button-" .. button_name,
@@ -247,7 +250,10 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
     end
 
 end
-)
+
+Muluna.events.on_event(defines.events.on_gui_opened, function(event)
+    build_entity_gui(game.players[event.player_index], event.entity)
+end)
 
 Muluna.events.on_event(defines.events.on_gui_closed, function(event)
 
@@ -260,16 +266,22 @@ Muluna.events.on_event(defines.events.on_gui_closed, function(event)
 
 end)
 
-Muluna.events.on_event(defines.events.on_gui_click, function(event)
-    local element = event.element
+---Handle a click on one of the Muluna relative-GUI buttons.
+---
+---Split from the event handler so the FUnit suite can pass a stub player; the
+---headless scenario has no player, and the crash in #408 happened before any
+---player method was called.
+---@param player LuaPlayer|table
+---@param element table
+local function handle_gui_click(player, element)
+    if not (element and element.name) then return end
     --game.print(serpent.block(element))
     if false then
 
     elseif string.find(element.name, "muluna%-goto%-button") or string.find(element.name, "muluna%-drag") or element.name == "muluna-horizontal-flip"   then 
 
-        local player = game.players[event.player_index]
-        
-        local selected = player.opened --The currently selected entity
+        local selected = player and player.opened --The currently selected entity
+        if not selected then return end
         local to_entity --Entity to change focus to
         local to_planet --Planet to switch view to
         local flip_rotation
@@ -347,6 +359,10 @@ Muluna.events.on_event(defines.events.on_gui_click, function(event)
 
 
 
+end
+
+Muluna.events.on_event(defines.events.on_gui_click, function(event)
+    handle_gui_click(game.players[event.player_index], event.element)
 end)
 
 Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(event)
@@ -370,6 +386,14 @@ Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(eve
 
 
 end)
+
+-- Test-only seams. The FUnit scenario has no player, so it cannot raise
+-- on_gui_opened/on_gui_click with a real GUI. scripts/funit.lua drives these
+-- functions with a stub player and records the element definitions.
+if script.active_mods["funit"] then
+    Muluna.funit.build_entity_gui = build_entity_gui
+    Muluna.funit.handle_gui_click = handle_gui_click
+end
 
 
 
