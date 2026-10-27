@@ -24,5 +24,6 @@ return {
     "content_references",
     "aai",
     "brevven",
+    "planets",
   },
 }

@@ -21,6 +21,7 @@
 #   * aai          -> vanilla plus aai-industry
 #   * bz           -> vanilla plus Brevven's BZ mods with 2.1 releases
 #   * no-quality   -> vanilla without the quality mod
+#   * planets      -> the top planet mods and their dependencies
 #   * k2so         -> additionally loads Krastorio 2 Spaced Out and its
 #                     dependencies, to keep the compatibility patches covered
 # Mods are resolved against the version installed in each image, so a
@@ -199,6 +200,9 @@ jobs:
             modset: no-quality
           - channel: stable
             image_tag: stable
+            modset: planets
+          - channel: stable
+            image_tag: stable
             modset: k2so
           - channel: experimental
             image_tag: latest
@@ -212,6 +216,9 @@ jobs:
           - channel: experimental
             image_tag: latest
             modset: no-quality
+          - channel: experimental
+            image_tag: latest
+            modset: planets
           - channel: experimental
             image_tag: latest
             modset: k2so
@@ -295,6 +302,8 @@ jobs:
           - channel: stable
             modset: no-quality
           - channel: stable
+            modset: planets
+          - channel: stable
             modset: k2so
           - channel: experimental
             modset: vanilla
@@ -304,6 +313,8 @@ jobs:
             modset: bz
           - channel: experimental
             modset: no-quality
+          - channel: experimental
+            modset: planets
           - channel: experimental
             modset: k2so
     container:

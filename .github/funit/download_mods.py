@@ -77,6 +77,30 @@ MODSETS = {
         ],
         "disable": [],
     },
+    # The top planet mods on the mod portal and their required dependencies.
+    "planets": {
+        "add": [
+            "maraxsis",
+            "Cerys-Moon-of-Fulgora",
+            "Moshine",
+            "corrundum",
+            "secretas",
+            "Paracelsin",
+            "rubia",
+            "SpidertronPatrols",
+            "SpidertronEnhancements",
+            "FluidMustFlow",
+            "Flare Stack",
+            "Moshine-assets",
+            "Paracelsin-Graphics",
+            "SolarMatrix",
+            "Accumulator-V2",
+            "rubia-assets",
+            "machine-upgrades",
+            "RocketCargoInsertion",
+        ],
+        "disable": [],
+    },
     "k2so": {
         "add": [
             "Krastorio2-spaced-out",
@@ -407,7 +431,8 @@ def main() -> int:
             "mod set to download and enable: 'vanilla' (default), 'aai' "
             "(vanilla plus aai-industry), 'bz' (Brevven's BZ mods with 2.1 "
             "releases), 'k2so' (Krastorio 2 Spaced Out and its dependencies), "
-            "or 'no-quality' (vanilla without quality)"
+            "'no-quality' (vanilla without quality), or 'planets' (the top "
+            "planet mods and their dependencies)"
         ),
     )
     parser.add_argument(

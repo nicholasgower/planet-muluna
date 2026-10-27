@@ -56,7 +56,7 @@ Useful environment variables:
 | `TIMEOUT` | `900` | Seconds to wait for `====END====` |
 | `FACTORIO_PORT` | `34198` | Local server port used by the headless instance |
 | `DATA_ONLY` | `0` | Run `--dump-data` instead of the scenario (used by `funit.sh --data-only`) |
-| `FUNIT_MODSET` | `vanilla` | `vanilla`, `aai` (aai-industry), `bz` (Brevven's BZ mods with 2.1 releases), `no-quality` (quality disabled), or `k2so` (Krastorio 2 Spaced Out and its dependencies) |
+| `FUNIT_MODSET` | `vanilla` | `vanilla`, `aai` (aai-industry), `bz` (Brevven's BZ mods with 2.1 releases), `no-quality` (quality disabled), `planets` (top planet mods), or `k2so` (Krastorio 2 Spaced Out and its dependencies) |
 
 The full log is `$TMP_ROOT/stdout.log`; on failure the runner prints the relevant
 FUnit lines and the tail of the log. A data-only run also writes the prototype dump to

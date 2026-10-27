@@ -12,8 +12,9 @@
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
 #   FUNIT_MODSET   Mod set to load: "vanilla" (default), "aai" (vanilla plus
 #                  aai-industry), "bz" (Brevven's BZ mods with 2.1 releases),
-#                  "k2so" (Krastorio 2 Spaced Out and its dependencies), or
-#                  "no-quality" (vanilla without quality)
+#                  "k2so" (Krastorio 2 Spaced Out and its dependencies),
+#                  "no-quality" (vanilla without quality), or "planets" (the
+#                  top planet mods and their dependencies)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -30,9 +31,9 @@ DATA_ONLY="${DATA_ONLY:-0}"
 FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
 case "$FUNIT_MODSET" in
-  vanilla | aai | bz | k2so | no-quality) ;;
+  vanilla | aai | bz | k2so | no-quality | planets) ;;
   *)
-    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, bz, k2so or no-quality)" >&2
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, bz, k2so, no-quality or planets)" >&2
     exit 2
     ;;
 esac
@@ -105,6 +106,40 @@ if [[ "$FUNIT_MODSET" == "bz" ]]; then
   link_zip "bzzirconium" 'bzzirconium_*.zip'
 fi
 
+# Prefer a development directory when one is installed, otherwise the newest
+# matching zip.
+link_mod_or_zip() {
+  local name="$1"
+  local pattern="$2"
+  if [[ -d "$FACTORIO_MODS/$name" ]]; then
+    link_mod "$name" "$FACTORIO_MODS/$name"
+  else
+    link_zip "$name" "$pattern"
+  fi
+}
+
+# The top planet mods on the mod portal and their required dependencies.
+if [[ "$FUNIT_MODSET" == "planets" ]]; then
+  link_mod_or_zip "maraxsis" 'maraxsis_*.zip'
+  link_mod_or_zip "Cerys-Moon-of-Fulgora" 'Cerys-Moon-of-Fulgora_*.zip'
+  link_mod_or_zip "Moshine" 'Moshine_*.zip'
+  link_mod_or_zip "corrundum" 'corrundum_*.zip'
+  link_mod_or_zip "secretas" 'secretas_*.zip'
+  link_mod_or_zip "Paracelsin" 'Paracelsin_*.zip'
+  link_mod_or_zip "rubia" 'rubia_*.zip'
+  link_zip "SpidertronPatrols" 'SpidertronPatrols_*.zip'
+  link_zip "SpidertronEnhancements" 'SpidertronEnhancements_*.zip'
+  link_zip "FluidMustFlow" 'FluidMustFlow_*.zip'
+  link_zip "Flare Stack" 'Flare Stack_*.zip'
+  link_zip "Moshine-assets" 'Moshine-assets_*.zip'
+  link_zip "Paracelsin-Graphics" 'Paracelsin-Graphics_*.zip'
+  link_zip "SolarMatrix" 'SolarMatrix_*.zip'
+  link_zip "Accumulator-V2" 'Accumulator-V2_*.zip'
+  link_zip "rubia-assets" 'rubia-assets_*.zip'
+  link_zip "machine-upgrades" 'machine-upgrades_*.zip'
+  link_zip "RocketCargoInsertion" 'RocketCargoInsertion_*.zip'
+fi
+
 if [[ "$FUNIT_MODSET" == "k2so" ]]; then
   link_zip "Krastorio2" 'Krastorio2_*.zip'
   link_zip "Krastorio2Assets" 'Krastorio2Assets_*.zip'
@@ -146,6 +181,28 @@ if [[ "$FUNIT_MODSET" == "bz" ]]; then
     bztin
     bztitanium
     bzzirconium
+  )
+fi
+if [[ "$FUNIT_MODSET" == "planets" ]]; then
+  MOD_NAMES+=(
+    maraxsis
+    Cerys-Moon-of-Fulgora
+    Moshine
+    corrundum
+    secretas
+    Paracelsin
+    rubia
+    SpidertronPatrols
+    SpidertronEnhancements
+    FluidMustFlow
+    "Flare Stack"
+    Moshine-assets
+    Paracelsin-Graphics
+    SolarMatrix
+    Accumulator-V2
+    rubia-assets
+    machine-upgrades
+    RocketCargoInsertion
   )
 fi
 if [[ "$FUNIT_MODSET" == "k2so" ]]; then
