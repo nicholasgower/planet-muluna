@@ -59,14 +59,40 @@ results.check(SUITE, "space-science-pack-recipe-moved", function()
   local tech = data.raw["technology"]["space-science-pack"]
   assert(tech, "space-science-pack technology is missing")
   local unlocks_muluna = false
+  local unlocks_vanilla = false
   for _, effect in pairs(tech.effects or {}) do
     if effect.type == "unlock-recipe" and effect.recipe == "space-science-pack-muluna" then
       unlocks_muluna = true
     end
-    assert(effect.recipe ~= "space-science-pack", "space-science-pack technology still unlocks the vanilla recipe")
+    if effect.type == "unlock-recipe" and effect.recipe == "space-science-pack" then
+      unlocks_vanilla = true
+    end
   end
   assert(unlocks_muluna, "space-science-pack technology does not unlock space-science-pack-muluna")
   assert(data.raw["recipe"]["space-science-pack-muluna"], "space-science-pack-muluna recipe is missing")
+
+  if mods["Krastorio2-spaced-out"] then
+    -- K2SO keeps the vanilla recipe and uses kr-space-research-data for space
+    -- science, so Muluna deliberately leaves the vanilla unlock in place and
+    -- adds a zero-gravity variant of the K2SO recipe instead.
+    assert(
+      unlocks_vanilla,
+      "K2SO build should keep the vanilla space-science-pack recipe unlocked"
+    )
+    assert(
+      data.raw["recipe"]["kr-space-research-data"],
+      "K2SO build is missing kr-space-research-data"
+    )
+    assert(
+      data.raw["recipe"]["kr-space-research-data-advanced"],
+      "K2SO build is missing the zero-gravity kr-space-research-data-advanced recipe"
+    )
+  else
+    assert(
+      not unlocks_vanilla,
+      "space-science-pack technology still unlocks the vanilla recipe"
+    )
+  end
 end)
 
 results.check(SUITE, "labs-accept-interstellar-pack", function()

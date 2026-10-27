@@ -56,6 +56,19 @@ local function build_machine(surface, machine, position)
   return assembler, data
 end
 
+---The fixed recipe's fluid ingredient. It is oxygen in vanilla and kr-oxygen
+---when Krastorio 2 Spaced Out is loaded; derive it instead of hardcoding.
+local function recipe_fluid_name(assembler)
+  local recipe = assembler.prototype.fixed_recipe
+  runner.assert(recipe ~= nil, "heat machine has no fixed recipe")
+  for _, ingredient in pairs(recipe.ingredients) do
+    if ingredient.type == "fluid" then
+      return ingredient.name
+    end
+  end
+  error("heat machine recipe has no fluid ingredient")
+end
+
 runner.test("heat assembling machine: build links a reactor and the fixed recipe", function()
   with_clean_areas(function()
     local surface = helpers.get_muluna()
@@ -184,6 +197,7 @@ runner.test("heat assembling machine: idle machine does not craft and stays cold
   local machine = get_machine_config()
   local center = helpers.center(helpers.muluna_area())
   local assembler, data = build_machine(surface, machine, center)
+  local fluid_name = recipe_fluid_name(assembler)
   local start_temperature = data.reactor.temperature
   local start_energy = data.reactor.energy
 
@@ -201,23 +215,27 @@ runner.test("heat assembling machine: idle machine does not craft and stays cold
       "idle heat machine heated the reactor: "
         .. tostring(start_temperature) .. " -> " .. tostring(data.reactor.temperature)
     )
-    runner.assert(assembler.get_fluid_count("oxygen") == 0, "idle heat machine unexpectedly contains oxygen")
+    runner.assert(
+      assembler.get_fluid_count(fluid_name) == 0,
+      "idle heat machine unexpectedly contains " .. fluid_name
+    )
     clean_areas()
   end)
 end)
 
-runner.test("heat assembling machine: fuel and oxygen produce progress, heat fluid and pipe heat", function()
+runner.test("heat assembling machine: fuel and the recipe fluid produce progress, heat fluid and pipe heat", function()
   clean_areas()
   local surface = helpers.get_muluna()
   local machine = get_machine_config()
   local center = helpers.center(helpers.muluna_area())
   local assembler, data = build_machine(surface, machine, center)
+  local fluid_name = recipe_fluid_name(assembler)
 
-  local oxygen_inserted = assembler.insert_fluid({ name = "oxygen", amount = 200, temperature = 15 })
+  local oxygen_inserted = assembler.insert_fluid({ name = fluid_name, amount = 200, temperature = 15 })
   local fuel_inserted = assembler.insert({ name = "coal", count = 10 })
   runner.assert(
     oxygen_inserted == 200,
-    "could not insert oxygen into the heat machine, inserted " .. tostring(oxygen_inserted)
+    "could not insert " .. fluid_name .. " into the heat machine, inserted " .. tostring(oxygen_inserted)
   )
   runner.assert(
     fuel_inserted == 10,
@@ -240,8 +258,8 @@ runner.test("heat assembling machine: fuel and oxygen produce progress, heat flu
       "heat machine did not gain crafting progress, progress=" .. tostring(assembler.crafting_progress)
     )
     runner.assert(
-      assembler.get_fluid_count("oxygen") < 200,
-      "heat machine did not consume oxygen, remaining=" .. tostring(assembler.get_fluid_count("oxygen"))
+      assembler.get_fluid_count(fluid_name) < 200,
+      "heat machine did not consume " .. fluid_name .. ", remaining=" .. tostring(assembler.get_fluid_count(fluid_name))
     )
     runner.assert(
       assembler.get_fluid_count("carbon-dioxide") > 0,

@@ -10,6 +10,8 @@
 #   TMP_ROOT       Scratch directory (default: /tmp/opencode/muluna-funit)
 #   TIMEOUT        Maximum run time in seconds (default: 900)
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
+#   FUNIT_MODSET   Mod set to load: "vanilla" (default) or "k2so" (Krastorio 2
+#                  Spaced Out and its dependencies)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -23,6 +25,15 @@ TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
 TIMEOUT="${TIMEOUT:-900}"
 FACTORIO_PORT="${FACTORIO_PORT:-34198}"
 DATA_ONLY="${DATA_ONLY:-0}"
+FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
+
+case "$FUNIT_MODSET" in
+  vanilla | k2so) ;;
+  *)
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla or k2so)" >&2
+    exit 2
+    ;;
+esac
 
 if [[ ! -x "$FACTORIO_BIN" ]]; then
   echo "Factorio binary not found: $FACTORIO_BIN" >&2
@@ -75,31 +86,60 @@ link_zip "space-exploration-graphics-4" 'space-exploration-graphics-4_*.zip'
 link_zip "space-exploration-graphics-5" 'space-exploration-graphics-5_*.zip'
 link_zip "alien-biomes-graphics" 'alien-biomes-graphics_*.zip'
 
-cat > "$TMP_ROOT/mods/mod-list.json" <<'JSON'
+# Krastorio 2 Spaced Out and the dependencies it needs. Keep this list in sync
+# with .github/funit/download_mods.py's MODSETS table and with K2SO's info.json.
+if [[ "$FUNIT_MODSET" == "k2so" ]]; then
+  link_zip "Krastorio2" 'Krastorio2_*.zip'
+  link_zip "Krastorio2Assets" 'Krastorio2Assets_*.zip'
+  link_zip "Krastorio2MenuSimulations" 'Krastorio2MenuSimulations_*.zip'
+  link_zip "Krastorio2-spaced-out" 'Krastorio2-spaced-out_*.zip'
+  link_zip "k2so-assets" 'k2so-assets_*.zip'
+  link_zip "ChangeInserterDropLane" 'ChangeInserterDropLane_*.zip'
+fi
+
+MOD_NAMES=(
+  base
+  elevated-rails
+  quality
+  recycler
+  space-age
+  planet-muluna
+  planet-muluna-funit
+  funit
+  PlanetsLib
+  flib
+  bplib
+  rigor-module
+  item-request-proxy-events
+  module-category-defaults
+  muluna-graphics
+  space-exploration-graphics
+  space-exploration-graphics-4
+  space-exploration-graphics-5
+  alien-biomes-graphics
+)
+if [[ "$FUNIT_MODSET" == "k2so" ]]; then
+  MOD_NAMES+=(
+    Krastorio2
+    Krastorio2Assets
+    Krastorio2MenuSimulations
+    Krastorio2-spaced-out
+    k2so-assets
+    ChangeInserterDropLane
+  )
+fi
+
 {
-  "mods": [
-    { "name": "base", "enabled": true },
-    { "name": "elevated-rails", "enabled": true },
-    { "name": "quality", "enabled": true },
-    { "name": "recycler", "enabled": true },
-    { "name": "space-age", "enabled": true },
-    { "name": "planet-muluna", "enabled": true },
-    { "name": "planet-muluna-funit", "enabled": true },
-    { "name": "funit", "enabled": true },
-    { "name": "PlanetsLib", "enabled": true },
-    { "name": "flib", "enabled": true },
-    { "name": "bplib", "enabled": true },
-    { "name": "rigor-module", "enabled": true },
-    { "name": "item-request-proxy-events", "enabled": true },
-    { "name": "module-category-defaults", "enabled": true },
-    { "name": "muluna-graphics", "enabled": true },
-    { "name": "space-exploration-graphics", "enabled": true },
-    { "name": "space-exploration-graphics-4", "enabled": true },
-    { "name": "space-exploration-graphics-5", "enabled": true },
-    { "name": "alien-biomes-graphics", "enabled": true }
-  ]
-}
-JSON
+  printf '{\n  "mods": [\n'
+  for i in "${!MOD_NAMES[@]}"; do
+    printf '    { "name": "%s", "enabled": true }' "${MOD_NAMES[$i]}"
+    if (( i < ${#MOD_NAMES[@]} - 1 )); then
+      printf ','
+    fi
+    printf '\n'
+  done
+  printf '  ]\n}\n'
+} > "$TMP_ROOT/mods/mod-list.json"
 
 sed 's/"auto_pause": true/"auto_pause": false/' "$(dirname "$FACTORIO_BIN")/../../data/server-settings.example.json" > "$TMP_ROOT/server-settings.json"
 

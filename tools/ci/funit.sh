@@ -44,6 +44,7 @@ NO_RUN=0
 JSON=0
 BASELINE=0
 DATA_ONLY=0
+MODSET=""
 
 # Parse state.
 LOG=""
@@ -102,6 +103,9 @@ Options:
                      the runtime suite and is the right loop for prototype
                      fixtures. Cannot be combined with --suite, --test,
                      --baseline, or --no-run.
+  --modset NAME      Load the named mod set: "vanilla" (default) or "k2so"
+                     (Krastorio 2 Spaced Out and its dependencies). Matches the
+                     modset matrix dimension in .github/workflows/funit.yml.
   -h, --help         Show this help.
 
 Environment overrides:
@@ -114,6 +118,7 @@ Environment overrides:
   TMP_ROOT           Runner scratch directory
                      (default: /tmp/opencode/muluna-funit)
   TIMEOUT            Maximum run time in seconds; --timeout wins.
+  FUNIT_MODSET       Mod set to load; --modset wins (default: vanilla).
 
 Summary statuses:
   passed       log reached ====END==== with no FAILURE/ERROR lines
@@ -134,6 +139,8 @@ Examples:
   tools/ci/funit.sh --data-only --json
   tools/ci/funit.sh --suite smoke
   tools/ci/funit.sh --suite telescope --test "telescope probability"
+  tools/ci/funit.sh --modset k2so
+  tools/ci/funit.sh --modset k2so --data-only
   tools/ci/funit.sh --summary --no-run --log /tmp/opencode/muluna-funit/stdout.log
 EOF
 }
@@ -610,6 +617,15 @@ while (($# > 0)); do
       DATA_ONLY=1
       shift
       ;;
+    --modset)
+      [[ $# -ge 2 ]] || die "--modset requires a value."
+      MODSET="$2"
+      shift 2
+      ;;
+    --modset=*)
+      MODSET="${1#*=}"
+      shift
+      ;;
     --)
       shift
       break
@@ -627,6 +643,14 @@ fi
 [[ -n "$TIMEOUT_VALUE" ]] || die "--timeout/TIMEOUT must not be empty."
 [[ "$TIMEOUT_VALUE" =~ ^[0-9]+$ ]] || die "--timeout must be a whole number of seconds."
 (( TIMEOUT_VALUE > 0 )) || die "--timeout must be greater than zero."
+
+if [[ -n "$MODSET" ]]; then
+  case "$MODSET" in
+    vanilla | k2so) ;;
+    *) die "unknown --modset: $MODSET (expected vanilla or k2so)." ;;
+  esac
+fi
+FUNIT_MODSET="${MODSET:-${FUNIT_MODSET:-vanilla}}"
 
 if (( BASELINE == 1 )) && [[ -n "$SUITE" ]]; then
   die "--baseline runs the full suite and cannot be combined with --suite."
@@ -693,10 +717,12 @@ if (( DATA_ONLY == 1 )); then
   echo "Running Muluna data-stage fixtures (timeout ${TIMEOUT_VALUE}s)..." >&2
   echo "  binary: $FACTORIO_BIN" >&2
   echo "  mods:   $FACTORIO_MODS" >&2
+  echo "  modset: $FUNIT_MODSET" >&2
   echo "  tmp:    $TMP_ROOT" >&2
 
   set +e
   DATA_ONLY=1 \
+    FUNIT_MODSET="$FUNIT_MODSET" \
     FACTORIO_BIN="$FACTORIO_BIN" \
     FACTORIO_MODS="$FACTORIO_MODS" \
     TMP_ROOT="$TMP_ROOT" \
@@ -757,10 +783,12 @@ RUN_OUTPUT="$(mktemp "${TMPDIR:-/tmp}/muluna-funit-run.XXXXXX")" ||
 echo "Running Muluna FUnit suite (timeout ${TIMEOUT_VALUE}s)..." >&2
 echo "  binary: $FACTORIO_BIN" >&2
 echo "  mods:   $FACTORIO_MODS" >&2
+echo "  modset: $FUNIT_MODSET" >&2
 echo "  tmp:    $TMP_ROOT" >&2
 
 set +e
-FACTORIO_BIN="$FACTORIO_BIN" \
+FUNIT_MODSET="$FUNIT_MODSET" \
+  FACTORIO_BIN="$FACTORIO_BIN" \
   FACTORIO_MODS="$FACTORIO_MODS" \
   TMP_ROOT="$TMP_ROOT" \
   TIMEOUT="$TIMEOUT_VALUE" \

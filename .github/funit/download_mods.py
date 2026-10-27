@@ -57,6 +57,23 @@ VERSION_LABELS = {"latest": "experimental", "stable": "stable"}
 BUILTIN_MODS = ["base", "elevated-rails", "quality", "recycler", "space-age"]
 LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
 
+# Named mod sets used by the FUnit matrix. Each list is the seed mod plus the
+# dependencies that are not already declared by info.json or the test mod.
+# Keep this in sync with test-mods/planet-muluna-funit/run.sh and K2SO's
+# info.json; a new required dependency will fail the run with a missing mod
+# instead of being silently skipped.
+MODSETS = {
+    "vanilla": [],
+    "k2so": [
+        "Krastorio2-spaced-out",
+        "Krastorio2",
+        "Krastorio2Assets",
+        "Krastorio2MenuSimulations",
+        "k2so-assets",
+        "ChangeInserterDropLane",
+    ],
+}
+
 
 def parse_dependency(spec: str):
     """Return (prefix, name, requirement) for a Factorio dependency string."""
@@ -237,7 +254,7 @@ def check_credentials(username: str, token: str) -> None:
         raise
 
 
-def collect_dependencies(info_paths: list[Path]) -> list[str]:
+def collect_dependencies(info_paths: list[Path], extra: list[str] | None = None) -> list[str]:
     names: list[str] = []
     seen: set[str] = set()
 
@@ -256,6 +273,14 @@ def collect_dependencies(info_paths: list[Path]) -> list[str]:
             if key not in seen:
                 seen.add(key)
                 names.append(name)
+
+    for name in extra or []:
+        if name.lower() in {builtin.lower() for builtin in BUILTIN_MODS + LOCAL_MODS}:
+            continue
+        key = name.lower()
+        if key not in seen:
+            seen.add(key)
+            names.append(name)
 
     return names
 
@@ -351,6 +376,15 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--modset",
+        default="vanilla",
+        choices=sorted(MODSETS),
+        help=(
+            "extra mod set to download and enable: 'vanilla' (default) or "
+            "'k2so' (Krastorio 2 Spaced Out and its dependencies)"
+        ),
+    )
+    parser.add_argument(
         "--skip-local-check",
         action="store_true",
         help=(
@@ -374,7 +408,9 @@ def main() -> int:
         or ""
     )
 
-    dependencies = collect_dependencies([args.info, args.test_info])
+    dependencies = collect_dependencies(
+        [args.info, args.test_info], extra=MODSETS[args.modset]
+    )
     factorio_version = resolve_version(args.factorio_version)
 
     if not args.dry_run:
@@ -386,6 +422,7 @@ def main() -> int:
         check_credentials(username, token)
 
     print(f"Required/recommended dependencies for Factorio {factorio_version}:")
+    print(f"  modset: {args.modset}")
     print("  " + ", ".join(dependencies))
 
     releases = []

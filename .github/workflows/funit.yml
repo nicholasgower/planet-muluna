@@ -14,9 +14,12 @@
 # The paid Space Age mods (space-age, quality, elevated-rails, recycler) are
 # built into the headless server image and are never downloaded from the portal.
 #
-# The scenario runs twice, in a matrix over the Factorio release channels:
+# The scenario runs in a matrix over the Factorio release channels and mod sets:
 #   * stable       -> factoriotools/factorio:stable (newest stable release)
 #   * experimental -> factoriotools/factorio:latest (newest experimental release)
+#   * vanilla      -> only Muluna and its declared dependencies
+#   * k2so         -> additionally loads Krastorio 2 Spaced Out and its
+#                     dependencies, to keep the compatibility patches covered
 # Mods are resolved against the version installed in each image, so a
 # dependency that is only published for the experimental release is still
 # picked up by the experimental leg.
@@ -171,18 +174,26 @@ jobs:
           if-no-files-found: error
 
   unit-test-job:
-    name: Run FUnit scenario (${{ matrix.channel }})
+    name: Run FUnit scenario (${{ matrix.channel }}, ${{ matrix.modset }})
     needs: build-archive-job
     runs-on: ubuntu-latest
     strategy:
-      # An experimental-release failure must not hide the stable result.
+      # An experimental-release or K2SO failure must not hide the vanilla result.
       fail-fast: false
       matrix:
         include:
           - channel: stable
             image_tag: stable
+            modset: vanilla
+          - channel: stable
+            image_tag: stable
+            modset: k2so
           - channel: experimental
             image_tag: latest
+            modset: vanilla
+          - channel: experimental
+            image_tag: latest
+            modset: k2so
     container:
       image: "factoriotools/factorio:${{ matrix.image_tag }}"
     timeout-minutes: 30
@@ -197,6 +208,7 @@ jobs:
       # FACTORIO_TOKEN is the ModPortal upload key and cannot download mods.
       TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN}}
       TIMEOUT: 10m
+      FUNIT_MODSET: ${{ matrix.modset }}
     defaults:
       run:
         shell: bash
@@ -211,7 +223,7 @@ jobs:
           name: build-archive-job
           path: artifacts
       - name: Download required and recommended dependencies
-        run: python3 .github/funit/download_mods.py
+        run: python3 .github/funit/download_mods.py --modset "$FUNIT_MODSET"
       - name: Prepare test environment
         run: bash .github/funit/prepare_test_environment.sh
       - name: Run FUnit scenario
@@ -240,12 +252,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: unit-test-job-${{ matrix.channel }}
+          name: unit-test-job-${{ matrix.channel }}-${{ matrix.modset }}
           retention-days: 30
           path: test_artifacts
 
   parse-results-job:
-    name: Parse FUnit results (${{ matrix.channel }})
+    name: Parse FUnit results (${{ matrix.channel }}, ${{ matrix.modset }})
     needs: unit-test-job
     if: ${{ !cancelled() && needs.unit-test-job.result != 'skipped' }}
     runs-on: ubuntu-latest
@@ -254,7 +266,13 @@ jobs:
       matrix:
         include:
           - channel: stable
+            modset: vanilla
+          - channel: stable
+            modset: k2so
           - channel: experimental
+            modset: vanilla
+          - channel: experimental
+            modset: k2so
     container:
       image: ruby:4-alpine
     timeout-minutes: 30
@@ -263,16 +281,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: unit-test-job-${{ matrix.channel }}
+          name: unit-test-job-${{ matrix.channel }}-${{ matrix.modset }}
           path: test_artifacts
       - name: Convert FUnit reports to JUnit XML
         run: |
           ruby .github/funit/parse_funit_json.rb \
             "test_artifacts/${MOD_NAME}/reports" \
-            -o "funit-report-${MOD_NAME}-${{ matrix.channel }}.xml"
+            -o "funit-report-${MOD_NAME}-${{ matrix.channel }}-${{ matrix.modset }}.xml"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: parse-results-job-${{ matrix.channel }}
+          name: parse-results-job-${{ matrix.channel }}-${{ matrix.modset }}
           retention-days: 30
           path: funit-report-*.xml
