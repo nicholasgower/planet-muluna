@@ -58,7 +58,8 @@ end
 
 --Updates the telescope based on whether stars are currently visible on this planet.
 function Muluna.update_telescope_daytime(telescope_data)
-    local telescope = telescope_data["assembling-machine"]
+    local telescope = telescope_data and telescope_data["assembling-machine"]
+    if not (telescope and telescope.valid) then return end
     local surface = telescope.surface
     local planet_prototype = surface.planet and surface.planet.prototype
     local daytime = surface.daytime
@@ -100,7 +101,9 @@ local function update_all_telescopes(surface)
     if not storage.telescopes_on_surface[surface.name] then return end
     for telescope_id,_ in pairs(storage.telescopes_on_surface[surface.name]) do
         local telescope = storage.telescopes[telescope_id]
-        Muluna.update_telescope_daytime(telescope)
+        if telescope then
+            Muluna.update_telescope_daytime(telescope)
+        end
     end
 
 end
@@ -203,6 +206,8 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         if telescope_build_limit and count >= telescope_build_limit then --Forbid building if count exceeded.
             local position = entity.position
             local surface = entity.surface
+            local refund_force = entity.force
+            local gps_tag = entity.gps_tag
             
             local player
             if event.player_index then
@@ -210,23 +215,30 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             else
                 player = event.robot
             end
-            local stack = {name=entity.prototype.mineable_properties.products[1].name, amount=1,quality=entity.quality.name}
+            local stack = {name=entity.prototype.mineable_properties.products[1].name, count=1,quality=entity.quality.name}
 
             --if event.consumed_items then
                 --for i = 1,#event.consumed_items do --Return telescope to player inventory
                     --local item = event.consumed_items[i]
                     local inventory_define
+                    local entity_destroyed = false
                     if event.name == defines.events.on_built_entity then
                         inventory_define = defines.inventory.character_main
                         player.get_inventory(inventory_define).insert(stack)
                     else
-                        local item = entity.surface.create_entity{
+                        -- The refused entity still occupies its own position, so
+                        -- it must be removed before the refund item can be placed
+                        -- there. Creating the item first returns nil and silently
+                        -- loses the refund for robot and script builds.
+                        entity.destroy{}
+                        entity_destroyed = true
+                        local item = surface.create_entity{
                             name = "item-on-ground",
-                            position = entity.position,
+                            position = position,
                             stack = stack
                         }
                         if item then
-                            item.order_deconstruction(entity.force)
+                            item.order_deconstruction(refund_force)
                         end
                         
                             
@@ -252,9 +264,9 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
                     speed = 0.01,
                 }
             else
-                entity.force.print({"",text," ",entity.gps_tag})
+                refund_force.print({"",text," ",gps_tag})
             end
-            entity.destroy{}
+            if not entity_destroyed then entity.destroy{} end
             return 
         end
 
@@ -337,7 +349,10 @@ local function get_telescope(entity)
     if storage.telescopes[entity.unit_number] then
         return storage.telescopes[entity.unit_number]
     else 
-        local telescope = rro.find_contains(storage.telescopes,function(other) return entity.unit_number == other["constant-combinator"].unit_number end )
+        local telescope = rro.find_contains(storage.telescopes,function(other)
+            local combinator = other["constant-combinator"]
+            return combinator and combinator.valid and entity.unit_number == combinator.unit_number
+        end )
         return telescope
     end
 end
@@ -372,14 +387,28 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 if entity.name == machine["constant-combinator"] then
                             --game.print("combinator!")
                             local assembler
+                            local destroyed_key
                             for i,telescope in pairs(storage.telescopes) do
                                 if entity == telescope["constant-combinator"]  then
                                     assembler = telescope["assembling-machine"]
+                                    destroyed_key = i
                                     break
                                 end
                             end
                             if not assembler then return end
                             entity = assembler
+                            if not entity.valid then
+                                -- The assembling machine disappeared before its
+                                -- combinator. Drop the pair without reading
+                                -- unit_number/surface from the invalid entity.
+                                if destroyed_key then
+                                    storage.telescopes[destroyed_key] = nil
+                                    for _, entries in pairs(storage.telescopes_on_surface) do
+                                        entries[destroyed_key] = nil
+                                    end
+                                end
+                                return
+                            end
                 end
                 break
             end
@@ -392,13 +421,17 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             if storage.telescopes[entity.unit_number] then
                 reactor = storage.telescopes[entity.unit_number]["constant-combinator"]
                 storage.telescopes[entity.unit_number] = nil
-                storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = nil
+                if storage.telescopes_on_surface[entity.surface.name] then
+                    storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = nil
+                end
             end
             for i,registered_machine in pairs(storage.telescopes) do
                 if registered_machine["assembling-machine"] == entity then
                     reactor = registered_machine["constant-combinator"]
                     storage.telescopes[i] = nil
-                    storage.telescopes_on_surface[entity.surface.name][i] = nil
+                    if storage.telescopes_on_surface[entity.surface.name] then
+                        storage.telescopes_on_surface[entity.surface.name][i] = nil
+                    end
                     break
                     
                 end
@@ -567,7 +600,9 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
         local platform = surface.platform
         if platform.space_connection then
             local total_length = platform.space_connection.length
-            local distance = math.floor(platform.distance * total_length)
+            -- LuaSpacePlatform.distance is optional: it is nil when the
+            -- platform is not travelling. Do not crash the combinator tick.
+            local distance = platform.distance and math.floor(platform.distance * total_length) or 0
             signals[i]={value = {type = "virtual",name = "signal-X",quality = "normal"},min= distance, }
             i = i+1
             signals[i]={value = {type = "virtual",name = "signal-L",quality = "normal"},min= total_length, }
@@ -623,7 +658,10 @@ end
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
     for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
-            if combinator.valid and telescope["constant-combinator-control-behavior"] then
+            local assembler = telescope["assembling-machine"]
+            local combinator_valid = combinator and combinator.valid
+            local assembler_valid = assembler and assembler.valid
+            if combinator_valid and assembler_valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
                     local cached_signals = telescope.cached_signals or {} 
@@ -640,6 +678,23 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                     telescope.cached_signals = signals
                 end
             else
+                -- Either half of the compound entity can disappear on its own
+                -- (for example when a surface is deleted). Drop the entry and
+                -- its surface index instead of leaving update_all_telescopes
+                -- to dereference an invalid entity.
+                local surface_name
+                if combinator_valid then
+                    surface_name = combinator.surface.name
+                elseif assembler_valid then
+                    surface_name = assembler.surface.name
+                end
+                if surface_name and storage.telescopes_on_surface[surface_name] then
+                    storage.telescopes_on_surface[surface_name][key] = nil
+                else
+                    for _, entries in pairs(storage.telescopes_on_surface) do
+                        entries[key] = nil
+                    end
+                end
                 storage.telescopes[key] = nil
             end
     end
