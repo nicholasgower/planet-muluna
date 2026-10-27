@@ -91,6 +91,12 @@ remote.add_interface("muluna_funit", {
     return true
   end,
 
+  -- Player build events cannot be raised from script, so the FUnit suite calls
+  -- the production build handler directly to exercise blueprint-tag handling.
+  build_nav_beacon = function(entity, tags)
+    stage().build_nav_beacon(entity, tags)
+  end,
+
   get_heat_assembling_machine_data = function(unit_number)
     return storage.heat_assembling_machines and storage.heat_assembling_machines[unit_number]
   end,

@@ -197,6 +197,22 @@ local function build_platform_radar(platform)
   return key, beacon
 end
 
+---Create a platform radar without raising a build event, so a test can drive
+---`built_nav_beacon` with the exact blueprint tags a real build would pass.
+local function create_unregistered_platform_radar(platform)
+  local radar = platform.surface.create_entity({
+    name = RADAR,
+    position = { x = 0, y = 0 },
+    force = "player",
+    raise_built = false,
+  })
+  runner.assert(
+    radar and radar.valid,
+    "could not create an unregistered platform radar on " .. platform.name
+  )
+  return radar
+end
+
 local function assert_nav_status(beacon, enabled)
   local status = beacon.custom_status
   if enabled then
@@ -404,6 +420,83 @@ runner.test("nav beacon status follows the tile revealing setting", function()
 
   destroy_platform(platform)
   clean_areas()
+end)
+
+runner.test("empty blueprint tags store a boolean nav beacon toggle", function()
+  -- Regression: a build event can carry an empty `tags` table (for example when
+  -- pasting a blueprint saved without bplib settings). The old code copied
+  -- `tags.enabled` (nil) into storage, and opening the radar GUI then passed nil
+  -- to the checkbox `state` field, which Factorio requires to be a boolean:
+  -- "Key 'state' not found in property tree at ROOT".
+  clean_areas()
+  local before = snapshot()
+  local platform = create_platform("funit-nav-platform-empty-tags")
+  local radar = create_unregistered_platform_radar(platform)
+
+  helpers.funit_call("build_nav_beacon", radar, {})
+
+  local storage = helpers.storage()
+  local beacon = storage.beaconed_platforms[platform.index]
+  runner.assert(beacon and beacon.valid, "build_nav_beacon did not register the platform beacon")
+  local settings = storage.nav_beacons_other[beacon.unit_number]
+  runner.assert(settings and settings.gui, "registered nav beacon has no GUI settings")
+  runner.assert(
+    type(settings.gui.enabled) == "boolean",
+    "empty blueprint tags stored gui.enabled as "
+      .. type(settings.gui.enabled)
+      .. "; the radar GUI requires a boolean checkbox state"
+  )
+  runner.assert(settings.gui.enabled == true, "empty blueprint tags should leave the radar enabled")
+  assert_nav_status(beacon, true)
+
+  beacon.destroy({ raise_destroy = true })
+  destroy_platform(platform)
+  clean_areas()
+  assert_snapshot(before, "building a platform radar with empty blueprint tags")
+end)
+
+runner.test("nav beacon toggle uses blueprint tags only when they are boolean", function()
+  clean_areas()
+  local before = snapshot()
+
+  local platform = create_platform("funit-nav-platform-tags-disabled")
+  local radar = create_unregistered_platform_radar(platform)
+  helpers.funit_call("build_nav_beacon", radar, { enabled = false })
+  local beacon = helpers.storage().beaconed_platforms[platform.index]
+  runner.assert(beacon and beacon.valid, "build_nav_beacon did not register the disabled beacon")
+  local settings = helpers.storage().nav_beacons_other[beacon.unit_number]
+  runner.assert(settings and settings.gui, "disabled nav beacon has no GUI settings")
+  runner.assert(settings.gui.enabled == false, "enabled = false blueprint tag did not disable the radar")
+  assert_nav_status(beacon, false)
+  beacon.destroy({ raise_destroy = true })
+  destroy_platform(platform)
+
+  -- Blueprint tags can hold numbers and strings. A malformed value must fall
+  -- back to the enabled default instead of reaching the checkbox as-is.
+  local malformed_platform = create_platform("funit-nav-platform-tags-malformed")
+  local malformed_radar = create_unregistered_platform_radar(malformed_platform)
+  helpers.funit_call("build_nav_beacon", malformed_radar, { enabled = "false" })
+  local malformed_beacon = helpers.storage().beaconed_platforms[malformed_platform.index]
+  runner.assert(
+    malformed_beacon and malformed_beacon.valid,
+    "build_nav_beacon did not register the malformed-tag beacon"
+  )
+  local malformed_settings = helpers.storage().nav_beacons_other[malformed_beacon.unit_number]
+  runner.assert(
+    malformed_settings and type(malformed_settings.gui.enabled) == "boolean",
+    "a non-boolean blueprint tag stored gui.enabled as "
+      .. type(malformed_settings and malformed_settings.gui.enabled)
+  )
+  runner.assert(
+    malformed_settings.gui.enabled == true,
+    "a non-boolean blueprint tag should leave the radar enabled"
+  )
+  assert_nav_status(malformed_beacon, true)
+  malformed_beacon.destroy({ raise_destroy = true })
+  destroy_platform(malformed_platform)
+
+  clean_areas()
+  assert_snapshot(before, "building platform radars with blueprint tags")
 end)
 
 runner.test("destroying the lower unit number of two nav beacons leaves the other registered", function()

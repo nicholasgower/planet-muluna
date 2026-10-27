@@ -538,4 +538,5 @@ end)
 
 if script.active_mods["funit"] then
     Muluna.funit.get_nav_scan_area = get_nav_scan_area
+    Muluna.funit.build_nav_beacon = built_nav_beacon
 end
