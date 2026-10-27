@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.3
+Date: 2026-10-27
+  Bugfixes:
+    - Fixed crash when the nav beacon update tick found an invalid stored entity. https://github.com/nicholasgower/planet-muluna/issues/504
+---------------------------------------------------------------------------------------------------
 Version: 2.9.2
 Date: 2026-10-27
   Bugfixes:
