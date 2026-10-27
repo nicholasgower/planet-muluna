@@ -499,6 +499,68 @@ runner.test("nav beacon toggle uses blueprint tags only when they are boolean", 
   assert_snapshot(before, "building platform radars with blueprint tags")
 end)
 
+runner.test("invalid nav beacon storage with a removed navigation surface does not crash", function()
+  -- Regression for the on_nth_tick crash reported after updating a save:
+  -- "LuaEntity API call when LuaEntity was invalid" in scripts/nav-beacon.lua.
+  -- The update tick read beacon.surface before checking beacon.valid when the
+  -- recorded navigation surface had also been removed. The update tick only
+  -- runs this branch for a player in remote view, so pass the invalid stale
+  -- beacon to the same handler directly.
+  clean_areas()
+  local before = snapshot()
+  runner.assert(
+    before.nav_beacons == 0,
+    "nav beacon storage was not empty before the invalid-storage test"
+  )
+
+  local platform = create_platform("funit-nav-platform-invalid-storage")
+  local key, beacon = build_platform_radar(platform)
+  runner.assert(beacon.valid, "invalid-storage test radar is not valid")
+
+  local probe = helpers.entity_at(
+    helpers.get_nauvis(),
+    "wooden-chest",
+    helpers.center(helpers.nauvis_area())
+  )
+  runner.assert(probe and probe.valid, "could not create the invalid-storage probe entity")
+
+  local ok, err = pcall(function()
+    local call_ok, call_err = pcall(function()
+      helpers.funit_call("handle_invalid_nav_surface", key, probe)
+    end)
+    runner.assert(
+      call_ok,
+      "invalid nav beacon storage crashed instead of being cleared: " .. tostring(call_err)
+    )
+
+    -- Recovering must rebuild tracking from the radar that still exists, so a
+    -- valid beacon is registered again with a valid surface.
+    local after = helpers.storage()
+    local rebuilt = after.nav_beacons[key]
+    runner.assert(rebuilt and rebuilt.valid, "recovery did not re-register the valid nav beacon")
+    runner.assert(after.nav_surfaces[key] ~= nil, "recovery did not restore the nav surface")
+    runner.assert(
+      after.beaconed_platforms[platform.index] ~= nil,
+      "recovery did not restore the beaconed platform entry"
+    )
+    runner.assert(after.has_nav_beacons == true, "recovery left has_nav_beacons false")
+  end)
+
+  -- Clean up even when the regression assertion above fails, so one stale test
+  -- cannot break the sparse-key test that follows it.
+  if beacon and beacon.valid then
+    pcall(function()
+      beacon.destroy({ raise_destroy = true })
+    end)
+  end
+  destroy_platform(platform)
+  clean_areas()
+  if not ok then
+    error(err, 0)
+  end
+  assert_snapshot(before, "recovering from invalid nav beacon storage")
+end)
+
 runner.test("destroying the lower unit number of two nav beacons leaves the other registered", function()
   -- Regression for sparse, unit-number-keyed beacon storage. Unit numbers are
   -- not sequential, so removing the lower key must not remove or invalidate

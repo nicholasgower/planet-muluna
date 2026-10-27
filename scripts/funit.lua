@@ -91,6 +91,20 @@ remote.add_interface("muluna_funit", {
     return true
   end,
 
+  -- The update tick only reaches this branch through a player in remote view,
+  -- which the headless FUnit scenario cannot create. Invalidate the supplied
+  -- probe entity, store it as the beacon, and call the same handler to exercise
+  -- the stale-storage path.
+  handle_invalid_nav_surface = function(unit_number, probe)
+    if probe and probe.valid then
+      probe.destroy({ raise_destroy = false })
+    end
+    if probe then
+      storage.nav_beacons[unit_number] = probe
+    end
+    return stage().handle_invalid_nav_surface(unit_number)
+  end,
+
   -- Player build events cannot be raised from script, so the FUnit suite calls
   -- the production build handler directly to exercise blueprint-tag handling.
   build_nav_beacon = function(entity, tags)

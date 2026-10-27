@@ -113,7 +113,8 @@ when the `funit` mod is active**:
 - `get_burner_roboport_data`, `short_update_roboport`
 - `get_heat_assembling_machine_data`
 - `get_compound_blueprint_tags`, `transform_compound_offset`
-- `get_nav_scan_area`, `set_nav_beacon_enabled`, `build_nav_beacon`
+- `get_nav_scan_area`, `set_nav_beacon_enabled`, `build_nav_beacon`,
+  `handle_invalid_nav_surface`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
 

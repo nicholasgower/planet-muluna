@@ -196,6 +196,31 @@ local function reset_storage_nav_beacons()
         end
 end
 
+---Update or discard a nav beacon whose recorded space location disappeared.
+---
+---A stored LuaEntity can be invalid (for example after a prototype change or a
+---scripted platform removal), so never read `surface` before checking `valid`.
+---@param beacon_id uint
+---@return boolean rebuilt true when the nav beacon tracking was rebuilt
+local function handle_invalid_nav_surface(beacon_id)
+    local beacon = storage.nav_beacons[beacon_id]
+    if beacon and beacon.valid then
+        local platform = beacon.surface and beacon.surface.platform
+        if platform then
+            update_space_platform_beacon(beacon, platform)
+            return false
+        end
+    end
+
+    game.print("[Muluna] ERROR: Satellite Radar data storage invalid, deleting storage to prevent crash. You might need to place your radars again.")
+    log("ERROR: Navigation beacon storage invalidated to prevent crash.")
+    log("planet-muluna storage contents:")
+    log(serpent.block(storage))
+    log("End planet-muluna storage")
+    reset_storage_nav_beacons()
+    return true
+end
+
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
 
     init_storage_nav_beacons()
@@ -363,12 +388,10 @@ if settings.startup["enable-nav-beacon"].value == true then
                         local enough_light = false
                         --game.print(serpent.block(storage.nav_surfaces))
                         for beacon_id,nav_surface in pairs(storage.nav_surfaces) do
-                            if storage.nav_beacons[beacon_id] and not nav_surface.valid then --If a surface is removed via mod uninstallation, update the space platform.
-                                --storage.nav_surfaces[beacon_id] = nil
-                                local beacon = storage.nav_beacons[beacon_id] 
-                                if beacon then update_space_platform_beacon(beacon,beacon.surface.platform) end
+                            if not nav_surface.valid then --If a surface is removed via mod uninstallation, update the space platform.
+                                if handle_invalid_nav_surface(beacon_id) then break end
                                 goto on_to_the_next
-                            
+
                             end
                                 if nav_surface.name == player.surface.name then
                                     local beacon = storage.nav_beacons[beacon_id] 
@@ -552,4 +575,5 @@ end)
 if script.active_mods["funit"] then
     Muluna.funit.get_nav_scan_area = get_nav_scan_area
     Muluna.funit.build_nav_beacon = built_nav_beacon
+    Muluna.funit.handle_invalid_nav_surface = handle_invalid_nav_surface
 end
