@@ -65,6 +65,18 @@ LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
 MODSETS = {
     "vanilla": {"add": [], "disable": []},
     "aai": {"add": ["aai-industry"], "disable": []},
+    # Brevven's BZ mods that have a Factorio 2.1 release.
+    "bz": {
+        "add": [
+            "bzcarbon",
+            "bzlead",
+            "bzsilicon",
+            "bztin",
+            "bztitanium",
+            "bzzirconium",
+        ],
+        "disable": [],
+    },
     "k2so": {
         "add": [
             "Krastorio2-spaced-out",
@@ -393,8 +405,9 @@ def main() -> int:
         choices=sorted(MODSETS),
         help=(
             "mod set to download and enable: 'vanilla' (default), 'aai' "
-            "(vanilla plus aai-industry), 'k2so' (Krastorio 2 Spaced Out and "
-            "its dependencies), or 'no-quality' (vanilla without quality)"
+            "(vanilla plus aai-industry), 'bz' (Brevven's BZ mods with 2.1 "
+            "releases), 'k2so' (Krastorio 2 Spaced Out and its dependencies), "
+            "or 'no-quality' (vanilla without quality)"
         ),
     )
     parser.add_argument(

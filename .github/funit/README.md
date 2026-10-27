@@ -36,9 +36,11 @@ Sources (FUnit commit `b69c2f277a467726e3a8c555d48df5b647ec5a64`):
   experimental channel and `FACTORIO_VERSION=stable` tracks the stable channel.
 - `funit.yml` runs the scenario once per release channel and mod set via a
   matrix over `factoriotools/factorio:stable` / `factoriotools/factorio:latest`
-  and `vanilla` / `aai` / `no-quality` / `k2so`. Each leg resolves and
+  and `vanilla` / `aai` / `bz` / `no-quality` / `k2so`. Each leg resolves and
   downloads its own dependency set, so a mod that has only published an
   experimental release is still picked up. The `aai` leg adds `aai-industry`;
+  the `bz` leg adds Brevven's BZ mods that have a Factorio 2.1 release
+  (`bzcarbon`, `bzlead`, `bzsilicon`, `bztin`, `bztitanium`, `bzzirconium`);
   the `no-quality` leg removes the optional `quality` mod; the `k2so` leg adds
   Krastorio 2 Spaced Out and its dependencies (`Krastorio2`,
   `Krastorio2Assets`, `Krastorio2MenuSimulations`, `k2so-assets`,

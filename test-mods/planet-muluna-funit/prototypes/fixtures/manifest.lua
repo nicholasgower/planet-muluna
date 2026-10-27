@@ -23,5 +23,6 @@ return {
     "prototype_integrity",
     "content_references",
     "aai",
+    "brevven",
   },
 }

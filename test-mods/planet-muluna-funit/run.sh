@@ -11,8 +11,9 @@
 #   TIMEOUT        Maximum run time in seconds (default: 900)
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
 #   FUNIT_MODSET   Mod set to load: "vanilla" (default), "aai" (vanilla plus
-#                  aai-industry), "k2so" (Krastorio 2 Spaced Out and its
-#                  dependencies), or "no-quality" (vanilla without quality)
+#                  aai-industry), "bz" (Brevven's BZ mods with 2.1 releases),
+#                  "k2so" (Krastorio 2 Spaced Out and its dependencies), or
+#                  "no-quality" (vanilla without quality)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,9 +30,9 @@ DATA_ONLY="${DATA_ONLY:-0}"
 FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
 case "$FUNIT_MODSET" in
-  vanilla | aai | k2so | no-quality) ;;
+  vanilla | aai | bz | k2so | no-quality) ;;
   *)
-    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, k2so or no-quality)" >&2
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, bz, k2so or no-quality)" >&2
     exit 2
     ;;
 esac
@@ -93,6 +94,17 @@ if [[ "$FUNIT_MODSET" == "aai" ]]; then
   link_zip "aai-industry" 'aai-industry_*.zip'
 fi
 
+# Brevven's BZ mods that have a Factorio 2.1 release. Keep this list in sync
+# with .github/funit/download_mods.py's MODSETS table.
+if [[ "$FUNIT_MODSET" == "bz" ]]; then
+  link_zip "bzcarbon" 'bzcarbon_*.zip'
+  link_zip "bzlead" 'bzlead_*.zip'
+  link_zip "bzsilicon" 'bzsilicon_*.zip'
+  link_zip "bztin" 'bztin_*.zip'
+  link_zip "bztitanium" 'bztitanium_*.zip'
+  link_zip "bzzirconium" 'bzzirconium_*.zip'
+fi
+
 if [[ "$FUNIT_MODSET" == "k2so" ]]; then
   link_zip "Krastorio2" 'Krastorio2_*.zip'
   link_zip "Krastorio2Assets" 'Krastorio2Assets_*.zip'
@@ -125,6 +137,16 @@ MOD_NAMES=(
 )
 if [[ "$FUNIT_MODSET" == "aai" ]]; then
   MOD_NAMES+=(aai-industry)
+fi
+if [[ "$FUNIT_MODSET" == "bz" ]]; then
+  MOD_NAMES+=(
+    bzcarbon
+    bzlead
+    bzsilicon
+    bztin
+    bztitanium
+    bzzirconium
+  )
 fi
 if [[ "$FUNIT_MODSET" == "k2so" ]]; then
   MOD_NAMES+=(
