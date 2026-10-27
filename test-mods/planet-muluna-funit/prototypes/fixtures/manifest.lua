@@ -6,10 +6,12 @@
 return {
   data = {
     "data_cells_setup",
+    "resized_assembler_compat_setup",
   },
   data_updates = {},
   data_final_fixes = {
     "data_cells",
+    "resized_assembler_compat",
     "lunar_rocks",
     "planet",
     "science",
