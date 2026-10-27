@@ -51,9 +51,7 @@ Muluna.events.on_event(defines.events.on_gui_opened, function(event)
         satradar_gui = true
         gui_type = defines.relative_gui_type.radar_gui
         localised_button = {"muluna-gui.satellite-radar-enable-button"}
-        if not storage.nav_beacons_other then storage.nav_beacons_other = {} end
-        if not storage.nav_beacons_other[entity.unit_number] then storage.nav_beacons_other[entity.unit_number] = {gui = {enabled = true}} end
-        enabled = storage.nav_beacons_other[entity.unit_number].gui.enabled
+        enabled = Muluna.get_nav_beacon_settings(entity.unit_number).gui.enabled
         button_name = "satellite-radar"
     elseif rro.contains(Muluna.constants.telescopes,function(other) return entity_name == other["assembling-machine"] end ) then
         local telescope_data = storage.telescopes

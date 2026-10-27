@@ -64,6 +64,34 @@ local status_nav_beacon_scanning_disabled = {
     label = {"custom-status.muluna-satellite-radar-scanning-disabled"}
 }
 
+---Get the player-facing settings for a satellite radar, creating defaults.
+---
+---`gui.enabled` must always be a boolean: the radar GUI passes it straight to
+---the `state` field of a checkbox, which Factorio requires to be present and
+---boolean. Blueprint tags can be an empty table with no `enabled` key, so a
+---missing or malformed value must never be stored.
+---@param unit_number uint
+---@return {gui: {enabled: boolean}}
+local function get_nav_beacon_settings(unit_number)
+    if not storage.nav_beacons_other then
+        storage.nav_beacons_other = {}
+    end
+    local settings = storage.nav_beacons_other[unit_number]
+    if not settings then
+        settings = {}
+        storage.nav_beacons_other[unit_number] = settings
+    end
+    if not settings.gui then
+        settings.gui = {}
+    end
+    if type(settings.gui.enabled) ~= "boolean" then
+        settings.gui.enabled = true
+    end
+    return settings
+end
+
+Muluna.get_nav_beacon_settings = get_nav_beacon_settings
+
 ---Update the satellite radar's custom status and animation state.
 ---@param nav LuaEntity
 local function update_nav_beacon_status(nav)
@@ -90,11 +118,9 @@ local function register_platform_beacon(nav, platform, enabled)
     storage.nav_surfaces[nav.unit_number] = platform.space_location
     storage.nav_beacons[nav.unit_number] = nav
     storage.has_nav_beacons = true
-    if not storage.nav_beacons_other then
-        storage.nav_beacons_other = {}
-    end
-    if not storage.nav_beacons_other[nav.unit_number] then
-        storage.nav_beacons_other[nav.unit_number] = { gui = { enabled = enabled ~= false } }
+    local settings = get_nav_beacon_settings(nav.unit_number)
+    if enabled == false then
+        settings.gui.enabled = false
     end
     update_nav_beacon_status(nav)
 end
@@ -255,22 +281,12 @@ local function built_nav_beacon(entity,tags)
         storage.nav_surfaces[nav.unit_number] = platform.space_location
         storage.nav_beacons[nav.unit_number] = nav
         storage.has_nav_beacons = true
-        
-        if not storage.nav_beacons_other then 
-                storage.nav_beacons_other = {}
-        end
-        if not storage.nav_beacons_other[nav.unit_number] then 
-            storage.nav_beacons_other[nav.unit_number] = {}
-        end
-            
-        if not storage.nav_beacons_other[nav.unit_number].gui then 
-            local enabled = true
-            if tags then
-                --game.print(serpent.block(tags))
-                enabled = tags.enabled
-                
-            end
-            storage.nav_beacons_other[nav.unit_number].gui = {enabled = enabled} 
+
+        -- Blueprint tags can be an empty table when the source radar had no
+        -- settings, so only an explicit boolean may override the default.
+        local settings = get_nav_beacon_settings(nav.unit_number)
+        if tags and type(tags.enabled) == "boolean" then
+            settings.gui.enabled = tags.enabled
         end
         update_nav_beacon_status(nav)
     end
@@ -315,8 +331,8 @@ Muluna.events.on_event("bplib-extract", function(event)
     for blueprint_index, entity in pairs(event.entities) do
     -- The event is raised for all mods, so you must filter for your mod's entities
     if entity.name == "muluna-satellite-radar" then
-        local enabled = storage.nav_beacons_other[entity.unit_number] and storage.nav_beacons_other[entity.unit_number].gui.enabled
-        --game.print(enabled)
+        local settings = storage.nav_beacons_other and storage.nav_beacons_other[entity.unit_number]
+        local enabled = not (settings and settings.gui and settings.gui.enabled == false)
       blueprint_tags.add_tags(event.blueprint, blueprint_index, {enabled = enabled})
     end
   end
@@ -369,9 +385,6 @@ if settings.startup["enable-nav-beacon"].value == true then
                                     if not storage.nav_beacons_other then 
                                         storage.nav_beacons_other = {}
                                     end
-                                    if not storage.nav_beacons_other[beacon_id] then 
-                                        storage.nav_beacons_other[beacon_id] = {}
-                                    end
                                     
                                    
                                     
@@ -379,7 +392,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                                     if beacon ~= nil then if beacon.force == player.force then
                                             navSat = beacon
                                             if display_beacon_alert then
-                                                local enabled = storage.nav_beacons_other[navSat.unit_number].gui.enabled
+                                                local enabled = get_nav_beacon_settings(navSat.unit_number).gui.enabled
                                                 player.add_custom_alert(beacon,
                                                     {type = "item", name = "muluna-satellite-radar"},
                                                     {enabled and "alert.nav-beacon-available" or "alert.nav-beacon-available-disabled",{"space-location-name."..player.surface.name}},
@@ -398,7 +411,7 @@ if settings.startup["enable-nav-beacon"].value == true then
                             ::on_to_the_next::
                         end
                         --game.print(serpent.block(navSat))
-                        if navSat ~= nil and (storage.nav_beacons_other[navSat.unit_number].gui.enabled == true) then
+                        if navSat ~= nil and get_nav_beacon_settings(navSat.unit_number).gui.enabled then
                             --local multiplier = 1/(1+0.3*navSat.quality.level)
                             local energy_cost = util.parse_energy(tostring(helpers.evaluate_expression(radar_data.energy_per_scan_expression,{base = radar_data.entities[navSat.name].energy_per_scan, quality_level = navSat.quality.level})) .. "MJ")
                             if navSat.energy >= energy_cost then
@@ -526,10 +539,10 @@ Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
     local source = event.source
     local destination = event.destination
 
-    local source_beacon_settings = storage.nav_beacons_other[source.unit_number] or {}
-    local destination_beacon_settings = storage.nav_beacons_other[destination.unit_number] or {}
-    if source_beacon_settings.gui and destination_beacon_settings.gui then
-        destination_beacon_settings.gui.enabled = source_beacon_settings.gui.enabled
+    local source_beacon_settings = storage.nav_beacons_other and storage.nav_beacons_other[source.unit_number]
+    if source_beacon_settings and source_beacon_settings.gui and destination.unit_number then
+        local destination_beacon_settings = get_nav_beacon_settings(destination.unit_number)
+        destination_beacon_settings.gui.enabled = source_beacon_settings.gui.enabled ~= false
         update_nav_beacon_status(destination)
     end
 
@@ -538,4 +551,5 @@ end)
 
 if script.active_mods["funit"] then
     Muluna.funit.get_nav_scan_area = get_nav_scan_area
+    Muluna.funit.build_nav_beacon = built_nav_beacon
 end
