@@ -10,6 +10,15 @@
 #   TMP_ROOT       Scratch directory (default: /tmp/opencode/muluna-funit)
 #   TIMEOUT        Maximum run time in seconds (default: 900)
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
+#   MOD_LIST_ONLY  Set to 1 to write the scratch mod-list.json and exit without
+#                  launching Factorio. Factorio does not need to be installed
+#                  (FACTORIO_BIN is not checked), but FACTORIO_MODS must still
+#                  contain the dependencies so the mod links can be created.
+#   FUNIT_MODSET   Mod set to load: "vanilla" (default), "aai" (vanilla plus
+#                  aai-industry), "bz" (Brevven's BZ mods with 2.1 releases),
+#                  "k2so" (Krastorio 2 Spaced Out and its dependencies),
+#                  "no-quality" (vanilla without quality), or "planets" (the
+#                  top planet mods and their dependencies)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -23,8 +32,21 @@ TMP_ROOT="${TMP_ROOT:-/tmp/opencode/muluna-funit}"
 TIMEOUT="${TIMEOUT:-900}"
 FACTORIO_PORT="${FACTORIO_PORT:-34198}"
 DATA_ONLY="${DATA_ONLY:-0}"
+MOD_LIST_ONLY="${MOD_LIST_ONLY:-0}"
+FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
-if [[ ! -x "$FACTORIO_BIN" ]]; then
+case "$FUNIT_MODSET" in
+  vanilla | aai | bz | k2so | no-quality | planets) ;;
+  *)
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, bz, k2so, no-quality or planets)" >&2
+    exit 2
+    ;;
+esac
+
+# The mod list can be generated without Factorio: MOD_LIST_ONLY=1 skips both
+# this check and the launch below. The mod directory is still required because
+# the mod links are created before the list is written.
+if [[ "$MOD_LIST_ONLY" != "1" && ! -x "$FACTORIO_BIN" ]]; then
   echo "Factorio binary not found: $FACTORIO_BIN" >&2
   exit 1
 fi
@@ -75,31 +97,159 @@ link_zip "space-exploration-graphics-4" 'space-exploration-graphics-4_*.zip'
 link_zip "space-exploration-graphics-5" 'space-exploration-graphics-5_*.zip'
 link_zip "alien-biomes-graphics" 'alien-biomes-graphics_*.zip'
 
-cat > "$TMP_ROOT/mods/mod-list.json" <<'JSON'
-{
-  "mods": [
-    { "name": "base", "enabled": true },
-    { "name": "elevated-rails", "enabled": true },
-    { "name": "quality", "enabled": true },
-    { "name": "recycler", "enabled": true },
-    { "name": "space-age", "enabled": true },
-    { "name": "planet-muluna", "enabled": true },
-    { "name": "planet-muluna-funit", "enabled": true },
-    { "name": "funit", "enabled": true },
-    { "name": "PlanetsLib", "enabled": true },
-    { "name": "flib", "enabled": true },
-    { "name": "bplib", "enabled": true },
-    { "name": "rigor-module", "enabled": true },
-    { "name": "item-request-proxy-events", "enabled": true },
-    { "name": "module-category-defaults", "enabled": true },
-    { "name": "muluna-graphics", "enabled": true },
-    { "name": "space-exploration-graphics", "enabled": true },
-    { "name": "space-exploration-graphics-4", "enabled": true },
-    { "name": "space-exploration-graphics-5", "enabled": true },
-    { "name": "alien-biomes-graphics", "enabled": true }
-  ]
+# Krastorio 2 Spaced Out and the dependencies it needs. Keep this list in sync
+# with .github/funit/download_mods.py's MODSETS table and with K2SO's info.json.
+if [[ "$FUNIT_MODSET" == "aai" ]]; then
+  link_zip "aai-industry" 'aai-industry_*.zip'
+fi
+
+# Brevven's BZ mods that have a Factorio 2.1 release. Keep this list in sync
+# with .github/funit/download_mods.py's MODSETS table.
+if [[ "$FUNIT_MODSET" == "bz" ]]; then
+  link_zip "bzcarbon" 'bzcarbon_*.zip'
+  link_zip "bzlead" 'bzlead_*.zip'
+  link_zip "bzsilicon" 'bzsilicon_*.zip'
+  link_zip "bztin" 'bztin_*.zip'
+  link_zip "bztitanium" 'bztitanium_*.zip'
+  link_zip "bzzirconium" 'bzzirconium_*.zip'
+fi
+
+# Prefer a development directory when one is installed, otherwise the newest
+# matching zip.
+link_mod_or_zip() {
+  local name="$1"
+  local pattern="$2"
+  if [[ -d "$FACTORIO_MODS/$name" ]]; then
+    link_mod "$name" "$FACTORIO_MODS/$name"
+  else
+    link_zip "$name" "$pattern"
+  fi
 }
-JSON
+
+# The top planet mods on the mod portal and their required dependencies.
+if [[ "$FUNIT_MODSET" == "planets" ]]; then
+  link_mod_or_zip "maraxsis" 'maraxsis_*.zip'
+  link_mod_or_zip "Cerys-Moon-of-Fulgora" 'Cerys-Moon-of-Fulgora_*.zip'
+  link_mod_or_zip "Moshine" 'Moshine_*.zip'
+  link_mod_or_zip "corrundum" 'corrundum_*.zip'
+  link_mod_or_zip "secretas" 'secretas_*.zip'
+  link_mod_or_zip "Paracelsin" 'Paracelsin_*.zip'
+  link_mod_or_zip "rubia" 'rubia_*.zip'
+  link_zip "SpidertronPatrols" 'SpidertronPatrols_*.zip'
+  link_zip "SpidertronEnhancements" 'SpidertronEnhancements_*.zip'
+  link_zip "FluidMustFlow" 'FluidMustFlow_*.zip'
+  link_zip "Flare Stack" 'Flare Stack_*.zip'
+  link_zip "Moshine-assets" 'Moshine-assets_*.zip'
+  link_zip "Paracelsin-Graphics" 'Paracelsin-Graphics_*.zip'
+  link_zip "SolarMatrix" 'SolarMatrix_*.zip'
+  link_zip "Accumulator-V2" 'Accumulator-V2_*.zip'
+  link_zip "rubia-assets" 'rubia-assets_*.zip'
+  link_zip "machine-upgrades" 'machine-upgrades_*.zip'
+  link_zip "RocketCargoInsertion" 'RocketCargoInsertion_*.zip'
+fi
+
+if [[ "$FUNIT_MODSET" == "k2so" ]]; then
+  link_zip "Krastorio2" 'Krastorio2_*.zip'
+  link_zip "Krastorio2Assets" 'Krastorio2Assets_*.zip'
+  link_zip "Krastorio2MenuSimulations" 'Krastorio2MenuSimulations_*.zip'
+  link_zip "Krastorio2-spaced-out" 'Krastorio2-spaced-out_*.zip'
+  link_zip "k2so-assets" 'k2so-assets_*.zip'
+  link_zip "ChangeInserterDropLane" 'ChangeInserterDropLane_*.zip'
+fi
+
+MOD_NAMES=(
+  base
+  elevated-rails
+  quality
+  recycler
+  space-age
+  planet-muluna
+  planet-muluna-funit
+  funit
+  PlanetsLib
+  flib
+  bplib
+  rigor-module
+  item-request-proxy-events
+  module-category-defaults
+  muluna-graphics
+  space-exploration-graphics
+  space-exploration-graphics-4
+  space-exploration-graphics-5
+  alien-biomes-graphics
+)
+if [[ "$FUNIT_MODSET" == "aai" ]]; then
+  MOD_NAMES+=(aai-industry)
+fi
+if [[ "$FUNIT_MODSET" == "bz" ]]; then
+  MOD_NAMES+=(
+    bzcarbon
+    bzlead
+    bzsilicon
+    bztin
+    bztitanium
+    bzzirconium
+  )
+fi
+if [[ "$FUNIT_MODSET" == "planets" ]]; then
+  MOD_NAMES+=(
+    maraxsis
+    Cerys-Moon-of-Fulgora
+    Moshine
+    corrundum
+    secretas
+    Paracelsin
+    rubia
+    SpidertronPatrols
+    SpidertronEnhancements
+    FluidMustFlow
+    "Flare Stack"
+    Moshine-assets
+    Paracelsin-Graphics
+    SolarMatrix
+    Accumulator-V2
+    rubia-assets
+    machine-upgrades
+    RocketCargoInsertion
+  )
+fi
+if [[ "$FUNIT_MODSET" == "k2so" ]]; then
+  MOD_NAMES+=(
+    Krastorio2
+    Krastorio2Assets
+    Krastorio2MenuSimulations
+    Krastorio2-spaced-out
+    k2so-assets
+    ChangeInserterDropLane
+  )
+fi
+
+{
+  printf '{\n  "mods": [\n'
+  for i in "${!MOD_NAMES[@]}"; do
+    enabled="true"
+    # Factorio auto-enables an installed mod that is recommended by an enabled
+    # mod, so the no-quality set must write quality as explicitly disabled
+    # rather than omitting it from the list.
+    if [[ "$FUNIT_MODSET" == "no-quality" && "${MOD_NAMES[$i]}" == "quality" ]]; then
+      enabled="false"
+    fi
+    printf '    { "name": "%s", "enabled": %s }' "${MOD_NAMES[$i]}" "$enabled"
+    if (( i < ${#MOD_NAMES[@]} - 1 )); then
+      printf ','
+    fi
+    printf '\n'
+  done
+  printf '  ]\n}\n'
+} > "$TMP_ROOT/mods/mod-list.json"
+
+# Print the generated list and stop before touching server-settings.json, which
+# is read from the Factorio install and therefore needs FACTORIO_BIN.
+if [[ "$MOD_LIST_ONLY" == "1" ]]; then
+  echo "Wrote mod list for modset '$FUNIT_MODSET': $TMP_ROOT/mods/mod-list.json" >&2
+  echo "$TMP_ROOT/mods/mod-list.json"
+  exit 0
+fi
 
 sed 's/"auto_pause": true/"auto_pause": false/' "$(dirname "$FACTORIO_BIN")/../../data/server-settings.example.json" > "$TMP_ROOT/server-settings.json"
 

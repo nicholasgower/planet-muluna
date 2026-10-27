@@ -18,6 +18,12 @@ Use `python3 <script> --help` for the complete option list.
 | Check data-port fluid isolation | `python3 tools/proto_query.py --dump DUMP data-port-invariant` |
 | Find fluid recipes without indexes | `python3 tools/proto_query.py --dump DUMP recipes --category crafting-with-fluid --missing-fluidbox-index` |
 | Run only the FUnit data-stage fixtures | `tools/ci/funit.sh --data-only` |
+| Run every FUnit modset | `tools/ci/funit-matrix.sh` |
+| Print a modset's `mod-list.json` | `tools/ci/funit-mod-list.sh --modset bz` |
+| Download a modset's extra mods | `tools/ci/funit-download-modset.sh --modset bz` |
+| Check FUnit modset definitions stay in sync | `tools/ci/funit-modsets-check.sh` |
+| Lint fixture load-stage globals | `tools/ci/funit-fixture-lint.sh` |
+| Prove the data fixtures can fail | `tools/ci/funit-mutation-check.sh` |
 | Syntax-check changed Lua files | `tools/ci/lua-check.sh` |
 | Check FUnit seam wiring and docs | `tools/ci/funit-seams-check.sh` |
 | Check the release export boundary | `tools/ci/export-check.sh` |
@@ -253,6 +259,90 @@ It is read-only and exits `1` on drift.
 `--require-missing NAME` adds `NAME` to the required README list. Pass a name that
 is intentionally absent; the checker must report it missing and exit `1`. That is
 the negative self-test for the README detector.
+
+## FUnit matrix and fixture helpers
+
+These helpers keep the FUnit mod-set matrix and fixtures consistent without
+starting Factorio unless noted.
+
+### `tools/ci/funit-modsets-check.sh`
+
+```sh
+tools/ci/funit-modsets-check.sh
+tools/ci/funit-modsets-check.sh --json
+tools/ci/funit-modsets-check.sh --require-missing does-not-exist
+```
+
+Compares the `MODSETS` table in `.github/funit/download_mods.py`, the
+`FUNIT_MODSET` names and link/mod-list blocks in
+`test-mods/planet-muluna-funit/run.sh`, and the `modset` values in both workflow
+matrices. It also requires each matrix to have two legs per modset. Read-only;
+exits `1` on drift.
+
+`--require-missing NAME` adds `NAME` to the expected set and must fail, proving
+the detector works.
+
+### `tools/ci/funit-matrix.sh`
+
+```sh
+tools/ci/funit-matrix.sh
+tools/ci/funit-matrix.sh --modsets vanilla,bz --data-only
+tools/ci/funit-matrix.sh --json
+```
+
+Runs `tools/ci/funit.sh` sequentially for each modset and prints one table or one
+JSON object. `--fail-fast` stops at the first failure; the default continues and
+reports every leg.
+
+### `tools/ci/funit-mod-list.sh`
+
+```sh
+tools/ci/funit-mod-list.sh --modset bz
+tools/ci/funit-mod-list.sh --modset no-quality --output /tmp/mod-list.json
+```
+
+Prints the exact `mod-list.json` the runner would write, without launching
+Factorio. This is useful for checking that a mod is explicitly disabled (for
+example `quality` in the no-quality set) and for feeding probe tools.
+
+### `tools/ci/funit-download-modset.sh`
+
+```sh
+tools/ci/funit-download-modset.sh --modset bz --dry-run
+tools/ci/funit-download-modset.sh --modset planets
+```
+
+Downloads only the named modset's extra mods into `FACTORIO_MODS` (or
+`--mods-dir`). It reuses `download_mods.py` with empty dependency files so the
+base Muluna dependency set is not re-downloaded. The player token is read from
+`FACTORIO_PLAYER_TOKEN`, `FACTORIO_TOKEN`, or `player-data.json`; `--dry-run`
+does not need one.
+
+### `tools/ci/funit-fixture-lint.sh`
+
+```sh
+tools/ci/funit-fixture-lint.sh
+tools/ci/funit-fixture-lint.sh --json
+```
+
+Flags load-stage mistakes: `mods[...]` and `data.raw` in runtime suites (control
+stage must use `script.active_mods`), `script.active_mods` in data-stage
+fixtures, and `assert(true, ...)` weak-test patterns. It skips comments and
+strings.
+
+### `tools/ci/funit-mutation-check.sh`
+
+```sh
+tools/ci/funit-mutation-check.sh
+tools/ci/funit-mutation-check.sh --modset vanilla --keep
+```
+
+Temporarily appends a bad-icon item and a `muluna-` recipe with a missing
+ingredient to the test mod's `data.lua`, runs `funit.sh --data-only`, and requires
+the `prototype_integrity/icon-fields-valid` and
+`content_references/muluna-recipes` fixtures to fail. The original file is
+restored by an exit trap. This is the automated version of the manual mutation
+check used when adding fixtures.
 
 ## `tools/ci/opencode-check.sh`
 

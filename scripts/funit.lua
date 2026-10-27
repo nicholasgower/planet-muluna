@@ -126,6 +126,37 @@ remote.add_interface("muluna_funit", {
   get_walking_controller_branch = function(input_method)
     return stage().is_game_controller_input(input_method)
   end,
+
+  -- The headless scenario has no player, so on_gui_opened/on_gui_click cannot
+  -- be raised with a real GUI. Build the frame against a stub root that records
+  -- each element definition and enforces the engine's checkbox state type.
+  build_entity_gui = function(entity, selected)
+    local recorded = {}
+    local function make_element()
+      local element = { style = {} }
+      function element.add(definition)
+        if definition.state ~= nil and type(definition.state) ~= "boolean" then
+          error("GUI checkbox state must be a boolean, got " .. type(definition.state))
+        end
+        recorded[#recorded + 1] = {
+          type = definition.type,
+          name = definition.name,
+          state = definition.state,
+        }
+        return make_element()
+      end
+      return element
+    end
+    local root = make_element()
+    local ok, err = pcall(stage().build_entity_gui, { gui = { relative = root } }, entity, selected)
+    return { ok = ok, error = err, elements = recorded }
+  end,
+
+  handle_gui_click = function(element_name, opened)
+    local player = { opened = opened }
+    local ok, err = pcall(stage().handle_gui_click, player, { name = element_name })
+    return { ok = ok, error = err, opened = player.opened }
+  end,
 })
 
 return Public

@@ -11,6 +11,28 @@ local BLUEPRINT = "0eNrVWdty4jgQ/Rc9y1NY8pWa3a+YtxRFybaSqMaWPJLMbCqVf9+WAUNAJoia
 
 local NAUVIS_RECIPE = "muluna-telescope-observation-nauvis"
 
+---The captured blueprint below contains quality data. Factorio cannot import it
+---when the quality mod is disabled, so assert that limitation explicitly and
+---skip the direction regression in that mod set.
+local function skip_without_quality(test_name)
+  if script.active_mods["quality"] then
+    return false
+  end
+
+  local inventory = game.create_inventory(1)
+  local blueprint = inventory[1]
+  local import_result = blueprint.import_stack(BLUEPRINT)
+  runner.assert(
+    import_result ~= 0,
+    "quality is disabled but the captured blueprint imported; the no-quality skip premise changed"
+  )
+  runner.log(
+    test_name .. ": quality is disabled; the captured blueprint contains quality data and cannot be imported"
+  )
+  inventory.destroy()
+  return true
+end
+
 local function find_telescope(surface)
   local telescopes = helpers.find_entities(surface, "muluna-telescope", helpers.nauvis_area())
   runner.assert(#telescopes == 1, "expected exactly one telescope, found " .. tostring(#telescopes))
@@ -18,6 +40,9 @@ local function find_telescope(surface)
 end
 
 runner.test("telescope blueprint: direction follows blueprint rotation on Nauvis", function()
+  if skip_without_quality("telescope blueprint: direction follows blueprint rotation on Nauvis") then
+    return
+  end
   helpers.reset_test_areas()
   local surface = helpers.get_nauvis()
   local force = game.forces["player"]
@@ -94,6 +119,9 @@ runner.test("telescope blueprint: direction follows blueprint rotation on Nauvis
 end)
 
 runner.test("telescope blueprint: direction survives recipe replacement on Nauvis", function()
+  if skip_without_quality("telescope blueprint: direction survives recipe replacement on Nauvis") then
+    return
+  end
   helpers.reset_test_areas()
   local surface = helpers.get_nauvis()
   local force = game.forces["player"]

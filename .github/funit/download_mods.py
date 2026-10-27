@@ -57,6 +57,68 @@ VERSION_LABELS = {"latest": "experimental", "stable": "stable"}
 BUILTIN_MODS = ["base", "elevated-rails", "quality", "recycler", "space-age"]
 LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
 
+# Named mod sets used by the FUnit matrix. Each list is the seed mod plus the
+# dependencies that are not already declared by info.json or the test mod.
+# Keep this in sync with test-mods/planet-muluna-funit/run.sh and K2SO's
+# info.json; a new required dependency will fail the run with a missing mod
+# instead of being silently skipped.
+MODSETS = {
+    "vanilla": {"add": [], "disable": []},
+    "aai": {"add": ["aai-industry"], "disable": []},
+    # Brevven's BZ mods that have a Factorio 2.1 release.
+    "bz": {
+        "add": [
+            "bzcarbon",
+            "bzlead",
+            "bzsilicon",
+            "bztin",
+            "bztitanium",
+            "bzzirconium",
+        ],
+        "disable": [],
+    },
+    # The top planet mods on the mod portal and their required dependencies.
+    "planets": {
+        "add": [
+            "maraxsis",
+            "Cerys-Moon-of-Fulgora",
+            "Moshine",
+            "corrundum",
+            "secretas",
+            "Paracelsin",
+            "rubia",
+            "SpidertronPatrols",
+            "SpidertronEnhancements",
+            "FluidMustFlow",
+            "Flare Stack",
+            "Moshine-assets",
+            "Paracelsin-Graphics",
+            "SolarMatrix",
+            "Accumulator-V2",
+            "rubia-assets",
+            "machine-upgrades",
+            "RocketCargoInsertion",
+        ],
+        "disable": [],
+    },
+    "k2so": {
+        "add": [
+            "Krastorio2-spaced-out",
+            "Krastorio2",
+            "Krastorio2Assets",
+            "Krastorio2MenuSimulations",
+            "k2so-assets",
+            "ChangeInserterDropLane",
+        ],
+        "disable": [],
+    },
+    # Quality is optional for both space-age and Muluna. Disable it to keep the
+    # no-quality code paths covered. It must stay in mod-list.json with
+    # enabled=false: Factorio auto-enables an installed mod that an enabled mod
+    # recommends, so omitting it is not enough.
+    "no-quality": {"add": [], "disable": ["quality"]},
+}
+
 
 def parse_dependency(spec: str):
     """Return (prefix, name, requirement) for a Factorio dependency string."""
@@ -237,7 +299,7 @@ def check_credentials(username: str, token: str) -> None:
         raise
 
 
-def collect_dependencies(info_paths: list[Path]) -> list[str]:
+def collect_dependencies(info_paths: list[Path], extra: list[str] | None = None) -> list[str]:
     names: list[str] = []
     seen: set[str] = set()
 
@@ -256,6 +318,14 @@ def collect_dependencies(info_paths: list[Path]) -> list[str]:
             if key not in seen:
                 seen.add(key)
                 names.append(name)
+
+    for name in extra or []:
+        if name.lower() in {builtin.lower() for builtin in BUILTIN_MODS + LOCAL_MODS}:
+            continue
+        key = name.lower()
+        if key not in seen:
+            seen.add(key)
+            names.append(name)
 
     return names
 
@@ -303,7 +373,10 @@ def download_release(name: str, release: dict, username: str, token: str, output
     return name
 
 
-def write_mod_list(path: Path, downloaded: list[str]) -> None:
+def write_mod_list(
+    path: Path, downloaded: list[str], disable: list[str] | None = None
+) -> None:
+    disabled = {name.lower() for name in (disable or [])}
     ordered = list(BUILTIN_MODS) + list(LOCAL_MODS) + sorted(
         downloaded, key=str.lower
     )
@@ -314,7 +387,7 @@ def write_mod_list(path: Path, downloaded: list[str]) -> None:
         if key in seen:
             continue
         seen.add(key)
-        mods.append({"name": name, "enabled": True})
+        mods.append({"name": name, "enabled": key not in disabled})
 
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"mods": mods}, indent=2) + "\n")
@@ -351,6 +424,18 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--modset",
+        default="vanilla",
+        choices=sorted(MODSETS),
+        help=(
+            "mod set to download and enable: 'vanilla' (default), 'aai' "
+            "(vanilla plus aai-industry), 'bz' (Brevven's BZ mods with 2.1 "
+            "releases), 'k2so' (Krastorio 2 Spaced Out and its dependencies), "
+            "'no-quality' (vanilla without quality), or 'planets' (the top "
+            "planet mods and their dependencies)"
+        ),
+    )
+    parser.add_argument(
         "--skip-local-check",
         action="store_true",
         help=(
@@ -374,7 +459,10 @@ def main() -> int:
         or ""
     )
 
-    dependencies = collect_dependencies([args.info, args.test_info])
+    modset = MODSETS[args.modset]
+    dependencies = collect_dependencies(
+        [args.info, args.test_info], extra=modset["add"]
+    )
     factorio_version = resolve_version(args.factorio_version)
 
     if not args.dry_run:
@@ -386,6 +474,7 @@ def main() -> int:
         check_credentials(username, token)
 
     print(f"Required/recommended dependencies for Factorio {factorio_version}:")
+    print(f"  modset: {args.modset}")
     print("  " + ", ".join(dependencies))
 
     releases = []
@@ -416,7 +505,7 @@ def main() -> int:
     mod_list = args.mod_list or (
         args.output_dir / "scenarios" / "__funit__muluna" / "mod-list.json"
     )
-    write_mod_list(mod_list, downloaded)
+    write_mod_list(mod_list, downloaded, disable=modset["disable"])
     print(f"Wrote mod list to {mod_list}")
     print("Downloaded mods:")
     for name in sorted(downloaded, key=str.lower):
