@@ -14,6 +14,13 @@
 # The paid Space Age mods (space-age, quality, elevated-rails, recycler) are
 # built into the headless server image and are never downloaded from the portal.
 #
+# The scenario runs twice, in a matrix over the Factorio release channels:
+#   * stable       -> factoriotools/factorio:stable (newest stable release)
+#   * experimental -> factoriotools/factorio:latest (newest experimental release)
+# Mods are resolved against the version installed in each image, so a
+# dependency that is only published for the experimental release is still
+# picked up by the experimental leg.
+#
 # See .github/funit/README.md for the local adaptations to PlanetsLib's action.
 
 name: FUnit
@@ -32,7 +39,6 @@ permissions:
   contents: read
 
 env:
-  FACTORIO_VERSION: "latest"
   MOD_NAME: planet-muluna
   TEST_MOD_NAME: planet-muluna-funit
   TEST_MOD_DIR: test-mods/planet-muluna-funit
@@ -45,8 +51,6 @@ jobs:
     container:
       image: ruby:4-alpine
     timeout-minutes: 30
-    outputs:
-      factorio_version: ${{ env.FACTORIO_VERSION }}
     defaults:
       run:
         shell: bash
@@ -167,13 +171,25 @@ jobs:
           if-no-files-found: error
 
   unit-test-job:
-    name: Run FUnit scenario
+    name: Run FUnit scenario (${{ matrix.channel }})
     needs: build-archive-job
     runs-on: ubuntu-latest
+    strategy:
+      # An experimental-release failure must not hide the stable result.
+      fail-fast: false
+      matrix:
+        include:
+          - channel: stable
+            image_tag: stable
+          - channel: experimental
+            image_tag: latest
     container:
-      image: "factoriotools/factorio:${{ needs.build-archive-job.outputs.factorio_version }}"
+      image: "factoriotools/factorio:${{ matrix.image_tag }}"
     timeout-minutes: 30
     env:
+      # Both labels are resolved by download_mods.py against the game installed
+      # in the image (falling back to factorio.com's matching release channel).
+      FACTORIO_VERSION: ${{ matrix.image_tag }}
       # The username is public; prefer an explicit repo variable/secret, then
       # fall back to the account that owns the mod portal listing for Muluna.
       USERNAME: ${{ vars.FACTORIO_USERNAME || secrets.FACTORIO_USERNAME || 'MeteorSwarm' }}
@@ -224,15 +240,21 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: unit-test-job
+          name: unit-test-job-${{ matrix.channel }}
           retention-days: 30
           path: test_artifacts
 
   parse-results-job:
-    name: Parse FUnit results
+    name: Parse FUnit results (${{ matrix.channel }})
     needs: unit-test-job
     if: ${{ !cancelled() && needs.unit-test-job.result != 'skipped' }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - channel: stable
+          - channel: experimental
     container:
       image: ruby:4-alpine
     timeout-minutes: 30
@@ -241,16 +263,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: unit-test-job
+          name: unit-test-job-${{ matrix.channel }}
           path: test_artifacts
       - name: Convert FUnit reports to JUnit XML
         run: |
           ruby .github/funit/parse_funit_json.rb \
             "test_artifacts/${MOD_NAME}/reports" \
-            -o "funit-report-${MOD_NAME}.xml"
+            -o "funit-report-${MOD_NAME}-${{ matrix.channel }}.xml"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: parse-results-job
+          name: parse-results-job-${{ matrix.channel }}
           retention-days: 30
           path: funit-report-*.xml

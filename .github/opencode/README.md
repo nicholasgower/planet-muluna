@@ -60,9 +60,10 @@ explicit deny rules still apply.
 `.github/opencode/setup-factorio.sh` runs before OpenCode and:
 
 1. downloads the public headless Factorio tarball for `latest` (the newest
-   experimental build, the same policy as the `FUnit` workflow's
-   `factoriotools/factorio:latest` image) and extracts it under
-   `$RUNNER_TEMP/muluna-opencode/factorio`;
+   experimental build, matching the experimental leg of the `FUnit` workflow's
+   `factoriotools/factorio` matrix) and extracts it under
+   `$RUNNER_TEMP/muluna-opencode/factorio`. Set `FACTORIO_VERSION=stable` to
+   use the newest stable build instead;
 2. downloads every required and recommended dependency from the mod portal using
    `.github/funit/download_mods.py`, so versions stay in sync with `info.json`;
 3. packages the pinned `funit` revision that `.github/workflows/funit.yml` uses.

@@ -360,7 +360,8 @@ The body contains, in order:
    `docs/` or `locale/` separately when they exist.
 3. **Testing Notes** — list every tested Factorio scenario with the scenario name, test
    count, and failures/errors. Include the Factorio version used locally and note that CI
-   runs the floating `latest` image. Also list the static checks run (`git diff --check`,
+   runs both the floating `latest` image (newest experimental release) and the `stable`
+   image (newest stable release). Also list the static checks run (`git diff --check`,
    any syntax checks).
 4. **Bugfix review scope** — identify the bugfix commit(s) explicitly and state that
    test-only commits are excluded from the bugfix checklist.
