@@ -117,6 +117,7 @@ when the `funit` mod is active**:
   `handle_invalid_nav_surface`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
+- `build_entity_gui`, `handle_gui_click`
 
 The production modules export their internal helpers through `Muluna.funit` under
 the same `script.active_mods["funit"]` guard. They are inert in normal play.
