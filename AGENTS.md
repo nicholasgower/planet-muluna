@@ -547,6 +547,18 @@ The `tools/ci/` helpers are development tools and are not shipped:
 - `funit-seams-check.sh` — verify `Muluna.funit` exports, FUnit remote calls, and the
   test-only seam list in the FUnit README stay in sync. `--require-missing` is the
   negative self-test.
+- `funit-modsets-check.sh` — verify the `MODSETS` table, the runner's accepted
+  mod sets and link blocks, and both workflow matrices agree. `--require-missing` is
+  the negative self-test.
+- `funit-matrix.sh` — run several mod sets sequentially and summarize the results
+  as a table or JSON.
+- `funit-mod-list.sh` — print a mod set's `mod-list.json` without launching Factorio.
+- `funit-download-modset.sh` — download only a mod set's extra mods into
+  `FACTORIO_MODS` for local runs.
+- `funit-fixture-lint.sh` — flag `mods[...]`/`data.raw` in runtime suites,
+  `script.active_mods` in data fixtures, and weak `assert(true, ...)` patterns.
+- `funit-mutation-check.sh` — inject a bad icon and a missing recipe ingredient,
+  require the matching fixtures to fail, and restore `data.lua` on exit.
 - `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
 - `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
   test links.
