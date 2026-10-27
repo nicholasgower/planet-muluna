@@ -11,11 +11,12 @@ Muluna:extend{
 -- dropped on Vulcanus lava. Vanilla's "smoke" lasts 600 ticks; this one
 -- disperses three times as fast, so it uses the same animation with a third
 -- of the lifetime.
+local smoke_speed = 6
 local dropped_item_smoke = table.deepcopy(data.raw["trivial-smoke"]["smoke"])
 dropped_item_smoke.name = "muluna-dropped-item-smoke"
-dropped_item_smoke.duration = math.floor(dropped_item_smoke.duration / 3)
-dropped_item_smoke.spread_duration = math.floor(dropped_item_smoke.spread_duration / 3)
-dropped_item_smoke.fade_away_duration = math.floor(dropped_item_smoke.fade_away_duration / 3)
+dropped_item_smoke.duration = math.floor(dropped_item_smoke.duration / smoke_speed)
+dropped_item_smoke.spread_duration = math.floor(dropped_item_smoke.spread_duration / smoke_speed)
+dropped_item_smoke.fade_away_duration = math.floor(dropped_item_smoke.fade_away_duration / smoke_speed)
 Muluna:extend{dropped_item_smoke}
 
 local destroyed_dropped_item_trigger = {
