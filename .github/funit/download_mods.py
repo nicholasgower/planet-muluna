@@ -64,6 +64,7 @@ LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
 # instead of being silently skipped.
 MODSETS = {
     "vanilla": {"add": [], "disable": []},
+    "aai": {"add": ["aai-industry"], "disable": []},
     "k2so": {
         "add": [
             "Krastorio2-spaced-out",
@@ -391,9 +392,9 @@ def main() -> int:
         default="vanilla",
         choices=sorted(MODSETS),
         help=(
-            "mod set to download and enable: 'vanilla' (default), 'k2so' "
-            "(Krastorio 2 Spaced Out and its dependencies), or 'no-quality' "
-            "(vanilla without the quality mod)"
+            "mod set to download and enable: 'vanilla' (default), 'aai' "
+            "(vanilla plus aai-industry), 'k2so' (Krastorio 2 Spaced Out and "
+            "its dependencies), or 'no-quality' (vanilla without quality)"
         ),
     )
     parser.add_argument(

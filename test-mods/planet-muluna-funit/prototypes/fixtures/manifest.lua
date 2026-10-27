@@ -22,5 +22,6 @@ return {
     "muluna_tiles",
     "prototype_integrity",
     "content_references",
+    "aai",
   },
 }

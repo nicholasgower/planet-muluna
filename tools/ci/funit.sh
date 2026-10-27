@@ -103,10 +103,11 @@ Options:
                      the runtime suite and is the right loop for prototype
                      fixtures. Cannot be combined with --suite, --test,
                      --baseline, or --no-run.
-  --modset NAME      Load the named mod set: "vanilla" (default), "k2so"
-                     (Krastorio 2 Spaced Out and its dependencies), or
-                     "no-quality" (vanilla without the quality mod). Matches
-                     the modset matrix dimension in .github/workflows/funit.yml.
+  --modset NAME      Load the named mod set: "vanilla" (default), "aai"
+                     (vanilla plus aai-industry), "k2so" (Krastorio 2 Spaced
+                     Out and its dependencies), or "no-quality" (vanilla
+                     without quality). Matches the modset matrix dimension in
+                     .github/workflows/funit.yml.
   -h, --help         Show this help.
 
 Environment overrides:
@@ -647,8 +648,8 @@ fi
 
 if [[ -n "$MODSET" ]]; then
   case "$MODSET" in
-    vanilla | k2so | no-quality) ;;
-    *) die "unknown --modset: $MODSET (expected vanilla, k2so or no-quality)." ;;
+    vanilla | aai | k2so | no-quality) ;;
+    *) die "unknown --modset: $MODSET (expected vanilla, aai, k2so or no-quality)." ;;
   esac
 fi
 FUNIT_MODSET="${MODSET:-${FUNIT_MODSET:-vanilla}}"

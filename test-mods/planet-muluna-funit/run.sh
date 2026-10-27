@@ -10,9 +10,9 @@
 #   TMP_ROOT       Scratch directory (default: /tmp/opencode/muluna-funit)
 #   TIMEOUT        Maximum run time in seconds (default: 900)
 #   DATA_ONLY      Set to 1 to run --dump-data instead of the FUnit scenario
-#   FUNIT_MODSET   Mod set to load: "vanilla" (default), "k2so" (Krastorio 2
-#                  Spaced Out and its dependencies), or "no-quality" (vanilla
-#                  without the quality mod)
+#   FUNIT_MODSET   Mod set to load: "vanilla" (default), "aai" (vanilla plus
+#                  aai-industry), "k2so" (Krastorio 2 Spaced Out and its
+#                  dependencies), or "no-quality" (vanilla without quality)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,9 +29,9 @@ DATA_ONLY="${DATA_ONLY:-0}"
 FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
 case "$FUNIT_MODSET" in
-  vanilla | k2so | no-quality) ;;
+  vanilla | aai | k2so | no-quality) ;;
   *)
-    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, k2so or no-quality)" >&2
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, k2so or no-quality)" >&2
     exit 2
     ;;
 esac
@@ -89,6 +89,10 @@ link_zip "alien-biomes-graphics" 'alien-biomes-graphics_*.zip'
 
 # Krastorio 2 Spaced Out and the dependencies it needs. Keep this list in sync
 # with .github/funit/download_mods.py's MODSETS table and with K2SO's info.json.
+if [[ "$FUNIT_MODSET" == "aai" ]]; then
+  link_zip "aai-industry" 'aai-industry_*.zip'
+fi
+
 if [[ "$FUNIT_MODSET" == "k2so" ]]; then
   link_zip "Krastorio2" 'Krastorio2_*.zip'
   link_zip "Krastorio2Assets" 'Krastorio2Assets_*.zip'
@@ -119,6 +123,9 @@ MOD_NAMES=(
   space-exploration-graphics-5
   alien-biomes-graphics
 )
+if [[ "$FUNIT_MODSET" == "aai" ]]; then
+  MOD_NAMES+=(aai-industry)
+fi
 if [[ "$FUNIT_MODSET" == "k2so" ]]; then
   MOD_NAMES+=(
     Krastorio2
