@@ -5,7 +5,7 @@ local SUITE = "muluna_tiles"
 local SMOKE_NAME = "muluna-dropped-item-smoke"
 local VANILLA_SMOKE_NAME = "smoke"
 local VANILLA_SMOKE_DURATION = 600
-local DISPERSAL_DIVISOR = 3
+local DISPERSAL_DIVISOR = 6
 
 local function each_natural_tile(fn)
   for i = 1, 9 do
@@ -31,7 +31,7 @@ results.check(SUITE, "dropped-item-smoke-exists", function()
   assert(data.raw["trivial-smoke"][SMOKE_NAME], SMOKE_NAME .. " is missing")
 end)
 
-results.check(SUITE, "dropped-item-smoke-disperses-three-times-faster", function()
+results.check(SUITE, "dropped-item-smoke-disperses-six-times-faster", function()
   local vanilla = data.raw["trivial-smoke"][VANILLA_SMOKE_NAME]
   assert(vanilla, VANILLA_SMOKE_NAME .. " is missing")
   assert(

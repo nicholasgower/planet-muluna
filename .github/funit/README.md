@@ -30,9 +30,14 @@ Sources (FUnit commit `b69c2f277a467726e3a8c555d48df5b647ec5a64`):
   recommended (`+`) dependency for the target Factorio version. Optional (`?`
   / `(?)`) and incompatible (`!`) entries are skipped. It writes the scenario's
   `mod-list.json` from the downloaded set, so the list cannot drift from the
-  mod's declared dependencies. `FACTORIO_VERSION=latest` is resolved to the
-  version installed in the image (falling back to factorio.com's experimental
-  release), so it stays in sync with the `factoriotools/factorio:latest` tag.
+  mod's declared dependencies. Labels are resolved to the version installed in
+  the image (falling back to factorio.com's matching release channel), so they
+  stay in sync with the docker tag: `FACTORIO_VERSION=latest` tracks the
+  experimental channel and `FACTORIO_VERSION=stable` tracks the stable channel.
+- `funit.yml` runs the scenario once per release channel via a matrix over
+  `factoriotools/factorio:stable` and `factoriotools/factorio:latest`. Each leg
+  resolves and downloads its own dependency set, so a mod that has only
+  published an experimental release is still picked up.
 - The paid DLC mods are supplied by the headless server image; the main mod,
   test mod and FUnit are packaged by the build job.
 - FUnit itself is packaged from a shallow GitLab clone at a pinned commit, so

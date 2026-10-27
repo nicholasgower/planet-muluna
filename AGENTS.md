@@ -92,6 +92,40 @@ end
 **Guard prototype-only code with `Muluna.stage == "data"` when a module might also be
 loaded from control,** and never touch `data.raw` in control stage.
 
+## Factorio version support (stable and experimental)
+
+The mod ships **one codebase** that must load and run on both the **latest stable** and the
+**latest experimental** Factorio release. There is no separate stable or experimental build
+of the release — one zip serves both — so a change that only works on the experimental build
+is a bug. `.github/workflows/funit.yml` enforces this by running the full FUnit suite once per
+release channel (`factoriotools/factorio:stable` and `factoriotools/factorio:latest`).
+
+- **Never require an experimental build.** Keep `info.json`'s `factorio_version` and
+  `base >= ...` satisfied by the current stable release; do not raise the minimum because
+  the experimental build happens to be installed.
+- **Version-gate behavior that only exists in newer builds.** `helpers` is available in
+  every stage (settings, prototype and runtime), so the same check works everywhere:
+
+  ```lua
+  local has_new_behavior = helpers.compare_versions(helpers.game_version, "2.1.24") >= 0
+  ```
+
+  Compare against the exact version that introduced the behavior, not `"latest"`. Existing
+  examples: `settings.lua`, `data-final-fixes.lua`,
+  `prototypes/entity/recycling-steam-turbine.lua`, `prototypes/entity/burner-roboport.lua`,
+  `prototypes/technology/space-station.lua`, `scripts/telescopes.lua`.
+- **Prefer feature detection where the API allows it.** A missing prototype, field or event
+  is cheaper and clearer to detect than a version bound, for example
+  `if data.raw["container"]["bottomless-chest"] then`. Use a version gate for behavior
+  changes that cannot be detected from the prototype tables.
+- **Gate both directions.** When adding an experimental-only improvement, keep the stable
+  path working instead of deleting the fallback. Assigning a prototype field that the stable
+  build does not recognize errors the data stage, so guard the assignment and not only the
+  runtime behavior.
+- **Test both channels for version-sensitive changes.**
+  `test-mods/planet-muluna-funit/run.sh` runs whichever install `FACTORIO_BIN` points at:
+  run it once against stable and once against experimental, or rely on the CI matrix.
+
 ## The `Muluna` global API (`api.lua`)
 
 Almost every file starts with `local rro = Muluna.rro`. Key members:
@@ -234,9 +268,9 @@ runs both locally and in GitHub Actions. What you can do:
    data-stage fixtures, `tools/ci/funit.sh --data-only` runs only the data stage and is
    much faster. See that mod's `README.md` for prerequisites and the test-only
    `muluna_funit` remote interface. The `FUnit` workflow
-   (`.github/workflows/funit.yml`) runs the same suite in CI, and
-   `.github/opencode/setup-factorio.sh` prepares a headless install plus the dependency
-   mods for the issue-bugfix workflow.
+   (`.github/workflows/funit.yml`) runs the same suite in CI once per release channel
+   (stable and experimental), and `.github/opencode/setup-factorio.sh` prepares a headless
+   install plus the dependency mods for the issue-bugfix workflow.
 4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
    `__funit__` test that generates the Muluna surface and checks the Entity Replacement
    System. It needs the `funit` mod and a matching `mod-list.json`; it is a reference smoke
@@ -360,7 +394,8 @@ The body contains, in order:
    `docs/` or `locale/` separately when they exist.
 3. **Testing Notes** — list every tested Factorio scenario with the scenario name, test
    count, and failures/errors. Include the Factorio version used locally and note that CI
-   runs the floating `latest` image. Also list the static checks run (`git diff --check`,
+   runs both the floating `latest` image (newest experimental release) and the `stable`
+   image (newest stable release). Also list the static checks run (`git diff --check`,
    any syntax checks).
 4. **Bugfix review scope** — identify the bugfix commit(s) explicitly and state that
    test-only commits are excluded from the bugfix checklist.

@@ -9,7 +9,7 @@ Muluna:extend{
 
 -- Items dropped on Muluna soil burn away with a puff of smoke, like items
 -- dropped on Vulcanus lava. Vanilla's "smoke" lasts 600 ticks; this one
--- disperses three times as fast, so it uses the same animation with a third
+-- disperses six times as fast, so it uses the same animation with a sixth
 -- of the lifetime.
 local smoke_speed = 6
 local dropped_item_smoke = table.deepcopy(data.raw["trivial-smoke"]["smoke"])

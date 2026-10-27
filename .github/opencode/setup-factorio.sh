@@ -13,7 +13,9 @@
 #   FACTORIO_PLAYER_TOKEN  Factorio player token (required unless reusing an
 #                          existing FACTORIO_BIN/FACTORIO_MODS pair)
 #   FACTORIO_USERNAME      Mod portal username (default: MeteorSwarm)
-#   FACTORIO_VERSION       Factorio version or "latest" (default: latest)
+#   FACTORIO_VERSION       Factorio release to install: "latest" (newest
+#                          experimental), "stable" (newest stable) or a concrete
+#                          version (default: latest)
 #   FUNIT_COMMIT           Pinned FUnit revision (matches .github/workflows/funit.yml)
 #   RUNNER_TEMP            Scratch root (default: /tmp/opencode)
 set -euo pipefail
@@ -47,9 +49,10 @@ mkdir -p "$WORK_ROOT" "$MODS_DIR"
 # Factorio
 # ---------------------------------------------------------------------------
 # factorio.com serves a public headless tarball for the requested release. The
-# "latest" alias tracks the newest experimental build, the same policy as the
-# factoriotools/factorio:latest image used by the FUnit workflow. The tarball
-# includes the Space Age expansion data, so no DLC download is needed.
+# "latest" alias tracks the newest experimental build and "stable" the newest
+# stable build, the same aliases the FUnit workflow passes to the
+# factoriotools/factorio image tags. The tarball includes the Space Age
+# expansion data, so no DLC download is needed.
 if [[ ! -x "$FACTORIO_DIR/bin/x64/factorio" ]]; then
   echo "Downloading Factorio $FACTORIO_VERSION (headless)..."
   archive="$WORK_ROOT/factorio-headless.tar.xz"

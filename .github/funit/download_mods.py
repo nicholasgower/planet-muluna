@@ -19,10 +19,14 @@ mod, test mod and FUnit are packaged from this repository.  Everything else is
 resolved to the newest release for the target Factorio version and downloaded
 into the test artifacts directory.
 
-The target version may be a concrete version (e.g. "2.1.22") or the label
-"latest", which matches the factorio-docker image's latest experimental build.
-"latest" is resolved from the game installed in this environment when possible
-and from factorio.com's latest-releases API otherwise.
+The target version may be a concrete version (e.g. "2.1.22") or one of the
+release-channel labels:
+
+  * "latest" -> newest experimental release (the factorio-docker "latest" tag)
+  * "stable" -> newest stable release (the factorio-docker "stable" tag)
+
+Labels are resolved from the game installed in this environment when possible
+and from factorio.com's matching release channel otherwise.
 """
 
 from __future__ import annotations
@@ -44,10 +48,11 @@ PORTAL = "https://mods.factorio.com"
 FACTORIO_RELEASES = "https://factorio.com/api/latest-releases"
 USER_AGENT = "planet-muluna-funit-ci/1.0"
 
-# Labels accepted in place of a concrete Factorio version. The docker image
-# publishes "latest" as the newest experimental build.
-VERSION_LABELS = ("latest",)
-LATEST_CHANNEL = "experimental"
+# Labels accepted in place of a concrete Factorio version, mapped to the
+# factorio.com release channel they track. The docker image publishes "latest"
+# as the newest release (experimental while one is in testing) and "stable" as
+# the newest stable build.
+VERSION_LABELS = {"latest": "experimental", "stable": "stable"}
 
 BUILTIN_MODS = ["base", "elevated-rails", "quality", "recycler", "space-age"]
 LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
@@ -87,10 +92,10 @@ def version_ge(a: str, b: str) -> bool:
 def installed_factorio_version():
     """Return the version of the Factorio install in this environment, if any.
 
-    The FUnit job runs inside the factorio-docker image, and that image's
-    "latest" tag selects whichever build it ships. Reading the installed
-    version keeps the mod selection in sync with the game that will load the
-    mods, even if factorio.com has already moved on to a newer release.
+    The FUnit jobs run inside the factorio-docker image, and each image tag
+    selects whichever build it ships ("stable" or "latest"). Reading the
+    installed version keeps the mod selection in sync with the game that will
+    load the mods, even if factorio.com has already moved on to a newer release.
     """
     candidates = []
     explicit = os.environ.get("FACTORIO_BIN")
@@ -131,7 +136,7 @@ def installed_factorio_version():
     return None
 
 
-def latest_portal_version(channel: str = LATEST_CHANNEL) -> str:
+def channel_version(channel: str) -> str:
     """Resolve a release channel from factorio.com's latest-releases API."""
     data = fetch_json(FACTORIO_RELEASES)
     releases = data.get(channel) or {}
@@ -143,15 +148,16 @@ def latest_portal_version(channel: str = LATEST_CHANNEL) -> str:
 
 
 def resolve_version(label: str) -> str:
-    """Turn a version label such as "latest" into a concrete version number."""
-    if label.strip().lower() not in VERSION_LABELS:
+    """Turn a version label such as "latest" or "stable" into a version number."""
+    channel = VERSION_LABELS.get(label.strip().lower())
+    if channel is None:
         return label
 
     version = installed_factorio_version()
     source = "installed game"
     if not version:
-        version = latest_portal_version()
-        source = f"factorio.com {LATEST_CHANNEL} channel"
+        version = channel_version(channel)
+        source = f"factorio.com {channel} channel"
 
     print(f"Resolved Factorio version '{label}' to {version} ({source}).")
     return version
@@ -339,7 +345,10 @@ def main() -> int:
     parser.add_argument(
         "--factorio-version",
         default=os.environ.get("FACTORIO_VERSION", "2.1.22"),
-        help="target Factorio version, or 'latest' for the installed/experimental build",
+        help=(
+            "target Factorio version, or a release label: 'latest' for the "
+            "installed/experimental build, 'stable' for the installed/stable build"
+        ),
     )
     parser.add_argument(
         "--skip-local-check",
