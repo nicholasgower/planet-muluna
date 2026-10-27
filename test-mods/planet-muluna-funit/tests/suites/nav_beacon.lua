@@ -665,10 +665,32 @@ runner.test("scan energy and scan area scale with quality", function()
 
   local energy_field = fields[1]
   local size_field = fields[2]
-  if not (energy_field.quality_values and size_field.quality_values) then
-    runner.log("quality feature is disabled; skipping quality scan scaling checks")
+  local has_quality_values = next(energy_field.quality_values or {}) ~= nil
+    and next(size_field.quality_values or {}) ~= nil
+
+  if not script.active_mods["quality"] then
+    -- The engine always exposes normal and quality-unknown values. Without the
+    -- quality mod no real quality tier may be advertised.
+    local allowed = { normal = true, ["quality-unknown"] = true }
+    for key in pairs(energy_field.quality_values or {}) do
+      runner.assert(
+        allowed[key],
+        "quality is disabled but the radar tooltip advertises " .. tostring(key) .. " scan values"
+      )
+    end
+    for key in pairs(size_field.quality_values or {}) do
+      runner.assert(
+        allowed[key],
+        "quality is disabled but the radar tooltip advertises " .. tostring(key) .. " scan values"
+      )
+    end
     return
   end
+
+  runner.assert(
+    has_quality_values,
+    "quality is enabled but the radar tooltip has no per-quality scan values"
+  )
 
   local radar_data = prototypes.mod_data[RADAR].data
   local base = radar_data.entities[RADAR]
@@ -682,7 +704,11 @@ runner.test("scan energy and scan area scale with quality", function()
 
   local checked = 0
   for quality_name, quality in pairs(prototypes.quality) do
-    if energy_field.quality_values[quality_name] and size_field.quality_values[quality_name] then
+    if
+      quality_name ~= "quality-unknown"
+      and energy_field.quality_values[quality_name]
+      and size_field.quality_values[quality_name]
+    then
       local level = quality.level
       local expected_energy = tonumber(string.format("%.0f", base.energy_per_scan / (1 + 0.3 * level)))
       local expected_size = tonumber(string.format("%.0f", base.scan_area * (1 + 0.3 * level)))
@@ -716,6 +742,10 @@ runner.test("scan energy and scan area scale with quality", function()
   end
 
   runner.assert(checked >= 2, "fewer than two qualities had scan tooltip values")
+  runner.assert(
+    energy_field.quality_values["uncommon"] ~= nil and size_field.quality_values["uncommon"] ~= nil,
+    "quality is enabled but the radar tooltip has no uncommon scan values"
+  )
   runner.assert(
     quality_value(energy_field, "uncommon") < quality_value(energy_field, "normal"),
     "uncommon scan energy is not lower than normal"

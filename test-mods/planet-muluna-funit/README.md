@@ -56,6 +56,8 @@ Useful environment variables:
 | `TIMEOUT` | `900` | Seconds to wait for `====END====` |
 | `FACTORIO_PORT` | `34198` | Local server port used by the headless instance |
 | `DATA_ONLY` | `0` | Run `--dump-data` instead of the scenario (used by `funit.sh --data-only`) |
+| `MOD_LIST_ONLY` | `0` | Write the scratch `mod-list.json` and exit without launching Factorio (used by `funit-mod-list.sh`) |
+| `FUNIT_MODSET` | `vanilla` | `vanilla`, `aai` (aai-industry), `bz` (Brevven's BZ mods with 2.1 releases), `no-quality` (quality disabled), `planets` (top planet mods), or `k2so` (Krastorio 2 Spaced Out and its dependencies) |
 
 The full log is `$TMP_ROOT/stdout.log`; on failure the runner prints the relevant
 FUnit lines and the tail of the log. A data-only run also writes the prototype dump to
@@ -117,6 +119,7 @@ when the `funit` mod is active**:
   `handle_invalid_nav_surface`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
+- `build_entity_gui`, `handle_gui_click`
 
 The production modules export their internal helpers through `Muluna.funit` under
 the same `script.active_mods["funit"]` guard. They are inert in normal play.

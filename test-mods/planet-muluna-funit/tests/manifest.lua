@@ -12,4 +12,7 @@ return {
   "__planet-muluna-funit__.tests.suites.nav_beacon",
   "__planet-muluna-funit__.tests.suites.ground_diggers",
   "__planet-muluna-funit__.tests.suites.walking_particles",
+  "__planet-muluna-funit__.tests.suites.compound_space_platform",
+  "__planet-muluna-funit__.tests.suites.stale_entities",
+  "__planet-muluna-funit__.tests.suites.gui",
 }

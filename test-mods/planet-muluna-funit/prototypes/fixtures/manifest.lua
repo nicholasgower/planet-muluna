@@ -20,5 +20,10 @@ return {
     "cargo_drops",
     "api_helpers",
     "muluna_tiles",
+    "prototype_integrity",
+    "content_references",
+    "aai",
+    "brevven",
+    "planets",
   },
 }

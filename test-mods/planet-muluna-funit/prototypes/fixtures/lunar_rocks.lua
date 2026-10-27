@@ -14,7 +14,17 @@ local function mining_yields(name)
   local yields = {}
   for _, result in pairs(entity.minable.results) do
     assert(result.type == "item", name .. " has a non-item mining result")
-    yields[result.name] = (yields[result.name] or 0) + result.amount
+    local amount = result.amount
+    if amount == nil then
+      -- Other mods (for example BZ Zirconium) add range results with
+      -- amount_min/amount_max instead of a fixed amount.
+      assert(
+        result.amount_min and result.amount_max,
+        name .. " result " .. tostring(result.name) .. " has neither amount nor an amount range"
+      )
+      amount = (result.amount_min + result.amount_max) / 2
+    end
+    yields[result.name] = (yields[result.name] or 0) + amount
   end
   return yields
 end
