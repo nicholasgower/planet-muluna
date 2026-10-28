@@ -121,6 +121,30 @@ results.check(SUITE, "science-discovery-vanilla-baseline", function()
   end
 end)
 
+results.check(SUITE, "science-discovery-vanilla-list-order", function()
+  local expected = {}
+  for _, item_name in ipairs({
+    "metallurgic-science-pack",
+    "agricultural-science-pack",
+    "electromagnetic-science-pack",
+  }) do
+    if data.raw["item"][item_name] then
+      expected[#expected + 1] = item_name
+    end
+  end
+
+  local data_table = conditions()
+  for index, item_name in ipairs(expected) do
+    local group = data_table.packs[index]
+    assert(group, "missing pack group at position " .. index)
+    assert(group.item == item_name, "vanilla pack is not in the hardcoded list position: " .. item_name)
+    assert(
+      data_table.science_packs[index] == group.representative,
+      "representative list does not match vanilla pack order at position " .. index
+    )
+  end
+end)
+
 results.check(SUITE, "science-discovery-alternative-recipe", function()
   local group = find_group_by_item("muluna-funit-science-pack")
   assert(group, "synthetic pack group is missing")
