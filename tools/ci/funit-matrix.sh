@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 FUNIT="$SCRIPT_DIR/funit.sh"
 
-ALL_MODSETS=(vanilla aai bz no-quality planets k2so)
+ALL_MODSETS=(vanilla aai bz no-quality planets k2so muluna-start)
 MODSETS=("${ALL_MODSETS[@]}")
 DATA_ONLY=0
 FAIL_FAST=0
@@ -34,8 +34,9 @@ one combined summary. Each leg calls:
 
 Options:
   --modsets LIST     Comma-separated mod sets to run, in order. Valid names are
-                     vanilla, aai, bz, no-quality, planets and k2so.
-                     Default: vanilla,aai,bz,no-quality,planets,k2so
+                     vanilla, aai, bz, no-quality, planets, k2so and
+                     muluna-start.
+                     Default: vanilla,aai,bz,no-quality,planets,k2so,muluna-start
                      Duplicates are dropped; the first occurrence wins.
   --data-only        Run only the data stage for every modset. Much faster than
                      the runtime suite and the right loop for prototype work.
@@ -90,8 +91,8 @@ split_modsets() {
     item="${item%"${item##*[![:space:]]}"}"
     [[ -n "$item" ]] || die "--modsets contains an empty entry: '$raw'."
     case "$item" in
-      vanilla | aai | bz | k2so | no-quality | planets) ;;
-      *) die "unknown modset: $item (expected vanilla, aai, bz, k2so, no-quality or planets)." ;;
+      vanilla | aai | bz | k2so | no-quality | planets | muluna-start) ;;
+      *) die "unknown modset: $item (expected vanilla, aai, bz, k2so, no-quality, planets or muluna-start)." ;;
     esac
     seen=0
     for existing in "${result[@]+"${result[@]}"}"; do

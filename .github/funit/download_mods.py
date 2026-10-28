@@ -65,6 +65,8 @@ LOCAL_MODS = ["planet-muluna", "planet-muluna-funit", "funit"]
 MODSETS = {
     "vanilla": {"add": [], "disable": []},
     "aai": {"add": ["aai-industry"], "disable": []},
+    # Any Planet Start with the test profile's aps-planet pin (muluna).
+    "muluna-start": {"add": ["any-planet-start"], "disable": []},
     # Brevven's BZ mods that have a Factorio 2.1 release.
     "bz": {
         "add": [
@@ -431,8 +433,9 @@ def main() -> int:
             "mod set to download and enable: 'vanilla' (default), 'aai' "
             "(vanilla plus aai-industry), 'bz' (Brevven's BZ mods with 2.1 "
             "releases), 'k2so' (Krastorio 2 Spaced Out and its dependencies), "
-            "'no-quality' (vanilla without quality), or 'planets' (the top "
-            "planet mods and their dependencies)"
+            "'no-quality' (vanilla without quality), 'planets' (the top planet "
+            "mods and their dependencies), or 'muluna-start' (vanilla plus "
+            "any-planet-start with aps-planet = muluna)"
         ),
     )
     parser.add_argument(
