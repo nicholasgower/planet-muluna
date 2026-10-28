@@ -106,8 +106,10 @@ Options:
   --modset NAME      Load the named mod set: "vanilla" (default), "aai"
                      (vanilla plus aai-industry), "bz" (Brevven's BZ mods with
                      2.1 releases), "k2so" (Krastorio 2 Spaced Out and its
-                     dependencies), "no-quality" (vanilla without quality), or
-                     "planets" (the top planet mods and their dependencies).
+                     dependencies), "no-quality" (vanilla without quality),
+                     "planets" (the top planet mods and their dependencies), or
+                     "muluna-start" (vanilla plus any-planet-start with
+                     aps-planet = muluna).
                      Matches the modset matrix dimension in
                      .github/workflows/funit.yml.
   -h, --help         Show this help.
@@ -650,8 +652,8 @@ fi
 
 if [[ -n "$MODSET" ]]; then
   case "$MODSET" in
-    vanilla | aai | bz | k2so | no-quality | planets) ;;
-    *) die "unknown --modset: $MODSET (expected vanilla, aai, bz, k2so, no-quality or planets)." ;;
+    vanilla | aai | bz | k2so | no-quality | planets | muluna-start) ;;
+    *) die "unknown --modset: $MODSET (expected vanilla, aai, bz, k2so, no-quality, planets or muluna-start)." ;;
   esac
 fi
 FUNIT_MODSET="${MODSET:-${FUNIT_MODSET:-vanilla}}"

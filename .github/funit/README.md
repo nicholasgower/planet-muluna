@@ -36,7 +36,8 @@ Sources (FUnit commit `b69c2f277a467726e3a8c555d48df5b647ec5a64`):
   experimental channel and `FACTORIO_VERSION=stable` tracks the stable channel.
 - `funit.yml` runs the scenario once per release channel and mod set via a
   matrix over `factoriotools/factorio:stable` / `factoriotools/factorio:latest`
-  and `vanilla` / `aai` / `bz` / `no-quality` / `planets` / `k2so`. Each leg
+  and `vanilla` / `aai` / `bz` / `no-quality` / `planets` / `k2so` /
+  `muluna-start`. Each leg
   resolves and downloads its own dependency set, so a mod that has only
   published an experimental release is still picked up. The `aai` leg adds
   `aai-industry`; the `bz` leg adds Brevven's BZ mods that have a Factorio 2.1
@@ -46,7 +47,9 @@ Sources (FUnit commit `b69c2f277a467726e3a8c555d48df5b647ec5a64`):
   and Rubia with their required dependencies; the `k2so` leg adds Krastorio 2
   Spaced Out and its dependencies (`Krastorio2`, `Krastorio2Assets`,
   `Krastorio2MenuSimulations`, `k2so-assets`, `ChangeInserterDropLane`) so the
-  K2SO compatibility patches are exercised in CI. The sets are defined in
+  K2SO compatibility patches are exercised in CI; the `muluna-start` leg adds
+  `any-planet-start`, and the companion mod's `settings-updates.lua` pins
+  `aps-planet` to `muluna`. The sets are defined in
   `download_mods.py` (`MODSETS`) and mirrored in
   `test-mods/planet-muluna-funit/run.sh`.
 - The paid DLC mods are supplied by the headless server image; the main mod,

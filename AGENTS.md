@@ -99,9 +99,11 @@ The mod ships **one codebase** that must load and run on both the **latest stabl
 of the release — one zip serves both — so a change that only works on the experimental build
 is a bug. `.github/workflows/funit.yml` enforces this by running the full FUnit suite once per
 release channel (`factoriotools/factorio:stable` and `factoriotools/factorio:latest`) and once
-per mod set (`vanilla`, `aai`, `bz`, `no-quality`, `planets`, and `k2so`; `aai` adds
-aai-industry, `bz` adds Brevven's BZ 2.1 mods, `planets` adds the top planet mods, and
-`k2so` adds Krastorio 2 Spaced Out and its dependencies).
+per mod set (`vanilla`, `aai`, `bz`, `no-quality`, `planets`, `k2so`, and
+`muluna-start`; `aai` adds aai-industry, `bz` adds Brevven's BZ 2.1 mods,
+`planets` adds the top planet mods, `k2so` adds Krastorio 2 Spaced Out and its
+dependencies, and `muluna-start` adds any-planet-start with `aps-planet` pinned
+to `muluna`).
 
 - **Never require an experimental build.** Keep `info.json`'s `factorio_version` and
   `base >= ...` satisfied by the current stable release; do not raise the minimum because
@@ -290,7 +292,7 @@ runs both locally and in GitHub Actions. What you can do:
    much faster. See that mod's `README.md` for prerequisites and the test-only
    `muluna_funit` remote interface. The `FUnit` workflow
    (`.github/workflows/funit.yml`) runs the same suite in CI once per release channel and
-   mod set (stable/experimental × vanilla/AAI/BZ/no-quality/planets/K2SO), and
+   mod set (stable/experimental × vanilla/AAI/BZ/no-quality/planets/K2SO/muluna-start), and
    `.github/opencode/setup-factorio.sh` prepares a headless install plus the dependency
    mods for the issue-bugfix workflow.
 4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio

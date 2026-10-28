@@ -16,7 +16,7 @@
 #
 # Options:
 #   --modset NAME             Mod set to download: vanilla, aai, bz, k2so,
-#                             no-quality or planets. Required.
+#                             no-quality, planets or muluna-start. Required.
 #   --mods-dir DIR            Destination mod directory. Defaults to
 #                             $FACTORIO_MODS, then /opt/factorio_space_age_21/mods.
 #   --factorio-version V      Target version, or "stable"/"latest" to track the

@@ -3,6 +3,7 @@
 return {
   "__planet-muluna-funit__.tests.suites.data_fixtures",
   "__planet-muluna-funit__.tests.suites.smoke",
+  "__planet-muluna-funit__.tests.suites.any_planet_start",
   "__planet-muluna-funit__.tests.suites.science",
   "__planet-muluna-funit__.tests.suites.telescope",
   "__planet-muluna-funit__.tests.suites.telescope_blueprint",

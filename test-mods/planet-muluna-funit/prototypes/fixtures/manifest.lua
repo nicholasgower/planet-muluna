@@ -26,6 +26,7 @@ return {
     "muluna_tiles",
     "prototype_integrity",
     "content_references",
+    "any_planet_start",
     "aai",
     "brevven",
     "planets",

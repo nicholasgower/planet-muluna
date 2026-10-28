@@ -24,6 +24,7 @@
 #   * planets      -> the top planet mods and their dependencies
 #   * k2so         -> additionally loads Krastorio 2 Spaced Out and its
 #                     dependencies, to keep the compatibility patches covered
+#   * muluna-start -> vanilla plus any-planet-start with aps-planet = muluna
 # Mods are resolved against the version installed in each image, so a
 # dependency that is only published for the experimental release is still
 # picked up by the experimental leg.
@@ -204,6 +205,9 @@ jobs:
           - channel: stable
             image_tag: stable
             modset: k2so
+          - channel: stable
+            image_tag: stable
+            modset: muluna-start
           - channel: experimental
             image_tag: latest
             modset: vanilla
@@ -222,6 +226,9 @@ jobs:
           - channel: experimental
             image_tag: latest
             modset: k2so
+          - channel: experimental
+            image_tag: latest
+            modset: muluna-start
     container:
       image: "factoriotools/factorio:${{ matrix.image_tag }}"
     timeout-minutes: 30
@@ -305,6 +312,8 @@ jobs:
             modset: planets
           - channel: stable
             modset: k2so
+          - channel: stable
+            modset: muluna-start
           - channel: experimental
             modset: vanilla
           - channel: experimental
@@ -317,6 +326,8 @@ jobs:
             modset: planets
           - channel: experimental
             modset: k2so
+          - channel: experimental
+            modset: muluna-start
     container:
       image: ruby:4-alpine
     timeout-minutes: 30
