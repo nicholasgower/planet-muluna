@@ -17,6 +17,8 @@ Use `python3 <script> --help` for the complete option list.
 | List machines with data ports | `python3 tools/proto_query.py --dump DUMP machines --data-ports` |
 | Check data-port fluid isolation | `python3 tools/proto_query.py --dump DUMP data-port-invariant` |
 | Find fluid recipes without indexes | `python3 tools/proto_query.py --dump DUMP recipes --category crafting-with-fluid --missing-fluidbox-index` |
+| Show exploration science pack discovery | `python3 tools/proto_query.py --dump DUMP exploration-science --rejected --legacy` |
+| Compare discovery across mod sets | `tools/ci/science-discovery-report.sh --modsets vanilla,planets` |
 | Run only the FUnit data-stage fixtures | `tools/ci/funit.sh --data-only` |
 | Run every FUnit modset | `tools/ci/funit-matrix.sh` |
 | Print a modset's `mod-list.json` | `tools/ci/funit-mod-list.sh --modset bz` |
@@ -162,6 +164,34 @@ python3 tools/proto_query.py --dump DUMP funit-results --json --log LOG
 
 This is how `tools/ci/funit.sh --data-only` reports pass/fail.
 
+### `exploration-science`
+
+Show the final exploration science pack groups written by
+`muluna-interstellar-science-pack-conditions`:
+
+```sh
+python3 tools/proto_query.py --dump DUMP exploration-science --rejected --legacy
+python3 tools/proto_query.py --dump DUMP exploration-science --json
+```
+
+The pack list is printed in shipping order, including each pack's item, planet,
+representative technology, contributing technologies, and any `baseline`, `legacy`
+or `forced` flags.
+
+Options:
+
+- `--rejected` — include lab science pack items that were rejected, with the reason
+  and canonical recipe when available.
+- `--legacy` — include the technologies that were used from
+  `LEGACY_PROGRESS_TECHNOLOGIES`, the full frozen legacy list, and names that are
+  missing from the loaded prototype data.
+- `--require-pack NAME` — exit `1` when NAME is not a pack item or synthetic key
+  (repeatable). Useful as a negative self-test.
+- `--json` — print JSON.
+
+Exit status is `1` when the conditions mod-data is missing or a required pack is
+absent.
+
 ## `tools/ci/funit.sh --data-only`
 
 Run only the test mod's data-stage fixtures:
@@ -293,6 +323,27 @@ tools/ci/funit-matrix.sh --json
 Runs `tools/ci/funit.sh` sequentially for each modset and prints one table or one
 JSON object. `--fail-fast` stops at the first failure; the default continues and
 reports every leg.
+
+### `tools/ci/science-discovery-report.sh`
+
+```sh
+tools/ci/science-discovery-report.sh
+tools/ci/science-discovery-report.sh --modsets vanilla,planets --require-baseline
+tools/ci/science-discovery-report.sh --modsets vanilla --json
+```
+
+Runs the data-stage fixtures once per modset, each with its own `TMP_ROOT`, then
+queries each dump with `proto_query.py exploration-science`. The report lists pack
+counts, the pack selected per planet, legacy-only keys, legacy names missing from the
+loaded data, and rejected lab science pack items.
+
+- `--modsets LIST` — comma-separated mod sets, default `vanilla,planets`.
+- `--work-dir DIR` — scratch directory for runs, dumps, logs and query results.
+- `--require-baseline` — exit `1` if any vanilla planetary pack is missing.
+- `--json` — print one JSON object instead of the table.
+
+This helper is local-only. It never reads tokens and is not part of a GitHub
+workflow.
 
 ### `tools/ci/funit-mod-list.sh`
 

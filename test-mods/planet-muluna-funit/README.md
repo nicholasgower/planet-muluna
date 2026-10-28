@@ -164,7 +164,10 @@ The suite covers:
 - Telescope blueprint recipe replacement across surfaces preserves the captured
   facing direction, including rotated placement and the supplied Muluna-to-Nauvis
   blueprint regression.
-- Interstellar science-pack gating, partial progress, and cheat-mode behavior.
+- Interstellar science-pack gating, partial progress, and cheat-mode behavior,
+  including dynamic exploration pack discovery, alternative recipes, legacy
+  fallback, Rigor Module recipe exclusion, pinned vanilla ordering, and
+  one-pack-per-planet selection.
 - Heat assembling machines (reactor link and fixed recipe).
 - Burner/vacuum roboports (refueler link, propellant energy, statuses).
 - Compound entity blueprints: subentity wires and control behavior, rotated
