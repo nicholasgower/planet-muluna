@@ -590,6 +590,9 @@ The `tools/ci/` helpers are development tools and are not shipped:
   the negative self-test.
 - `funit-matrix.sh` — run several mod sets sequentially and summarize the results
   as a table or JSON.
+- `science-discovery-report.sh` — run data-only discovery per mod set with isolated
+  scratch directories, then report the selected pack per planet, legacy coverage and
+  rejected items. Local-only; never add it to a workflow.
 - `funit-mod-list.sh` — print a mod set's `mod-list.json` without launching Factorio.
 - `funit-download-modset.sh` — download only a mod set's extra mods into
   `FACTORIO_MODS` for local runs.
