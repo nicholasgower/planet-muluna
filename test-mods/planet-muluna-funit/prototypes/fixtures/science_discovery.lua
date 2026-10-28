@@ -153,10 +153,15 @@ results.check(SUITE, "science-discovery-negative-cases", function()
       not has_technology(group, "muluna-funit-shared-science-pack-alt"),
       "an alternative recipe made a shared pack eligible"
     )
+    assert(
+      not has_technology(group, "muluna-funit-rigor-science"),
+      "a Rigor Module-generated recipe contributed to a pack group"
+    )
   end
   assert(not has_label("muluna-funit-shared-science-pack"), "shared pack technology has a label")
   assert(not has_label("muluna-funit-shared-science-pack-alt"), "shared pack alternative technology has a label")
   assert(not has_label("muluna-funit-recycling-science"), "recycling technology has a label")
+  assert(not has_label("muluna-funit-rigor-science"), "Rigor Module-generated recipe technology has a label")
   assert(not has_label("muluna-funit-forced-false-science-pack"), "forced-false technology has a label")
 end)
 

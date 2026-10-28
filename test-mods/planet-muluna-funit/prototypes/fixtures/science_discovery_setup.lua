@@ -112,6 +112,14 @@ results.check(SUITE, "science-discovery-setup", function()
   )
   add_technology("muluna-funit-recycling-science", "muluna-funit-science-pack-recycling")
 
+  -- Rigor Module generates large numbers of scaled recipe variants. They must
+  -- not be treated as separate science pack recipes.
+  add_recipe(
+    "muluna-funit-science-pack__rigor_module_mod__25",
+    "muluna-funit-science-pack"
+  )
+  add_technology("muluna-funit-rigor-science", "muluna-funit-science-pack__rigor_module_mod__25")
+
   -- A shared pack (no surface conditions) must not become a dynamic pack,
   -- even when an alternative recipe is restricted to one planet.
   add_science_pack_item("muluna-funit-shared-science-pack")
