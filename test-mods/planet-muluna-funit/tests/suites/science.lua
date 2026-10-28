@@ -35,10 +35,34 @@ local function restore_technology(technology, state)
   technology.saved_progress = state.saved_progress
 end
 
+local function science_pack_groups(conditions)
+  if conditions.packs then
+    return conditions.packs
+  end
+  local groups = {}
+  for _, pack in ipairs(conditions.science_packs or {}) do
+    groups[#groups + 1] = {
+      representative = pack,
+      technologies = { pack },
+    }
+  end
+  return groups
+end
+
+local function representative_technologies(conditions)
+  local names = {}
+  for _, group in ipairs(science_pack_groups(conditions)) do
+    names[#names + 1] = group.representative or group.technologies[1]
+  end
+  return names
+end
+
 local function gated_technology_names(conditions)
   local names = { conditions.gated_technology }
-  for _, pack in ipairs(conditions.science_packs) do
-    names[#names + 1] = pack
+  for _, group in ipairs(science_pack_groups(conditions)) do
+    for _, technology_name in ipairs(group.technologies) do
+      names[#names + 1] = technology_name
+    end
   end
   return names
 end
@@ -89,11 +113,13 @@ local function reset_gate(force, conditions)
     gated.researched = false
     gated.saved_progress = 0
   end
-  for _, pack in ipairs(conditions.science_packs) do
-    local technology = force.technologies[pack]
-    if technology then
-      technology.researched = false
-      technology.saved_progress = 0
+  for _, group in ipairs(science_pack_groups(conditions)) do
+    for _, technology_name in ipairs(group.technologies) do
+      local technology = force.technologies[technology_name]
+      if technology then
+        technology.researched = false
+        technology.saved_progress = 0
+      end
     end
   end
 end
@@ -153,25 +179,36 @@ runner.test("interstellar science: conditions reference real technologies", func
 
   runner.assert(type(conditions.science_packs) == "table", "science_packs is not a table")
   runner.assert(#conditions.science_packs > 0, "science_packs is empty")
+  runner.assert(type(conditions.packs) == "table", "packs is not a table")
+  runner.assert(#conditions.packs > 0, "packs is empty")
+  runner.assert(#conditions.packs == #conditions.science_packs, "packs and science_packs disagree")
   runner.assert(type(conditions.required_science_packs) == "number", "required_science_packs is not a number")
   runner.assert(
-    conditions.required_science_packs >= 1 and conditions.required_science_packs <= #conditions.science_packs,
+    conditions.required_science_packs >= 1 and conditions.required_science_packs <= #conditions.packs,
     string.format(
-      "required_science_packs (%s) must be between 1 and the number of listed packs (%d)",
+      "required_science_packs (%s) must be between 1 and the number of pack groups (%d)",
       tostring(conditions.required_science_packs),
-      #conditions.science_packs
+      #conditions.packs
     )
   )
 
-  for index, pack in ipairs(conditions.science_packs) do
+  for index, group in ipairs(conditions.packs) do
+    runner.assert(type(group.technologies) == "table" and #group.technologies > 0, "pack group " .. index .. " is empty")
+    runner.assert(group.representative ~= nil, "pack group " .. index .. " has no representative")
     runner.assert(
-      prototypes.technology[pack] ~= nil,
-      "science pack entry " .. index .. " (" .. tostring(pack) .. ") has no technology prototype"
+      group.representative == conditions.science_packs[index],
+      "pack group " .. index .. " representative does not match science_packs"
     )
-    runner.assert(
-      force.technologies[pack] ~= nil,
-      "science pack entry " .. index .. " (" .. tostring(pack) .. ") has no technology on the player force"
-    )
+    for _, technology_name in ipairs(group.technologies) do
+      runner.assert(
+        prototypes.technology[technology_name] ~= nil,
+        "pack contributor " .. tostring(technology_name) .. " has no technology prototype"
+      )
+      runner.assert(
+        force.technologies[technology_name] ~= nil,
+        "pack contributor " .. tostring(technology_name) .. " has no technology on the player force"
+      )
+    end
   end
 end)
 
@@ -216,12 +253,13 @@ runner.test("interstellar science: handler tracks partial progress", function()
     local required = conditions.required_science_packs
     runner.assert(required >= 1, "required_science_packs must be at least 1")
     local researched = math.max(required - 1, 0)
+    local representatives = representative_technologies(conditions)
 
     for index = 1, researched do
-      local technology = force.technologies[conditions.science_packs[index]]
+      local technology = force.technologies[representatives[index]]
       runner.assert(
         technology ~= nil,
-        "science pack technology " .. tostring(conditions.science_packs[index]) .. " is missing"
+        "science pack technology " .. tostring(representatives[index]) .. " is missing"
       )
       technology.researched = true
     end
@@ -252,6 +290,59 @@ runner.test("interstellar science: handler tracks partial progress", function()
   end)
 end)
 
+runner.test("interstellar science: alternative recipe technologies count once per pack", function()
+  local conditions = get_conditions()
+  local force = get_player_force()
+
+  runner.assert(
+    conditions.required_science_packs >= 2,
+    "test requires at least two required pack groups"
+  )
+
+  local multi_technology_group
+  for _, group in ipairs(science_pack_groups(conditions)) do
+    if #group.technologies > 1 then
+      multi_technology_group = group
+      break
+    end
+  end
+  runner.assert(
+    multi_technology_group ~= nil,
+    "no pack group has multiple contributing technologies; the alternative-recipe fixture is missing"
+  )
+
+  with_technology_restore(force, conditions, function()
+    local first = force.technologies[multi_technology_group.technologies[1]]
+    local second = force.technologies[multi_technology_group.technologies[2]]
+    runner.assert(first ~= nil and second ~= nil, "alternative pack technologies are missing from the force")
+
+    local gated = force.technologies[conditions.gated_technology]
+    runner.assert(gated.researched == false, "test setup failed: gate is already researched")
+
+    first.researched = true
+    invoke_research_finished(force, gated)
+    runner.assert(gated.researched == false, "one researched technology should not research the gate")
+    local first_progress = gated.saved_progress
+
+    second.researched = true
+    invoke_research_finished(force, gated)
+    runner.assert(gated.researched == false, "two contributors to one pack should not research the gate")
+
+    runner.assert(
+      math.abs(gated.saved_progress - first_progress) < 1e-6,
+      "a second technology for the same pack was counted twice"
+    )
+    runner.assert(
+      math.abs(first_progress - 1 / conditions.required_science_packs) < 1e-6,
+      string.format(
+        "one discovered pack should be %.6f progress, got %.6f",
+        1 / conditions.required_science_packs,
+        first_progress
+      )
+    )
+  end)
+end)
+
 runner.test("interstellar science: handler researches the gate at the required pack count", function()
   local conditions = get_conditions()
   local force = get_player_force()
@@ -259,12 +350,13 @@ runner.test("interstellar science: handler researches the gate at the required p
   with_technology_restore(force, conditions, function()
     local required = conditions.required_science_packs
     runner.assert(required >= 1, "required_science_packs must be at least 1")
+    local representatives = representative_technologies(conditions)
 
     for index = 1, required do
-      local technology = force.technologies[conditions.science_packs[index]]
+      local technology = force.technologies[representatives[index]]
       runner.assert(
         technology ~= nil,
-        "science pack technology " .. tostring(conditions.science_packs[index]) .. " is missing"
+        "science pack technology " .. tostring(representatives[index]) .. " is missing"
       )
       technology.researched = true
     end
@@ -275,9 +367,9 @@ runner.test("interstellar science: handler researches the gate at the required p
     runner.assert(
       gated.researched == true,
       string.format(
-        "gate was not researched after %d of %d listed science pack technologies",
+        "gate was not researched after %d of %d listed science pack groups",
         required,
-        #conditions.science_packs
+        #conditions.packs
       )
     )
   end)

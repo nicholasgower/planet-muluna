@@ -43,8 +43,12 @@ results.check(SUITE, "interstellar-conditions-mod-data", function()
   assert(gated, "gated technology prototype is missing")
   assert(type(conditions.data.science_packs) == "table", "science pack list is not a table")
   assert(#conditions.data.science_packs > 0, "science pack list is empty")
+  assert(type(conditions.data.packs) == "table", "pack groups are not a table")
+  assert(#conditions.data.packs > 0, "pack groups are empty")
+  assert(#conditions.data.packs == #conditions.data.science_packs, "pack groups and representatives disagree")
   assert(type(conditions.data.required_science_packs) == "number", "required_science_packs is not a number")
   assert(conditions.data.required_science_packs > 0, "required_science_packs is not positive")
+  assert(conditions.data.required_science_packs <= #conditions.data.packs, "required_science_packs exceeds the pack count")
   assert(gated.research_trigger and gated.research_trigger.type == "scripted", "gated technology does not use the scripted trigger")
 end)
 
@@ -52,6 +56,12 @@ results.check(SUITE, "interstellar-science-pack-list-valid", function()
   local conditions = data.raw["mod-data"]["muluna-interstellar-science-pack-conditions"].data
   for _, pack in pairs(conditions.science_packs) do
     assert(data.raw["technology"][pack], "science pack technology is missing: " .. tostring(pack))
+  end
+  for _, group in pairs(conditions.packs) do
+    assert(type(group.technologies) == "table" and #group.technologies > 0, "pack group has no technologies")
+    for _, technology_name in pairs(group.technologies) do
+      assert(data.raw["technology"][technology_name], "pack contributor technology is missing: " .. tostring(technology_name))
+    end
   end
 end)
 
