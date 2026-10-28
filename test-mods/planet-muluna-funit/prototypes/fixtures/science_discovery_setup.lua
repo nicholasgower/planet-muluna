@@ -88,7 +88,21 @@ results.check(SUITE, "science-discovery-setup", function()
     "muluna-funit-science-pack",
     {{property = "muluna-funit-exploration-test", min = 1, max = 1}}
   )
-  add_technology("muluna-funit-science-pack", "muluna-funit-science-pack")
+  add_technology("muluna-funit-science-pack", "muluna-funit-science-pack", {
+    prerequisites = {"planet-discovery-muluna"},
+  })
+
+  -- A second pack on the same planet must not contribute; only the first
+  -- unlocked pack on Muluna should remain.
+  add_science_pack_item("muluna-funit-aaa-science-pack")
+  add_recipe(
+    "muluna-funit-aaa-science-pack",
+    "muluna-funit-aaa-science-pack",
+    {{property = "muluna-funit-exploration-test", min = 1, max = 1}}
+  )
+  add_technology("muluna-funit-aaa-science", "muluna-funit-aaa-science-pack", {
+    prerequisites = {"muluna-funit-science-pack"},
+  })
 
   -- An alternative recipe for the same synthetic pack, craftable on Vulcanus.
   add_recipe(

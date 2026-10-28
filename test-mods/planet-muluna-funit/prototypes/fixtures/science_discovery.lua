@@ -145,6 +145,25 @@ results.check(SUITE, "science-discovery-vanilla-list-order", function()
   end
 end)
 
+results.check(SUITE, "science-discovery-one-pack-per-planet", function()
+  local muluna_groups = {}
+  for _, group in ipairs(conditions().packs) do
+    if group.item and group.planet == "muluna" then
+      muluna_groups[#muluna_groups + 1] = group
+    end
+  end
+  assert(#muluna_groups == 1, "Muluna has more than one contributing science pack")
+  assert(muluna_groups[1].item == "muluna-funit-science-pack", "the first Muluna pack was not selected")
+
+  for _, group in ipairs(conditions().packs) do
+    assert(
+      not has_technology(group, "muluna-funit-aaa-science"),
+      "a second pack on the same planet contributed progress"
+    )
+  end
+  assert(not has_label("muluna-funit-aaa-science"), "the second pack technology has a label")
+end)
+
 results.check(SUITE, "science-discovery-alternative-recipe", function()
   local group = find_group_by_item("muluna-funit-science-pack")
   assert(group, "synthetic pack group is missing")
