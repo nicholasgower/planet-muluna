@@ -1,0 +1,838 @@
+--- Discovery rules for the exploration science pack.
+---
+--- The gate is intentionally item-centric: a science pack is an exploration
+--- pack when its canonical recipe is craftable on a single pre-exploration
+--- planet. Every technology that unlocks any recipe producing an eligible
+--- pack contributes, so alternative recipes are handled without duplicating
+--- the pack or letting an alternative recipe change eligibility.
+--
+-- @module lib.exploration-science.lua
+-- @pragma nostrip
+
+local Public = {}
+
+local GATED_TECHNOLOGY = "muluna-nanofoamed-polymers"
+local EXPLORATION_ITEM = "interstellar-science-pack"
+local EXPLORATION_TECHNOLOGY = "interstellar-science-pack"
+local SPACE_SCIENCE_ITEM = "space-science-pack"
+local MOD_DATA_NAME = "muluna-interstellar-science-pack-conditions"
+
+-- These packs are the compatibility baseline. Their items are always eligible
+-- even if another mod rewrites the recipe or adds an alternative production
+-- path. The canonical technology is also kept as a fallback contributor.
+-- Cryogenic, promethium and space science are intentionally absent: Aquilo is
+-- gated by the exploration science pack, and the other two are not planetary.
+local VANILLA_EXPLORATION_PACKS = {
+    ["metallurgic-science-pack"] = {
+        planet = "vulcanus",
+        technology = "metallurgic-science-pack",
+    },
+    ["agricultural-science-pack"] = {
+        planet = "gleba",
+        technology = "agricultural-science-pack",
+    },
+    ["electromagnetic-science-pack"] = {
+        planet = "fulgora",
+        technology = "electromagnetic-science-pack",
+    },
+}
+
+-- Compatibility bridge for technologies that were manually listed before the
+-- dynamic discovery code existed. Technologies that are already contributors
+-- to an eligible pack are skipped; the rest become explicit one-technology
+-- progress entries. This can be pruned once every entry has been audited.
+local LEGACY_PROGRESS_TECHNOLOGIES = {
+    "electrochemical-science-pack",
+    "cerysian-science-pack",
+    "janus-time-science-pack",
+    "slp-sunpack",
+    "nanite-science-pack",
+    "battlefield-science-pack",
+    "compression-science-pack",
+    "omnia-omnite-processing",
+    "igrys-mineral-science",
+    "rubia-progression-stage1B",
+    "quantum-science-pack",
+    "ring-science-pack",
+    "anomaly-science-pack",
+    "tiberium-mechanical-research",
+    "moshine-tech-ai-trainer",
+    "pelagos-science-pack",
+    "carnal-science-pack",
+    "foliax-welcome",
+    "arboric-science-pack",
+    "planetaris-compression-science",
+    "athletic-science-pack",
+    "linox-technology_linox-supercomputer",
+    "lead-and-gold-tech",
+    "s6x-void-science-pack",
+    "apicultural-science-pack",
+    "vanadium-science-pack",
+    "planet-crucible-science-pack",
+    "planetaris-bioengineering-science-pack",
+    "velora-science-pack",
+    "halo-science-pack",
+    "abacayba_ominous_science_pack_tech",
+    "environment-research-center",
+    "s6x-iridescent-science-pack",
+    "rabbasca-warpfield-science-pack",
+}
+
+if mods["panglia_planet"] then
+    table.insert(LEGACY_PROGRESS_TECHNOLOGIES, "cloning-vat-technology")
+end
+
+local function get_item(name)
+    if data.raw["item"] and data.raw["item"][name] then
+        return data.raw["item"][name]
+    end
+    if data.raw["tool"] and data.raw["tool"][name] then
+        return data.raw["tool"][name]
+    end
+end
+
+local function get_item_icon(item)
+    if not item then return nil end
+    if item.icon then
+        return item.icon, item.icon_size or 64
+    end
+    if item.icons and item.icons[1] then
+        return item.icons[1].icon, item.icons[1].icon_size or 64
+    end
+end
+
+local function add_unique(list, value, seen)
+    seen = seen or {}
+    if not seen[value] then
+        seen[value] = true
+        list[#list + 1] = value
+    end
+    return seen
+end
+
+local function ingredient_name(ingredient)
+    if type(ingredient) == "string" then
+        return ingredient
+    end
+    if type(ingredient) == "table" then
+        return ingredient.name or ingredient[1]
+    end
+end
+
+local function is_recycling_recipe(recipe)
+    if not recipe then return false end
+    if string.sub(recipe.name or "", -#"-recycling") == "-recycling" then
+        return true
+    end
+    for _, category in ipairs(recipe.categories or {}) do
+        if category == "recycling" then
+            return true
+        end
+    end
+    return false
+end
+
+local function get_recipe_item_results(recipe)
+    local results = {}
+    if not recipe then return results end
+    if recipe.results then
+        for _, result in ipairs(recipe.results) do
+            if result.name and (result.type == nil or result.type == "item") then
+                results[#results + 1] = {
+                    name = result.name,
+                    amount = result.amount or result.amount_max or result.amount_min or 1,
+                    main_product = recipe.main_product == result.name,
+                }
+            end
+        end
+    elseif recipe.result then
+        results[#results + 1] = {
+            name = recipe.result,
+            amount = recipe.result_count or 1,
+            main_product = true,
+        }
+    end
+    return results
+end
+
+local function get_lab_science_pack_items()
+    local items = {}
+    for _, lab in pairs(data.raw["lab"] or {}) do
+        for _, input in ipairs(lab.inputs or {}) do
+            local name = ingredient_name(input)
+            if name then
+                items[name] = true
+            end
+        end
+    end
+    return items
+end
+
+local function find_canonical_recipe(item_name)
+    local candidates = {}
+    for _, recipe in pairs(data.raw["recipe"] or {}) do
+        if not is_recycling_recipe(recipe) then
+            local results = get_recipe_item_results(recipe)
+            for _, result in ipairs(results) do
+                if result.name == item_name then
+                    local score = math.min(result.amount or 1, 40)
+                    if recipe.name == item_name then score = score + 1000 end
+                    if #results == 1 then score = score + 100 end
+                    if recipe.main_product == item_name then score = score + 50 end
+                    candidates[#candidates + 1] = {
+                        recipe = recipe,
+                        score = score,
+                    }
+                end
+            end
+        end
+    end
+
+    table.sort(candidates, function(a, b)
+        if a.score == b.score then
+            return a.recipe.name < b.recipe.name
+        end
+        return a.score > b.score
+    end)
+
+    return candidates[1] and candidates[1].recipe or nil
+end
+
+local function default_surface_property(property_name)
+    local prototype = data.raw["surface-property"] and data.raw["surface-property"][property_name]
+    if prototype and prototype.default_value ~= nil then
+        return prototype.default_value
+    end
+    return 0
+end
+
+local function matches_surface_conditions(conditions, properties)
+    for _, condition in ipairs(conditions or {}) do
+        local value = properties and properties[condition.property]
+        if value == nil then
+            value = default_surface_property(condition.property)
+        end
+        if condition.min ~= nil and value < condition.min - 1e-9 then
+            return false
+        end
+        if condition.max ~= nil and value > condition.max + 1e-9 then
+            return false
+        end
+    end
+    return true
+end
+
+local function get_recipe_planets(recipe)
+    local planets = {}
+    for name, planet in pairs(data.raw["planet"] or {}) do
+        if matches_surface_conditions(recipe.surface_conditions, planet.surface_properties) then
+            planets[#planets + 1] = name
+        end
+    end
+
+    local matches_non_planet_surface = false
+    for _, surface in pairs(data.raw["surface"] or {}) do
+        if matches_surface_conditions(recipe.surface_conditions, surface.surface_properties) then
+            matches_non_planet_surface = true
+            break
+        end
+    end
+
+    table.sort(planets)
+    return planets, matches_non_planet_surface
+end
+
+local function get_single_recipe_planet(recipe)
+    local planets, matches_non_planet_surface = get_recipe_planets(recipe)
+    if #planets == 1 then
+        return planets[1], matches_non_planet_surface, #planets
+    end
+    return nil, matches_non_planet_surface, #planets
+end
+
+local function technology_depends_on(tech_name, predicate, memo, visiting)
+    memo = memo or {}
+    visiting = visiting or {}
+    if memo[tech_name] ~= nil then
+        return memo[tech_name]
+    end
+    if visiting[tech_name] then
+        return false
+    end
+    visiting[tech_name] = true
+
+    local result = false
+    local tech = data.raw["technology"] and data.raw["technology"][tech_name]
+    if tech then
+        for _, ingredient in ipairs((tech.unit and tech.unit.ingredients) or {}) do
+            local name = ingredient_name(ingredient)
+            if name and predicate(name) then
+                result = true
+                break
+            end
+        end
+
+        if not result then
+            for _, prerequisite in ipairs(tech.prerequisites or {}) do
+                if predicate(prerequisite) or technology_depends_on(prerequisite, predicate, memo, visiting) then
+                    result = true
+                    break
+                end
+            end
+        end
+    end
+
+    visiting[tech_name] = nil
+    memo[tech_name] = result
+    return result
+end
+
+local function is_space_science(name)
+    return name == SPACE_SCIENCE_ITEM
+end
+
+local function is_exploration_technology(name)
+    if name == EXPLORATION_TECHNOLOGY then
+        return true
+    end
+    local prefix = EXPLORATION_TECHNOLOGY .. "-"
+    return string.sub(name, 1, #prefix) == prefix
+end
+
+local space_science_cache = {}
+local exploration_cache = {}
+
+local function technology_is_after_space_science(tech_name)
+    return technology_depends_on(tech_name, is_space_science, space_science_cache)
+end
+
+local function technology_is_post_exploration(tech_name)
+    if is_exploration_technology(tech_name) then
+        return true
+    end
+    return technology_depends_on(tech_name, is_exploration_technology, exploration_cache)
+end
+
+local function get_planet_discovery_technologies(planet_name)
+    local names = {}
+    local seen = {}
+    local conventional_name = "planet-discovery-" .. planet_name
+    if data.raw["technology"] and data.raw["technology"][conventional_name] then
+        add_unique(names, conventional_name, seen)
+    end
+
+    for tech_name, tech in pairs(data.raw["technology"] or {}) do
+        for _, effect in ipairs(tech.effects or {}) do
+            if effect.type == "unlock-space-location" and effect.space_location == planet_name then
+                add_unique(names, tech_name, seen)
+            end
+        end
+    end
+    return names
+end
+
+local function planet_is_after_space_science(planet_name)
+    for _, tech_name in ipairs(get_planet_discovery_technologies(planet_name)) do
+        if technology_is_after_space_science(tech_name) then
+            return true
+        end
+    end
+    return false
+end
+
+local function planet_is_post_exploration(planet_name)
+    for _, tech_name in ipairs(get_planet_discovery_technologies(planet_name)) do
+        if technology_is_post_exploration(tech_name) then
+            return true
+        end
+    end
+    return false
+end
+
+local function add_technology(group, tech_name)
+    group.technology_seen = group.technology_seen or {}
+    if not group.technology_seen[tech_name] then
+        group.technology_seen[tech_name] = true
+        group.technologies[#group.technologies + 1] = tech_name
+    end
+end
+
+local function technology_unlocks_lab_science_pack(tech_name, lab_items)
+    local tech = data.raw["technology"] and data.raw["technology"][tech_name]
+    if not tech then
+        return false
+    end
+    for _, effect in ipairs(tech.effects or {}) do
+        if effect.type == "unlock-recipe" then
+            local recipe = data.raw["recipe"] and data.raw["recipe"][effect.recipe]
+            if recipe and not is_recycling_recipe(recipe) then
+                for _, result in ipairs(get_recipe_item_results(recipe)) do
+                    if lab_items[result.name] then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
+local function collect_eligible_items(lab_items, diagnostics)
+    local eligible = {}
+
+    local function reject(item_name, reason, detail)
+        diagnostics.rejected_items[#diagnostics.rejected_items + 1] = {
+            item = item_name,
+            reason = reason,
+            detail = detail,
+        }
+    end
+
+    for item_name, baseline in pairs(VANILLA_EXPLORATION_PACKS) do
+        if get_item(item_name) and lab_items[item_name] then
+            eligible[item_name] = {
+                item = item_name,
+                planet = baseline.planet,
+                baseline = true,
+                fallback_technology = baseline.technology,
+            }
+        else
+            reject(item_name, "baseline item is missing or not accepted by a lab")
+        end
+    end
+
+    for item_name in pairs(lab_items) do
+        if item_name == EXPLORATION_ITEM then
+            reject(item_name, "exploration science pack is not a progress source")
+        elseif not eligible[item_name] and get_item(item_name) then
+            local recipe = find_canonical_recipe(item_name)
+            if not recipe then
+                reject(item_name, "no canonical recipe")
+            else
+                local planet, matches_non_planet_surface, planet_count = get_single_recipe_planet(recipe)
+                if not planet then
+                    local reason
+                    if planet_count == 1 and matches_non_planet_surface then
+                        reason = "craftable on a space surface"
+                    elseif planet_count ~= 1 then
+                        reason = "not craftable on exactly one planet"
+                    else
+                        reason = "no matching planet"
+                    end
+                    reject(item_name, reason, recipe.name)
+                elseif planet_is_post_exploration(planet) then
+                    reject(item_name, "canonical planet is unlocked by the exploration science pack", recipe.name)
+                else
+                    eligible[item_name] = {
+                        item = item_name,
+                        planet = planet,
+                        baseline = false,
+                        recipe = recipe.name,
+                    }
+                end
+            end
+        end
+    end
+
+    return eligible
+end
+
+local function collect_groups(eligible, diagnostics, lab_items)
+    local groups = {}
+    for item_name, info in pairs(eligible) do
+        groups[item_name] = {
+            key = item_name,
+            item = item_name,
+            planet = info.planet,
+            baseline = info.baseline,
+            technologies = {},
+        }
+    end
+
+    for tech_name, tech in pairs(data.raw["technology"] or {}) do
+        if not technology_is_post_exploration(tech_name) then
+            for _, effect in ipairs(tech.effects or {}) do
+                if effect.type == "unlock-recipe" then
+                    local recipe = data.raw["recipe"] and data.raw["recipe"][effect.recipe]
+                    if recipe and not is_recycling_recipe(recipe) then
+                        local recipe_planet = get_single_recipe_planet(recipe)
+                        for _, result in ipairs(get_recipe_item_results(recipe)) do
+                            local group = groups[result.name]
+                            if group and (result.amount or 0) > 0 then
+                                local planet = recipe_planet or group.planet
+                                local after_space_science = technology_is_after_space_science(tech_name)
+                                    or (planet and planet_is_after_space_science(planet))
+                                local post_exploration = technology_is_post_exploration(tech_name)
+                                    or (planet and planet_is_post_exploration(planet))
+                                if after_space_science and not post_exploration then
+                                    add_technology(group, tech_name)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    -- Keep the vanilla canonical technology as a contributor even when another
+    -- mod has rewritten or removed the technology's unlock-recipe effect.
+    for item_name, info in pairs(eligible) do
+        if info.baseline and info.fallback_technology and data.raw["technology"][info.fallback_technology] then
+            local tech_name = info.fallback_technology
+            local group = groups[item_name]
+            if group and not technology_is_post_exploration(tech_name) then
+                local after_space_science = technology_is_after_space_science(tech_name)
+                    or planet_is_after_space_science(group.planet)
+                if after_space_science then
+                    add_technology(group, tech_name)
+                end
+            end
+        end
+    end
+
+    -- Add the old manual list as explicit extras only for non-pack
+    -- contributors. Technologies that unlock a lab science pack are left to
+    -- dynamic detection, so a failed eligibility check is not silently
+    -- overridden by the legacy list.
+    local grouped_technologies = {}
+    for _, group in pairs(groups) do
+        for _, tech_name in ipairs(group.technologies) do
+            grouped_technologies[tech_name] = true
+        end
+    end
+
+    for _, tech_name in ipairs(LEGACY_PROGRESS_TECHNOLOGIES) do
+        if data.raw["technology"][tech_name]
+            and not grouped_technologies[tech_name]
+            and not technology_is_post_exploration(tech_name)
+            and not technology_unlocks_lab_science_pack(tech_name, lab_items)
+        then
+            groups[tech_name] = {
+                key = tech_name,
+                item = nil,
+                planet = nil,
+                legacy = true,
+                technologies = { tech_name },
+            }
+            grouped_technologies[tech_name] = true
+            diagnostics.legacy_extras[#diagnostics.legacy_extras + 1] = tech_name
+        end
+    end
+
+    return groups
+end
+
+local function apply_overrides(groups)
+    local forced_true = {}
+    local forced_false = {}
+    for tech_name, tech in pairs(data.raw["technology"] or {}) do
+        if tech.muluna_adds_progress_to_exploration_science_pack == true then
+            forced_true[tech_name] = true
+        elseif tech.muluna_adds_progress_to_exploration_science_pack == false then
+            forced_false[tech_name] = true
+        end
+    end
+
+    for key, group in pairs(groups) do
+        for index = #group.technologies, 1, -1 do
+            if forced_false[group.technologies[index]] then
+                table.remove(group.technologies, index)
+            end
+        end
+        group.technology_seen = nil
+        if #group.technologies == 0 then
+            groups[key] = nil
+        end
+    end
+
+    local grouped_technologies = {}
+    for _, group in pairs(groups) do
+        for _, tech_name in ipairs(group.technologies) do
+            grouped_technologies[tech_name] = true
+        end
+    end
+
+    for tech_name in pairs(forced_true) do
+        if data.raw["technology"][tech_name] and not grouped_technologies[tech_name] then
+            groups[tech_name] = {
+                key = tech_name,
+                item = nil,
+                planet = nil,
+                forced = true,
+                technologies = { tech_name },
+            }
+            grouped_technologies[tech_name] = true
+        end
+    end
+
+    return groups
+end
+
+local function choose_representative(group)
+    if group.item then
+        local baseline = VANILLA_EXPLORATION_PACKS[group.item]
+        if baseline and baseline.technology then
+            for _, tech_name in ipairs(group.technologies) do
+                if tech_name == baseline.technology then
+                    return tech_name
+                end
+            end
+        end
+        for _, tech_name in ipairs(group.technologies) do
+            if tech_name == group.item then
+                return tech_name
+            end
+        end
+    end
+    return group.technologies[1]
+end
+
+local function finalize_groups(groups)
+    local packs = {}
+    for _, group in pairs(groups) do
+        table.sort(group.technologies)
+        group.representative = choose_representative(group)
+        packs[#packs + 1] = group
+    end
+
+    table.sort(packs, function(a, b)
+        if a.representative == b.representative then
+            return a.key < b.key
+        end
+        return a.representative < b.representative
+    end)
+    return packs
+end
+
+local function compute_required_science_packs(pack_count)
+    if pack_count <= 0 then
+        return 0
+    end
+
+    if settings.startup["muluna-interstellar-science-pack-dynamic-packs-required"].value == false then
+        local configured = settings.startup["muluna-interstellar-science-pack-packs-required"].value
+        return math.max(1, math.min(configured, pack_count))
+    end
+
+    local percentage = settings.startup["muluna-interstellar-science-pack-dynamic-packs-required-percentage-required"].value / 100
+    return math.max(1, math.ceil(pack_count * percentage))
+end
+
+--- Discover the exploration science pack groups from the current prototypes.
+--- @return table
+function Public.detect()
+    space_science_cache = {}
+    exploration_cache = {}
+
+    local diagnostics = {
+        rejected_items = {},
+        legacy_extras = {},
+    }
+    local lab_items = get_lab_science_pack_items()
+    local eligible = collect_eligible_items(lab_items, diagnostics)
+    local groups = collect_groups(eligible, diagnostics, lab_items)
+    groups = apply_overrides(groups)
+    local packs = finalize_groups(groups)
+
+    local science_packs = {}
+    for _, group in ipairs(packs) do
+        science_packs[#science_packs + 1] = group.representative
+    end
+
+    table.sort(diagnostics.rejected_items, function(a, b)
+        return a.item < b.item
+    end)
+    table.sort(diagnostics.legacy_extras)
+
+    return {
+        packs = packs,
+        science_packs = science_packs,
+        required_science_packs = compute_required_science_packs(#packs),
+        diagnostics = diagnostics,
+    }
+end
+
+local function is_generated_label(effect, gated_technology)
+    return effect.type == "nothing"
+        and type(effect.effect_description) == "table"
+        and effect.effect_description[1] == "technology-effect.contributes-to-discovery"
+        and effect.effect_description[2] == gated_technology
+end
+
+local function build_label_effect(conditions)
+    local item = get_item(EXPLORATION_ITEM)
+    local icon, icon_size = get_item_icon(item)
+    if not icon then
+        return nil
+    end
+    return {
+        type = "nothing",
+        icons = {
+            {icon = "__muluna-graphics__/graphics/icons/green-rectangle.png", icon_size = 64},
+            {icon = icon, icon_size = icon_size, shift = {0, 0}, scale = 0.375},
+            {
+                icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-recipe-productivity.png",
+                icon_size = 64,
+            },
+        },
+        effect_description = {
+            "technology-effect.contributes-to-discovery",
+            conditions.gated_technology,
+            {"technology-name." .. conditions.gated_technology},
+            tostring(conditions.required_science_packs or 0),
+        },
+    }
+end
+
+--- Add the discovery label to every contributor technology and remove labels
+--- generated by an earlier call.
+--- @param conditions table
+function Public.apply_labels(conditions)
+    local gated_technology = conditions.gated_technology
+    if not gated_technology then
+        return
+    end
+
+    for _, tech in pairs(data.raw["technology"] or {}) do
+        if tech.effects then
+            for index = #tech.effects, 1, -1 do
+                if is_generated_label(tech.effects[index], gated_technology) then
+                    table.remove(tech.effects, index)
+                end
+            end
+        end
+    end
+
+    local label = build_label_effect(conditions)
+    if not label then
+        return
+    end
+
+    local labeled = {}
+    for _, group in ipairs(conditions.packs or {}) do
+        for _, tech_name in ipairs(group.technologies or {}) do
+            local tech = data.raw["technology"][tech_name]
+            if tech and not labeled[tech_name] then
+                labeled[tech_name] = true
+                tech.effects = tech.effects or {}
+                tech.effects[#tech.effects + 1] = table.deepcopy(label)
+            end
+        end
+    end
+end
+
+local function build_trigger_icons(conditions)
+    local icons = {}
+    local shifts = {{0, -8}, {8, 8}, {-8, 8}}
+    local main_icon, main_icon_size
+
+    for _, group in ipairs(conditions.packs or {}) do
+        if group.item then
+            local item = get_item(group.item)
+            local icon, icon_size = get_item_icon(item)
+            if icon then
+                if not main_icon then
+                    main_icon = icon
+                    main_icon_size = icon_size
+                end
+                icons[#icons + 1] = {
+                    icon = icon,
+                    icon_size = icon_size,
+                    scale = 0.35,
+                    shift = shifts[#icons + 1],
+                }
+                if #icons == 3 then
+                    break
+                end
+            end
+        end
+    end
+
+    if not main_icon then
+        local fallback = get_item(EXPLORATION_ITEM)
+        main_icon, main_icon_size = get_item_icon(fallback)
+    end
+
+    return icons, main_icon, main_icon_size
+end
+
+--- Rebuild the gated technology's trigger and description from the current
+--- group list. Safe to call repeatedly.
+--- @param conditions table
+function Public.update_gated_technology(conditions)
+    local tech = data.raw["technology"] and data.raw["technology"][conditions.gated_technology]
+    if not tech then
+        return
+    end
+
+    local scripted_triggers = helpers.compare_versions(helpers.game_version, "2.0.69") >= 0
+    local icons, main_icon, main_icon_size = build_trigger_icons(conditions)
+
+    if scripted_triggers and main_icon then
+        tech.research_trigger = {
+            type = "scripted",
+            trigger_description = {
+                "research-trigger.muluna-nanofoamed-polymers",
+                tostring(conditions.required_science_packs or 0),
+            },
+            icons = icons,
+            icon = main_icon,
+            icon_size = main_icon_size,
+        }
+        tech.enabled = true
+        tech.visible_when_disabled = false
+    else
+        tech.unit = {
+            count = 1,
+            time = 1,
+            ingredients = {},
+        }
+        tech.enabled = false
+        tech.visible_when_disabled = true
+    end
+
+    tech.localised_description = {
+        scripted_triggers and "technology-description.muluna-nanofoamed-polymers-2069"
+            or "technology-description.muluna-nanofoamed-polymers",
+        tostring(conditions.required_science_packs or 0),
+    }
+    tech.localised_description = {"", tech.localised_description or {"technology-description." .. tech.name}}
+
+    local index = 0
+    for _, pack in ipairs(conditions.science_packs or {}) do
+        if index <= 18 then
+            table.insert(tech.localised_description, "\n[technology=" .. pack .. "]")
+            index = index + 1
+        end
+    end
+
+    if scripted_triggers then
+        tech.research_trigger.trigger_description = tech.localised_description
+        tech.localised_description = {"item-description.muluna-microcellular-plastic"}
+    end
+end
+
+--- Recompute conditions and rebuild the generated labels/descriptions.
+--- Other mods may call this from their own data-final-fixes after Muluna's.
+--- @return table|nil
+function Public.refresh()
+    local mod_data = data.raw["mod-data"] and data.raw["mod-data"][MOD_DATA_NAME]
+    if not mod_data then
+        return nil
+    end
+
+    local conditions = mod_data.data
+    local result = Public.detect()
+    conditions.science_packs = result.science_packs
+    conditions.packs = result.packs
+    conditions.required_science_packs = result.required_science_packs
+    conditions.diagnostics = result.diagnostics
+    conditions.gated_technology = conditions.gated_technology or GATED_TECHNOLOGY
+
+    Public.apply_labels(conditions)
+    Public.update_gated_technology(conditions)
+    return conditions
+end
+
+return Public
