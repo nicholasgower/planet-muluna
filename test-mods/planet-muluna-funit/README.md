@@ -57,7 +57,7 @@ Useful environment variables:
 | `FACTORIO_PORT` | `34198` | Local server port used by the headless instance |
 | `DATA_ONLY` | `0` | Run `--dump-data` instead of the scenario (used by `funit.sh --data-only`) |
 | `MOD_LIST_ONLY` | `0` | Write the scratch `mod-list.json` and exit without launching Factorio (used by `funit-mod-list.sh`) |
-| `FUNIT_MODSET` | `vanilla` | `vanilla`, `aai` (aai-industry), `bz` (Brevven's BZ mods with 2.1 releases), `no-quality` (quality disabled), `planets` (top planet mods), or `k2so` (Krastorio 2 Spaced Out and its dependencies) |
+| `FUNIT_MODSET` | `vanilla` | `vanilla`, `aai` (aai-industry), `bz` (Brevven's BZ mods with 2.1 releases), `no-quality` (quality disabled), `planets` (top planet mods), `k2so` (Krastorio 2 Spaced Out and its dependencies), or `muluna-start` (any-planet-start with `aps-planet = muluna`) |
 
 The full log is `$TMP_ROOT/stdout.log`; on failure the runner prints the relevant
 FUnit lines and the tail of the log. A data-only run also writes the prototype dump to
@@ -181,6 +181,11 @@ The suite covers:
   ground diggers, cargo drops, public API helpers, and data-port fluidbox isolation
   (including modded fluid recipe categories and recipes added after Muluna's
   data-final-fixes).
+- Muluna start (`any-planet-start` with `aps-planet = muluna`): APS choice and
+  starting-planet selection, discovery-technology swap, aluminum automation science
+  pack, aluminum electronics trigger, collapsed start technology tree, reduced
+  wood-gasification productivity, Muluna orbit/connection, default item import
+  locations, and map-gen control ordering.
 
 Some paths remain player- or graphics-bound and are only partially covered:
 
@@ -189,8 +194,12 @@ Some paths remain player- or graphics-bound and are only partially covered:
 - Player-driven ground-digger construction (PlanetsLib's custom input).
 - Walking-particle creation/cleanup for a real character.
 - GUI-only code paths.
+- The APS `on_player_created` spawn, teleport, crash-site, and Nauvis-clearing
+  path. The headless scenario has no player, so the Muluna-start suite checks the
+  selected planet through APS's public `get_planet` interface and the final
+  prototype state instead.
 - Cross-mod compatibility branches that require mods not enabled in the default
-  test profile.
+  test profile, including the `AAI Industry + Muluna start` branch.
 
 For these, prefer a narrow test-only export over weakening an assertion or turning
 the test into a prototype-existence check.
