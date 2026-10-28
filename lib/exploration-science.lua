@@ -478,26 +478,6 @@ local function add_technology(group, tech_name)
     end
 end
 
-local function technology_unlocks_lab_science_pack(tech_name, lab_items)
-    local tech = data.raw["technology"] and data.raw["technology"][tech_name]
-    if not tech then
-        return false
-    end
-    for _, effect in ipairs(tech.effects or {}) do
-        if effect.type == "unlock-recipe" then
-            local recipe = data.raw["recipe"] and data.raw["recipe"][effect.recipe]
-            if recipe and not is_rigor_generated_recipe(recipe) and not is_recycling_recipe(recipe) then
-                for _, result in ipairs(get_recipe_item_results(recipe)) do
-                    if lab_items[result.name] then
-                        return true
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
-
 local function collect_eligible_items(lab_items, diagnostics)
     local eligible = {}
 
@@ -558,7 +538,7 @@ local function collect_eligible_items(lab_items, diagnostics)
     return eligible
 end
 
-local function collect_groups(eligible, diagnostics, lab_items)
+local function collect_groups(eligible, diagnostics)
     local groups = {}
     for item_name, info in pairs(eligible) do
         groups[item_name] = {
@@ -612,10 +592,10 @@ local function collect_groups(eligible, diagnostics, lab_items)
         end
     end
 
-    -- Add the old manual list as explicit extras only for non-pack
-    -- contributors. Technologies that unlock a lab science pack are left to
-    -- dynamic detection, so a failed eligibility check is not silently
-    -- overridden by the legacy list.
+    -- Add the old manual list as explicit extras when dynamic detection did
+    -- not produce a group for them. This is the compatibility path for packs
+    -- whose recipes are not planet-restricted in prototype data, such as
+    -- Rabbasca's athletic-science-pack.
     local grouped_technologies = {}
     for _, group in pairs(groups) do
         for _, tech_name in ipairs(group.technologies) do
@@ -627,7 +607,6 @@ local function collect_groups(eligible, diagnostics, lab_items)
         if data.raw["technology"][tech_name]
             and not grouped_technologies[tech_name]
             and not technology_is_post_exploration(tech_name)
-            and not technology_unlocks_lab_science_pack(tech_name, lab_items)
         then
             groups[tech_name] = {
                 key = tech_name,
@@ -759,7 +738,7 @@ function Public.detect()
     }
     local lab_items = get_lab_science_pack_items()
     local eligible = collect_eligible_items(lab_items, diagnostics)
-    local groups = collect_groups(eligible, diagnostics, lab_items)
+    local groups = collect_groups(eligible, diagnostics)
     groups = apply_overrides(groups)
     local packs = finalize_groups(groups)
 
