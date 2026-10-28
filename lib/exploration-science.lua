@@ -881,7 +881,11 @@ function Public.detect()
     local diagnostics = {
         rejected_items = {},
         legacy_extras = {},
+        legacy_technologies = {},
     }
+    for _, tech_name in ipairs(LEGACY_PROGRESS_TECHNOLOGIES) do
+        diagnostics.legacy_technologies[#diagnostics.legacy_technologies + 1] = tech_name
+    end
     local lab_items = get_lab_science_pack_items()
     local eligible = collect_eligible_items(lab_items, diagnostics)
     local groups = collect_groups(eligible, diagnostics)
