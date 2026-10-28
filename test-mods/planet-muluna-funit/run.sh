@@ -17,8 +17,9 @@
 #   FUNIT_MODSET   Mod set to load: "vanilla" (default), "aai" (vanilla plus
 #                  aai-industry), "bz" (Brevven's BZ mods with 2.1 releases),
 #                  "k2so" (Krastorio 2 Spaced Out and its dependencies),
-#                  "no-quality" (vanilla without quality), or "planets" (the
-#                  top planet mods and their dependencies)
+#                  "no-quality" (vanilla without quality), "planets" (the top
+#                  planet mods and their dependencies), or "muluna-start"
+#                  (vanilla plus any-planet-start with aps-planet = muluna)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -36,9 +37,9 @@ MOD_LIST_ONLY="${MOD_LIST_ONLY:-0}"
 FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
 
 case "$FUNIT_MODSET" in
-  vanilla | aai | bz | k2so | no-quality | planets) ;;
+  vanilla | aai | bz | k2so | no-quality | planets | muluna-start) ;;
   *)
-    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, bz, k2so, no-quality or planets)" >&2
+    echo "Unknown FUNIT_MODSET: $FUNIT_MODSET (expected vanilla, aai, bz, k2so, no-quality, planets or muluna-start)" >&2
     exit 2
     ;;
 esac
@@ -101,6 +102,12 @@ link_zip "alien-biomes-graphics" 'alien-biomes-graphics_*.zip'
 # with .github/funit/download_mods.py's MODSETS table and with K2SO's info.json.
 if [[ "$FUNIT_MODSET" == "aai" ]]; then
   link_zip "aai-industry" 'aai-industry_*.zip'
+fi
+
+# Any Planet Start with Muluna as the starting planet. The companion mod's
+# settings-updates.lua pins aps-planet to "muluna".
+if [[ "$FUNIT_MODSET" == "muluna-start" ]]; then
+  link_zip "any-planet-start" 'any-planet-start_*.zip'
 fi
 
 # Brevven's BZ mods that have a Factorio 2.1 release. Keep this list in sync
@@ -180,6 +187,9 @@ MOD_NAMES=(
 )
 if [[ "$FUNIT_MODSET" == "aai" ]]; then
   MOD_NAMES+=(aai-industry)
+fi
+if [[ "$FUNIT_MODSET" == "muluna-start" ]]; then
+  MOD_NAMES+=(any-planet-start)
 fi
 if [[ "$FUNIT_MODSET" == "bz" ]]; then
   MOD_NAMES+=(

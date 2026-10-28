@@ -298,6 +298,7 @@ reports every leg.
 
 ```sh
 tools/ci/funit-mod-list.sh --modset bz
+tools/ci/funit-mod-list.sh --modset muluna-start --output /tmp/mod-list.json
 tools/ci/funit-mod-list.sh --modset no-quality --output /tmp/mod-list.json
 ```
 

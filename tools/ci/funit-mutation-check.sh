@@ -69,7 +69,7 @@ and on interrupt (SIGINT/SIGTERM).
 
 Options:
   --modset NAME      Mod set passed to funit.sh: vanilla (default), aai, bz,
-                     k2so, no-quality or planets.
+                     k2so, no-quality, planets or muluna-start.
   --timeout SECONDS  Maximum Factorio run time (default: 900, or $TIMEOUT).
   --keep             Do not restore data.lua. Prints a loud warning and the
                      backup path. Use only for debugging, and restore the file
@@ -306,8 +306,8 @@ if (($# > 0)); then
 fi
 
 case "$MODSET" in
-  vanilla | aai | bz | k2so | no-quality | planets) ;;
-  *) die "unknown --modset: $MODSET (expected vanilla, aai, bz, k2so, no-quality or planets)." ;;
+  vanilla | aai | bz | k2so | no-quality | planets | muluna-start) ;;
+  *) die "unknown --modset: $MODSET (expected vanilla, aai, bz, k2so, no-quality, planets or muluna-start)." ;;
 esac
 
 [[ -n "$TIMEOUT_VALUE" ]] || die "--timeout/TIMEOUT must not be empty."

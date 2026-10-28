@@ -21,6 +21,7 @@
     "space-exploration-graphics",
     "space-exploration-graphics-4",
     "space-exploration-graphics-5",
-    "alien-biomes-graphics >= 0.7.0"
+    "alien-biomes-graphics >= 0.7.0",
+    "? any-planet-start"
   ]
 }
