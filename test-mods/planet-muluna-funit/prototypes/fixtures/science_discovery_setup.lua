@@ -147,4 +147,16 @@ results.check(SUITE, "science-discovery-setup", function()
   add_technology("muluna-funit-forced-true-tech", nil, {
     muluna_adds_progress_to_exploration_science_pack = true,
   })
+
+  -- Rabbasca's athletic pack is in the frozen legacy list but its recipe has no
+  -- surface conditions, so dynamic detection cannot classify it. Create a
+  -- faithful synthetic stand-in when Rabbasca is not installed so the legacy
+  -- fallback is covered in every mod set.
+  if not data.raw["technology"]["athletic-science-pack"]
+    and not data.raw["item"]["athletic-science-pack"]
+  then
+    add_science_pack_item("athletic-science-pack")
+    add_recipe("athletic-science-pack", "athletic-science-pack")
+    add_technology("athletic-science-pack", "athletic-science-pack")
+  end
 end)

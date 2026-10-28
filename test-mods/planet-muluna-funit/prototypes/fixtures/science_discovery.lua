@@ -172,6 +172,15 @@ results.check(SUITE, "science-discovery-forced-true-tech", function()
   assert(has_label("muluna-funit-forced-true-tech"), "forced-true technology has no label")
 end)
 
+results.check(SUITE, "science-discovery-legacy-pack-fallback", function()
+  local technology_name = "athletic-science-pack"
+  assert(data.raw["technology"][technology_name], "athletic science pack technology is missing")
+  local group = find_group_by_key(technology_name) or find_group_by_item(technology_name)
+  assert(group, "athletic science pack did not create a progress group")
+  assert(has_technology(group, technology_name), "athletic science pack technology is not in its group")
+  assert(has_label(technology_name), "athletic science pack technology has no discovery label")
+end)
+
 results.check(SUITE, "science-discovery-no-duplicates", function()
   local seen_items = {}
   for _, group in ipairs(conditions().packs) do
