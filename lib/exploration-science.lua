@@ -18,6 +18,8 @@ local surface_sets_cache
 local planet_discovery_cache
 local planet_after_space_cache = {}
 local planet_post_exploration_cache = {}
+local technology_children_cache
+local planet_distance_cache = {}
 
 local GATED_TECHNOLOGY = "muluna-nanofoamed-polymers"
 local EXPLORATION_ITEM = "interstellar-science-pack"
@@ -477,6 +479,64 @@ local function planet_is_post_exploration(planet_name)
     return result
 end
 
+local function get_technology_children()
+    if technology_children_cache then
+        return technology_children_cache
+    end
+
+    technology_children_cache = {}
+    for tech_name, tech in pairs(data.raw["technology"] or {}) do
+        for _, prerequisite in ipairs(tech.prerequisites or {}) do
+            local children = technology_children_cache[prerequisite]
+            if not children then
+                children = {}
+                technology_children_cache[prerequisite] = children
+            end
+            children[#children + 1] = tech_name
+        end
+    end
+    return technology_children_cache
+end
+
+local function get_planet_distances(planet_name)
+    local cached = planet_distance_cache[planet_name]
+    if cached then
+        return cached
+    end
+
+    local distances = {}
+    local discovery_technologies = get_planet_discovery_technologies(planet_name)
+    if #discovery_technologies == 0 then
+        planet_distance_cache[planet_name] = distances
+        return distances
+    end
+
+    local children = get_technology_children()
+    local queue = {}
+    local head = 1
+    for _, tech_name in ipairs(discovery_technologies) do
+        if data.raw["technology"][tech_name] and distances[tech_name] == nil then
+            distances[tech_name] = 0
+            queue[#queue + 1] = tech_name
+        end
+    end
+
+    while head <= #queue do
+        local tech_name = queue[head]
+        head = head + 1
+        local next_distance = distances[tech_name] + 1
+        for _, child in ipairs(children[tech_name] or {}) do
+            if distances[child] == nil then
+                distances[child] = next_distance
+                queue[#queue + 1] = child
+            end
+        end
+    end
+
+    planet_distance_cache[planet_name] = distances
+    return distances
+end
+
 local function add_technology(group, tech_name)
     group.technology_seen = group.technology_seen or {}
     if not group.technology_seen[tech_name] then
@@ -695,6 +755,69 @@ local function choose_representative(group)
     return group.technologies[1]
 end
 
+local function keep_first_pack_per_planet(groups)
+    local by_planet = {}
+    for _, group in pairs(groups) do
+        if group.item and group.planet then
+            local candidates = by_planet[group.planet]
+            if not candidates then
+                candidates = {}
+                by_planet[group.planet] = candidates
+            end
+            candidates[#candidates + 1] = group
+        end
+    end
+
+    for planet_name, candidates in pairs(by_planet) do
+        if #candidates > 1 then
+            local distances = get_planet_distances(planet_name)
+            local best_group
+            local best_distance
+            local best_order
+            local best_name
+
+            for _, group in ipairs(candidates) do
+                local distance = math.huge
+                for _, tech_name in ipairs(group.technologies) do
+                    local candidate_distance = distances[tech_name]
+                    if candidate_distance and candidate_distance < distance then
+                        distance = candidate_distance
+                    end
+                end
+
+                local representative = choose_representative(group)
+                local technology = data.raw["technology"][representative]
+                local order = technology and technology.order or ""
+                local name = representative or group.key
+
+                local better
+                if not best_group then
+                    better = true
+                elseif distance ~= best_distance then
+                    better = distance < best_distance
+                elseif order ~= best_order then
+                    better = order < best_order
+                else
+                    better = name < best_name
+                end
+
+                if better then
+                    best_group = group
+                    best_distance = distance
+                    best_order = order
+                    best_name = name
+                end
+            end
+
+            for _, group in ipairs(candidates) do
+                if group ~= best_group then
+                    groups[group.key] = nil
+                end
+            end
+        end
+    end
+end
+
 local function vanilla_pack_priority(group)
     for index, item_name in ipairs(VANILLA_EXPLORATION_PACK_ORDER) do
         if group.item == item_name then
@@ -752,6 +875,8 @@ function Public.detect()
     planet_discovery_cache = nil
     planet_after_space_cache = {}
     planet_post_exploration_cache = {}
+    technology_children_cache = nil
+    planet_distance_cache = {}
 
     local diagnostics = {
         rejected_items = {},
@@ -761,6 +886,7 @@ function Public.detect()
     local eligible = collect_eligible_items(lab_items, diagnostics)
     local groups = collect_groups(eligible, diagnostics)
     groups = apply_overrides(groups)
+    keep_first_pack_per_planet(groups)
     local packs = finalize_groups(groups)
 
     local science_packs = {}
