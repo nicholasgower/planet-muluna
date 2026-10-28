@@ -11,6 +11,14 @@
 
 local Public = {}
 
+local recipe_results_cache = {}
+local recipes_by_item_cache
+local recipe_planet_cache = {}
+local surface_sets_cache
+local planet_discovery_cache
+local planet_after_space_cache = {}
+local planet_post_exploration_cache = {}
+
 local GATED_TECHNOLOGY = "muluna-nanofoamed-polymers"
 local EXPLORATION_ITEM = "interstellar-science-pack"
 local EXPLORATION_TECHNOLOGY = "interstellar-science-pack"
@@ -101,15 +109,6 @@ local function get_item_icon(item)
     end
 end
 
-local function add_unique(list, value, seen)
-    seen = seen or {}
-    if not seen[value] then
-        seen[value] = true
-        list[#list + 1] = value
-    end
-    return seen
-end
-
 local function ingredient_name(ingredient)
     if type(ingredient) == "string" then
         return ingredient
@@ -117,6 +116,19 @@ local function ingredient_name(ingredient)
     if type(ingredient) == "table" then
         return ingredient.name or ingredient[1]
     end
+end
+
+local function is_rigor_generated_recipe(recipe)
+    if not recipe then return false end
+    if string.find(recipe.name or "", "__rigor_module_mod", 1, true) then
+        return true
+    end
+    for _, category in ipairs(recipe.categories or {}) do
+        if string.find(category, "__rigor_module_mod", 1, true) then
+            return true
+        end
+    end
+    return false
 end
 
 local function is_recycling_recipe(recipe)
@@ -133,8 +145,13 @@ local function is_recycling_recipe(recipe)
 end
 
 local function get_recipe_item_results(recipe)
+    if not recipe then return {} end
+    local recipe_name = recipe.name
+    if recipe_name and recipe_results_cache[recipe_name] then
+        return recipe_results_cache[recipe_name]
+    end
+
     local results = {}
-    if not recipe then return results end
     if recipe.results then
         for _, result in ipairs(recipe.results) do
             if result.name and (result.type == nil or result.type == "item") then
@@ -152,7 +169,32 @@ local function get_recipe_item_results(recipe)
             main_product = true,
         }
     end
+
+    if recipe_name then
+        recipe_results_cache[recipe_name] = results
+    end
     return results
+end
+
+local function get_recipes_by_item()
+    if recipes_by_item_cache then
+        return recipes_by_item_cache
+    end
+
+    recipes_by_item_cache = {}
+    for _, recipe in pairs(data.raw["recipe"] or {}) do
+        if not is_rigor_generated_recipe(recipe) and not is_recycling_recipe(recipe) then
+            for _, result in ipairs(get_recipe_item_results(recipe)) do
+                local recipes = recipes_by_item_cache[result.name]
+                if not recipes then
+                    recipes = {}
+                    recipes_by_item_cache[result.name] = recipes
+                end
+                recipes[#recipes + 1] = recipe
+            end
+        end
+    end
+    return recipes_by_item_cache
 end
 
 local function get_lab_science_pack_items()
@@ -170,20 +212,18 @@ end
 
 local function find_canonical_recipe(item_name)
     local candidates = {}
-    for _, recipe in pairs(data.raw["recipe"] or {}) do
-        if not is_recycling_recipe(recipe) then
-            local results = get_recipe_item_results(recipe)
-            for _, result in ipairs(results) do
-                if result.name == item_name then
-                    local score = math.min(result.amount or 1, 40)
-                    if recipe.name == item_name then score = score + 1000 end
-                    if #results == 1 then score = score + 100 end
-                    if recipe.main_product == item_name then score = score + 50 end
-                    candidates[#candidates + 1] = {
-                        recipe = recipe,
-                        score = score,
-                    }
-                end
+    for _, recipe in ipairs(get_recipes_by_item()[item_name] or {}) do
+        local results = get_recipe_item_results(recipe)
+        for _, result in ipairs(results) do
+            if result.name == item_name then
+                local score = math.min(result.amount or 1, 40)
+                if recipe.name == item_name then score = score + 1000 end
+                if #results == 1 then score = score + 100 end
+                if recipe.main_product == item_name then score = score + 50 end
+                candidates[#candidates + 1] = {
+                    recipe = recipe,
+                    score = score,
+                }
             end
         end
     end
@@ -222,32 +262,70 @@ local function matches_surface_conditions(conditions, properties)
     return true
 end
 
-local function get_recipe_planets(recipe)
+local function get_surface_sets()
+    if surface_sets_cache then
+        return surface_sets_cache
+    end
+
     local planets = {}
     for name, planet in pairs(data.raw["planet"] or {}) do
-        if matches_surface_conditions(recipe.surface_conditions, planet.surface_properties) then
-            planets[#planets + 1] = name
+        planets[#planets + 1] = {
+            name = name,
+            properties = planet.surface_properties,
+        }
+    end
+
+    local non_planets = {}
+    for name, surface in pairs(data.raw["surface"] or {}) do
+        non_planets[#non_planets + 1] = {
+            name = name,
+            properties = surface.surface_properties,
+        }
+    end
+
+    surface_sets_cache = {
+        planets = planets,
+        non_planets = non_planets,
+    }
+    return surface_sets_cache
+end
+
+local function get_single_recipe_planet(recipe)
+    local recipe_name = recipe.name
+    local cached = recipe_name and recipe_planet_cache[recipe_name]
+    if cached then
+        return cached.planet, cached.matches_non_planet_surface, cached.count
+    end
+
+    local sets = get_surface_sets()
+    local count = 0
+    local first_planet
+    for _, planet in ipairs(sets.planets) do
+        if matches_surface_conditions(recipe.surface_conditions, planet.properties) then
+            count = count + 1
+            if not first_planet then
+                first_planet = planet.name
+            end
         end
     end
 
     local matches_non_planet_surface = false
-    for _, surface in pairs(data.raw["surface"] or {}) do
-        if matches_surface_conditions(recipe.surface_conditions, surface.surface_properties) then
+    for _, surface in ipairs(sets.non_planets) do
+        if matches_surface_conditions(recipe.surface_conditions, surface.properties) then
             matches_non_planet_surface = true
             break
         end
     end
 
-    table.sort(planets)
-    return planets, matches_non_planet_surface
-end
-
-local function get_single_recipe_planet(recipe)
-    local planets, matches_non_planet_surface = get_recipe_planets(recipe)
-    if #planets == 1 then
-        return planets[1], matches_non_planet_surface, #planets
+    local result = {
+        planet = count == 1 and first_planet or nil,
+        matches_non_planet_surface = matches_non_planet_surface,
+        count = count,
+    }
+    if recipe_name then
+        recipe_planet_cache[recipe_name] = result
     end
-    return nil, matches_non_planet_surface, #planets
+    return result.planet, result.matches_non_planet_surface, result.count
 end
 
 local function technology_depends_on(tech_name, predicate, memo, visiting)
@@ -313,40 +391,83 @@ local function technology_is_post_exploration(tech_name)
     return technology_depends_on(tech_name, is_exploration_technology, exploration_cache)
 end
 
-local function get_planet_discovery_technologies(planet_name)
-    local names = {}
-    local seen = {}
-    local conventional_name = "planet-discovery-" .. planet_name
-    if data.raw["technology"] and data.raw["technology"][conventional_name] then
-        add_unique(names, conventional_name, seen)
+local EMPTY_LIST = {}
+
+local function get_planet_discovery_map()
+    if planet_discovery_cache then
+        return planet_discovery_cache
+    end
+
+    local map = {}
+    local function add(planet_name, tech_name)
+        local names = map[planet_name]
+        if not names then
+            names = {}
+            map[planet_name] = names
+        end
+        for _, existing in ipairs(names) do
+            if existing == tech_name then
+                return
+            end
+        end
+        names[#names + 1] = tech_name
     end
 
     for tech_name, tech in pairs(data.raw["technology"] or {}) do
         for _, effect in ipairs(tech.effects or {}) do
-            if effect.type == "unlock-space-location" and effect.space_location == planet_name then
-                add_unique(names, tech_name, seen)
+            if effect.type == "unlock-space-location" and effect.space_location then
+                add(effect.space_location, tech_name)
             end
         end
     end
-    return names
+
+    for planet_name in pairs(data.raw["planet"] or {}) do
+        local conventional_name = "planet-discovery-" .. planet_name
+        if data.raw["technology"] and data.raw["technology"][conventional_name] then
+            add(planet_name, conventional_name)
+        end
+    end
+
+    planet_discovery_cache = map
+    return map
+end
+
+local function get_planet_discovery_technologies(planet_name)
+    return get_planet_discovery_map()[planet_name] or EMPTY_LIST
 end
 
 local function planet_is_after_space_science(planet_name)
+    local cached = planet_after_space_cache[planet_name]
+    if cached ~= nil then
+        return cached
+    end
+
+    local result = false
     for _, tech_name in ipairs(get_planet_discovery_technologies(planet_name)) do
         if technology_is_after_space_science(tech_name) then
-            return true
+            result = true
+            break
         end
     end
-    return false
+    planet_after_space_cache[planet_name] = result
+    return result
 end
 
 local function planet_is_post_exploration(planet_name)
+    local cached = planet_post_exploration_cache[planet_name]
+    if cached ~= nil then
+        return cached
+    end
+
+    local result = false
     for _, tech_name in ipairs(get_planet_discovery_technologies(planet_name)) do
         if technology_is_post_exploration(tech_name) then
-            return true
+            result = true
+            break
         end
     end
-    return false
+    planet_post_exploration_cache[planet_name] = result
+    return result
 end
 
 local function add_technology(group, tech_name)
@@ -365,7 +486,7 @@ local function technology_unlocks_lab_science_pack(tech_name, lab_items)
     for _, effect in ipairs(tech.effects or {}) do
         if effect.type == "unlock-recipe" then
             local recipe = data.raw["recipe"] and data.raw["recipe"][effect.recipe]
-            if recipe and not is_recycling_recipe(recipe) then
+            if recipe and not is_rigor_generated_recipe(recipe) and not is_recycling_recipe(recipe) then
                 for _, result in ipairs(get_recipe_item_results(recipe)) do
                     if lab_items[result.name] then
                         return true
@@ -454,7 +575,7 @@ local function collect_groups(eligible, diagnostics, lab_items)
             for _, effect in ipairs(tech.effects or {}) do
                 if effect.type == "unlock-recipe" then
                     local recipe = data.raw["recipe"] and data.raw["recipe"][effect.recipe]
-                    if recipe and not is_recycling_recipe(recipe) then
+                    if recipe and not is_rigor_generated_recipe(recipe) and not is_recycling_recipe(recipe) then
                         local recipe_planet = get_single_recipe_planet(recipe)
                         for _, result in ipairs(get_recipe_item_results(recipe)) do
                             local group = groups[result.name]
@@ -624,6 +745,13 @@ end
 function Public.detect()
     space_science_cache = {}
     exploration_cache = {}
+    recipe_results_cache = {}
+    recipes_by_item_cache = nil
+    recipe_planet_cache = {}
+    surface_sets_cache = nil
+    planet_discovery_cache = nil
+    planet_after_space_cache = {}
+    planet_post_exploration_cache = {}
 
     local diagnostics = {
         rejected_items = {},
