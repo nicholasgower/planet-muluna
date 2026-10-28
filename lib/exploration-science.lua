@@ -45,6 +45,13 @@ local VANILLA_EXPLORATION_PACKS = {
     },
 }
 
+-- These three are always listed first in the gated technology description.
+local VANILLA_EXPLORATION_PACK_ORDER = {
+    "metallurgic-science-pack",
+    "agricultural-science-pack",
+    "electromagnetic-science-pack",
+}
+
 -- Compatibility bridge for technologies that were manually listed before the
 -- dynamic discovery code existed. Technologies that are already contributors
 -- to an eligible pack are skipped; the rest become explicit one-technology
@@ -688,6 +695,15 @@ local function choose_representative(group)
     return group.technologies[1]
 end
 
+local function vanilla_pack_priority(group)
+    for index, item_name in ipairs(VANILLA_EXPLORATION_PACK_ORDER) do
+        if group.item == item_name then
+            return index
+        end
+    end
+    return #VANILLA_EXPLORATION_PACK_ORDER + 1
+end
+
 local function finalize_groups(groups)
     local packs = {}
     for _, group in pairs(groups) do
@@ -697,6 +713,11 @@ local function finalize_groups(groups)
     end
 
     table.sort(packs, function(a, b)
+        local a_priority = vanilla_pack_priority(a)
+        local b_priority = vanilla_pack_priority(b)
+        if a_priority ~= b_priority then
+            return a_priority < b_priority
+        end
         if a.representative == b.representative then
             return a.key < b.key
         end
