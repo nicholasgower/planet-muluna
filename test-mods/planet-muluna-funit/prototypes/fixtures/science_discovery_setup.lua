@@ -93,7 +93,10 @@ results.check(SUITE, "science-discovery-setup", function()
   })
 
   -- A second pack on the same planet must not contribute; only the first
-  -- unlocked pack on Muluna should remain.
+  -- unlocked pack on Muluna should remain. Any Planet Start removes every
+  -- prerequisite that points at planet-discovery-muluna, so under the
+  -- muluna-start mod set the discovery technology cannot reach either pack and
+  -- selection falls back to distance from the prerequisite-free technologies.
   add_science_pack_item("muluna-funit-aaa-science-pack")
   add_recipe(
     "muluna-funit-aaa-science-pack",

@@ -19,6 +19,7 @@ local planet_discovery_cache
 local planet_after_space_cache = {}
 local planet_post_exploration_cache = {}
 local technology_children_cache
+local technology_root_depth_cache
 local planet_distance_cache = {}
 
 local GATED_TECHNOLOGY = "muluna-nanofoamed-polymers"
@@ -537,6 +538,59 @@ local function get_planet_distances(planet_name)
     return distances
 end
 
+--- Distance of every technology from the closest prerequisite-free technology.
+--- Used when a planet's discovery technology cannot reach its pack technologies,
+--- as happens on the Any Planet Start starting planet.
+local function get_technology_root_depths()
+    if technology_root_depth_cache then
+        return technology_root_depth_cache
+    end
+
+    local children = get_technology_children()
+    local depths = {}
+    local queue = {}
+    local head = 1
+    for tech_name, tech in pairs(data.raw["technology"] or {}) do
+        local has_prerequisite = false
+        for _, prerequisite in ipairs(tech.prerequisites or {}) do
+            if data.raw["technology"][prerequisite] then
+                has_prerequisite = true
+                break
+            end
+        end
+        if not has_prerequisite then
+            depths[tech_name] = 0
+            queue[#queue + 1] = tech_name
+        end
+    end
+
+    while head <= #queue do
+        local tech_name = queue[head]
+        head = head + 1
+        local next_depth = depths[tech_name] + 1
+        for _, child in ipairs(children[tech_name] or {}) do
+            if depths[child] == nil then
+                depths[child] = next_depth
+                queue[#queue + 1] = child
+            end
+        end
+    end
+
+    technology_root_depth_cache = depths
+    return depths
+end
+
+local function minimum_technology_distance(technologies, distances)
+    local best = math.huge
+    for _, tech_name in ipairs(technologies) do
+        local distance = distances[tech_name]
+        if distance and distance < best then
+            best = distance
+        end
+    end
+    return best
+end
+
 local function add_technology(group, tech_name)
     group.technology_seen = group.technology_seen or {}
     if not group.technology_seen[tech_name] then
@@ -771,19 +825,34 @@ local function keep_first_pack_per_planet(groups)
     for planet_name, candidates in pairs(by_planet) do
         if #candidates > 1 then
             local distances = get_planet_distances(planet_name)
+            local group_distances = {}
+            local any_reachable = false
+            for _, group in ipairs(candidates) do
+                local distance = minimum_technology_distance(group.technologies, distances)
+                group_distances[group] = distance
+                if distance < math.huge then
+                    any_reachable = true
+                end
+            end
+
+            -- Any Planet Start detaches the starting planet's discovery
+            -- technology from the prerequisite tree, so nothing is reachable
+            -- from it. Fall back to the depth from the tree roots so the
+            -- earliest pack on the planet still wins.
+            if not any_reachable then
+                local root_depths = get_technology_root_depths()
+                for _, group in ipairs(candidates) do
+                    group_distances[group] = minimum_technology_distance(group.technologies, root_depths)
+                end
+            end
+
             local best_group
             local best_distance
             local best_order
             local best_name
 
             for _, group in ipairs(candidates) do
-                local distance = math.huge
-                for _, tech_name in ipairs(group.technologies) do
-                    local candidate_distance = distances[tech_name]
-                    if candidate_distance and candidate_distance < distance then
-                        distance = candidate_distance
-                    end
-                end
+                local distance = group_distances[group]
 
                 local representative = choose_representative(group)
                 local technology = data.raw["technology"][representative]
@@ -876,6 +945,7 @@ function Public.detect()
     planet_after_space_cache = {}
     planet_post_exploration_cache = {}
     technology_children_cache = nil
+    technology_root_depth_cache = nil
     planet_distance_cache = {}
 
     local diagnostics = {

@@ -215,7 +215,9 @@ Rules that are easy to miss:
 
 - Only one pack per planet contributes. The winner is the pack whose technology is
   reached first from the planet's discovery technology through the prerequisite graph;
-  ties use technology `order`, then name.
+  ties use technology `order`, then name. When the discovery technology cannot reach any
+  pack technology (Any Planet Start detaches the starting planet's discovery technology
+  from the tree), the winner is the one closest to a prerequisite-free technology instead.
 - The three vanilla packs are always listed first, in the order metallurgic,
   agricultural, electromagnetic. They are also the compatibility baseline.
 - Recycling recipes and Rigor Module's generated `__rigor_module_mod` recipes are
