@@ -233,6 +233,9 @@ heating_boiler = Muluna.rro.util_merge{heating_boiler,
         
     }
 }
+-- The tower deepcopies the vacuum boiler's burner energy source, so it would otherwise
+-- inherit its pollution emissions. Keep the vacuum heating tower pollution free.
+heating_boiler.energy_source.emissions_per_minute = {}
 heating_boiler.fluid_boxes = {
             {
                 volume = 200,

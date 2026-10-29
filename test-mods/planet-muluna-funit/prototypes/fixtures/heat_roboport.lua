@@ -63,6 +63,18 @@ results.check(SUITE, "heat-machine-fluid-categories", function()
   end
 end)
 
+results.check(SUITE, "boilers-emit-no-pollution", function()
+  -- The vacuum boiler deepcopies the vanilla boiler's energy source, and the vacuum heating
+  -- tower deepcopies the vacuum boiler's, so both can silently inherit pollution emissions.
+  for _, name in ipairs({ "muluna-advanced-boiler", "muluna-vacuum-heating-tower" }) do
+    local machine = data.raw["assembling-machine"][name]
+    assert(machine, "assembling machine is missing: " .. name)
+    local emissions = machine.energy_source and machine.energy_source.emissions_per_minute or {}
+    local pollution = emissions.pollution or 0
+    assert(pollution == 0, name .. " emits pollution: " .. tostring(pollution))
+  end
+end)
+
 results.check(SUITE, "compound-entities-registered-for-bplib", function()
   local bplib = data.raw["mod-data"]["bplib"].data
   local parents = {}

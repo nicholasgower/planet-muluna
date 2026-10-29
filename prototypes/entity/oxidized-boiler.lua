@@ -399,7 +399,9 @@ space_boiler_new.energy_source.smoke =
     starting_frame_deviation = 60
   }
 }
-space_boiler_new.energy_source.emissions_per_minute = { pollution = 90 }
+-- The energy source is a deepcopy of the vanilla boiler's, which emits 30 pollution/minute.
+-- Clear it explicitly so the vacuum boiler does not inherit that value.
+space_boiler_new.energy_source.emissions_per_minute = {}
 space_boiler_new.graphics_set.animation = { north = {
   layers =
           {
