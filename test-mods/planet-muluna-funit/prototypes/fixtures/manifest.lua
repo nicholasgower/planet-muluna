@@ -7,12 +7,16 @@ return {
   data = {
     "data_cells_setup",
   },
-  data_updates = {},
+  data_updates = {
+    "science_discovery_setup",
+  },
   data_final_fixes = {
     "data_cells",
     "lunar_rocks",
     "planet",
     "science",
+    "science_discovery",
+    "science_legacy_snapshot",
     "telescope",
     "heat_roboport",
     "nav_beacon",

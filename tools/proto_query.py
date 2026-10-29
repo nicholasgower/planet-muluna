@@ -37,6 +37,7 @@ DEFAULT_DUMP = os.environ.get(
     "/tmp/opencode/factorio-probe/write-data/script-output/data-raw-dump.json",
 )
 FUNIT_RESULTS = "planet-muluna-funit-results"
+EXPLORATION_CONDITIONS = "muluna-interstellar-science-pack-conditions"
 
 
 def fail(message: str) -> NoReturn:
@@ -394,6 +395,123 @@ def command_funit_results(dump: dict[str, Any], args: argparse.Namespace) -> int
     return 0 if status == "passed" else 1
 
 
+def command_exploration_science(dump: dict[str, Any], args: argparse.Namespace) -> int:
+    mod_data = (dump.get("mod-data") or {}).get(EXPLORATION_CONDITIONS)
+    if not mod_data:
+        print(
+            f"{EXPLORATION_CONDITIONS} mod-data is missing; "
+            "is planet-muluna loaded?",
+            file=sys.stderr,
+        )
+        return 1
+
+    conditions = mod_data.get("data") or {}
+    packs = []
+    for index, pack in enumerate(conditions.get("packs") or [], 1):
+        row = {
+            "index": index,
+            "key": pack.get("key"),
+            "item": pack.get("item"),
+            "planet": pack.get("planet"),
+            "representative": pack.get("representative"),
+            "technologies": list(pack.get("technologies") or []),
+        }
+        for flag in ("baseline", "legacy", "forced"):
+            if pack.get(flag):
+                row[flag] = True
+        packs.append(row)
+
+    result: dict[str, Any] = {
+        "gated_technology": conditions.get("gated_technology"),
+        "required_science_packs": conditions.get("required_science_packs"),
+        "packs": packs,
+    }
+
+    if args.rejected:
+        result["rejected_items"] = list(
+            (conditions.get("diagnostics") or {}).get("rejected_items") or []
+        )
+
+    if args.legacy:
+        diagnostics = conditions.get("diagnostics") or {}
+        legacy_technologies = list(diagnostics.get("legacy_technologies") or [])
+        technologies = dump.get("technology") or {}
+        result["legacy_extras"] = list(diagnostics.get("legacy_extras") or [])
+        result["legacy_technologies"] = legacy_technologies
+        result["missing_legacy_technologies"] = [
+            name for name in legacy_technologies if name not in technologies
+        ]
+
+    missing_required = [
+        name
+        for name in args.require_pack
+        if not any(pack.get("item") == name or pack.get("key") == name for pack in packs)
+    ]
+    if missing_required:
+        result["missing_required_packs"] = missing_required
+
+    if args.json:
+        print(json.dumps(result, indent=2))
+    else:
+        print(
+            "Exploration science packs ({count}, required {required})".format(
+                count=len(packs),
+                required=result["required_science_packs"],
+            )
+        )
+        for pack in packs:
+            flags = [
+                flag
+                for flag in ("baseline", "legacy", "forced")
+                if pack.get(flag)
+            ]
+            suffix = " [" + ", ".join(flags) + "]" if flags else ""
+            print(
+                "  {index}. {item} (planet={planet}) representative={representative}{suffix}".format(
+                    index=pack["index"],
+                    item=pack.get("item") or pack.get("key"),
+                    planet=pack.get("planet"),
+                    representative=pack.get("representative"),
+                    suffix=suffix,
+                )
+            )
+            print("     technologies: " + ", ".join(pack["technologies"]))
+
+        if args.rejected:
+            rejected = result.get("rejected_items") or []
+            print(f"Rejected items ({len(rejected)})")
+            for item in rejected:
+                detail = item.get("detail")
+                suffix = f" ({detail})" if detail else ""
+                print(
+                    "  {item}: {reason}{suffix}".format(
+                        item=item.get("item"),
+                        reason=item.get("reason"),
+                        suffix=suffix,
+                    )
+                )
+
+        if args.legacy:
+            extras = result.get("legacy_extras") or []
+            missing = result.get("missing_legacy_technologies") or []
+            print(
+                "Legacy technologies ({total}, missing {missing})".format(
+                    total=len(result.get("legacy_technologies") or []),
+                    missing=len(missing),
+                )
+            )
+            print("  extras: " + (", ".join(extras) if extras else "none"))
+            print("  missing: " + (", ".join(missing) if missing else "none"))
+
+        if missing_required:
+            print(
+                "Missing required packs: " + ", ".join(missing_required),
+                file=sys.stderr,
+            )
+
+    return 1 if missing_required else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Query a Factorio --dump-data JSON file."
@@ -477,6 +595,30 @@ def build_parser() -> argparse.ArgumentParser:
     results.add_argument("--log", help="Factorio log path to include in the summary")
     results.add_argument("--json", action="store_true", help="print JSON")
     results.set_defaults(func=command_funit_results)
+
+    exploration = subparsers.add_parser(
+        "exploration-science",
+        help="show the discovered exploration science pack groups",
+    )
+    exploration.add_argument(
+        "--rejected",
+        action="store_true",
+        help="include rejected lab science pack items and their reasons",
+    )
+    exploration.add_argument(
+        "--legacy",
+        action="store_true",
+        help="include legacy extras and missing legacy technology names",
+    )
+    exploration.add_argument(
+        "--require-pack",
+        action="append",
+        default=[],
+        metavar="NAME",
+        help="exit 1 when NAME is not an item or key in the pack list (repeatable)",
+    )
+    exploration.add_argument("--json", action="store_true", help="print JSON")
+    exploration.set_defaults(func=command_exploration_science)
 
     return parser
 

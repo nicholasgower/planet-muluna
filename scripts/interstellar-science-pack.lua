@@ -36,6 +36,16 @@ local interstellar_pack_name = "interstellar-science-pack"
 
 -- end)
 
+local function pack_is_researched(technologies, pack)
+    for _, technology_name in ipairs(pack.technologies or {}) do
+        local technology = technologies[technology_name]
+        if technology and technology.researched == true then
+            return true
+        end
+    end
+    return false
+end
+
 --- Checks whether a force meets the conditions to unlock the interstellar science pack.
 --- @param force LuaForce
 --- @param display_notification boolean
@@ -49,17 +59,29 @@ function Public.update_interstellar_pack(force,display_notification)
     if not gated_technology then return end
     if gated_technology.researched == true then return end
 
-    local science_packs = data.science_packs
+    local max_count = data.required_science_packs or 0
+    if max_count <= 0 then return end
+
     --local tech = event.research
     
     if gated_technology.researched == false then
         local count = 0
-        local max_count = data.required_science_packs
-        for _, pack in pairs(science_packs) do
-            if technologies[pack].researched == true then
-                count = count + 1
+        if data.packs then
+            for _, pack in ipairs(data.packs) do
+                if pack_is_researched(technologies, pack) then
+                    count = count + 1
+                end
+                if count >= max_count then break end
             end
-            if count == max_count then break end
+        else
+            -- Compatibility with data written before packs existed.
+            for _, pack in pairs(data.science_packs or {}) do
+                local technology = technologies[pack]
+                if technology and technology.researched == true then
+                    count = count + 1
+                end
+                if count >= max_count then break end
+            end
         end
         if count >= max_count then
 
