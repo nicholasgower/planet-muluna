@@ -125,6 +125,13 @@ for plant,fruit in pairs(plant_list) do
         new_recipe.order = "zzz-" .. tostring(j)
         rro.replace(new_recipe.ingredients,{type = "item", name = "tree-seed",amount = "_any"},{type = "item", name = fruit .. "-seed",amount = function(other) return other end})
         rro.replace(new_recipe.results,{type = "item", name = "muluna-sapling",amount = "_any"},{type = "item", name = new_plant_item.name ,amount = function(other) return 25 * other end})
+        -- Seedless fruit spoils, so without this it inherits the freshness of the nutrients in the
+        -- recipe and each generation comes out worse than the last.
+        for _,result in pairs(new_recipe.results) do
+            if result.type == "item" and result.name == new_plant_item.name then
+                result.reset_freshness_on_craft = true
+            end
+        end
 
         rro.soft_insert(new_tech.effects, {
             type = "unlock-recipe",
