@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.7
+Date: 2026-10-31
+  Bugfixes:
+    - Seedless Gleba crops now leave greenhouses fresh instead of inheriting nutrient spoilage.
+---------------------------------------------------------------------------------------------------
 Version: 2.9.6
 Date: 2026-10-29
   Changes:
