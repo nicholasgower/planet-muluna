@@ -21,6 +21,7 @@ return {
     "heat_roboport",
     "nav_beacon",
     "ground_diggers",
+    "greenhouse_seedless",
     "cargo_drops",
     "api_helpers",
     "muluna_tiles",
