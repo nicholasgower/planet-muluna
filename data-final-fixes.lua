@@ -290,6 +290,20 @@ for _,recipe_name in pairs(recipes_to_fix) do
 
     )
 
+    -- The recycler finds recycling recipes automatically, so the replacement
+    -- must be unlocked exactly like the generated recipe it replaces.
+    local recycling_technology = data.raw["technology"] and data.raw["technology"]["recycling"]
+    if recycling_technology then
+        recycling_technology.effects = recycling_technology.effects or {}
+        rro.soft_insert(recycling_technology.effects, {
+            type = "unlock-recipe",
+            recipe = recipe_muluna.name,
+            hidden = true,
+        })
+    else
+        recipe_muluna.enabled = true
+    end
+
     Muluna:extend{recipe_muluna,recipe}
 end
 
