@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.8
+Date: 2026-11-01
+  Bugfixes:
+    - Unlock Muluna's replacement copper-cable recycling recipe. https://github.com/nicholasgower/planet-muluna/issues/517
+---------------------------------------------------------------------------------------------------
 Version: 2.9.7
 Date: 2026-10-31
   Bugfixes:
