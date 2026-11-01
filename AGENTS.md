@@ -504,14 +504,20 @@ AI-generated pull requests begin the body with the same signature.
 ## Automated issue triage
 
 `.github/workflows/opencode-bugfix.yml` runs the `issue-bugfix` OpenCode agent on every
-newly opened issue, and on demand for existing issues. It:
+newly opened or reopened issue, and on demand for existing issues. It:
 
 - labels feature requests `enhancement` and does not open a pull request;
-- reproduces crash reports with a new or extended FUnit test, confirms the test fails
-  before the fix, fixes the crash, confirms the full suite passes, and opens a pull
-  request in the format above;
+- reproduces crashes and minor gameplay bugs with a new or extended FUnit test (or,
+  when the harness cannot express the behavior, a deterministic data probe), confirms
+  the defect before the fix, fixes it, confirms the full suite passes, and opens a
+  pull request in the format above;
 - comments with its findings instead of opening a pull request for anything else,
-  including crashes that cannot be reproduced headlessly.
+  including reports that cannot be reproduced headlessly, broad balance or design
+  changes, and bugs that would need a new feature or large refactor.
+
+A gameplay bug is in scope for an automated attempt only when the report gives concrete
+reproduction steps and an expected result, the cause is local and minor, and the
+corrected behavior can be verified in the headless harness. A crash is not required.
 
 Maintainers can re-run the bot on an existing issue by commenting `/opencode fix` (or
 `/oc fix`) or by starting the **Opencode Bugfix** workflow from the Actions tab with the

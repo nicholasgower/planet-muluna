@@ -1,14 +1,20 @@
 # Automated issue triage
 
 `opencode-bugfix.yml` runs the OpenCode `issue-bugfix` agent on every newly
-opened GitHub issue, and on demand for existing issues. The agent follows
-`.github/opencode/bugfix-prompt.md` and `AGENTS.md`:
+opened or reopened GitHub issue, and on demand for existing issues. The agent
+follows `.github/opencode/bugfix-prompt.md` and `AGENTS.md`:
 
 | Issue type | Action |
 | --- | --- |
 | Feature request / enhancement | Add the `enhancement` label, comment, **no pull request** |
 | Crash report | Add a failing FUnit regression test, confirm it fails, fix the crash, confirm the full suite passes, open a pull request |
-| Anything else | Comment with findings, **no pull request** |
+| Minor, reproducible gameplay bug | Reproduce it with a failing FUnit test or a deterministic data probe, fix it, confirm the suite passes, open a pull request |
+| Anything else | Comment with findings or a request for reproduction details, **no pull request** |
+
+A gameplay bug is in scope only when the report contains concrete reproduction
+steps and an expected result, the cause is local and minor, and the corrected
+behavior can be verified in the headless harness. Balance changes, new
+features, and reports that cannot be reproduced are left to a human maintainer.
 
 The pull request format is the review-oriented PlanetsLib PR #130 format
 documented under "Pull requests and AI-generated bugfixes" in `AGENTS.md`.
@@ -107,9 +113,10 @@ it at an issue, or re-run the GitHub Actions workflow for a past `issues` event.
   pushing to `main`, force-pushing, merging pull requests, closing issues,
   reading `.env` files, external web access, subagents, and `sudo`. The
   `GITHUB_TOKEN` permissions are scoped to the workflow.
-- The workflow is triggered by `issues: opened`, an explicit `/opencode fix`
-  comment from a repository owner/member/collaborator, or a manual
-  `workflow_dispatch`. Bot-authored issues and comments are skipped.
+- The workflow is triggered by `issues: opened` or `issues: reopened`, an
+  explicit `/opencode fix` comment from a repository
+  owner/member/collaborator, or a manual `workflow_dispatch`. Bot-authored
+  issues and comments are skipped.
 
 ## Troubleshooting
 
@@ -119,4 +126,5 @@ it at an issue, or re-run the GitHub Actions workflow for a past `issues` event.
   with the printed `FACTORIO_BIN`/`FACTORIO_MODS` and check
   `$TMP_ROOT/stdout.log` (default `/tmp/opencode/muluna-funit/stdout.log`).
 - **The agent opens no pull request** — check the issue comment it posted. A
-  crash that cannot be reproduced headlessly is reported instead of guessed at.
+  bug that cannot be reproduced or verified headlessly is reported instead of
+  guessed at, and feature requests are left to the maintainers.

@@ -16,7 +16,7 @@
       }
     },
     "issue-bugfix": {
-      "description": "Automated crash-report triage and bugfix agent for GitHub issues.",
+      "description": "Automated issue triage and bugfix agent for reproducible crashes and gameplay bugs.",
       "mode": "primary",
       "model": "opencode-go/deepseek-v4.1-flash",
       "temperature": 0.2,

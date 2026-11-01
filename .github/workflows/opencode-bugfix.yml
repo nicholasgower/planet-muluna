@@ -3,13 +3,15 @@
 # This workflow implements the automated bugfix policy in AGENTS.md:
 #
 #   * Feature requests are labelled `enhancement` and get no pull request.
-#   * Crash reports are reproduced with an FUnit regression test, fixed, and
+#   * Crash reports and minor, reproducible gameplay bugs are reproduced with
+#     an FUnit regression test (or a deterministic data probe), fixed, and
 #     submitted as a review-ready pull request in the PlanetsLib bugfix format.
-#   * Every other issue gets a comment only.
+#   * Every other issue gets a comment only, normally asking for reproduction
+#     details or explaining why the change is too broad for an automated fix.
 #
-# It runs automatically when an issue is opened, and can be invoked manually on
-# an existing issue by commenting `/opencode fix` (or `/oc fix`) or by running
-# the workflow from the Actions tab with an issue number.
+# It runs automatically when an issue is opened or reopened, and can be invoked
+# manually on an existing issue by commenting `/opencode fix` (or `/oc fix`) or
+# by running the workflow from the Actions tab with an issue number.
 #
 # The runner prepares a headless Factorio install and the FUnit dependency mods
 # before OpenCode starts, so the agent can run
@@ -20,7 +22,7 @@ name: Opencode Bugfix
 
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened]
   issue_comment:
     types: [created]
   workflow_dispatch:
@@ -47,9 +49,10 @@ env:
 
 jobs:
   bugfix:
-    name: Triage issue and fix crash
-    # Automatic runs skip bot-authored issues. Manual comment runs require an
-    # explicit command from a repository owner, member, or collaborator.
+    name: Triage issue and fix reproducible bug
+    # Automatic runs skip bot-authored issues. Reopened issues are retried.
+    # Manual comment runs require an explicit command from a repository owner,
+    # member, or collaborator.
     if: >-
       ${{
         (github.event_name == 'issues' && github.event.issue.user.type != 'Bot') ||
@@ -131,17 +134,23 @@ jobs:
           PROMPT: |
             Process issue #${{ github.event.issue.number || inputs.issue_number }} now.
 
-            This may be an automatically opened issue, a maintainer re-run on an
-            existing issue, or a `/opencode fix` request. Classify the current
-            issue and follow the issue triage and bugfix workflow in your agent
-            instructions exactly. Read AGENTS.md and
+            This may be an automatically opened or reopened issue, a maintainer
+            re-run on an existing issue, or a `/opencode fix` request. Classify
+            the current issue and follow the issue triage and bugfix workflow in
+            your agent instructions exactly. Read AGENTS.md and
             test-mods/planet-muluna-funit/README.md before changing anything.
             Check for an existing pull request or a fix already on `main` first;
             if the issue was already handled, link it and stop.
 
             Feature requests must be labelled `enhancement` and must not get a
-            pull request. Only crash reports are fixed. Leave the worktree
-            clean and open the pull request yourself in the required format.
+            pull request. Fix crash reports and minor gameplay bugs that have
+            concrete reproduction steps, even when they are not crashes. For a
+            gameplay bug, reproduce the reported behavior with the FUnit suite
+            or a deterministic data probe before changing production code.
+            Comment only when the report cannot be reproduced, the fix would be
+            a broad balance or design change, or the issue is a feature request.
+            Leave the worktree clean and open the pull request yourself in the
+            required format.
         run: |
           set -euo pipefail
           # Run the agent directly. The OpenCode GitHub action currently falls
