@@ -22,6 +22,7 @@ return {
     "nav_beacon",
     "ground_diggers",
     "greenhouse_seedless",
+    "recycling",
     "cargo_drops",
     "api_helpers",
     "muluna_tiles",
