@@ -137,6 +137,20 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 local parent = parent_unit_number and storage.burner_roboports[parent_unit_number]
                 if not parent then return end
                 entity = parent.refueler
+                if not entity.valid then
+                    -- The refueler disappeared without a destroy event (for
+                    -- example a deleted surface). Drop the pair without reading
+                    -- a unit number from the invalid entity.
+                    storage.burner_roboports[parent_unit_number] = nil
+                    if storage.active_burner_roboports then
+                        storage.active_burner_roboports[parent_unit_number] = nil
+                    end
+                    local children = storage.burner_roboport_children
+                    if children and parent.roboport_unit_number then
+                        children[parent.roboport_unit_number] = nil
+                    end
+                    return
+                end
             end
             break
         end

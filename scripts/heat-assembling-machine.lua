@@ -111,6 +111,17 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                         local parent = parent_unit_number and storage.heat_assembling_machines[parent_unit_number]
                         if not parent then return end
                         entity = parent["assembling-machine"]
+                        if not entity.valid then
+                            -- The machine disappeared without a destroy event (for
+                            -- example a deleted surface). Drop the pair without
+                            -- reading a unit number from the invalid entity.
+                            storage.heat_assembling_machines[parent_unit_number] = nil
+                            local children = storage.heat_assembling_machine_children
+                            if children and parent.reactor_unit_number then
+                                children[parent.reactor_unit_number] = nil
+                            end
+                            return
+                        end
             end
             break
         end

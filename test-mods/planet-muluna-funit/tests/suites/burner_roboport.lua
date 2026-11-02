@@ -389,3 +389,30 @@ runner.test("burner roboport: a stale child index entry does not remove another 
   end)
 end)
 
+runner.test("burner roboport: roboport destroyed after a silent refueler removal does not crash", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local refueler, data = build_roboport(surface, machine, center)
+    local unit_number = refueler.unit_number
+    local roboport_unit = data.roboport.unit_number
+
+    refueler.destroy({ raise_destroy = false })
+    runner.assert(not refueler.valid, "the refueler is still valid after a silent destroy")
+    runner.assert(data.roboport.valid, "the roboport died with the silently removed refueler")
+
+    local ok, err = pcall(function()
+      data.roboport.destroy({ raise_destroy = true })
+    end)
+    runner.assert(ok, "destroying the orphaned roboport crashed: " .. tostring(err))
+    runner.assert(
+      helpers.funit_call("get_burner_roboport_data", unit_number) == nil,
+      "the orphaned pair is still in storage"
+    )
+    runner.assert(
+      helpers.storage().burner_roboport_children[roboport_unit] == nil,
+      "the orphaned pair left its child index entry behind"
+    )
+  end)
+end)

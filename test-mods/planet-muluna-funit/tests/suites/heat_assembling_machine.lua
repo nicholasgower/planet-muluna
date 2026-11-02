@@ -431,3 +431,34 @@ runner.test("compound: the wire retry timer starts when a wire is queued and sto
   end)
 end)
 
+runner.test("heat assembling machine: reactor destroyed after a silent machine removal does not crash", function()
+  -- A script or a deleted surface can remove the machine without raising a
+  -- destroy event, leaving storage pointing at an invalid entity. Destroying the
+  -- orphaned reactor must drop the pair instead of reading entity.unit_number
+  -- from the invalid machine.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local assembler, data = build_machine(surface, machine, center)
+    local unit_number = assembler.unit_number
+    local reactor_unit = data.reactor.unit_number
+
+    assembler.destroy({ raise_destroy = false })
+    runner.assert(not assembler.valid, "the machine is still valid after a silent destroy")
+    runner.assert(data.reactor.valid, "the reactor died with the silently removed machine")
+
+    local ok, err = pcall(function()
+      data.reactor.destroy({ raise_destroy = true })
+    end)
+    runner.assert(ok, "destroying the orphaned reactor crashed: " .. tostring(err))
+    runner.assert(
+      helpers.funit_call("get_heat_assembling_machine_data", unit_number) == nil,
+      "the orphaned pair is still in storage"
+    )
+    runner.assert(
+      helpers.storage().heat_assembling_machine_children[reactor_unit] == nil,
+      "the orphaned pair left its child index entry behind"
+    )
+  end)
+end)
