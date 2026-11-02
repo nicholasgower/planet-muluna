@@ -37,6 +37,10 @@ remote.add_interface("muluna_funit", {
     return stage().get_telescope_combinator_signals(combinator.surface, combinator.force, telescope)
   end,
 
+  get_telescope_combinator_stats = function()
+    return stage().get_telescope_combinator_stats()
+  end,
+
   get_telescope_probability = function(pollution, quality_level)
     return Muluna.get_telescope_probability(pollution, { level = quality_level or 0 })
   end,

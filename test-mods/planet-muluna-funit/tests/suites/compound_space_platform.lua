@@ -648,13 +648,21 @@ runner.test("space platform telescope survives the combinator update tick", func
     local ok, err = pcall(function()
       local current = helpers.funit_call("get_telescope_data", unit_number)
       runner.assert(current ~= nil, "the combinator update tick removed the platform telescope from storage")
+      local combinator = current["constant-combinator"]
       runner.assert(
-        current.cached_signals ~= nil,
+        combinator ~= nil and combinator.valid,
+        "the platform telescope has no valid constant-combinator after the update tick"
+      )
+      local section = current["constant-combinator-control-behavior"].get_section(1)
+      runner.assert(section ~= nil, "the platform telescope combinator has no section after the update tick")
+      local filters = section.filters
+      runner.assert(
+        #filters > 0,
         "the platform telescope combinator was not updated on its update tick"
       )
 
       local platform_signal
-      for _, signal in ipairs(current.cached_signals) do
+      for _, signal in ipairs(filters) do
         if
           type(signal.value) == "table"
           and signal.value.type == "virtual"

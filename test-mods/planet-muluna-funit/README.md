@@ -109,6 +109,7 @@ when the `funit` mod is active**:
 
 - `get_storage`, `get_constants`
 - `get_telescope_data`, `update_telescope`, `get_telescope_signals`
+- `get_telescope_combinator_stats`
 - `get_telescope_probability`, `get_telescope_min_pollution`,
   `get_telescope_max_pollution`
 - `get_state_integer`, `get_time_to_next_asteroid_check`

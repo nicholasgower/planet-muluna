@@ -554,7 +554,18 @@ end
 local experimental = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
 local use_quality = script.active_mods["quality"]
 local debug = false
-local function get_telescope_combinator_signals(surface,force,telescope) --Intended to be memoized with cache resetting every on_nth_tick event
+---Build the signal list for a telescope combinator.
+---
+---`space_platforms` is optional: the update tick passes the list it already
+---fetched (and memoized per planet+force) so a write does not call
+---`get_space_platforms` a second time. The FUnit seam calls this with three
+---arguments and lets it fetch the list itself.
+---@param surface LuaSurface
+---@param force LuaForce
+---@param telescope table
+---@param space_platforms LuaSpacePlatform[]|nil
+---@return LogisticFilter[]
+local function get_telescope_combinator_signals(surface,force,telescope,space_platforms)
     if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
     local signals = {}
     local i = 1
@@ -564,8 +575,7 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
         -- Produce list of space platforms (Normal quality channel provides platform id) (Uses list of virtual signals with strength equal to id)
         -- Uncommon quality: State of space platform (https://lua-api.factorio.com/latest/defines.html#defines.space_platform_state)
         -- Rare quality: Can leave_current_location (1 or 2) (https://lua-api.factorio.com/latest/classes/LuaSpacePlatform.html#can_leave_current_location)
-        local space_platforms = {}
-        space_platforms = planet.get_space_platforms(force)
+        space_platforms = space_platforms or planet.get_space_platforms(force)
         -- if experimental then
         --     if debug then log("planet.get_space_platforms(" .. force.name .. ")") end
             
@@ -632,6 +642,10 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
             telescope.old_total_asteroid_count = total_asteroid_count
             --game.print(total_asteroid_count)
             telescope.old_asteroid_counts_next_tick = game.tick + get_time_to_next_asteroid_check(telescope)
+            -- Bump a revision instead of hashing the counts (names are strings,
+            -- and the table is only rebuilt on the refresh cadence above). The
+            -- update tick mixes this number into the signal signature.
+            telescope.asteroid_revision = (telescope.asteroid_revision or 0) + 1
             else
                 asteroid_counts = telescope.old_asteroid_counts
             end
@@ -655,7 +669,94 @@ end
 
 
 
+local SIGNATURE_MODULUS = 2147483647 -- 2^31 - 1 keeps hash*131 below 2^53, so the math stays exact.
+local SIGNATURE_BRANCH_PLANET = 1
+local SIGNATURE_BRANCH_PLATFORM = 2
+
+local function signature_mix(hash, value)
+    return (hash * 131 + value) % SIGNATURE_MODULUS
+end
+
+---Numeric fingerprint of everything `get_telescope_combinator_signals` reads.
+---
+---Comparing the built signal list with `rro.deep_equals` costs more than the
+---`section.filters` write it would avoid: the list is several nested tables per
+---platform and per asteroid type, and the recursive comparison visits every
+---node. The list is derived from a handful of numbers, so hash those instead and
+---skip both the rebuild and the write when they are unchanged.
+---
+---Every branch mixes in `#platform_list_signals`: if another mod adds a virtual
+---signal, the signal names change even though the platform numbers did not, and
+---the stored signature must not match anymore.
+---@param surface LuaSurface
+---@param force LuaForce
+---@param telescope table
+---@param get_platforms fun(planet: LuaPlanet, force: LuaForce): LuaSpacePlatform[]
+---@return number signature
+---@return LuaSpacePlatform[]|nil space_platforms
+local function get_telescope_signal_signature(surface, force, telescope, get_platforms)
+    if surface.planet then
+        local space_platforms = get_platforms(surface.planet, force)
+        local hash = signature_mix(SIGNATURE_BRANCH_PLANET, #platform_list_signals)
+        hash = signature_mix(hash, #space_platforms)
+        for j = 1, #space_platforms do
+            local space_platform = space_platforms[j]
+            hash = signature_mix(hash, space_platform.index)
+            if use_quality then
+                -- get_state_integer returns nil for a state added by a newer
+                -- Factorio build; a nil would break the hash arithmetic.
+                hash = signature_mix(hash, get_state_integer(space_platform.state) or 0)
+                hash = signature_mix(hash, bool_to_int(space_platform.can_leave_current_location()))
+            end
+        end
+        return hash, space_platforms
+    elseif surface.platform then
+        local platform = surface.platform
+        local hash = signature_mix(SIGNATURE_BRANCH_PLATFORM, #platform_list_signals)
+        hash = signature_mix(hash, platform.index)
+        if platform.space_connection then
+            local total_length = platform.space_connection.length
+            hash = signature_mix(hash, total_length)
+            -- Matches the emitted signal, including a nil distance (docked).
+            hash = signature_mix(hash, math.floor((platform.distance or 0) * total_length))
+        end
+        if telescope.output_asteroid_signals ~= false then
+            -- asteroid_revision changes only when the counts are rebuilt, so the
+            -- asteroid tail does not need to be hashed entry by entry.
+            hash = signature_mix(hash, telescope.asteroid_revision or 0)
+        end
+        return hash
+    end
+    -- Neither a planet nor a platform surface: the signal list is always empty.
+    return signature_mix(SIGNATURE_BRANCH_PLANET, 0)
+end
+
+-- Test seam: prove the update skips unchanged telescopes. Inert in normal play.
+local combinator_stats = { updates = 0, rebuilds = 0, writes = 0 }
+
+---Fetch the platform list for a planet+force once per update.
+---
+---`get_space_platforms` builds a fresh list on every call, and several
+---telescopes can share one planet and force.
+local function make_platform_cache()
+    local cache = {}
+    return function(planet, force)
+        local by_force = cache[planet.name]
+        if not by_force then
+            by_force = {}
+            cache[planet.name] = by_force
+        end
+        local space_platforms = by_force[force.index]
+        if not space_platforms then
+            space_platforms = planet.get_space_platforms(force)
+            by_force[force.index] = space_platforms
+        end
+        return space_platforms
+    end
+end
+
 Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
+    local get_platforms = make_platform_cache()
     for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
             local assembler = telescope["assembling-machine"]
@@ -664,18 +765,16 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
             if combinator_valid and assembler_valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
-                    local cached_signals = telescope.cached_signals or {} 
-                    local signals = get_telescope_combinator_signals(combinator.surface,combinator.force,telescope)
-                    --if not rro.deep_equals(signals,cached_signals) then
-                        --combinator_behavior.remove_section(1)
+                    combinator_stats.updates = combinator_stats.updates + 1
+                    local signature, space_platforms = get_telescope_signal_signature(combinator.surface, combinator.force, telescope, get_platforms)
+                    if signature ~= telescope.signal_signature then
+                        local signals = get_telescope_combinator_signals(combinator.surface, combinator.force, telescope, space_platforms)
+                        combinator_stats.rebuilds = combinator_stats.rebuilds + 1
                         local section = combinator_behavior.get_section(1) or combinator_behavior.add_section()
                         section.filters = signals
-                        -- for i,signal in ipairs(signals) do
-                        --     section.set_slot(i,signal)
-                        -- end
-                    --end
-                    
-                    telescope.cached_signals = signals
+                        combinator_stats.writes = combinator_stats.writes + 1
+                        telescope.signal_signature = signature
+                    end
                 end
             else
                 -- Either half of the compound entity can disappear on its own
@@ -708,4 +807,15 @@ if script.active_mods["funit"] then
     Muluna.funit.get_state_integer = get_state_integer
     Muluna.funit.get_time_to_next_asteroid_check = get_time_to_next_asteroid_check
     Muluna.funit.bool_to_int = bool_to_int
+
+    ---Snapshot of how much work the combinator update did since load.
+    ---@return {updates: integer, rebuilds: integer, writes: integer}
+    Muluna.funit.get_telescope_combinator_stats = function()
+        return {
+            updates = combinator_stats.updates,
+            rebuilds = combinator_stats.rebuilds,
+            writes = combinator_stats.writes,
+        }
+    end
+
 end

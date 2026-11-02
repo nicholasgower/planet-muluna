@@ -99,6 +99,13 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
     end
     if not storage.telescopes then storage.telescopes = {} end 
     if not storage.telescopes_on_surface then storage.telescopes_on_surface = {} end
+    -- The telescope combinator update skips writes that cannot change the
+    -- signals by comparing a numeric signature. A prototype change can reorder
+    -- or rename the virtual signals without changing the platform numbers, so
+    -- force one rewrite after a configuration change.
+    for _, telescope in pairs(storage.telescopes) do
+        telescope.signal_signature = nil
+    end
     if not storage.active_burner_roboports then storage.active_burner_roboports = {} end
     if not storage.burner_roboports then storage.burner_roboports = {} end
     if not storage.cached_direction_to_string then storage.cached_direction_to_string = {} end
