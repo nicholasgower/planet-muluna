@@ -61,6 +61,26 @@ for i = 0, 20 do
 end
 
 local finalized = false
+-- Composed handler for every finalized nth-tick, so an idle timer can be
+-- switched off and on without unregistering other handlers by accident.
+local nth_tick_handlers = {}
+
+---Enable or disable an nth-tick handler that was registered with
+---`on_nth_tick` before `finalize_events`.
+---
+---Use this for work that only needs a timer while something is pending. The
+---engine call itself is cheap, but a handler that runs forever to inspect an
+---empty table is still work in every save.
+---@param tick integer
+---@param enabled boolean
+function Public.set_nth_tick_enabled(tick, enabled)
+    local handler = nth_tick_handlers[tick]
+    if not handler then
+        error("No nth-tick handler registered for tick " .. tostring(tick))
+    end
+    script.on_nth_tick(tick, enabled and handler or nil)
+end
+
 Public.finalize_events = function()
 	if finalized then error("Events already finalized") end
 	local i = 0
@@ -69,6 +89,7 @@ Public.finalize_events = function()
 		local f = func_and_filter[1]
 		local filter = func_and_filter[2]
 		if type(event) == "number" then
+			nth_tick_handlers[event] = f
 			script.on_nth_tick(event, f)
 		elseif event == Public.events.on_init() then
 			script.on_init(f)
@@ -107,8 +128,14 @@ local function process_gui_event(event)
 	end
 end
 
-for event, _ in pairs(gui_events) do
-	Public.on_event(event, process_gui_event)
+for event, handlers in pairs(gui_events) do
+	-- Registering an event makes the engine call into Lua for every occurrence
+	-- (including on_gui_value_changed and on_gui_text_changed, which fire many
+	-- times per second while dragging or typing). Skip the events that have no
+	-- handler pattern at load time.
+	if next(handlers) ~= nil then
+		Public.on_event(event, process_gui_event)
+	end
 end
 
 local delayed_functions = {}
@@ -143,7 +170,7 @@ Public.on_event(defines.events.on_object_destroyed, function(event)
 	storage._delayed_functions[registration_number] = nil
 
 	local f = delayed_functions[data[1]]
-	if not f then error("No function found for key: " .. function_key) end
+	if not f then error("No function found for key: " .. tostring(data[1])) end
 	f(table.unpack(data[2]))
 end)
 

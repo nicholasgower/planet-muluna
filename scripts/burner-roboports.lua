@@ -196,35 +196,6 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 end,
 heat_assembler_filters)
 
-local function register_for_deconstruction_events(entity_name,entity_storage) --Assumes that upgrades are done to upgrade quality, not entity type
-
-    Muluna.events.on_event({defines.events.on_marked_for_deconstruction,defines.events.on_cancelled_deconstruction}, function(event)
-        local entity = event.entity
-        game.print(entity)
-        local player = game.players[event.player_index]
-        local force = game.players[event.player_index].force
-        if entity.name == entity_name then
-            if entity_storage then
-                game.print(entity_storage)
-                local entity_group = entity_storage[entity.unit_number]
-                for _,sub_entity in pairs(entity_group) do
-                    game.print(sub_entity)
-                    if sub_entity ~= entity then
-                        if event.name == defines.events.on_marked_for_deconstruction then
-                            sub_entity.order_deconstruction(force,player,1)
-                        elseif event.name == defines.events.on_cancelled_deconstruction then
-                            sub_entity.cancel_deconstruction(force,player)
-                        end
-
-                    end
-                end
-            end
-        end
-    end)
-
-end
-
-
 -- 5000 MJ / 2000 MW
 
 local cutoff_energy_high = 0.8 --If energy % is greater/equal than this, stop updating

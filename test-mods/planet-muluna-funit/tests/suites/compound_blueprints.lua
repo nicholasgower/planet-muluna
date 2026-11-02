@@ -519,3 +519,17 @@ runner.test("compound blueprint: wire offsets follow blueprint rotation and flip
   )
   runner.assert(x == 2 and y == -1, "south rotation with a horizontal flip should give (2,-1), got (" .. x .. "," .. y .. ")")
 end)
+
+runner.test("compound: wire retry timer only runs while a wire is pending", function()
+  -- The 30-tick retry handler used to be registered for the whole session even
+  -- though storage.compound_pending_wires is empty almost all the time. It is
+  -- now switched off when the table drains.
+  local state = helpers.funit_call("get_compound_retry_state")
+  runner.assert(type(state) == "table", "get_compound_retry_state returned no state")
+  runner.assert(type(state.pending) == "number", "retry state has no pending count")
+  runner.assert(
+    state.enabled == (state.pending > 0),
+    "the wire retry timer should run only while a wire is pending (pending="
+      .. tostring(state.pending) .. ", enabled=" .. tostring(state.enabled) .. ")"
+  )
+end)

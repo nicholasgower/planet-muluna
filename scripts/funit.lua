@@ -178,6 +178,10 @@ remote.add_interface("muluna_funit", {
     return stage().capture_compound_blueprint_tags(unit_number)
   end,
 
+  get_compound_retry_state = function()
+    return stage().get_compound_retry_state()
+  end,
+
   transform_compound_offset = function(offset, direction, flip_horizontal, flip_vertical)
     return stage().transform_compound_offset(offset, direction, flip_horizontal, flip_vertical)
   end,
