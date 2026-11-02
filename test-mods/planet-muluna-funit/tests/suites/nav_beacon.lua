@@ -292,6 +292,10 @@ runner.test("nav beacon storage tables are initialized", function()
   runner.assert(type(storage.beaconed_platforms) == "table", "storage.beaconed_platforms is not a table")
   runner.assert(type(storage.nav_beacons_other) == "table", "storage.nav_beacons_other is not a table")
   runner.assert(type(storage.has_nav_beacons) == "boolean", "storage.has_nav_beacons is not a boolean")
+  runner.assert(
+    type(storage.nav_beacon_players) == "table",
+    "storage.nav_beacon_players is not a table; the update tick would index nil"
+  )
 end)
 
 runner.test("radar on Muluna is not registered as a nav beacon", function()
@@ -884,4 +888,35 @@ runner.test("nav beacon scan energy is computed once per radar and quality", fun
         .. " times across three lookups; it should be cached per radar and quality"
     )
   end)
+end)
+
+runner.test("nav beacon update only visits players in remote view", function()
+  -- The update tick used to loop over every player and remove the alert from
+  -- each non-remote player on every interval. It now loops storage.nav_beacon_players,
+  -- which is maintained from controller changes, and leaves remote view once.
+  local storage = helpers.storage()
+  runner.assert(type(storage.nav_beacon_players) == "table", "storage.nav_beacon_players is missing")
+
+  local entered = helpers.funit_call(
+    "probe_nav_beacon_controller_change",
+    defines.controllers.character,
+    defines.controllers.remote
+  )
+  runner.assert(entered.ok, "entering remote view errored: " .. tostring(entered.error))
+  runner.assert(entered.tracked, "entering remote view did not track the player")
+  runner.assert(entered.removed == 0, "entering remote view removed a beacon alert")
+
+  local left = helpers.funit_call(
+    "probe_nav_beacon_controller_change",
+    defines.controllers.remote,
+    defines.controllers.character
+  )
+  runner.assert(left.ok, "leaving remote view errored: " .. tostring(left.error))
+  runner.assert(not left.tracked, "leaving remote view did not untrack the player")
+  runner.assert(left.removed == 1, "leaving remote view did not remove the beacon alert exactly once")
+
+  runner.assert(
+    helpers.storage().nav_beacon_players[9999] == nil,
+    "the probe player is still tracked after leaving remote view"
+  )
 end)

@@ -48,6 +48,20 @@ local function init_storage_nav_beacons()
     if storage.beacon_electric_interfaces == nil then
         storage.beacon_electric_interfaces = {}
     end
+    if storage.nav_beacon_players == nil then
+        storage.nav_beacon_players = {}
+    end
+    -- Rebuild the remote-view player table after a load or configuration
+    -- change. Controller types survive a save, and on_player_controller_changed
+    -- is not raised when a save is loaded, so a player saved in remote view has
+    -- to be tracked again here.
+    for player_index, player in pairs(game.players) do
+        if player.controller_type == defines.controllers.remote then
+            storage.nav_beacon_players[player_index] = player
+        else
+            storage.nav_beacon_players[player_index] = nil
+        end
+    end
     if rro.deep_equals(storage.nav_beacons,{}) then
         storage.has_nav_beacons = false
     else
@@ -426,6 +440,7 @@ end
 ---every alert with that icon.
 ---@param player LuaPlayer|table player-shaped table with surface, force, position, mod_settings
 local function update_player_nav_beacon(player)
+    if storage.has_nav_beacons ~= true then return end
     local surface_name = player.surface.name
     local force = player.force
     local display_beacon_alert = false
@@ -482,16 +497,66 @@ local function update_player_nav_beacon(player)
     end
 end
 
+---Keep storage.nav_beacon_players in sync with a player's current controller.
+---@param player_index uint
+---@param player LuaPlayer|table
+local function sync_nav_beacon_player(player_index, player)
+    if player.controller_type == defines.controllers.remote then
+        storage.nav_beacon_players[player_index] = player
+    else
+        storage.nav_beacon_players[player_index] = nil
+    end
+end
+
+---Apply a controller change and clean up the alert when the player leaves the
+---remote view.
+---
+---Split from the event handler so the FUnit suite can drive it with a stub
+---player; the headless scenario has no LuaPlayer.
+---@param player_index uint
+---@param player LuaPlayer|table
+---@param old_type defines.controllers
+local function apply_controller_change(player_index, player, old_type)
+    sync_nav_beacon_player(player_index, player)
+    if old_type == defines.controllers.remote and player.controller_type ~= defines.controllers.remote then
+        -- One call clears the beacon alert whatever its message. The previous
+        -- per-update cleanup filtered on the player's current surface name,
+        -- which missed the alert when the player stood on another surface.
+        player.remove_alert{icon = {type = "item", name = "muluna-satellite-radar"}}
+    end
+end
+
 if settings.startup["enable-nav-beacon"].value == true then
+    -- The update tick only visits players currently in remote view, which keeps
+    -- the handler body a single loop over a storage table.
     Muluna.events.on_nth_tick(settings.startup["nav-beacon-update-ticks"].value, function()
-        if storage.has_nav_beacons ~= true then return end
-        for _,player in pairs(game.players) do
-            if player.controller_type == defines.controllers.remote then
-                update_player_nav_beacon(player)
-            else
-                player.remove_alert{type = defines.alert_type.custom, icon = {type = "item", name = "muluna-satellite-radar"},message = {"alert.nav-beacon-available",{"space-location-name."..player.surface.name}}}
-            end
+        for _,player in pairs(storage.nav_beacon_players) do
+            update_player_nav_beacon(player)
         end
+    end)
+
+    Muluna.events.on_event(defines.events.on_player_controller_changed, function(event)
+        local player = game.players[event.player_index]
+        if player then
+            apply_controller_change(event.player_index, player, event.old_type)
+        end
+    end)
+
+    -- A player joining a multiplayer game keeps the controller type from the
+    -- save, so sync without raising a controller change.
+    Muluna.events.on_event(defines.events.on_player_joined_game, function(event)
+        local player = game.players[event.player_index]
+        if player then
+            sync_nav_beacon_player(event.player_index, player)
+        end
+    end)
+
+    Muluna.events.on_event(defines.events.on_player_left_game, function(event)
+        storage.nav_beacon_players[event.player_index] = nil
+    end)
+
+    Muluna.events.on_event(defines.events.on_player_removed, function(event)
+        storage.nav_beacon_players[event.player_index] = nil
     end)
 end
 
@@ -597,6 +662,7 @@ if script.active_mods["funit"] then
     Muluna.funit.build_nav_beacon = built_nav_beacon
     Muluna.funit.handle_invalid_nav_surface = handle_invalid_nav_surface
     Muluna.funit.update_player_nav_beacon = update_player_nav_beacon
+    Muluna.funit.apply_controller_change = apply_controller_change
     Muluna.funit.get_nav_energy_cost = get_nav_energy_cost
     Muluna.funit.get_nav_energy_cost_stats = function()
         return { computations = nav_energy_cost_stats.computations }

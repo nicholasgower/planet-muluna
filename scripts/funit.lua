@@ -112,6 +112,27 @@ remote.add_interface("muluna_funit", {
   -- The update tick only reaches this branch through a player in remote view,
   -- which the headless FUnit scenario cannot create. Run the same per-player
   -- handler against a stub that records alert calls.
+  -- Controller changes cannot be raised for a real player in the headless
+  -- scenario. Drive the production tracking function with a stub that is only
+  -- given a remove_alert method when the change actually removes the alert, so
+  -- a function is never written into storage.
+  probe_nav_beacon_controller_change = function(old_type, new_type)
+    local removed = 0
+    local stub = { controller_type = new_type }
+    if new_type ~= defines.controllers.remote then
+      function stub.remove_alert(_)
+        removed = removed + 1
+      end
+    end
+    local ok, err = pcall(stage().apply_controller_change, 9999, stub, old_type)
+    return {
+      ok = ok,
+      error = err,
+      removed = removed,
+      tracked = storage.nav_beacon_players[9999] ~= nil,
+    }
+  end,
+
   probe_nav_beacon_player = function(surface_name)
     local surface
     for _, candidate in pairs(game.surfaces) do

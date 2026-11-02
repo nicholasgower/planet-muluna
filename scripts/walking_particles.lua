@@ -178,7 +178,6 @@ end
 
 
     Muluna.events.on_event(defines.events.on_tick, function(event)
-            if not storage.walking_tick_rates then update_step_tick_rates(event) end
             for i,player in pairs(storage.players_walking_on_muluna) do
                 local player_info = storage.players_on_muluna[i]
                 if not player_info then
@@ -194,6 +193,7 @@ end
                     state.cached_position = player.character.position
                 end
 
+                if not storage.walking_tick_rates then update_step_tick_rates(event) end
                 local tick_rate = storage.walking_tick_rates[i]
                 if not tick_rate then
                     update_player_step_tick_rate(i, player_info)

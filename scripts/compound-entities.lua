@@ -495,29 +495,30 @@ local function get_wire_connector(entity, connector_id)
 end
 
 local function retry_pending_wires()
-    local pending = get_pending_wires()
-    for id, wire in pairs(pending) do
+    for id, wire in pairs(storage.compound_pending_wires) do
         local config = compound_types[wire.parent_name]
         local data = config and get_compound_data_by_unit_number(config, wire.parent_unit_number)
         local parent = config and data and data[config.parent_key]
         local child = data and data[wire.child_key]
         if not parent or not parent.valid or not child or not child.valid or game.tick > wire.expires then
-            pending[id] = nil
+            storage.compound_pending_wires[id] = nil
         else
             local source = get_wire_connector(child, wire.source_connector_id)
             local target_entity, target_connector_id = resolve_target_entity(parent, data, config, wire.target)
             local target = target_entity and target_entity.valid and get_wire_connector(target_entity, target_connector_id)
             if source and target then
                 if source.is_connected_to(target) then
-                    pending[id] = nil
+                    storage.compound_pending_wires[id] = nil
                 elseif source.connect_to(target) then
-                    pending[id] = nil
+                    storage.compound_pending_wires[id] = nil
                 end
             end
         end
+        -- Stop the timer when the last wire resolved or expired.
+        if next(storage.compound_pending_wires) == nil then
+            set_wire_retries_enabled(false)
+        end
     end
-    -- Stop the timer when the last wire resolved or expired.
-    sync_wire_retries()
 end
 
 local function restore_wires(parent, data, config, tags, orientation_override)
