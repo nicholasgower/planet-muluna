@@ -120,7 +120,7 @@ when the `funit` mod is active**:
   `handle_invalid_nav_surface`, `get_nav_energy_cost`, `get_nav_energy_cost_stats`,
   `reset_nav_energy_cost_cache`, `probe_nav_beacon_player`
 - `set_cheat_mode`
-- `get_walking_controller_branch`
+- `get_walking_controller_branch`, `get_walking_step_movement`
 - `build_entity_gui`, `handle_gui_click`
 
 The production modules export their internal helpers through `Muluna.funit` under

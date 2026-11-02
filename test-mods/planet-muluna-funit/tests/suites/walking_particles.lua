@@ -171,3 +171,38 @@ runner.test("controller input precedence selects only the game controller", func
     "a missing input method incorrectly selected the game-controller branch"
   )
 end)
+
+runner.test("walking particles: step movement averages the facing with the previous step", function()
+  -- The per-tick handler averages the current facing with the previous step so
+  -- the burst turns instead of jumping. The shared direction vector must not be
+  -- modified, so the seam returns it alongside the result.
+  local first = helpers.funit_call("get_walking_step_movement", "North", nil)
+  runner.assert(type(first.movement) == "table", "step movement is not a table")
+  runner.assert(#first.movement == 2, "step movement should have two components")
+  runner.assert(
+    math.abs(first.movement[1] - first.direction[1] / 2) < 1e-12
+      and math.abs(first.movement[2] - first.direction[2] / 2) < 1e-12,
+    "first step should be half of the facing vector"
+  )
+
+  local second = helpers.funit_call("get_walking_step_movement", "North", first.movement)
+  runner.assert(
+    math.abs(second.movement[1] - (first.direction[1] + first.movement[1]) / 2) < 1e-12
+      and math.abs(second.movement[2] - (first.direction[2] + first.movement[2]) / 2) < 1e-12,
+    "second step did not average the facing with the previous movement"
+  )
+
+  -- If the implementation aliased or mutated the shared direction vector, this
+  -- third call would see a changed facing.
+  local third = helpers.funit_call("get_walking_step_movement", "North", nil)
+  runner.assert(
+    math.abs(third.direction[1] - first.direction[1]) < 1e-12
+      and math.abs(third.direction[2] - first.direction[2]) < 1e-12,
+    "the shared direction vector was modified by a step"
+  )
+  runner.assert(
+    math.abs(third.movement[1] - first.movement[1]) < 1e-12
+      and math.abs(third.movement[2] - first.movement[2]) < 1e-12,
+    "the first step result changed after later steps"
+  )
+end)

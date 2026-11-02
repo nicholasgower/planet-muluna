@@ -186,6 +186,13 @@ remote.add_interface("muluna_funit", {
     return stage().is_game_controller_input(input_method)
   end,
 
+  -- The per-tick particle step needs a player, which the headless scenario has
+  -- none of. Expose the direction averaging so its shape (and the fact that it
+  -- copies the shared direction vector instead of mutating it) stays tested.
+  get_walking_step_movement = function(direction_name, previous)
+    return stage().get_walking_step_movement(direction_name, previous)
+  end,
+
   -- The headless scenario has no player, so on_gui_opened/on_gui_click cannot
   -- be raised with a real GUI. Build the frame against a stub root that records
   -- each element definition and enforces the engine's checkbox state type.
