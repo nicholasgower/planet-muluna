@@ -890,6 +890,129 @@ runner.test("nav beacon scan energy is computed once per radar and quality", fun
   end)
 end)
 
+runner.test("nav beacon update does nothing while no radar is registered", function()
+  -- The update tick used to return early when storage.has_nav_beacons was false
+  -- and must keep doing nothing: no alert is added or removed.
+  clean_areas()
+  runner.assert(count_entries(helpers.storage().nav_beacons) == 0, "a nav beacon is still registered")
+  runner.assert(helpers.storage().has_nav_beacons == false, "has_nav_beacons is still set")
+
+  local result = helpers.funit_call("probe_nav_beacon_player", "nauvis")
+  runner.assert(result.ok, "the update errored with no beacons: " .. tostring(result.error))
+  runner.assert(result.added == 0, "an alert was added without a registered radar")
+  runner.assert(result.removed == 0, "an alert was removed without a registered radar")
+end)
+
+runner.test("nav beacon scan ignores a radar owned by another force", function()
+  with_platform_radars(1, "funit-nav-force", function(platforms, keys)
+    local unit_number = keys[1]
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    local cost = helpers.funit_call("get_nav_energy_cost", unit_number)
+    beacon.energy = 3 * cost
+    local energy_before = beacon.energy
+
+    local result = helpers.funit_call("probe_nav_beacon_player", "nauvis", { force = "enemy" })
+    runner.assert(result.ok, "the update errored for another force: " .. tostring(result.error))
+    runner.assert(result.added == 0, "an alert was added for another force's radar")
+    runner.assert(result.removed == 1, "the alert was not cleared for another force's radar")
+    runner.assert(
+      math.abs(beacon.energy - energy_before) < 1e-6,
+      "another force's radar was charged for the scan"
+    )
+  end)
+end)
+
+runner.test("nav beacon scan still runs when the alert setting is off", function()
+  with_platform_radars(1, "funit-nav-display", function(platforms, keys)
+    local unit_number = keys[1]
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    local cost = helpers.funit_call("get_nav_energy_cost", unit_number)
+    beacon.energy = 3 * cost
+    local energy_before = beacon.energy
+
+    local result = helpers.funit_call("probe_nav_beacon_player", "nauvis", { display_alert = false })
+    runner.assert(result.ok, "the update errored: " .. tostring(result.error))
+    runner.assert(result.added == 0, "an alert was added while the alert setting is off")
+    runner.assert(result.removed == 0, "an alert was removed for a matching radar")
+    runner.assert(
+      math.abs((energy_before - beacon.energy) - cost) < 1e-6,
+      "the scan did not run while the alert setting is off"
+    )
+  end)
+end)
+
+runner.test("nav beacon with scanning disabled is announced but not charged", function()
+  with_platform_radars(1, "funit-nav-disabled", function(platforms, keys)
+    local unit_number = keys[1]
+    runner.assert(helpers.funit_call("set_nav_beacon_enabled", unit_number, false), "could not disable the radar")
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    local cost = helpers.funit_call("get_nav_energy_cost", unit_number)
+    beacon.energy = 3 * cost
+    local energy_before = beacon.energy
+
+    local result = helpers.funit_call("probe_nav_beacon_player", "nauvis")
+    runner.assert(result.ok, "the update errored: " .. tostring(result.error))
+    runner.assert(result.added == 1, "the disabled radar was not announced")
+    runner.assert(
+      result.alert_message == "alert.nav-beacon-available-disabled",
+      "the disabled radar used alert " .. tostring(result.alert_message)
+    )
+    runner.assert(
+      math.abs(beacon.energy - energy_before) < 1e-6,
+      "a radar with scanning disabled was charged for a scan"
+    )
+
+    helpers.funit_call("set_nav_beacon_enabled", unit_number, true)
+  end)
+end)
+
+runner.test("nav beacon scan needs a full scan's energy", function()
+  with_platform_radars(1, "funit-nav-energy", function(platforms, keys)
+    local unit_number = keys[1]
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    local cost = helpers.funit_call("get_nav_energy_cost", unit_number)
+
+    beacon.energy = 0
+    local result = helpers.funit_call("probe_nav_beacon_player", "nauvis")
+    runner.assert(result.ok, "the update errored at zero energy: " .. tostring(result.error))
+    runner.assert(result.added == 1, "the radar was not announced at zero energy")
+    runner.assert(beacon.energy == 0, "a scan was charged without enough energy")
+
+    beacon.energy = 3 * cost
+    helpers.funit_call("probe_nav_beacon_player", "nauvis")
+    runner.assert(
+      math.abs(beacon.energy - 2 * cost) < 1e-6,
+      "a scan with enough energy charged " .. tostring(3 * cost - beacon.energy)
+        .. ", expected " .. tostring(cost)
+    )
+  end)
+end)
+
+runner.test("nav beacon update resets storage when the registered radar is invalid", function()
+  -- The update tick reaches the reset branch when the recorded radar died without
+  -- raising a destroy event (for example a deleted surface). It must rebuild the
+  -- tracking data and must not also remove the player's alert.
+  with_platform_radars(1, "funit-nav-invalid-update", function(platforms, keys)
+    local unit_number = keys[1]
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    runner.assert(beacon and beacon.valid, "the radar was not registered")
+    beacon.destroy({ raise_destroy = false })
+    runner.assert(not beacon.valid, "the radar is still valid after a silent destroy")
+    runner.assert(
+      helpers.storage().nav_surfaces[unit_number] ~= nil,
+      "the nav surface was removed with the silent destroy; the test needs the stale pair"
+    )
+
+    local result = helpers.funit_call("probe_nav_beacon_player", "nauvis")
+    runner.assert(result.ok, "the reset branch crashed: " .. tostring(result.error))
+    runner.assert(
+      helpers.storage().has_nav_beacons == false,
+      "the update did not reset the invalid nav beacon storage"
+    )
+    runner.assert(result.removed == 0, "the reset branch also removed the player alert")
+  end)
+end)
+
 runner.test("nav beacon update only visits players in remote view", function()
   -- The update tick used to loop over every player and remove the alert from
   -- each non-remote player on every interval. It now loops storage.nav_beacon_players,

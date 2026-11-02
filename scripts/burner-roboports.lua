@@ -106,7 +106,10 @@ heat_assembler_filters
 local function find_burner_roboport_unit_number(child)
     local children = storage.burner_roboport_children
     local unit_number = children and children[child.unit_number]
-    if unit_number and storage.burner_roboports and storage.burner_roboports[unit_number] then
+    local entry = unit_number and storage.burner_roboports and storage.burner_roboports[unit_number]
+    -- Verify the entry really owns this child: a unit number can be reassigned
+    -- when a prototype changes type, which would leave a stale index entry.
+    if entry and entry.roboport == child then
         return unit_number
     end
     for candidate_unit_number, entry in pairs(storage.burner_roboports or {}) do

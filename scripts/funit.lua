@@ -41,6 +41,10 @@ remote.add_interface("muluna_funit", {
     return stage().get_telescope_combinator_stats()
   end,
 
+  set_telescope_asteroid_signals = function(unit_number, state)
+    return stage().set_telescope_asteroid_signals(unit_number, state)
+  end,
+
   get_telescope_probability = function(pollution, quality_level)
     return Muluna.get_telescope_probability(pollution, { level = quality_level or 0 })
   end,
@@ -133,7 +137,7 @@ remote.add_interface("muluna_funit", {
     }
   end,
 
-  probe_nav_beacon_player = function(surface_name)
+  probe_nav_beacon_player = function(surface_name, options)
     local surface
     for _, candidate in pairs(game.surfaces) do
       if candidate.name == surface_name then
@@ -145,17 +149,19 @@ remote.add_interface("muluna_funit", {
       return { ok = false, error = "no surface named " .. tostring(surface_name) }
     end
 
+    options = options or {}
     local calls = { added = 0, removed = 0 }
     local player = {
       surface = surface,
-      force = game.forces.player,
+      force = game.forces[options.force or "player"],
       position = { x = 0, y = 0 },
       controller_type = defines.controllers.remote,
-      mod_settings = { ["nav-beacon-display-alert"] = { value = true } },
+      mod_settings = { ["nav-beacon-display-alert"] = { value = options.display_alert ~= false } },
     }
-    function player.add_custom_alert(entity)
+    function player.add_custom_alert(entity, icon, message)
       calls.added = calls.added + 1
       calls.alert_entity = entity.unit_number
+      calls.alert_message = message and message[1]
     end
     function player.remove_alert(_)
       calls.removed = calls.removed + 1
@@ -168,6 +174,7 @@ remote.add_interface("muluna_funit", {
       added = calls.added,
       removed = calls.removed,
       alert_entity = calls.alert_entity,
+      alert_message = calls.alert_message,
     }
   end,
 
@@ -201,6 +208,25 @@ remote.add_interface("muluna_funit", {
 
   get_compound_retry_state = function()
     return stage().get_compound_retry_state()
+  end,
+
+  -- Overturn one entry of a child index, or remove it when parent is nil, so a
+  -- test can reproduce an older save (no index) or a stale index.
+  set_compound_child_index = function(table_name, child_unit_number, parent_unit_number)
+    local index = storage[table_name]
+    if not index then
+      if parent_unit_number == nil then return false end
+      index = {}
+      storage[table_name] = index
+    end
+    index[child_unit_number] = parent_unit_number
+    return true
+  end,
+
+  -- Queue a wire whose other endpoint will never exist, so the retry timer
+  -- starts and then drains a tick after it runs.
+  queue_test_pending_wire = function(parent_unit_number)
+    return stage().queue_test_pending_wire(parent_unit_number)
   end,
 
   transform_compound_offset = function(offset, direction, flip_horizontal, flip_vertical)

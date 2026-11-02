@@ -210,3 +210,77 @@ runner.test("telescope combinator goto click focuses the telescope", function()
     error(err, 0)
   end
 end)
+
+runner.test("compound GUI goto buttons resolve both directions", function()
+  -- The two compound bodies that are not a telescope: the reactor of a heat
+  -- assembling machine (child -> parent through the child index) and the hidden
+  -- roboport of a burner roboport (child -> parent through the refueler key).
+  clean_areas()
+  local surface = helpers.get_muluna()
+  local center = helpers.center(helpers.muluna_area())
+  local constants = prototypes.mod_data["muluna-constants"].data
+  local heat_key, heat = next(constants.heat_assembling_machines or {})
+  local vacuum_key, vacuum = next(constants.vacuum_roboports or {})
+  runner.assert(heat_key ~= nil and heat ~= nil, "heat_assembling_machines constants are empty")
+  runner.assert(vacuum_key ~= nil and vacuum ~= nil, "vacuum_roboports constants are empty")
+
+  local ok, err = pcall(function()
+    local assembler = helpers.entity_at(surface, heat["assembling-machine"], { x = center.x - 30, y = center.y })
+    runner.assert(assembler and assembler.valid, "could not build the heat assembling machine")
+    local heat_data = helpers.funit_call("get_heat_assembling_machine_data", assembler.unit_number)
+    runner.assert(heat_data ~= nil, "the heat assembling machine was not registered")
+
+    local to_parent = helpers.funit_call(
+      "handle_gui_click",
+      "muluna-goto-button-heat-assembling-machine-reactor",
+      heat_data.reactor
+    )
+    runner.assert(to_parent.ok, "heat reactor goto click crashed: " .. tostring(to_parent.error))
+    runner.assert(to_parent.opened == assembler, "heat reactor goto click did not focus the machine")
+
+    local to_child = helpers.funit_call(
+      "handle_gui_click",
+      "muluna-goto-button-heat-assembling-machine-unit",
+      assembler
+    )
+    runner.assert(to_child.ok, "heat machine goto click crashed: " .. tostring(to_child.error))
+    runner.assert(to_child.opened == heat_data.reactor, "heat machine goto click did not focus the reactor")
+
+    local refueler = helpers.entity_at(surface, vacuum.refueler, { x = center.x + 30, y = center.y })
+    runner.assert(refueler and refueler.valid, "could not build the burner roboport refueler")
+    local roboport_data = helpers.funit_call("get_burner_roboport_data", refueler.unit_number)
+    runner.assert(roboport_data ~= nil, "the burner roboport was not registered")
+
+    local roboport_to_parent = helpers.funit_call(
+      "handle_gui_click",
+      "muluna-goto-button-burner-roboport-unit",
+      roboport_data.roboport
+    )
+    runner.assert(
+      roboport_to_parent.ok,
+      "roboport goto click crashed: " .. tostring(roboport_to_parent.error)
+    )
+    runner.assert(
+      roboport_to_parent.opened == refueler,
+      "roboport goto click did not focus the refueler"
+    )
+
+    local refueler_to_child = helpers.funit_call(
+      "handle_gui_click",
+      "muluna-goto-button-burner-roboport-refueler",
+      refueler
+    )
+    runner.assert(
+      refueler_to_child.ok,
+      "refueler goto click crashed: " .. tostring(refueler_to_child.error)
+    )
+    runner.assert(
+      refueler_to_child.opened == roboport_data.roboport,
+      "refueler goto click did not focus the hidden roboport"
+    )
+  end)
+  clean_areas()
+  if not ok then
+    error(err, 0)
+  end
+end)

@@ -384,7 +384,11 @@ end)
 local function find_telescope_unit_number(combinator)
     local children = storage.telescope_children
     local unit_number = children and children[combinator.unit_number]
-    if unit_number and storage.telescopes and storage.telescopes[unit_number] then
+    local entry = unit_number and storage.telescopes and storage.telescopes[unit_number]
+    -- Verify the entry really owns this combinator: a unit number can be
+    -- reassigned when a prototype changes type, which would leave a stale
+    -- index entry.
+    if entry and entry["constant-combinator"] == combinator then
         return unit_number
     end
     for candidate_unit_number, entry in pairs(storage.telescopes or {}) do
@@ -781,6 +785,9 @@ local function get_telescope_signal_signature(surface, force, telescope, tick)
             -- Matches the emitted signal, including a nil distance (docked).
             hash = signature_mix(hash, math.floor((platform.distance or 0) * total_length))
         end
+        -- Mix the switch explicitly so toggling it always changes the
+        -- signature, whether or not any asteroid has been counted yet.
+        hash = signature_mix(hash, telescope.output_asteroid_signals ~= false and 1 or 0)
         if telescope.output_asteroid_signals ~= false then
             -- asteroid_revision changes only when the counts are rebuilt, so the
             -- asteroid tail does not need to be hashed entry by entry.
@@ -849,6 +856,16 @@ if script.active_mods["funit"] then
     Muluna.funit.get_state_integer = get_state_integer
     Muluna.funit.get_time_to_next_asteroid_check = get_time_to_next_asteroid_check
     Muluna.funit.bool_to_int = bool_to_int
+
+    ---Flip the asteroid-signal output switch, which the GUI normally toggles.
+    ---@param unit_number uint
+    ---@param state boolean
+    Muluna.funit.set_telescope_asteroid_signals = function(unit_number, state)
+        local telescope = storage.telescopes and storage.telescopes[unit_number]
+        if not telescope then return false end
+        telescope.output_asteroid_signals = state and true or false
+        return true
+    end
 
     ---Snapshot of how much work the combinator update did since load.
     ---@return {updates: integer, rebuilds: integer, writes: integer}

@@ -625,6 +625,20 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function()
 end)
 
 if script.active_mods["funit"] then
+    ---Queue a wire that can never resolve, so the retry timer has work for one
+    ---interval. Used to test that the timer starts and stops with the queue.
+    ---@param parent_unit_number uint32
+    ---@return boolean
+    Muluna.funit.queue_test_pending_wire = function(parent_unit_number)
+        local parent = find_parent_by_unit_number(parent_unit_number)
+        if not parent then return false end
+        queue_wire(parent, { key = "funit-missing-child" }, 1, {
+            name = "funit-missing-entity",
+            position = parent.position,
+        })
+        return true
+    end
+
     ---State of the idle-able wire retry timer, for the FUnit suite.
     ---@return {enabled: boolean, pending: integer}
     Muluna.funit.get_compound_retry_state = function()

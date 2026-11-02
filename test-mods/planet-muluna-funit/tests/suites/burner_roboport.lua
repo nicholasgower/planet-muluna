@@ -329,3 +329,63 @@ runner.test("burner roboport: child index resolves each pair independently", fun
     runner.assert(not second.valid, "the second roboport no longer resolves to its refueler")
   end)
 end)
+
+runner.test("burner roboport: child lookup falls back when the index is missing", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local refueler, data = build_roboport(surface, machine, center)
+    local refueler_unit = refueler.unit_number
+    local roboport_unit = data.roboport.unit_number
+
+    helpers.funit_call("set_compound_child_index", "burner_roboport_children", roboport_unit, nil)
+    runner.assert(
+      helpers.storage().burner_roboport_children[roboport_unit] == nil,
+      "could not remove the child index entry"
+    )
+
+    data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not refueler.valid, "the roboport did not remove its refueler through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_burner_roboport_data", refueler_unit) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)
+
+runner.test("burner roboport: a stale child index entry does not remove another pair", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_roboport(surface, machine, { x = center.x - 25, y = center.y })
+    local second, second_data = build_roboport(surface, machine, { x = center.x + 25, y = center.y })
+    local first_roboport_unit = first_data.roboport.unit_number
+    local second_roboport_unit = second_data.roboport.unit_number
+    local second_unit = second.unit_number
+
+    helpers.funit_call(
+      "set_compound_child_index",
+      "burner_roboport_children",
+      first_roboport_unit,
+      second_unit
+    )
+
+    first_data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "the first refueler survived its roboport")
+    runner.assert(second.valid, "a stale index entry removed the wrong refueler")
+    runner.assert(second_data.roboport.valid, "a stale index entry destroyed the wrong roboport")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.burner_roboport_children[second_roboport_unit] == second_unit,
+      "the wrong pair's index entry was removed"
+    )
+    runner.assert(
+      after.burner_roboport_children[first_roboport_unit] == nil,
+      "the destroyed pair left its index entry behind"
+    )
+  end)
+end)
+

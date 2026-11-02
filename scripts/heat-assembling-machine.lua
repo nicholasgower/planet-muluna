@@ -80,7 +80,10 @@ heat_assembler_filters
 local function find_heat_machine_unit_number(child)
     local children = storage.heat_assembling_machine_children
     local unit_number = children and children[child.unit_number]
-    if unit_number and storage.heat_assembling_machines and storage.heat_assembling_machines[unit_number] then
+    local entry = unit_number and storage.heat_assembling_machines and storage.heat_assembling_machines[unit_number]
+    -- Verify the entry really owns this child: a unit number can be reassigned
+    -- when a prototype changes type, which would leave a stale index entry.
+    if entry and entry.reactor == child then
         return unit_number
     end
     for candidate_unit_number, entry in pairs(storage.heat_assembling_machines or {}) do

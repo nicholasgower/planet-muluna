@@ -545,3 +545,52 @@ runner.test("telescope: destroying the combinator removes the telescope pair", f
     )
   end)
 end)
+
+runner.test("telescope: child lookup falls back when the index is missing", function()
+  with_telescope(function(context)
+    local unit_number = context.telescope.unit_number
+    local data = helpers.funit_call("get_telescope_data", unit_number)
+    local combinator = data["constant-combinator"]
+    local combinator_unit = combinator.unit_number
+
+    helpers.funit_call("set_compound_child_index", "telescope_children", combinator_unit, nil)
+    runner.assert(
+      helpers.storage().telescope_children[combinator_unit] == nil,
+      "could not remove the child index entry"
+    )
+
+    combinator.destroy({ raise_destroy = true })
+    runner.assert(not context.telescope.valid, "the combinator did not remove its telescope through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_telescope_data", unit_number) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)
+
+runner.test("telescope: a child index entry with no telescope falls back to the scan", function()
+  -- A save can carry an index entry whose telescope entry was already dropped
+  -- (for example after the stale-entity cleanup). The lookup must not trust it.
+  with_telescope(function(context)
+    local unit_number = context.telescope.unit_number
+    local data = helpers.funit_call("get_telescope_data", unit_number)
+    local combinator = data["constant-combinator"]
+    local combinator_unit = combinator.unit_number
+
+    runner.assert(
+      helpers.funit_call("set_compound_child_index", "telescope_children", combinator_unit, unit_number + 100000),
+      "could not point the child index at a missing telescope"
+    )
+    runner.assert(
+      helpers.storage().telescope_children[combinator_unit] ~= unit_number,
+      "the child index still points at the real telescope"
+    )
+
+    combinator.destroy({ raise_destroy = true })
+    runner.assert(not context.telescope.valid, "the combinator did not remove its telescope through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_telescope_data", unit_number) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)

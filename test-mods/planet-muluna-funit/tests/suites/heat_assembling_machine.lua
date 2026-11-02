@@ -338,3 +338,96 @@ runner.test("heat assembling machine: child index resolves each machine independ
     runner.assert(not first.valid, "the first reactor no longer resolves to its machine")
   end)
 end)
+
+runner.test("heat assembling machine: child lookup falls back when the index is missing", function()
+  -- Saves created before the child index existed have storage entries but no
+  -- index entry. Destroying their reactor must still find the machine by the
+  -- original scan.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local assembler, data = build_machine(surface, machine, { x = center.x - 25, y = center.y })
+    local assembler_unit = assembler.unit_number
+    local reactor_unit = data.reactor.unit_number
+
+    helpers.funit_call("set_compound_child_index", "heat_assembling_machine_children", reactor_unit, nil)
+    runner.assert(
+      helpers.storage().heat_assembling_machine_children[reactor_unit] == nil,
+      "could not remove the child index entry"
+    )
+
+    data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not assembler.valid, "the reactor did not remove its machine through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_heat_assembling_machine_data", assembler_unit) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)
+
+runner.test("heat assembling machine: a stale child index entry does not remove another machine", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_machine(surface, machine, { x = center.x - 25, y = center.y })
+    local second, second_data = build_machine(surface, machine, { x = center.x + 25, y = center.y })
+    local first_reactor_unit = first_data.reactor.unit_number
+    local second_reactor_unit = second_data.reactor.unit_number
+
+    -- Point the first reactor at the second machine, the shape a reassigned unit
+    -- number would produce.
+    helpers.funit_call(
+      "set_compound_child_index",
+      "heat_assembling_machine_children",
+      first_reactor_unit,
+      second.unit_number
+    )
+
+    first_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "the first machine survived its reactor")
+    runner.assert(second.valid, "a stale index entry removed the wrong machine")
+    runner.assert(second_data.reactor.valid, "a stale index entry destroyed the wrong reactor")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.heat_assembling_machine_children[second_reactor_unit] == second.unit_number,
+      "the wrong pair's index entry was removed"
+    )
+    runner.assert(
+      after.heat_assembling_machine_children[first_reactor_unit] == nil,
+      "the destroyed pair left its index entry behind"
+    )
+  end)
+end)
+
+runner.test("compound: the wire retry timer starts when a wire is queued and stops when it drains", function()
+  clean_areas()
+  local surface = helpers.get_muluna()
+  local machine = get_machine_config()
+  local center = helpers.center(helpers.muluna_area())
+  local assembler = build_machine(surface, machine, center)
+
+  local queued = helpers.funit_call("queue_test_pending_wire", assembler.unit_number)
+  runner.assert(queued, "could not queue a pending wire for " .. tostring(assembler.unit_number))
+
+  local queued_state = helpers.funit_call("get_compound_retry_state")
+  runner.assert(queued_state.pending == 1, "the queued wire is not pending")
+  runner.assert(queued_state.enabled == true, "the retry timer did not start when a wire was queued")
+
+  -- The placeholder wire can never resolve, so the first retry drops it.
+  runner.after_n_ticks_do(35, function()
+    local ok, err = pcall(function()
+      local state = helpers.funit_call("get_compound_retry_state")
+      runner.assert(state.pending == 0, "the retry did not drop the unresolvable wire")
+      runner.assert(state.enabled == false, "the retry timer did not stop when the queue drained")
+    end)
+    local cleanup_ok, cleanup_err = pcall(clean_areas)
+    if not ok then
+      error(err, 0)
+    end
+    runner.assert(cleanup_ok, "cleanup failed: " .. tostring(cleanup_err))
+  end)
+end)
+
