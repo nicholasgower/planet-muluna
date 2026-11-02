@@ -287,3 +287,132 @@ runner.test("burner roboport: raise_on_crafted refuels without a remote call", f
     clean_areas()
   end)
 end)
+
+runner.test("burner roboport: child index resolves each pair independently", function()
+  -- Regression guard for the reverse index: destroying a hidden roboport must
+  -- remove only its own pair and leave the other pairs' index entries intact.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_roboport(surface, machine, { x = center.x - 25, y = center.y })
+    local second, second_data = build_roboport(surface, machine, { x = center.x + 25, y = center.y })
+
+    local first_roboport_unit = first_data.roboport.unit_number
+    local second_roboport_unit = second_data.roboport.unit_number
+    local children = helpers.storage().burner_roboport_children
+    runner.assert(type(children) == "table", "storage.burner_roboport_children is missing")
+    runner.assert(
+      children[first_roboport_unit] == first.unit_number,
+      "child index does not map the first roboport to its refueler"
+    )
+    runner.assert(
+      children[second_roboport_unit] == second.unit_number,
+      "child index does not map the second roboport to its refueler"
+    )
+
+    first_data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "destroying the first roboport did not remove its refueler")
+    runner.assert(second.valid, "destroying the first roboport removed the second refueler")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.burner_roboport_children[first_roboport_unit] == nil,
+      "the destroyed pair left a stale child index entry"
+    )
+    runner.assert(
+      after.burner_roboport_children[second_roboport_unit] == second.unit_number,
+      "destroying the first pair removed the second pair's child index entry"
+    )
+
+    second_data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not second.valid, "the second roboport no longer resolves to its refueler")
+  end)
+end)
+
+runner.test("burner roboport: child lookup falls back when the index is missing", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local refueler, data = build_roboport(surface, machine, center)
+    local refueler_unit = refueler.unit_number
+    local roboport_unit = data.roboport.unit_number
+
+    helpers.funit_call("set_compound_child_index", "burner_roboport_children", roboport_unit, nil)
+    runner.assert(
+      helpers.storage().burner_roboport_children[roboport_unit] == nil,
+      "could not remove the child index entry"
+    )
+
+    data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not refueler.valid, "the roboport did not remove its refueler through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_burner_roboport_data", refueler_unit) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)
+
+runner.test("burner roboport: a stale child index entry does not remove another pair", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_roboport(surface, machine, { x = center.x - 25, y = center.y })
+    local second, second_data = build_roboport(surface, machine, { x = center.x + 25, y = center.y })
+    local first_roboport_unit = first_data.roboport.unit_number
+    local second_roboport_unit = second_data.roboport.unit_number
+    local second_unit = second.unit_number
+
+    helpers.funit_call(
+      "set_compound_child_index",
+      "burner_roboport_children",
+      first_roboport_unit,
+      second_unit
+    )
+
+    first_data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "the first refueler survived its roboport")
+    runner.assert(second.valid, "a stale index entry removed the wrong refueler")
+    runner.assert(second_data.roboport.valid, "a stale index entry destroyed the wrong roboport")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.burner_roboport_children[second_roboport_unit] == second_unit,
+      "the wrong pair's index entry was removed"
+    )
+    runner.assert(
+      after.burner_roboport_children[first_roboport_unit] == nil,
+      "the destroyed pair left its index entry behind"
+    )
+  end)
+end)
+
+runner.test("burner roboport: roboport destroyed after a silent refueler removal does not crash", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local refueler, data = build_roboport(surface, machine, center)
+    local unit_number = refueler.unit_number
+    local roboport_unit = data.roboport.unit_number
+
+    refueler.destroy({ raise_destroy = false })
+    runner.assert(not refueler.valid, "the refueler is still valid after a silent destroy")
+    runner.assert(data.roboport.valid, "the roboport died with the silently removed refueler")
+
+    local ok, err = pcall(function()
+      data.roboport.destroy({ raise_destroy = true })
+    end)
+    runner.assert(ok, "destroying the orphaned roboport crashed: " .. tostring(err))
+    runner.assert(
+      helpers.funit_call("get_burner_roboport_data", unit_number) == nil,
+      "the orphaned pair is still in storage"
+    )
+    runner.assert(
+      helpers.storage().burner_roboport_children[roboport_unit] == nil,
+      "the orphaned pair left its child index entry behind"
+    )
+  end)
+end)

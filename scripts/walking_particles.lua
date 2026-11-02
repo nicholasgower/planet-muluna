@@ -1,6 +1,5 @@
 
 if settings.startup["muluna-graphics-enable-footstep-animations"].value == true then
-    local vectors = Muluna.vectors
     local m = 0.01 local r = 0.005
     local direction_vectors = { --Velocity vector used to set velocity of kicked up particles.
         North = {0,m},	
@@ -35,19 +34,50 @@ local function is_game_controller_input(input_method)
 end
 
     
+    -- Per-tick movement state (cached position, delta and the last spawned
+    -- direction) is transient: it is rebuilt from the player's movement, so it
+    -- does not belong in storage, where every write is saved. Keyed by player
+    -- index and cleared when the player leaves Muluna.
+    local player_state = {}
+    local ZERO_MOVEMENT = {0, 0}
+
+    local function get_player_state(index)
+        local state = player_state[index]
+        if not state then
+            state = {}
+            player_state[index] = state
+        end
+        return state
+    end
+
+---Average the facing vector with the previous step.
+---
+---Returns a new table: `direction_vectors` is shared by every step and must not
+---be modified. Turns become a short curve instead of a jump.
+---@param direction_movement number[]
+---@param previous_movement number[]|nil
+---@return number[] movement
+local function step_movement(direction_movement, previous_movement)
+    previous_movement = previous_movement or ZERO_MOVEMENT
+    return {
+        (direction_movement[1] + previous_movement[1]) / 2,
+        (direction_movement[2] + previous_movement[2]) / 2,
+    }
+end
+
 local step_process_tick_rate = 1
 local function update_player_step_tick_rate(i,player_table)
         --if not (player.connected and player.surface.name == "muluna") then goto continue end
         --player.print(player.name)
         local player = player_table.player
         local speed
+        local delta = player_state[i] and player_state[i].delta_position
         if is_game_controller_input(storage.player_control_method[i]) then
-            speed = player_table.delta_position and math.sqrt( player_table.delta_position.x^2 + player_table.delta_position.y^2) or player.character_running_speed
+            speed = delta and math.sqrt( delta.x^2 + delta.y^2) or player.character_running_speed
         else
             speed = player.character_running_speed or 0
         end
-        
-        local tick_rate = storage.walking_tick_rates[i]
+
         storage.walking_tick_rates[i] = step_process_tick_rate*math.ceil(30/(speed/0.075)/step_process_tick_rate)
         --player.print(storage.walking_tick_rates[i])
         --player.print(speed)
@@ -64,6 +94,7 @@ local function update_player_step_tick_rate(i,player_table)
             end
         --end
     end
+
     
 
     Muluna.events.on_nth_tick(60, update_step_tick_rates)
@@ -83,6 +114,7 @@ local function update_player_step_tick_rate(i,player_table)
         else
             storage.players_on_muluna[event.player_index] = nil
             storage.players_walking_on_muluna[event.player_index] = nil
+            player_state[event.player_index] = nil
         end
 
 
@@ -104,20 +136,6 @@ local function update_player_step_tick_rate(i,player_table)
     --     game.print(saved_value)
     --     game.print({"",profiler_exp,"saved"})
     -- profiler_exp.reset()
-local experimental = helpers.compare_versions(helpers.game_version,"2.0.64") >= 0
-local armor_list = prototypes.get_item_filtered({{filter = "type", type = "armor"}})
-
-    local function get_armor(player)
-
-        local armor_inventory = nil
-        if player.controller_type == defines.controllers.editor then
-            armor_inventory = player.get_inventory(defines.inventory.editor_armor)
-        else
-            armor_inventory = player.get_inventory(defines.inventory.character_armor)
-        end
-        --if not armor_inventory or armor_inventory.is_empty() then return end
-        return (armor_inventory or {{valid_for_read = false}})[1] 
-    end
     --local profiler = helpers.create_profiler()
 local function generate_particles(speed,movement,player_position,surface)
     for i = 1,math.floor(3*math.sqrt(speed)),1 do
@@ -161,47 +179,51 @@ end
 
     Muluna.events.on_event(defines.events.on_tick, function(event)
             for i,player in pairs(storage.players_walking_on_muluna) do
-                --profiler.reset()
                 local player_info = storage.players_on_muluna[i]
+                if not player_info then
+                    storage.players_walking_on_muluna[i] = nil
+                    player_state[i] = nil
+                    goto continue
+                end
+                local state = get_player_state(i)
                 if is_game_controller_input(storage.player_control_method[i]) then
-                    if not player_info.cached_position then player_info.cached_position = player.physical_position end
-                    player_info.delta_position = {x = player.physical_position.x-player_info.cached_position.x,y = player.physical_position.y - player_info.cached_position.y}
-                    player_info.cached_position = player.character.position
+                    if not state.cached_position then state.cached_position = player.physical_position end
+                    local position = player.physical_position
+                    state.delta_position = {x = position.x-state.cached_position.x,y = position.y - state.cached_position.y}
+                    state.cached_position = player.character.position
                 end
 
                 if not storage.walking_tick_rates then update_step_tick_rates(event) end
-                local tick_rate = storage.walking_tick_rates[i] 
-                if not tick_rate then update_step_tick_rates(event) tick_rate = storage.walking_tick_rates[i] end
+                local tick_rate = storage.walking_tick_rates[i]
+                if not tick_rate then
+                    update_player_step_tick_rate(i, player_info)
+                    tick_rate = storage.walking_tick_rates[i]
+                end
+                if not tick_rate or tick_rate < 1 then tick_rate = 1 end
                 --if surface.name ~= "muluna" then goto continue end
                 if event.tick % tick_rate ~= 0 then goto continue end
                 local player = player_info.player or player_info
                 local character = player.character
                 local surface = player.surface
-                    --game.print(surface.name)
-                    
-                    
-                    --game.print(player_armor.name)
-                    --game.print(provides_flight)
-                   
                     local walking_state = player.walking_state
-                    --game.print(player.character_running_speed)
-                    if walking_state.walking == false then 
-                        storage.players_on_muluna[i].previous_movement = {0,0} 
+                    if walking_state.walking == false then
+                        player_state[i] = nil
                         storage.players_walking_on_muluna[i] = nil
-                        goto continue 
-
-                    end 
-                        local character_is_flying = not character or character.is_flying 
+                        goto continue
+                    end
+                        local character_is_flying = not character or character.is_flying
                         if character_is_flying then goto continue end
-                        
-                        local player_tile = surface.get_tile(player.position)
-                        if player.physical_vehicle or (player_tile.valid and player_tile.hidden_tile) then goto continue end
-                            
+
+                        -- get_hidden_tile answers the same question as
+                        -- get_tile().hidden_tile without allocating a LuaTile
+                        -- object for every particle burst.
+                        if player.physical_vehicle or surface.get_hidden_tile(player.position) then goto continue end
+
                             local player_position
 
                             if character then
                                 player_position = character.position
-                            else 
+                            else
                                 player_position = player.position
                             end
                             surface.create_particle{
@@ -213,29 +235,28 @@ end
                                 frame_speed = 1
                             }
                             local direction = cached_direction_to_string(walking_state.direction)
-                            
+
                             local speed = player.character_running_speed /0.075
                             if speed == 1/0 then speed = 1 end --To fix issue where character running speed is infinity for some reason.
-                            
-                            
-                            local movement = table.deepcopy(direction_vectors[direction]) --{0.01,0}
-                            local prev_movement = storage.players_on_muluna[i].previous_movement or {0,0}
-                            movement = vectors.vector_average_unsafe(movement,prev_movement)
-                            --game.print(serpent.block(movement))
-                            storage.players_on_muluna[i].previous_movement = table.deepcopy(movement)
+
+                            local movement = step_movement(direction_vectors[direction], state.previous_movement)
+                            state.previous_movement = movement
                             generate_particles(speed,movement,player_position,surface)
-                            
-                        --end
-                    
-                --game.print(profiler)
-                
+
                 ::continue::
             end
-        
+
         end
         )
 
     if script.active_mods["funit"] then
         Muluna.funit.is_game_controller_input = is_game_controller_input
+        ---@return {movement: number[], direction: number[]}
+        Muluna.funit.get_walking_step_movement = function(direction_name, previous)
+            return {
+                movement = step_movement(direction_vectors[direction_name], previous),
+                direction = direction_vectors[direction_name],
+            }
+        end
     end
 end

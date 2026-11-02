@@ -281,3 +281,184 @@ runner.test("heat assembling machine: fuel and the recipe fluid produce progress
     clean_areas()
   end)
 end)
+
+runner.test("heat assembling machine: child index resolves each machine independently", function()
+  -- Regression guard for the reverse index: destroying a reactor must remove
+  -- only its own pair, even with sparse unit numbers, and must not leave or
+  -- delete another pair's index entry.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_machine(surface, machine, { x = center.x - 25, y = center.y })
+    local middle, middle_data = build_machine(surface, machine, { x = center.x, y = center.y })
+    local last, last_data = build_machine(surface, machine, { x = center.x + 25, y = center.y })
+
+    local first_reactor_unit = first_data.reactor.unit_number
+    local middle_reactor_unit = middle_data.reactor.unit_number
+    local last_reactor_unit = last_data.reactor.unit_number
+    local children = helpers.storage().heat_assembling_machine_children
+    runner.assert(type(children) == "table", "storage.heat_assembling_machine_children is missing")
+    runner.assert(
+      children[first_reactor_unit] == first.unit_number,
+      "child index does not map the first reactor to its machine"
+    )
+    runner.assert(
+      children[middle_reactor_unit] == middle.unit_number,
+      "child index does not map the middle reactor to its machine"
+    )
+    runner.assert(
+      children[last_reactor_unit] == last.unit_number,
+      "child index does not map the last reactor to its machine"
+    )
+
+    middle_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not middle.valid, "destroying the middle reactor did not remove its machine")
+    runner.assert(first.valid and last.valid, "destroying the middle reactor removed another machine")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.heat_assembling_machine_children[middle_reactor_unit] == nil,
+      "the destroyed pair left a stale child index entry"
+    )
+    runner.assert(
+      after.heat_assembling_machine_children[first_reactor_unit] == first.unit_number,
+      "destroying the middle pair removed the first pair's child index entry"
+    )
+    runner.assert(
+      after.heat_assembling_machine_children[last_reactor_unit] == last.unit_number,
+      "destroying the middle pair removed the last pair's child index entry"
+    )
+
+    -- The remaining pairs must still resolve through the index.
+    last_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not last.valid, "the last reactor no longer resolves to its machine")
+    runner.assert(first.valid, "destroying the last pair removed the first machine")
+    first_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "the first reactor no longer resolves to its machine")
+  end)
+end)
+
+runner.test("heat assembling machine: child lookup falls back when the index is missing", function()
+  -- Saves created before the child index existed have storage entries but no
+  -- index entry. Destroying their reactor must still find the machine by the
+  -- original scan.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local assembler, data = build_machine(surface, machine, { x = center.x - 25, y = center.y })
+    local assembler_unit = assembler.unit_number
+    local reactor_unit = data.reactor.unit_number
+
+    helpers.funit_call("set_compound_child_index", "heat_assembling_machine_children", reactor_unit, nil)
+    runner.assert(
+      helpers.storage().heat_assembling_machine_children[reactor_unit] == nil,
+      "could not remove the child index entry"
+    )
+
+    data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not assembler.valid, "the reactor did not remove its machine through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_heat_assembling_machine_data", assembler_unit) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)
+
+runner.test("heat assembling machine: a stale child index entry does not remove another machine", function()
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_machine(surface, machine, { x = center.x - 25, y = center.y })
+    local second, second_data = build_machine(surface, machine, { x = center.x + 25, y = center.y })
+    local first_reactor_unit = first_data.reactor.unit_number
+    local second_reactor_unit = second_data.reactor.unit_number
+
+    -- Point the first reactor at the second machine, the shape a reassigned unit
+    -- number would produce.
+    helpers.funit_call(
+      "set_compound_child_index",
+      "heat_assembling_machine_children",
+      first_reactor_unit,
+      second.unit_number
+    )
+
+    first_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "the first machine survived its reactor")
+    runner.assert(second.valid, "a stale index entry removed the wrong machine")
+    runner.assert(second_data.reactor.valid, "a stale index entry destroyed the wrong reactor")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.heat_assembling_machine_children[second_reactor_unit] == second.unit_number,
+      "the wrong pair's index entry was removed"
+    )
+    runner.assert(
+      after.heat_assembling_machine_children[first_reactor_unit] == nil,
+      "the destroyed pair left its index entry behind"
+    )
+  end)
+end)
+
+runner.test("compound: the wire retry timer starts when a wire is queued and stops when it drains", function()
+  clean_areas()
+  local surface = helpers.get_muluna()
+  local machine = get_machine_config()
+  local center = helpers.center(helpers.muluna_area())
+  local assembler = build_machine(surface, machine, center)
+
+  local queued = helpers.funit_call("queue_test_pending_wire", assembler.unit_number)
+  runner.assert(queued, "could not queue a pending wire for " .. tostring(assembler.unit_number))
+
+  local queued_state = helpers.funit_call("get_compound_retry_state")
+  runner.assert(queued_state.pending == 1, "the queued wire is not pending")
+  runner.assert(queued_state.enabled == true, "the retry timer did not start when a wire was queued")
+
+  -- The placeholder wire can never resolve, so the first retry drops it.
+  runner.after_n_ticks_do(35, function()
+    local ok, err = pcall(function()
+      local state = helpers.funit_call("get_compound_retry_state")
+      runner.assert(state.pending == 0, "the retry did not drop the unresolvable wire")
+      runner.assert(state.enabled == false, "the retry timer did not stop when the queue drained")
+    end)
+    local cleanup_ok, cleanup_err = pcall(clean_areas)
+    if not ok then
+      error(err, 0)
+    end
+    runner.assert(cleanup_ok, "cleanup failed: " .. tostring(cleanup_err))
+  end)
+end)
+
+runner.test("heat assembling machine: reactor destroyed after a silent machine removal does not crash", function()
+  -- A script or a deleted surface can remove the machine without raising a
+  -- destroy event, leaving storage pointing at an invalid entity. Destroying the
+  -- orphaned reactor must drop the pair instead of reading entity.unit_number
+  -- from the invalid machine.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local assembler, data = build_machine(surface, machine, center)
+    local unit_number = assembler.unit_number
+    local reactor_unit = data.reactor.unit_number
+
+    assembler.destroy({ raise_destroy = false })
+    runner.assert(not assembler.valid, "the machine is still valid after a silent destroy")
+    runner.assert(data.reactor.valid, "the reactor died with the silently removed machine")
+
+    local ok, err = pcall(function()
+      data.reactor.destroy({ raise_destroy = true })
+    end)
+    runner.assert(ok, "destroying the orphaned reactor crashed: " .. tostring(err))
+    runner.assert(
+      helpers.funit_call("get_heat_assembling_machine_data", unit_number) == nil,
+      "the orphaned pair is still in storage"
+    )
+    runner.assert(
+      helpers.storage().heat_assembling_machine_children[reactor_unit] == nil,
+      "the orphaned pair left its child index entry behind"
+    )
+  end)
+end)

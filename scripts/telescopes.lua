@@ -312,7 +312,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
-        local telescope_data = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior,output_asteroid_signals = false}
+        local telescope_data = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior,output_asteroid_signals = false, combinator_unit_number = reactor.unit_number}
         if event.tags then
             if event.tags.output_asteroid_signals then
                 telescope_data.output_asteroid_signals = event.tags.output_asteroid_signals
@@ -322,6 +322,10 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             end
         end
         storage.telescopes[entity.unit_number] = telescope_data
+        -- Reverse index: a destroyed combinator finds its telescope in O(1)
+        -- instead of scanning every registered telescope.
+        if not storage.telescope_children then storage.telescope_children = {} end
+        storage.telescope_children[reactor.unit_number] = entity.unit_number
         if not storage.telescopes_on_surface[entity.surface.name] then storage.telescopes_on_surface[entity.surface.name] = {} end
         storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = true
         Muluna.update_telescope_daytime(telescope_data)
@@ -370,6 +374,30 @@ Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
 
 end)
 
+
+---Find the storage key of the telescope that owns `combinator`.
+---
+---The reverse index is populated when a telescope is built. Entries registered
+---before the index existed (an older save) fall back to the original scan.
+---@param combinator LuaEntity
+---@return uint|nil
+local function find_telescope_unit_number(combinator)
+    local children = storage.telescope_children
+    local unit_number = children and children[combinator.unit_number]
+    local entry = unit_number and storage.telescopes and storage.telescopes[unit_number]
+    -- Verify the entry really owns this combinator: a unit number can be
+    -- reassigned when a prototype changes type, which would leave a stale
+    -- index entry.
+    if entry and entry["constant-combinator"] == combinator then
+        return unit_number
+    end
+    for candidate_unit_number, entry in pairs(storage.telescopes or {}) do
+        if entry["constant-combinator"] == combinator then
+            return candidate_unit_number
+        end
+    end
+end
+
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
     local entity = event.entity
@@ -386,16 +414,10 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 heat_assembling_machine_data = machine
                 if entity.name == machine["constant-combinator"] then
                             --game.print("combinator!")
-                            local assembler
-                            local destroyed_key
-                            for i,telescope in pairs(storage.telescopes) do
-                                if entity == telescope["constant-combinator"]  then
-                                    assembler = telescope["assembling-machine"]
-                                    destroyed_key = i
-                                    break
-                                end
-                            end
-                            if not assembler then return end
+                            local destroyed_key = find_telescope_unit_number(entity)
+                            local telescope = destroyed_key and storage.telescopes[destroyed_key]
+                            if not telescope then return end
+                            local assembler = telescope["assembling-machine"]
                             entity = assembler
                             if not entity.valid then
                                 -- The assembling machine disappeared before its
@@ -418,26 +440,36 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
     if is_heat_assembling_machine then
         local reactor = nil
         if storage.telescopes then
-            if storage.telescopes[entity.unit_number] then
-                reactor = storage.telescopes[entity.unit_number]["constant-combinator"]
+            local entry = storage.telescopes[entity.unit_number]
+            if entry then
+                reactor = entry["constant-combinator"]
                 storage.telescopes[entity.unit_number] = nil
                 if storage.telescopes_on_surface[entity.surface.name] then
                     storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = nil
                 end
-            end
-            for i,registered_machine in pairs(storage.telescopes) do
-                if registered_machine["assembling-machine"] == entity then
-                    reactor = registered_machine["constant-combinator"]
-                    storage.telescopes[i] = nil
-                    if storage.telescopes_on_surface[entity.surface.name] then
-                        storage.telescopes_on_surface[entity.surface.name][i] = nil
+            else
+                -- Entries are keyed by the assembling machine's unit number, so
+                -- this only runs for an entry registered under another key.
+                for i,registered_machine in pairs(storage.telescopes) do
+                    if registered_machine["assembling-machine"] == entity then
+                        reactor = registered_machine["constant-combinator"]
+                        storage.telescopes[i] = nil
+                        if storage.telescopes_on_surface[entity.surface.name] then
+                            storage.telescopes_on_surface[entity.surface.name][i] = nil
+                        end
+                        break
                     end
-                    break
-                    
                 end
-                
             end
-            
+            local children = storage.telescope_children
+            if children then
+                if entry and entry.combinator_unit_number then
+                    children[entry.combinator_unit_number] = nil
+                end
+                if reactor and reactor.valid then
+                    children[reactor.unit_number] = nil
+                end
+            end
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
@@ -554,7 +586,18 @@ end
 local experimental = helpers.compare_versions(helpers.game_version,"2.0.69") >= 0
 local use_quality = script.active_mods["quality"]
 local debug = false
-local function get_telescope_combinator_signals(surface,force,telescope) --Intended to be memoized with cache resetting every on_nth_tick event
+---Build the signal list for a telescope combinator.
+---
+---`space_platforms` is optional: the update tick passes the list it already
+---fetched (and memoized per planet+force) so a write does not call
+---`get_space_platforms` a second time. The FUnit seam calls this with three
+---arguments and lets it fetch the list itself.
+---@param surface LuaSurface
+---@param force LuaForce
+---@param telescope table
+---@param space_platforms LuaSpacePlatform[]|nil
+---@return LogisticFilter[]
+local function get_telescope_combinator_signals(surface,force,telescope,space_platforms)
     if debug then log("get_telescope_combinator_signals(" .. surface.name .. "," .. force.name .. ")") end
     local signals = {}
     local i = 1
@@ -564,8 +607,7 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
         -- Produce list of space platforms (Normal quality channel provides platform id) (Uses list of virtual signals with strength equal to id)
         -- Uncommon quality: State of space platform (https://lua-api.factorio.com/latest/defines.html#defines.space_platform_state)
         -- Rare quality: Can leave_current_location (1 or 2) (https://lua-api.factorio.com/latest/classes/LuaSpacePlatform.html#can_leave_current_location)
-        local space_platforms = {}
-        space_platforms = planet.get_space_platforms(force)
+        space_platforms = space_platforms or planet.get_space_platforms(force)
         -- if experimental then
         --     if debug then log("planet.get_space_platforms(" .. force.name .. ")") end
             
@@ -632,6 +674,10 @@ local function get_telescope_combinator_signals(surface,force,telescope) --Inten
             telescope.old_total_asteroid_count = total_asteroid_count
             --game.print(total_asteroid_count)
             telescope.old_asteroid_counts_next_tick = game.tick + get_time_to_next_asteroid_check(telescope)
+            -- Bump a revision instead of hashing the counts (names are strings,
+            -- and the table is only rebuilt on the refresh cadence above). The
+            -- update tick mixes this number into the signal signature.
+            telescope.asteroid_revision = (telescope.asteroid_revision or 0) + 1
             else
                 asteroid_counts = telescope.old_asteroid_counts
             end
@@ -655,7 +701,108 @@ end
 
 
 
-Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function() --Update telescope combinators
+---Platform lists fetched during the current update.
+---
+---`get_space_platforms` builds a fresh list on every call and several
+---telescopes can share one planet and force, so the first lookup in an update is
+---memoized. The cache is reset lazily from `get_platforms` on the first
+---telescope that asks: keeping the reset out of the event handler leaves the
+---handler body a single storage loop, and an empty storage.telescopes never
+---touches this table at all.
+local platform_cache = { tick = nil, by_planet = {} }
+
+---Fetch the platform list for a planet+force once per update.
+---@param planet LuaPlanet
+---@param force LuaForce
+---@param tick MapTick
+---@return LuaSpacePlatform[]
+local function get_platforms(planet, force, tick)
+    if platform_cache.tick ~= tick then
+        platform_cache.tick = tick
+        platform_cache.by_planet = {}
+    end
+    local by_force = platform_cache.by_planet[planet.name]
+    if not by_force then
+        by_force = {}
+        platform_cache.by_planet[planet.name] = by_force
+    end
+    local space_platforms = by_force[force.index]
+    if not space_platforms then
+        space_platforms = planet.get_space_platforms(force)
+        by_force[force.index] = space_platforms
+    end
+    return space_platforms
+end
+
+local SIGNATURE_MODULUS = 2147483647 -- 2^31 - 1 keeps hash*131 below 2^53, so the math stays exact.
+local SIGNATURE_BRANCH_PLANET = 1
+local SIGNATURE_BRANCH_PLATFORM = 2
+
+local function signature_mix(hash, value)
+    return (hash * 131 + value) % SIGNATURE_MODULUS
+end
+
+---Numeric fingerprint of everything `get_telescope_combinator_signals` reads.
+---
+---Comparing the built signal list with `rro.deep_equals` costs more than the
+---`section.filters` write it would avoid: the list is several nested tables per
+---platform and per asteroid type, and the recursive comparison visits every
+---node. The list is derived from a handful of numbers, so hash those instead and
+---skip both the rebuild and the write when they are unchanged.
+---
+---Every branch mixes in `#platform_list_signals`: if another mod adds a virtual
+---signal, the signal names change even though the platform numbers did not, and
+---the stored signature must not match anymore.
+---@param surface LuaSurface
+---@param force LuaForce
+---@param telescope table
+---@param tick MapTick tick of the current update, for the per-update platform cache
+---@return number signature
+---@return LuaSpacePlatform[]|nil space_platforms
+local function get_telescope_signal_signature(surface, force, telescope, tick)
+    if surface.planet then
+        local space_platforms = get_platforms(surface.planet, force, tick)
+        local hash = signature_mix(SIGNATURE_BRANCH_PLANET, #platform_list_signals)
+        hash = signature_mix(hash, #space_platforms)
+        for j = 1, #space_platforms do
+            local space_platform = space_platforms[j]
+            hash = signature_mix(hash, space_platform.index)
+            if use_quality then
+                -- get_state_integer returns nil for a state added by a newer
+                -- Factorio build; a nil would break the hash arithmetic.
+                hash = signature_mix(hash, get_state_integer(space_platform.state) or 0)
+                hash = signature_mix(hash, bool_to_int(space_platform.can_leave_current_location()))
+            end
+        end
+        return hash, space_platforms
+    elseif surface.platform then
+        local platform = surface.platform
+        local hash = signature_mix(SIGNATURE_BRANCH_PLATFORM, #platform_list_signals)
+        hash = signature_mix(hash, platform.index)
+        if platform.space_connection then
+            local total_length = platform.space_connection.length
+            hash = signature_mix(hash, total_length)
+            -- Matches the emitted signal, including a nil distance (docked).
+            hash = signature_mix(hash, math.floor((platform.distance or 0) * total_length))
+        end
+        -- Mix the switch explicitly so toggling it always changes the
+        -- signature, whether or not any asteroid has been counted yet.
+        hash = signature_mix(hash, telescope.output_asteroid_signals ~= false and 1 or 0)
+        if telescope.output_asteroid_signals ~= false then
+            -- asteroid_revision changes only when the counts are rebuilt, so the
+            -- asteroid tail does not need to be hashed entry by entry.
+            hash = signature_mix(hash, telescope.asteroid_revision or 0)
+        end
+        return hash
+    end
+    -- Neither a planet nor a platform surface: the signal list is always empty.
+    return signature_mix(SIGNATURE_BRANCH_PLANET, 0)
+end
+
+-- Test seam: prove the update skips unchanged telescopes. Inert in normal play.
+local combinator_stats = { updates = 0, rebuilds = 0, writes = 0 }
+
+Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-ticks"].value, function(event) --Update telescope combinators
     for key,telescope in pairs(storage.telescopes) do
             local combinator = telescope["constant-combinator"]
             local assembler = telescope["assembling-machine"]
@@ -664,18 +811,16 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
             if combinator_valid and assembler_valid and telescope["constant-combinator-control-behavior"] then
                 local combinator_behavior = telescope["constant-combinator-control-behavior"]
                 if combinator_behavior.enabled == true then
-                    local cached_signals = telescope.cached_signals or {} 
-                    local signals = get_telescope_combinator_signals(combinator.surface,combinator.force,telescope)
-                    --if not rro.deep_equals(signals,cached_signals) then
-                        --combinator_behavior.remove_section(1)
+                    combinator_stats.updates = combinator_stats.updates + 1
+                    local signature, space_platforms = get_telescope_signal_signature(combinator.surface, combinator.force, telescope, event.tick)
+                    if signature ~= telescope.signal_signature then
+                        local signals = get_telescope_combinator_signals(combinator.surface, combinator.force, telescope, space_platforms)
+                        combinator_stats.rebuilds = combinator_stats.rebuilds + 1
                         local section = combinator_behavior.get_section(1) or combinator_behavior.add_section()
                         section.filters = signals
-                        -- for i,signal in ipairs(signals) do
-                        --     section.set_slot(i,signal)
-                        -- end
-                    --end
-                    
-                    telescope.cached_signals = signals
+                        combinator_stats.writes = combinator_stats.writes + 1
+                        telescope.signal_signature = signature
+                    end
                 end
             else
                 -- Either half of the compound entity can disappear on its own
@@ -695,6 +840,9 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                         entries[key] = nil
                     end
                 end
+                if storage.telescope_children and telescope.combinator_unit_number then
+                    storage.telescope_children[telescope.combinator_unit_number] = nil
+                end
                 storage.telescopes[key] = nil
             end
     end
@@ -708,4 +856,25 @@ if script.active_mods["funit"] then
     Muluna.funit.get_state_integer = get_state_integer
     Muluna.funit.get_time_to_next_asteroid_check = get_time_to_next_asteroid_check
     Muluna.funit.bool_to_int = bool_to_int
+
+    ---Flip the asteroid-signal output switch, which the GUI normally toggles.
+    ---@param unit_number uint
+    ---@param state boolean
+    Muluna.funit.set_telescope_asteroid_signals = function(unit_number, state)
+        local telescope = storage.telescopes and storage.telescopes[unit_number]
+        if not telescope then return false end
+        telescope.output_asteroid_signals = state and true or false
+        return true
+    end
+
+    ---Snapshot of how much work the combinator update did since load.
+    ---@return {updates: integer, rebuilds: integer, writes: integer}
+    Muluna.funit.get_telescope_combinator_stats = function()
+        return {
+            updates = combinator_stats.updates,
+            rebuilds = combinator_stats.rebuilds,
+            writes = combinator_stats.writes,
+        }
+    end
+
 end

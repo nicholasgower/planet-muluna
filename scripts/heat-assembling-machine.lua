@@ -57,7 +57,11 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
         if not storage.heat_assembling_machines then storage.heat_assembling_machines = {} end
-        storage.heat_assembling_machines[entity.unit_number] = {["assembling-machine"]=entity,["reactor"] = reactor}
+        storage.heat_assembling_machines[entity.unit_number] = {["assembling-machine"]=entity,["reactor"] = reactor, reactor_unit_number = reactor.unit_number}
+        -- Reverse index: a destroyed reactor finds its machine in O(1) instead
+        -- of scanning every registered machine.
+        if not storage.heat_assembling_machine_children then storage.heat_assembling_machine_children = {} end
+        storage.heat_assembling_machine_children[reactor.unit_number] = entity.unit_number
     end
 
 
@@ -65,6 +69,29 @@ end,
 heat_assembler_filters
 )
 
+
+
+---Find the storage key of the machine that owns `child`.
+---
+---The reverse index is populated when a machine is built. Entries registered
+---before the index existed (an older save) fall back to the original scan.
+---@param child LuaEntity
+---@return uint|nil
+local function find_heat_machine_unit_number(child)
+    local children = storage.heat_assembling_machine_children
+    local unit_number = children and children[child.unit_number]
+    local entry = unit_number and storage.heat_assembling_machines and storage.heat_assembling_machines[unit_number]
+    -- Verify the entry really owns this child: a unit number can be reassigned
+    -- when a prototype changes type, which would leave a stale index entry.
+    if entry and entry.reactor == child then
+        return unit_number
+    end
+    for candidate_unit_number, entry in pairs(storage.heat_assembling_machines or {}) do
+        if entry.reactor == child then
+            return candidate_unit_number
+        end
+    end
+end
 
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
@@ -80,15 +107,21 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
             heat_assembling_machine_data = machine
             if entity.name == machine["reactor"] then
                         --game.print("roboport!")
-                        local found = false
-                        for i,heat_assembling_machine in pairs(storage.heat_assembling_machines or {}) do
-                            if entity == heat_assembling_machine.reactor  then
-                                entity = heat_assembling_machine["assembling-machine"]
-                                found = true
-                                break
+                        local parent_unit_number = find_heat_machine_unit_number(entity)
+                        local parent = parent_unit_number and storage.heat_assembling_machines[parent_unit_number]
+                        if not parent then return end
+                        entity = parent["assembling-machine"]
+                        if not entity.valid then
+                            -- The machine disappeared without a destroy event (for
+                            -- example a deleted surface). Drop the pair without
+                            -- reading a unit number from the invalid entity.
+                            storage.heat_assembling_machines[parent_unit_number] = nil
+                            local children = storage.heat_assembling_machine_children
+                            if children and parent.reactor_unit_number then
+                                children[parent.reactor_unit_number] = nil
                             end
+                            return
                         end
-                        if not found then return end
             end
             break
         end
@@ -97,20 +130,28 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
     if is_heat_assembling_machine then
         local reactor = nil
         if storage.heat_assembling_machines then
-            if storage.heat_assembling_machines[entity.unit_number] then
-                reactor = storage.heat_assembling_machines[entity.unit_number]["reactor"]
+            local entry = storage.heat_assembling_machines[entity.unit_number]
+            if entry then
+                reactor = entry["reactor"]
                 storage.heat_assembling_machines[entity.unit_number] = nil
-            end
-            for i,registered_machine in pairs(storage.heat_assembling_machines) do
-                if registered_machine["assembling-machine"] == entity then
-                    reactor = registered_machine["reactor"]
-                    storage.heat_assembling_machines[i] = nil
-                    break
-                    
+            else
+                -- Entries are keyed by the assembling machine's unit number, so
+                -- this only runs for an entry registered under another key.
+                for i,registered_machine in pairs(storage.heat_assembling_machines) do
+                    if registered_machine["assembling-machine"] == entity then
+                        reactor = registered_machine["reactor"]
+                        storage.heat_assembling_machines[i] = nil
+                        break
+                    end
                 end
-                
             end
-            
+            local children = storage.heat_assembling_machine_children
+            if children and reactor then
+                children[reactor.unit_number] = nil
+                if entry and entry.reactor_unit_number then
+                    children[entry.reactor_unit_number] = nil
+                end
+            end
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
@@ -136,33 +177,6 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 end,
 heat_assembler_filters)
 
-local function register_for_deconstruction_events(entity_name,entity_storage) --Assumes that upgrades are done to upgrade quality, not entity type
-
-    Muluna.events.on_event({defines.events.on_marked_for_deconstruction,defines.events.on_cancelled_deconstruction}, function(event)
-        local entity = event.entity
-        game.print(entity)
-        local player = game.players[event.player_index]
-        local force = game.players[event.player_index].force
-        if entity.name == entity_name then
-            if entity_storage then
-                game.print(entity_storage)
-                local entity_group = entity_storage[entity.unit_number]
-                for _,sub_entity in pairs(entity_group) do
-                    game.print(sub_entity)
-                    if sub_entity ~= entity then
-                        if event.name == defines.events.on_marked_for_deconstruction then
-                            sub_entity.order_deconstruction(force,player,1)
-                        elseif event.name == defines.events.on_cancelled_deconstruction then
-                            sub_entity.cancel_deconstruction(force,player)
-                        end
-
-                    end
-                end
-            end
-        end
-    end)
-
-end
 -- for _,entity in pairs(heat_assembling_machines) do
 --     register_for_deconstruction_events(entity["assembling-machine"],storage.heat_assembling_machines)
 -- end

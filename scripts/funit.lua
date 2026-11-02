@@ -37,6 +37,14 @@ remote.add_interface("muluna_funit", {
     return stage().get_telescope_combinator_signals(combinator.surface, combinator.force, telescope)
   end,
 
+  get_telescope_combinator_stats = function()
+    return stage().get_telescope_combinator_stats()
+  end,
+
+  set_telescope_asteroid_signals = function(unit_number, state)
+    return stage().set_telescope_asteroid_signals(unit_number, state)
+  end,
+
   get_telescope_probability = function(pollution, quality_level)
     return Muluna.get_telescope_probability(pollution, { level = quality_level or 0 })
   end,
@@ -91,6 +99,85 @@ remote.add_interface("muluna_funit", {
     return true
   end,
 
+  get_nav_energy_cost = function(unit_number)
+    local beacon = storage.nav_beacons and storage.nav_beacons[unit_number]
+    if not beacon or not beacon.valid then return nil end
+    return stage().get_nav_energy_cost(beacon)
+  end,
+
+  get_nav_energy_cost_stats = function()
+    return stage().get_nav_energy_cost_stats()
+  end,
+
+  reset_nav_energy_cost_cache = function()
+    stage().reset_nav_energy_cost_cache()
+  end,
+
+  -- The update tick only reaches this branch through a player in remote view,
+  -- which the headless FUnit scenario cannot create. Run the same per-player
+  -- handler against a stub that records alert calls.
+  -- Controller changes cannot be raised for a real player in the headless
+  -- scenario. Drive the production tracking function with a stub that is only
+  -- given a remove_alert method when the change actually removes the alert, so
+  -- a function is never written into storage.
+  probe_nav_beacon_controller_change = function(old_type, new_type)
+    local removed = 0
+    local stub = { controller_type = new_type }
+    if new_type ~= defines.controllers.remote then
+      function stub.remove_alert(_)
+        removed = removed + 1
+      end
+    end
+    local ok, err = pcall(stage().apply_controller_change, 9999, stub, old_type)
+    return {
+      ok = ok,
+      error = err,
+      removed = removed,
+      tracked = storage.nav_beacon_players[9999] ~= nil,
+    }
+  end,
+
+  probe_nav_beacon_player = function(surface_name, options)
+    local surface
+    for _, candidate in pairs(game.surfaces) do
+      if candidate.name == surface_name then
+        surface = candidate
+        break
+      end
+    end
+    if not surface then
+      return { ok = false, error = "no surface named " .. tostring(surface_name) }
+    end
+
+    options = options or {}
+    local calls = { added = 0, removed = 0 }
+    local player = {
+      surface = surface,
+      force = game.forces[options.force or "player"],
+      position = { x = 0, y = 0 },
+      controller_type = defines.controllers.remote,
+      mod_settings = { ["nav-beacon-display-alert"] = { value = options.display_alert ~= false } },
+    }
+    function player.add_custom_alert(entity, icon, message)
+      calls.added = calls.added + 1
+      calls.alert_entity = entity.unit_number
+      calls.alert_message = message and message[1]
+    end
+    function player.remove_alert(_)
+      calls.removed = calls.removed + 1
+    end
+
+    local ok, err = pcall(stage().update_player_nav_beacon, player)
+    return {
+      ok = ok,
+      error = err,
+      added = calls.added,
+      removed = calls.removed,
+      alert_entity = calls.alert_entity,
+      alert_message = calls.alert_message,
+    }
+  end,
+
   -- The update tick only reaches this branch through a player in remote view,
   -- which the headless FUnit scenario cannot create. Invalidate the supplied
   -- probe entity, store it as the beacon, and call the same handler to exercise
@@ -119,12 +206,42 @@ remote.add_interface("muluna_funit", {
     return stage().capture_compound_blueprint_tags(unit_number)
   end,
 
+  get_compound_retry_state = function()
+    return stage().get_compound_retry_state()
+  end,
+
+  -- Overturn one entry of a child index, or remove it when parent is nil, so a
+  -- test can reproduce an older save (no index) or a stale index.
+  set_compound_child_index = function(table_name, child_unit_number, parent_unit_number)
+    local index = storage[table_name]
+    if not index then
+      if parent_unit_number == nil then return false end
+      index = {}
+      storage[table_name] = index
+    end
+    index[child_unit_number] = parent_unit_number
+    return true
+  end,
+
+  -- Queue a wire whose other endpoint will never exist, so the retry timer
+  -- starts and then drains a tick after it runs.
+  queue_test_pending_wire = function(parent_unit_number)
+    return stage().queue_test_pending_wire(parent_unit_number)
+  end,
+
   transform_compound_offset = function(offset, direction, flip_horizontal, flip_vertical)
     return stage().transform_compound_offset(offset, direction, flip_horizontal, flip_vertical)
   end,
 
   get_walking_controller_branch = function(input_method)
     return stage().is_game_controller_input(input_method)
+  end,
+
+  -- The per-tick particle step needs a player, which the headless scenario has
+  -- none of. Expose the direction averaging so its shape (and the fact that it
+  -- copies the shared direction vector instead of mutating it) stays tested.
+  get_walking_step_movement = function(direction_name, previous)
+    return stage().get_walking_step_movement(direction_name, previous)
   end,
 
   -- The headless scenario has no player, so on_gui_opened/on_gui_click cannot

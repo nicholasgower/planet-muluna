@@ -23,6 +23,27 @@ for i,tab in pairs({telescopes,heat_assembling_machine_keys}) do
         
     end
 end
+
+---Resolve a compound storage entry from a child entity's unit number.
+---
+---The reverse index is maintained by each compound entity's build handler.
+---Entries registered before the index existed (an older save) fall back to the
+---original linear scan.
+---@param storage_table table
+---@param reverse_table table|nil
+---@param child_key string
+---@param child_unit_number uint
+local function child_entry(storage_table, reverse_table, child_key, child_unit_number)
+    if not child_unit_number then return nil end
+    local parent_unit_number = reverse_table and reverse_table[child_unit_number]
+    local entry = parent_unit_number and storage_table[parent_unit_number]
+    if entry then return entry end
+    return rro.find_contains(storage_table or {}, function(candidate)
+        local child = candidate[child_key]
+        return child and child.unit_number == child_unit_number
+    end)
+end
+
 ---Build the Muluna relative GUI for an opened entity.
 ---
 ---Split from the event handler so the FUnit suite can exercise the frame
@@ -292,21 +313,22 @@ local function handle_gui_click(player, element)
             to_entity = storage.telescopes[selected.unit_number]["constant-combinator"]
         elseif string.find(element.name,"telescope%-combinator")  then
             --game.print(element.name)
-            local to_entity_table = rro.find_contains(storage.telescopes, function(entry) return entry["constant-combinator"].unit_number == selected.unit_number end)
+            local to_entity_table = child_entry(storage.telescopes, storage.telescope_children, "constant-combinator", selected.unit_number)
             to_entity = to_entity_table["assembling-machine"]
         elseif string.find(element.name,"burner%-roboport%-unit")  then
             --game.print(element.name)
-            local to_entity_table = rro.find_contains(storage.burner_roboports, function(entry) return entry["roboport"].unit_number == selected.unit_number end)
+            local to_entity_table = child_entry(storage.burner_roboports, storage.burner_roboport_children, "roboport", selected.unit_number)
             to_entity = to_entity_table["refueler"]
         elseif string.find(element.name,"burner%-roboport%-refueler")  then
             --game.print(element.name)
-            local to_entity_table = rro.find_contains(storage.burner_roboports, function(entry) return entry["refueler"].unit_number == selected.unit_number end)
+            -- Entries are keyed by the refueler's unit number.
+            local to_entity_table = storage.burner_roboports[selected.unit_number]
             to_entity = to_entity_table["roboport"]
         elseif string.find(element.name,"heat%-assembling%-machine%-unit")  then
             to_entity = storage.heat_assembling_machines[selected.unit_number]["reactor"]
             --game.print(element.name)
         elseif string.find(element.name,"heat%-assembling%-machine%-reactor")  then
-            local to_entity_table = rro.find_contains(storage.heat_assembling_machines, function(entry) return entry["reactor"].unit_number == selected.unit_number end)
+            local to_entity_table = child_entry(storage.heat_assembling_machines, storage.heat_assembling_machine_children, "reactor", selected.unit_number)
             to_entity = to_entity_table["assembling-machine"]
             --game.print(element.name)
         elseif string.find(element.name,"satellite%-radar")  then
@@ -376,7 +398,7 @@ Muluna.events.on_event(defines.events.on_gui_checked_state_changed, function(eve
     elseif (checkbox.name and checkbox.name == "muluna-telescope-combinator-enable-asteroid-signal-checkbox") then
         local player = game.players[event.player_index]
         local combinator = player.opened --The currently selected entity (Satellite Radar)
-        local telescope = rro.find_contains(storage.telescopes,function(other) return combinator.unit_number == other["constant-combinator"].unit_number end )
+        local telescope = child_entry(storage.telescopes, storage.telescope_children, "constant-combinator", combinator.unit_number)
         storage.telescopes[telescope["assembling-machine"].unit_number].output_asteroid_signals = checkbox.state
         --game.print(storage.telescopes[telescope["assembling-machine"].unit_number].output_asteroid_signals)
     end

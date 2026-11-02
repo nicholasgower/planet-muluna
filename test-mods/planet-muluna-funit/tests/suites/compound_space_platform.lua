@@ -648,13 +648,21 @@ runner.test("space platform telescope survives the combinator update tick", func
     local ok, err = pcall(function()
       local current = helpers.funit_call("get_telescope_data", unit_number)
       runner.assert(current ~= nil, "the combinator update tick removed the platform telescope from storage")
+      local combinator = current["constant-combinator"]
       runner.assert(
-        current.cached_signals ~= nil,
+        combinator ~= nil and combinator.valid,
+        "the platform telescope has no valid constant-combinator after the update tick"
+      )
+      local section = current["constant-combinator-control-behavior"].get_section(1)
+      runner.assert(section ~= nil, "the platform telescope combinator has no section after the update tick")
+      local filters = section.filters
+      runner.assert(
+        #filters > 0,
         "the platform telescope combinator was not updated on its update tick"
       )
 
       local platform_signal
-      for _, signal in ipairs(current.cached_signals) do
+      for _, signal in ipairs(filters) do
         if
           type(signal.value) == "table"
           and signal.value.type == "virtual"
@@ -678,6 +686,94 @@ runner.test("space platform telescope survives the combinator update tick", func
 
     cleanup_platform(platform, { telescope })
     if not ok then
+      error(err, 0)
+    end
+  end)
+end)
+
+runner.test("space platform telescope rewrites its signals when the asteroid switch changes", function()
+  -- output_asteroid_signals is part of the signal signature, so flipping the
+  -- switch must force a rewrite even when no asteroid count changed.
+  clean_areas()
+  local platform = create_platform(PLATFORM_PREFIX .. "asteroids")
+  local context = { platform = platform }
+
+  local build_ok, build_err = pcall(function()
+    local surface = platform.surface
+    local position = find_platform_position(surface, TELESCOPE)
+    runner.assert(position ~= nil, "no buildable position for " .. TELESCOPE .. " on " .. platform.name)
+    local telescope = helpers.entity_at(surface, TELESCOPE, position)
+    context.telescope = telescope
+    runner.assert(telescope and telescope.valid, "could not build the platform telescope")
+  end)
+  if not build_ok then
+    cleanup_platform(platform, { context.telescope })
+    error(build_err, 0)
+  end
+
+  local telescope = context.telescope
+  local unit_number = telescope.unit_number
+  local data = helpers.funit_call("get_telescope_data", unit_number)
+  runner.assert(type(data) == "table", "the platform telescope was not registered")
+  runner.assert(
+    data.output_asteroid_signals == false,
+    "a platform telescope is expected to start with the asteroid switch off"
+  )
+  data["constant-combinator-control-behavior"].enabled = true
+
+  local update_ticks = math.floor(settings.startup["muluna-telescope-combinator-update-ticks"].value)
+  runner.assert(update_ticks > 0, "muluna-telescope-combinator-update-ticks must be positive")
+
+  runner.after_n_ticks_do(update_ticks + 5, function()
+    local ok, err = pcall(function()
+      local before = helpers.funit_call("get_telescope_combinator_stats")
+      runner.assert(before.writes >= 1, "the first combinator write did not happen")
+
+      runner.assert(
+        helpers.funit_call("set_telescope_asteroid_signals", unit_number, true),
+        "could not flip the asteroid signal switch"
+      )
+
+      runner.after_n_ticks_do(update_ticks + 5, function()
+        local body_ok, body_err = pcall(function()
+          local after = helpers.funit_call("get_telescope_combinator_stats")
+          runner.assert(
+            after.writes > before.writes,
+            "toggling the asteroid switch did not rewrite the combinator signals"
+          )
+
+          local current = helpers.funit_call("get_telescope_data", unit_number)
+          local section = current["constant-combinator-control-behavior"].get_section(1)
+          runner.assert(section ~= nil, "the combinator has no section after the switch change")
+          local asteroid_signals = 0
+          for _, filter in ipairs(section.filters) do
+            local value = filter.value
+            if value and value.type == "entity" then
+              asteroid_signals = asteroid_signals + 1
+            end
+          end
+          local counted = current.old_total_asteroid_count or 0
+          if counted > 0 then
+            runner.assert(
+              asteroid_signals > 0,
+              "the switch is on and " .. counted .. " asteroids were counted, but the filters carry no entity signal"
+            )
+          else
+            runner.assert(
+              asteroid_signals == 0,
+              "no asteroids were counted, but the filters carry " .. asteroid_signals .. " entity signal(s)"
+            )
+          end
+        end)
+        local cleanup_ok, cleanup_err = pcall(cleanup_platform, platform, { telescope })
+        if not body_ok then
+          error(body_err, 0)
+        end
+        runner.assert(cleanup_ok, "cleanup failed: " .. tostring(cleanup_err))
+      end)
+    end)
+    if not ok then
+      cleanup_platform(platform, { telescope })
       error(err, 0)
     end
   end)

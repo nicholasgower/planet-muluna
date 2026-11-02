@@ -316,3 +316,281 @@ runner.test("telescope: pollution probability spans zero to one", function()
   runner.assert(math.abs(at_min - 0) < 1e-9, "probability at min pollution should be 0, got " .. tostring(at_min))
   runner.assert(math.abs(at_max - 1) < 1e-9, "probability at max pollution should be 1, got " .. tostring(at_max))
 end)
+
+-------------------------------------------------------------------------------
+-- Combinator update: change detection
+-------------------------------------------------------------------------------
+-- The update tick used to rebuild and rewrite `section.filters` for every
+-- telescope on every interval. Comparing the built signal list with a deep table
+-- compare costs more than the write, so the update now compares a numeric
+-- signature of the inputs (scripts/telescopes.lua). These tests pin both halves
+-- of that contract: no write without a change, and a write with correct data
+-- after a change.
+local COMBINATOR_UPDATE_SETTING = "muluna-telescope-combinator-update-ticks"
+
+local function combinator_update_interval()
+  local setting = settings.startup[COMBINATOR_UPDATE_SETTING]
+  runner.assert(setting ~= nil, COMBINATOR_UPDATE_SETTING .. " startup setting is missing")
+  local value = tonumber(setting.value)
+  runner.assert(
+    type(value) == "number" and value >= 1,
+    COMBINATOR_UPDATE_SETTING .. " is not a positive number: " .. tostring(setting.value)
+  )
+  return math.max(1, math.floor(value))
+end
+
+local function combinator_stats()
+  return helpers.funit_call("get_telescope_combinator_stats")
+end
+
+---Find the space-location signal for a planet in a filter list.
+local function planet_signal(filters, planet_name)
+  for _, filter in ipairs(filters or {}) do
+    local value = filter.value
+    if value and value.type == "space-location" and value.name == planet_name then
+      return filter
+    end
+  end
+  return nil
+end
+
+local function cleanup_after_failure(context)
+  pcall(cleanup_telescope, context)
+end
+
+runner.test("telescope: unchanged combinator signals are not rewritten", function()
+  local context = build_powered_telescope()
+  local unit_number = context.telescope.unit_number
+  local data = helpers.funit_call("get_telescope_data", unit_number)
+  local behavior = data["constant-combinator-control-behavior"]
+  runner.assert(behavior ~= nil, "telescope has no cached combinator control behavior")
+  behavior.enabled = true
+
+  local interval = combinator_update_interval()
+
+  -- Wait for the first update to write, then count writes over three intervals.
+  runner.after_n_ticks_do(interval + 5, function()
+    local ok, err = pcall(function()
+      local first = combinator_stats()
+      runner.assert(
+        first.writes >= 1,
+        "the first combinator update did not write the filters (writes=" .. tostring(first.writes) .. ")"
+      )
+      local writes = first.writes
+      local rebuilds = first.rebuilds
+
+      runner.after_n_ticks_do(interval * 3 + 5, function()
+        local body_ok, body_err = pcall(function()
+          local later = combinator_stats()
+          runner.assert(
+            later.updates > first.updates,
+            "the combinator update did not run during the wait"
+          )
+          runner.assert(
+            later.writes == writes,
+            "unchanged telescope signals were rewritten " .. (later.writes - writes) .. " time(s)"
+          )
+          runner.assert(
+            later.rebuilds == rebuilds,
+            "unchanged telescope signals were rebuilt " .. (later.rebuilds - rebuilds) .. " time(s)"
+          )
+
+          -- The skipped updates must leave the previously written filters intact
+          -- and equal to the producer's output.
+          local section = behavior.get_section(1)
+          runner.assert(section ~= nil, "combinator has no section after the skipped updates")
+          local filters = section.filters
+          local expected = helpers.funit_call("get_telescope_signals", unit_number)
+          runner.assert(type(expected) == "table", "get_telescope_signals returned no table")
+          runner.assert(
+            #filters == #expected,
+            "combinator holds " .. #filters .. " filters, the producer emits " .. #expected
+          )
+          for index = 1, #expected do
+            runner.assert(
+              filters[index].min == expected[index].min,
+              "filter " .. index .. " min is " .. tostring(filters[index].min)
+                .. ", expected " .. tostring(expected[index].min)
+            )
+          end
+        end)
+
+        local cleanup_ok, cleanup_err = pcall(cleanup_telescope, context)
+        if not body_ok then
+          error(body_err, 0)
+        end
+        runner.assert(cleanup_ok, "telescope cleanup failed: " .. tostring(cleanup_err))
+      end)
+    end)
+    if not ok then
+      cleanup_after_failure(context)
+      error(err, 0)
+    end
+  end)
+end)
+
+runner.test("telescope: combinator signals are rewritten when the platform roster changes", function()
+  local context = build_powered_telescope()
+  local unit_number = context.telescope.unit_number
+  local data = helpers.funit_call("get_telescope_data", unit_number)
+  local behavior = data["constant-combinator-control-behavior"]
+  runner.assert(behavior ~= nil, "telescope has no cached combinator control behavior")
+  behavior.enabled = true
+
+  local interval = combinator_update_interval()
+  local planet = context.surface.planet
+  local force = context.force
+  local platform
+
+  runner.after_n_ticks_do(interval + 5, function()
+    local ok, err = pcall(function()
+      local baseline = combinator_stats()
+
+      -- Remove a platform left by an earlier failed run so the name stays unique.
+      for _, existing in pairs(force.platforms) do
+        if existing.name == "funit-telescope-platform" then
+          pcall(function()
+            existing.destroy()
+          end)
+        end
+      end
+
+      local before = #planet.get_space_platforms(force)
+
+      platform = force.create_space_platform({
+        name = "funit-telescope-platform",
+        planet = "muluna",
+        starter_pack = { name = "space-platform-starter-pack", quality = "normal" },
+      })
+      runner.assert(platform and platform.valid, "could not create a space platform at Muluna")
+      platform.apply_starter_pack(true)
+      runner.assert(platform.surface and platform.surface.valid, "new platform has no surface")
+
+      local after = #planet.get_space_platforms(force)
+      runner.assert(
+        after == before + 1,
+        "creating a platform did not change Muluna's platform roster (" .. before .. " -> " .. after .. ")"
+      )
+
+      runner.after_n_ticks_do(interval + 10, function()
+        local body_ok, body_err = pcall(function()
+          local later = combinator_stats()
+          runner.assert(
+            later.writes > baseline.writes,
+            "the combinator filters were not rewritten after the roster changed"
+          )
+
+          local section = behavior.get_section(1)
+          runner.assert(section ~= nil, "combinator has no section after the roster change")
+          local signal = planet_signal(section.filters, "muluna")
+          runner.assert(signal ~= nil, "combinator filters have no muluna space-location signal")
+          local expected = #planet.get_space_platforms(force)
+          runner.assert(
+            signal.min == expected,
+            "muluna platform-count signal is " .. tostring(signal.min) .. ", expected " .. tostring(expected)
+          )
+        end)
+
+        if platform and platform.valid then
+          pcall(function()
+            platform.destroy()
+          end)
+        end
+        local cleanup_ok, cleanup_err = pcall(cleanup_telescope, context)
+        if not body_ok then
+          error(body_err, 0)
+        end
+        runner.assert(cleanup_ok, "telescope cleanup failed: " .. tostring(cleanup_err))
+      end)
+    end)
+    if not ok then
+      if platform and platform.valid then
+        pcall(function()
+          platform.destroy()
+        end)
+      end
+      cleanup_after_failure(context)
+      error(err, 0)
+    end
+  end)
+end)
+
+runner.test("telescope: destroying the combinator removes the telescope pair", function()
+  -- Regression guard for the reverse index: the combinator is a child entity and
+  -- its destroy handler must find and remove its own telescope without scanning
+  -- the whole storage table.
+  with_telescope(function(context)
+    local unit_number = context.telescope.unit_number
+    local data = helpers.funit_call("get_telescope_data", unit_number)
+    local combinator = data["constant-combinator"]
+    runner.assert(combinator and combinator.valid, "telescope has no valid combinator")
+
+    local combinator_unit = combinator.unit_number
+    local children = helpers.storage().telescope_children
+    runner.assert(type(children) == "table", "storage.telescope_children is missing")
+    runner.assert(
+      children[combinator_unit] == unit_number,
+      "child index does not map the combinator to its telescope"
+    )
+
+    combinator.destroy({ raise_destroy = true })
+    runner.assert(not context.telescope.valid, "destroying the combinator left the telescope alive")
+    runner.assert(
+      helpers.funit_call("get_telescope_data", unit_number) == nil,
+      "storage.telescopes still holds the pair after the combinator was destroyed"
+    )
+    runner.assert(
+      helpers.storage().telescope_children[combinator_unit] == nil,
+      "the destroyed pair left a stale child index entry"
+    )
+  end)
+end)
+
+runner.test("telescope: child lookup falls back when the index is missing", function()
+  with_telescope(function(context)
+    local unit_number = context.telescope.unit_number
+    local data = helpers.funit_call("get_telescope_data", unit_number)
+    local combinator = data["constant-combinator"]
+    local combinator_unit = combinator.unit_number
+
+    helpers.funit_call("set_compound_child_index", "telescope_children", combinator_unit, nil)
+    runner.assert(
+      helpers.storage().telescope_children[combinator_unit] == nil,
+      "could not remove the child index entry"
+    )
+
+    combinator.destroy({ raise_destroy = true })
+    runner.assert(not context.telescope.valid, "the combinator did not remove its telescope through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_telescope_data", unit_number) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)
+
+runner.test("telescope: a child index entry with no telescope falls back to the scan", function()
+  -- A save can carry an index entry whose telescope entry was already dropped
+  -- (for example after the stale-entity cleanup). The lookup must not trust it.
+  with_telescope(function(context)
+    local unit_number = context.telescope.unit_number
+    local data = helpers.funit_call("get_telescope_data", unit_number)
+    local combinator = data["constant-combinator"]
+    local combinator_unit = combinator.unit_number
+
+    runner.assert(
+      helpers.funit_call("set_compound_child_index", "telescope_children", combinator_unit, unit_number + 100000),
+      "could not point the child index at a missing telescope"
+    )
+    runner.assert(
+      helpers.storage().telescope_children[combinator_unit] ~= unit_number,
+      "the child index still points at the real telescope"
+    )
+
+    combinator.destroy({ raise_destroy = true })
+    runner.assert(not context.telescope.valid, "the combinator did not remove its telescope through the fallback scan")
+    runner.assert(
+      helpers.funit_call("get_telescope_data", unit_number) == nil,
+      "the storage entry survived the fallback cleanup"
+    )
+  end)
+end)

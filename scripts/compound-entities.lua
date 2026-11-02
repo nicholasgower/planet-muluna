@@ -413,9 +413,27 @@ end
 -- built (for example a construction robot may build it several ticks later).
 -- Unresolved wires are retried on a timer and dropped when the parent is gone.
 
+local RETRY_INTERVAL = 30
+
 local function get_pending_wires()
     storage.compound_pending_wires = storage.compound_pending_wires or {}
     return storage.compound_pending_wires
+end
+
+-- The retry timer is only registered with the engine while a wire is waiting
+-- for its other endpoint. An empty pending table is the normal state, so an
+-- always-on timer spends an engine call every 30 ticks for nothing.
+-- nil means "not synced with the engine yet"; on_init applies the real state.
+local retry_enabled
+
+local function set_wire_retries_enabled(enabled)
+    if retry_enabled == enabled then return end
+    retry_enabled = enabled
+    Muluna.events.set_nth_tick_enabled(RETRY_INTERVAL, enabled)
+end
+
+local function sync_wire_retries()
+    set_wire_retries_enabled(next(get_pending_wires()) ~= nil)
 end
 
 local function queue_wire(parent, child, source_connector_id, target)
@@ -430,6 +448,7 @@ local function queue_wire(parent, child, source_connector_id, target)
         target = target,
         expires = game.tick + PENDING_WIRE_LIFETIME,
     }
+    set_wire_retries_enabled(true)
 end
 
 local function find_target_entity(parent, target)
@@ -476,25 +495,28 @@ local function get_wire_connector(entity, connector_id)
 end
 
 local function retry_pending_wires()
-    local pending = get_pending_wires()
-    for id, wire in pairs(pending) do
+    for id, wire in pairs(storage.compound_pending_wires) do
         local config = compound_types[wire.parent_name]
         local data = config and get_compound_data_by_unit_number(config, wire.parent_unit_number)
         local parent = config and data and data[config.parent_key]
         local child = data and data[wire.child_key]
         if not parent or not parent.valid or not child or not child.valid or game.tick > wire.expires then
-            pending[id] = nil
+            storage.compound_pending_wires[id] = nil
         else
             local source = get_wire_connector(child, wire.source_connector_id)
             local target_entity, target_connector_id = resolve_target_entity(parent, data, config, wire.target)
             local target = target_entity and target_entity.valid and get_wire_connector(target_entity, target_connector_id)
             if source and target then
                 if source.is_connected_to(target) then
-                    pending[id] = nil
+                    storage.compound_pending_wires[id] = nil
                 elseif source.connect_to(target) then
-                    pending[id] = nil
+                    storage.compound_pending_wires[id] = nil
                 end
             end
+        end
+        -- Stop the timer when the last wire resolved or expired.
+        if next(storage.compound_pending_wires) == nil then
+            set_wire_retries_enabled(false)
         end
     end
 end
@@ -591,15 +613,40 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
     apply_compound_tags(parent, data, config, event.tags)
 end, build_filters)
 
-Muluna.events.on_nth_tick(30, retry_pending_wires)
+Muluna.events.on_nth_tick(RETRY_INTERVAL, retry_pending_wires)
 
 Muluna.events.on_event(Muluna.events.events.on_init(), function()
     storage.compound_pending_wires = storage.compound_pending_wires or {}
     storage.compound_placement_orientations = storage.compound_placement_orientations or {}
     storage.compound_blueprint_directions = storage.compound_blueprint_directions or {}
+    -- Resume the retry timer only when a save has wires still waiting. This
+    -- runs on configuration change as well as load, after finalize_events.
+    sync_wire_retries()
 end)
 
 if script.active_mods["funit"] then
+    ---Queue a wire that can never resolve, so the retry timer has work for one
+    ---interval. Used to test that the timer starts and stops with the queue.
+    ---@param parent_unit_number uint32
+    ---@return boolean
+    Muluna.funit.queue_test_pending_wire = function(parent_unit_number)
+        local parent = find_parent_by_unit_number(parent_unit_number)
+        if not parent then return false end
+        queue_wire(parent, { key = "funit-missing-child" }, 1, {
+            name = "funit-missing-entity",
+            position = parent.position,
+        })
+        return true
+    end
+
+    ---State of the idle-able wire retry timer, for the FUnit suite.
+    ---@return {enabled: boolean, pending: integer}
+    Muluna.funit.get_compound_retry_state = function()
+        local pending = 0
+        for _ in pairs(get_pending_wires()) do pending = pending + 1 end
+        return { enabled = retry_enabled, pending = pending }
+    end
+
     ---@param unit_number uint32
     ---@return table|nil
     Muluna.funit.capture_compound_blueprint_tags = function(unit_number)

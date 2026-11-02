@@ -109,16 +109,20 @@ when the `funit` mod is active**:
 
 - `get_storage`, `get_constants`
 - `get_telescope_data`, `update_telescope`, `get_telescope_signals`
+- `get_telescope_combinator_stats`, `set_telescope_asteroid_signals`
 - `get_telescope_probability`, `get_telescope_min_pollution`,
   `get_telescope_max_pollution`
 - `get_state_integer`, `get_time_to_next_asteroid_check`
 - `get_burner_roboport_data`, `short_update_roboport`
 - `get_heat_assembling_machine_data`
-- `get_compound_blueprint_tags`, `transform_compound_offset`
+- `get_compound_blueprint_tags`, `transform_compound_offset`, `get_compound_retry_state`,
+  `set_compound_child_index`, `queue_test_pending_wire`
 - `get_nav_scan_area`, `set_nav_beacon_enabled`, `build_nav_beacon`,
-  `handle_invalid_nav_surface`
+  `handle_invalid_nav_surface`, `get_nav_energy_cost`, `get_nav_energy_cost_stats`,
+  `reset_nav_energy_cost_cache`, `probe_nav_beacon_player`,
+  `probe_nav_beacon_controller_change`
 - `set_cheat_mode`
-- `get_walking_controller_branch`
+- `get_walking_controller_branch`, `get_walking_step_movement`
 - `build_entity_gui`, `handle_gui_click`
 
 The production modules export their internal helpers through `Muluna.funit` under
