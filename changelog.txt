@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.9
+Date: 2026-11-02
+  Optimizations:
+    - Cut per-step allocations and storage writes from walking particles.
+    - Decide the nav beacon alert once per player instead of once per radar.
+    - Index compound entity children for O(1) parent lookups.
+    - Skip unchanged telescope combinator filter updates.
+    - Stop the idle wire retry timer and unused GUI event registrations.
+  Bugfixes:
+    - Prevent a crash when a compound subentity outlives its removed parent.
+---------------------------------------------------------------------------------------------------
 Version: 2.9.8
 Date: 2026-11-01
   Bugfixes:
