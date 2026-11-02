@@ -95,6 +95,61 @@ remote.add_interface("muluna_funit", {
     return true
   end,
 
+  get_nav_energy_cost = function(unit_number)
+    local beacon = storage.nav_beacons and storage.nav_beacons[unit_number]
+    if not beacon or not beacon.valid then return nil end
+    return stage().get_nav_energy_cost(beacon)
+  end,
+
+  get_nav_energy_cost_stats = function()
+    return stage().get_nav_energy_cost_stats()
+  end,
+
+  reset_nav_energy_cost_cache = function()
+    stage().reset_nav_energy_cost_cache()
+  end,
+
+  -- The update tick only reaches this branch through a player in remote view,
+  -- which the headless FUnit scenario cannot create. Run the same per-player
+  -- handler against a stub that records alert calls.
+  probe_nav_beacon_player = function(surface_name)
+    local surface
+    for _, candidate in pairs(game.surfaces) do
+      if candidate.name == surface_name then
+        surface = candidate
+        break
+      end
+    end
+    if not surface then
+      return { ok = false, error = "no surface named " .. tostring(surface_name) }
+    end
+
+    local calls = { added = 0, removed = 0 }
+    local player = {
+      surface = surface,
+      force = game.forces.player,
+      position = { x = 0, y = 0 },
+      controller_type = defines.controllers.remote,
+      mod_settings = { ["nav-beacon-display-alert"] = { value = true } },
+    }
+    function player.add_custom_alert(entity)
+      calls.added = calls.added + 1
+      calls.alert_entity = entity.unit_number
+    end
+    function player.remove_alert(_)
+      calls.removed = calls.removed + 1
+    end
+
+    local ok, err = pcall(stage().update_player_nav_beacon, player)
+    return {
+      ok = ok,
+      error = err,
+      added = calls.added,
+      removed = calls.removed,
+      alert_entity = calls.alert_entity,
+    }
+  end,
+
   -- The update tick only reaches this branch through a player in remote view,
   -- which the headless FUnit scenario cannot create. Invalidate the supplied
   -- probe entity, store it as the beacon, and call the same handler to exercise

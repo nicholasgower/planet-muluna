@@ -149,7 +149,7 @@ local function destroy_platform(platform)
   end
 end
 
-local function build_platform_radar(platform)
+local function build_platform_radar(platform, quality)
   local before = nav_keys()
   local position = { x = 0, y = 0 }
 
@@ -158,6 +158,7 @@ local function build_platform_radar(platform)
     position = position,
     force = "player",
     raise_built = true,
+    quality = quality,
   })
 
   local storage = helpers.storage()
@@ -754,4 +755,133 @@ runner.test("scan energy and scan area scale with quality", function()
     quality_value(size_field, "uncommon") > quality_value(size_field, "normal"),
     "uncommon scan area is not larger than normal"
   )
+end)
+
+-------------------------------------------------------------------------------
+-- Per-player update tick
+-------------------------------------------------------------------------------
+-- The update tick only runs the per-player branch for a player in remote view,
+-- which the headless scenario cannot create. `probe_nav_beacon_player` drives
+-- the same production handler with a stub player that records alert calls, so
+-- the alert and scan decisions are covered.
+
+---Create `count` platforms at nauvis, each with a registered radar.
+local function with_platform_radars(count, prefix, fn)
+  clean_areas()
+  helpers.get_muluna()
+  local platforms = {}
+  local keys = {}
+  local ok, err = pcall(function()
+    for index = 1, count do
+      local platform = create_platform(prefix .. "-" .. index)
+      platforms[index] = platform
+      keys[index] = build_platform_radar(platform)
+    end
+    fn(platforms, keys)
+  end)
+  -- Destroy the radars explicitly so their storage entries are gone before the
+  -- next test starts; platform deletion is scheduled and would leave them
+  -- registered for a tick.
+  for index = 1, count do
+    local beacon = keys[index] and helpers.storage().nav_beacons[keys[index]]
+    if beacon and beacon.valid then
+      pcall(function()
+        beacon.destroy({ raise_destroy = true })
+      end)
+    end
+  end
+  for index = 1, count do
+    destroy_platform(platforms[index])
+  end
+  clean_areas()
+  if not ok then
+    error(err, 0)
+  end
+end
+
+runner.test("nav beacon update removes the player alert once for all non-matching radars", function()
+  -- Regression: the update loop called remove_alert once per tracked radar that
+  -- did not match the player's surface, so the cost grew with the number of
+  -- radars even though a single call clears every alert with that icon.
+  with_platform_radars(2, "funit-nav-alert", function(platforms)
+    local registered = count_entries(helpers.storage().nav_surfaces)
+    runner.assert(
+      registered >= 2,
+      "expected at least two registered nav surfaces, got " .. registered
+    )
+
+    -- A remote-view player at Muluna matches neither radar (both are at nauvis).
+    local result = helpers.funit_call("probe_nav_beacon_player", "muluna")
+    runner.assert(result.ok, "update_player_nav_beacon errored: " .. tostring(result.error))
+    runner.assert(result.added == 0, "an alert was added for a non-matching radar")
+    runner.assert(
+      result.removed == 1,
+      "the alert was removed " .. result.removed .. " times for " .. registered
+        .. " non-matching nav surfaces; one remove_alert call clears every alert with the icon"
+    )
+  end)
+end)
+
+runner.test("nav beacon update adds one alert and charges one scan for a matching radar", function()
+  with_platform_radars(1, "funit-nav-scan", function(platforms, keys)
+    local unit_number = keys[1]
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    runner.assert(beacon and beacon.valid, "the radar was not registered as a nav beacon")
+    -- Platforms are created at nauvis, so the beacon's recorded nav surface is
+    -- nauvis. A remote-view player on nauvis is the matching case.
+    runner.assert(
+      helpers.storage().nav_surfaces[unit_number].name == "nauvis",
+      "expected the radar's nav surface to be nauvis"
+    )
+
+    local cost = helpers.funit_call("get_nav_energy_cost", unit_number)
+    runner.assert(type(cost) == "number" and cost > 0, "scan energy cost is not a positive number")
+    beacon.energy = 3 * cost
+    local energy_before = beacon.energy
+
+    local result = helpers.funit_call("probe_nav_beacon_player", "nauvis")
+    runner.assert(result.ok, "update_player_nav_beacon errored: " .. tostring(result.error))
+    runner.assert(result.added == 1, "the scan alert was added " .. result.added .. " times, expected 1")
+    runner.assert(result.removed == 0, "the alert was removed for a matching radar")
+    runner.assert(
+      result.alert_entity == unit_number,
+      "the alert points at unit number " .. tostring(result.alert_entity)
+        .. ", expected " .. tostring(unit_number)
+    )
+    runner.assert(
+      math.abs((energy_before - beacon.energy) - cost) < 1e-6,
+      "one scan charged " .. tostring(energy_before - beacon.energy)
+        .. " energy, expected " .. tostring(cost)
+    )
+  end)
+end)
+
+runner.test("nav beacon scan energy is computed once per radar and quality", function()
+  -- Regression: the per-scan energy used helpers.evaluate_expression and
+  -- util.parse_energy on every scan. It only depends on the radar name and
+  -- quality level, so it is cached.
+  with_platform_radars(1, "funit-nav-cost", function(platforms, keys)
+    local unit_number = keys[1]
+    local beacon = helpers.storage().nav_beacons[unit_number]
+    runner.assert(beacon and beacon.valid, "the radar was not registered as a nav beacon")
+
+    helpers.funit_call("reset_nav_energy_cost_cache")
+    local cost = helpers.funit_call("get_nav_energy_cost", unit_number)
+    runner.assert(type(cost) == "number" and cost > 0, "scan energy cost is not a positive number")
+    runner.assert(
+      helpers.funit_call("get_nav_energy_cost_stats").computations == 1,
+      "the first scan cost lookup did not compute exactly once"
+    )
+
+    beacon.energy = 3 * cost
+    helpers.funit_call("probe_nav_beacon_player", "nauvis")
+    helpers.funit_call("probe_nav_beacon_player", "nauvis")
+
+    local stats = helpers.funit_call("get_nav_energy_cost_stats")
+    runner.assert(
+      stats.computations == 1,
+      "the scan cost was computed " .. stats.computations
+        .. " times across three lookups; it should be cached per radar and quality"
+    )
+  end)
 end)

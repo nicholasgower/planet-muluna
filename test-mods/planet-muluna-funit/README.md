@@ -117,7 +117,8 @@ when the `funit` mod is active**:
 - `get_heat_assembling_machine_data`
 - `get_compound_blueprint_tags`, `transform_compound_offset`
 - `get_nav_scan_area`, `set_nav_beacon_enabled`, `build_nav_beacon`,
-  `handle_invalid_nav_surface`
+  `handle_invalid_nav_surface`, `get_nav_energy_cost`, `get_nav_energy_cost_stats`,
+  `reset_nav_energy_cost_cache`, `probe_nav_beacon_player`
 - `set_cheat_mode`
 - `get_walking_controller_branch`
 - `build_entity_gui`, `handle_gui_click`
