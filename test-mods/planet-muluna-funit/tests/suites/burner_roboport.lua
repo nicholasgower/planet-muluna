@@ -287,3 +287,45 @@ runner.test("burner roboport: raise_on_crafted refuels without a remote call", f
     clean_areas()
   end)
 end)
+
+runner.test("burner roboport: child index resolves each pair independently", function()
+  -- Regression guard for the reverse index: destroying a hidden roboport must
+  -- remove only its own pair and leave the other pairs' index entries intact.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_roboport_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_roboport(surface, machine, { x = center.x - 25, y = center.y })
+    local second, second_data = build_roboport(surface, machine, { x = center.x + 25, y = center.y })
+
+    local first_roboport_unit = first_data.roboport.unit_number
+    local second_roboport_unit = second_data.roboport.unit_number
+    local children = helpers.storage().burner_roboport_children
+    runner.assert(type(children) == "table", "storage.burner_roboport_children is missing")
+    runner.assert(
+      children[first_roboport_unit] == first.unit_number,
+      "child index does not map the first roboport to its refueler"
+    )
+    runner.assert(
+      children[second_roboport_unit] == second.unit_number,
+      "child index does not map the second roboport to its refueler"
+    )
+
+    first_data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "destroying the first roboport did not remove its refueler")
+    runner.assert(second.valid, "destroying the first roboport removed the second refueler")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.burner_roboport_children[first_roboport_unit] == nil,
+      "the destroyed pair left a stale child index entry"
+    )
+    runner.assert(
+      after.burner_roboport_children[second_roboport_unit] == second.unit_number,
+      "destroying the first pair removed the second pair's child index entry"
+    )
+
+    second_data.roboport.destroy({ raise_destroy = true })
+    runner.assert(not second.valid, "the second roboport no longer resolves to its refueler")
+  end)
+end)

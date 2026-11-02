@@ -514,3 +514,34 @@ runner.test("telescope: combinator signals are rewritten when the platform roste
     end
   end)
 end)
+
+runner.test("telescope: destroying the combinator removes the telescope pair", function()
+  -- Regression guard for the reverse index: the combinator is a child entity and
+  -- its destroy handler must find and remove its own telescope without scanning
+  -- the whole storage table.
+  with_telescope(function(context)
+    local unit_number = context.telescope.unit_number
+    local data = helpers.funit_call("get_telescope_data", unit_number)
+    local combinator = data["constant-combinator"]
+    runner.assert(combinator and combinator.valid, "telescope has no valid combinator")
+
+    local combinator_unit = combinator.unit_number
+    local children = helpers.storage().telescope_children
+    runner.assert(type(children) == "table", "storage.telescope_children is missing")
+    runner.assert(
+      children[combinator_unit] == unit_number,
+      "child index does not map the combinator to its telescope"
+    )
+
+    combinator.destroy({ raise_destroy = true })
+    runner.assert(not context.telescope.valid, "destroying the combinator left the telescope alive")
+    runner.assert(
+      helpers.funit_call("get_telescope_data", unit_number) == nil,
+      "storage.telescopes still holds the pair after the combinator was destroyed"
+    )
+    runner.assert(
+      helpers.storage().telescope_children[combinator_unit] == nil,
+      "the destroyed pair left a stale child index entry"
+    )
+  end)
+end)

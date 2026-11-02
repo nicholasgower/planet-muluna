@@ -281,3 +281,60 @@ runner.test("heat assembling machine: fuel and the recipe fluid produce progress
     clean_areas()
   end)
 end)
+
+runner.test("heat assembling machine: child index resolves each machine independently", function()
+  -- Regression guard for the reverse index: destroying a reactor must remove
+  -- only its own pair, even with sparse unit numbers, and must not leave or
+  -- delete another pair's index entry.
+  with_clean_areas(function()
+    local surface = helpers.get_muluna()
+    local machine = get_machine_config()
+    local center = helpers.center(helpers.muluna_area())
+    local first, first_data = build_machine(surface, machine, { x = center.x - 25, y = center.y })
+    local middle, middle_data = build_machine(surface, machine, { x = center.x, y = center.y })
+    local last, last_data = build_machine(surface, machine, { x = center.x + 25, y = center.y })
+
+    local first_reactor_unit = first_data.reactor.unit_number
+    local middle_reactor_unit = middle_data.reactor.unit_number
+    local last_reactor_unit = last_data.reactor.unit_number
+    local children = helpers.storage().heat_assembling_machine_children
+    runner.assert(type(children) == "table", "storage.heat_assembling_machine_children is missing")
+    runner.assert(
+      children[first_reactor_unit] == first.unit_number,
+      "child index does not map the first reactor to its machine"
+    )
+    runner.assert(
+      children[middle_reactor_unit] == middle.unit_number,
+      "child index does not map the middle reactor to its machine"
+    )
+    runner.assert(
+      children[last_reactor_unit] == last.unit_number,
+      "child index does not map the last reactor to its machine"
+    )
+
+    middle_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not middle.valid, "destroying the middle reactor did not remove its machine")
+    runner.assert(first.valid and last.valid, "destroying the middle reactor removed another machine")
+
+    local after = helpers.storage()
+    runner.assert(
+      after.heat_assembling_machine_children[middle_reactor_unit] == nil,
+      "the destroyed pair left a stale child index entry"
+    )
+    runner.assert(
+      after.heat_assembling_machine_children[first_reactor_unit] == first.unit_number,
+      "destroying the middle pair removed the first pair's child index entry"
+    )
+    runner.assert(
+      after.heat_assembling_machine_children[last_reactor_unit] == last.unit_number,
+      "destroying the middle pair removed the last pair's child index entry"
+    )
+
+    -- The remaining pairs must still resolve through the index.
+    last_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not last.valid, "the last reactor no longer resolves to its machine")
+    runner.assert(first.valid, "destroying the last pair removed the first machine")
+    first_data.reactor.destroy({ raise_destroy = true })
+    runner.assert(not first.valid, "the first reactor no longer resolves to its machine")
+  end)
+end)

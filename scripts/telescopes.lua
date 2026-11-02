@@ -312,7 +312,7 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
         move_entity_to_bottom_layer(entity) --Ensures that assembler entity, which has a smaller selection box, is always on top of the reactor entity, which unlike the assembler, can't be rotated.
         reactor.add_fluid_box_linked_connection(1,entity,1) 
         --rendering.draw_sprite{sprite = "item.heat-pipe", target = {entity=reactor,offset = {0,-1}},surface = reactor.surface,only_in_alt_mode = true}
-        local telescope_data = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior,output_asteroid_signals = false}
+        local telescope_data = {["assembling-machine"]=entity,["constant-combinator"] = reactor,["constant-combinator-control-behavior"] = control_behavior,output_asteroid_signals = false, combinator_unit_number = reactor.unit_number}
         if event.tags then
             if event.tags.output_asteroid_signals then
                 telescope_data.output_asteroid_signals = event.tags.output_asteroid_signals
@@ -322,6 +322,10 @@ Muluna.events.on_event(Muluna.events.events.on_built(), function(event)
             end
         end
         storage.telescopes[entity.unit_number] = telescope_data
+        -- Reverse index: a destroyed combinator finds its telescope in O(1)
+        -- instead of scanning every registered telescope.
+        if not storage.telescope_children then storage.telescope_children = {} end
+        storage.telescope_children[reactor.unit_number] = entity.unit_number
         if not storage.telescopes_on_surface[entity.surface.name] then storage.telescopes_on_surface[entity.surface.name] = {} end
         storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = true
         Muluna.update_telescope_daytime(telescope_data)
@@ -370,6 +374,26 @@ Muluna.events.on_event(defines.events.on_entity_settings_pasted,function(event)
 
 end)
 
+
+---Find the storage key of the telescope that owns `combinator`.
+---
+---The reverse index is populated when a telescope is built. Entries registered
+---before the index existed (an older save) fall back to the original scan.
+---@param combinator LuaEntity
+---@return uint|nil
+local function find_telescope_unit_number(combinator)
+    local children = storage.telescope_children
+    local unit_number = children and children[combinator.unit_number]
+    if unit_number and storage.telescopes and storage.telescopes[unit_number] then
+        return unit_number
+    end
+    for candidate_unit_number, entry in pairs(storage.telescopes or {}) do
+        if entry["constant-combinator"] == combinator then
+            return candidate_unit_number
+        end
+    end
+end
+
 Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
 
     local entity = event.entity
@@ -386,16 +410,10 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
                 heat_assembling_machine_data = machine
                 if entity.name == machine["constant-combinator"] then
                             --game.print("combinator!")
-                            local assembler
-                            local destroyed_key
-                            for i,telescope in pairs(storage.telescopes) do
-                                if entity == telescope["constant-combinator"]  then
-                                    assembler = telescope["assembling-machine"]
-                                    destroyed_key = i
-                                    break
-                                end
-                            end
-                            if not assembler then return end
+                            local destroyed_key = find_telescope_unit_number(entity)
+                            local telescope = destroyed_key and storage.telescopes[destroyed_key]
+                            if not telescope then return end
+                            local assembler = telescope["assembling-machine"]
                             entity = assembler
                             if not entity.valid then
                                 -- The assembling machine disappeared before its
@@ -418,26 +436,36 @@ Muluna.events.on_event(Muluna.events.events.on_destroyed(), function(event)
     if is_heat_assembling_machine then
         local reactor = nil
         if storage.telescopes then
-            if storage.telescopes[entity.unit_number] then
-                reactor = storage.telescopes[entity.unit_number]["constant-combinator"]
+            local entry = storage.telescopes[entity.unit_number]
+            if entry then
+                reactor = entry["constant-combinator"]
                 storage.telescopes[entity.unit_number] = nil
                 if storage.telescopes_on_surface[entity.surface.name] then
                     storage.telescopes_on_surface[entity.surface.name][entity.unit_number] = nil
                 end
-            end
-            for i,registered_machine in pairs(storage.telescopes) do
-                if registered_machine["assembling-machine"] == entity then
-                    reactor = registered_machine["constant-combinator"]
-                    storage.telescopes[i] = nil
-                    if storage.telescopes_on_surface[entity.surface.name] then
-                        storage.telescopes_on_surface[entity.surface.name][i] = nil
+            else
+                -- Entries are keyed by the assembling machine's unit number, so
+                -- this only runs for an entry registered under another key.
+                for i,registered_machine in pairs(storage.telescopes) do
+                    if registered_machine["assembling-machine"] == entity then
+                        reactor = registered_machine["constant-combinator"]
+                        storage.telescopes[i] = nil
+                        if storage.telescopes_on_surface[entity.surface.name] then
+                            storage.telescopes_on_surface[entity.surface.name][i] = nil
+                        end
+                        break
                     end
-                    break
-                    
                 end
-                
             end
-            
+            local children = storage.telescope_children
+            if children then
+                if entry and entry.combinator_unit_number then
+                    children[entry.combinator_unit_number] = nil
+                end
+                if reactor and reactor.valid then
+                    children[reactor.unit_number] = nil
+                end
+            end
         end
         --{entity.position[1]+0.5,entity.position[2]+0.5}
         --game.print(reactor)
@@ -793,6 +821,9 @@ Muluna.events.on_nth_tick(settings.startup["muluna-telescope-combinator-update-t
                     for _, entries in pairs(storage.telescopes_on_surface) do
                         entries[key] = nil
                     end
+                end
+                if storage.telescope_children and telescope.combinator_unit_number then
+                    storage.telescope_children[telescope.combinator_unit_number] = nil
                 end
                 storage.telescopes[key] = nil
             end

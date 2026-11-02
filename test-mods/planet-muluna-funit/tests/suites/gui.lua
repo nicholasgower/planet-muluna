@@ -182,3 +182,31 @@ runner.test("telescope goto click focuses the combinator", function()
     error(err, 0)
   end
 end)
+
+runner.test("telescope combinator goto click focuses the telescope", function()
+  -- The combinator -> telescope direction is a child lookup; it must resolve
+  -- through the child index (or the compatibility scan) and open the machine.
+  clean_areas()
+  local telescope, recipe, was_enabled = build_telescope()
+  local ok, err = pcall(function()
+    local data = helpers.funit_call("get_telescope_data", telescope.unit_number)
+    runner.assert(data ~= nil, "telescope is not registered in storage")
+    local combinator = data["constant-combinator"]
+    runner.assert(combinator and combinator.valid, "telescope has no valid combinator")
+
+    local result = helpers.funit_call("handle_gui_click", "muluna-goto-button-telescope-combinator", combinator)
+    runner.assert(result.ok, "telescope combinator goto click crashed: " .. tostring(result.error))
+    runner.assert(
+      result.opened == telescope,
+      "telescope combinator goto click did not focus the telescope"
+    )
+  end)
+  destroy_entity(telescope)
+  if recipe.valid then
+    recipe.enabled = was_enabled
+  end
+  clean_areas()
+  if not ok then
+    error(err, 0)
+  end
+end)
