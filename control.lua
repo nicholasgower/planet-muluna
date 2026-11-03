@@ -76,6 +76,13 @@ local interstellar_science_pack = require("scripts.interstellar-science-pack")
 
 
 Muluna.events.on_event(Muluna.events.events.on_init(), function(event)
+    if event == nil then
+        -- This is the real on_init (the handler is also wired to
+        -- on_configuration_changed). Record the version the save was first
+        -- loaded with so migrations can tell a version upgrade from a mod that
+        -- was removed and added back at the same version.
+        storage.muluna_first_loaded_version = script.active_mods["planet-muluna"]
+    end
     --init_storage() 
     storage.walking_tick_rates = {}
     for _,force in pairs(game.forces) do
