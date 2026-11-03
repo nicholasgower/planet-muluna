@@ -8,7 +8,7 @@ buggy.max_health = 750
 buggy.minable.result = "muluna-rocket-buggy"
 buggy.weight = buggy.weight * buggy_scale^2
 buggy.consumption = "500kW"
-buggy.braking_power = "750kW"
+buggy.braking_force = (750 * 1000) / 60
 buggy.rotation_speed = buggy.rotation_speed * 0.9
 
 buggy.icons = {
@@ -50,7 +50,7 @@ buggy.resistances =
         decrease = 10
       }
     }
-buggy.friction = 2.5e-3
+buggy.friction_force = 2.5e-3
 buggy.turret_animation = table.deepcopy(data.raw["ammo-turret"]["rocket-turret"].attacking_animation)
 
 for i,layer in ipairs(buggy.turret_animation.layers) do
