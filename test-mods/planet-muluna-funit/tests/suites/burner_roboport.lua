@@ -231,6 +231,53 @@ runner.test("burner roboport: destroying the roboport removes the refueler", fun
   end)
 end)
 
+runner.test("burner roboport: an inserter can remove robots from the hidden roboport", function()
+  -- Regression coverage for issue #522: the refueler and the hidden roboport
+  -- share a position, so inserters must skip the refueler when extracting
+  -- robots. The refueler already opts out of automated insertion; without the
+  -- matching removal flag an inserter picks the (empty) refueler and waits.
+  clean_areas()
+  local surface = helpers.get_muluna()
+  local machine = get_roboport_config()
+  local center = helpers.center(helpers.muluna_area())
+  local refueler, data = build_roboport(surface, machine, center)
+
+  local robot_name = "logistic-robot"
+  local robot_inventory = data.roboport.get_inventory(defines.inventory.roboport_robot)
+  runner.assert(robot_inventory ~= nil, "hidden roboport has no robot inventory")
+  local inserted = robot_inventory.insert({ name = robot_name, count = 10 })
+  runner.assert(inserted == 10, "could not insert robots into the hidden roboport, inserted " .. tostring(inserted))
+
+  local chest = helpers.entity_at(surface, "steel-chest", { x = center.x + 3.5, y = center.y })
+  local inserter = helpers.entity_at(
+    surface,
+    "burner-inserter",
+    { x = center.x + 2.5, y = center.y },
+    { direction = defines.direction.west }
+  )
+  runner.assert(chest and chest.valid, "could not create the output chest")
+  runner.assert(inserter and inserter.valid, "could not create the output inserter")
+  inserter.insert({ name = "coal", count = 10 })
+
+  local chest_inventory = chest.get_inventory(defines.inventory.chest)
+  local finished = false
+  local function finish()
+    if finished then return end
+    finished = true
+    clean_areas()
+  end
+
+  helpers.wait_until(runner, function()
+    return chest_inventory.get_item_count(robot_name) > 0
+  end, {
+    timeout = 180,
+    interval = 10,
+    message = "inserter did not remove a robot from the burner roboport",
+    on_success = finish,
+    on_failure = finish,
+  })
+end)
+
 runner.test("burner roboport: multiple roboports are tracked independently", function()
   with_clean_areas(function()
     local surface = helpers.get_muluna()
