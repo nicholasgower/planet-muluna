@@ -1,5 +1,8 @@
 
 require("api")
+-- Register the migration bodies during parsing so the FUnit re-add seam can
+-- replay them with an empty storage table.
+require("lib.migrations")
 Muluna.funit = Muluna.funit or {}
 local rro = Muluna.rro
 -- script.on_configuration_changed(function()
