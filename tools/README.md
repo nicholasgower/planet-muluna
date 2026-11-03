@@ -27,6 +27,8 @@ Use `python3 <script> --help` for the complete option list.
 | Lint fixture load-stage globals | `tools/ci/funit-fixture-lint.sh` |
 | Prove the data fixtures can fail | `tools/ci/funit-mutation-check.sh` |
 | Syntax-check changed Lua files | `tools/ci/lua-check.sh` |
+| Check the tick-handler storage-loop convention | `tools/ci/tick-handler-check.sh` |
+| Report storage key read/write/init sites | `tools/ci/storage-keys-report.sh --key nav_beacon_players` |
 | Check FUnit seam wiring and docs | `tools/ci/funit-seams-check.sh` |
 | Check the release export boundary | `tools/ci/export-check.sh` |
 | Review a pull request in a temporary worktree | `tools/ci/pr-worktree.sh 123` |

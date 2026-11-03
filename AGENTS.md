@@ -177,6 +177,14 @@ Muluna.events.on_event(Muluna.events.events.on_built, my_handler) -- group of ev
 - `Muluna.events.execute_later` / `register_delayed_function` schedule deferred calls using a
   hidden render object as a timer sentinel.
 
+**Tick handlers are a single storage loop.** The body of every `on_tick` and `on_nth_tick`
+handler contains nothing but one `for ... in pairs(storage.<table>) do ... end` loop; the
+work lives in a named function the loop calls (see `update_player_nav_beacon` in
+`scripts/nav-beacon.lua`). An unused feature then costs one empty iteration instead of a
+per-tick call with setup, allocations or guards. Lazy caches reset from inside the loop on
+first use, never before it. `tools/ci/tick-handler-check.sh` enforces this; a justified
+exception gets a `-- tick-handler-ok: <reason>` comment on the registration line.
+
 State lives in the `storage` table. Initialize it defensively in the `on_init` handler in
 `control.lua` (guard with `if not storage.x then`). Never store references to `LuaEntity`
 across ticks without re-validating `entity.valid`.
@@ -201,6 +209,14 @@ adding a new compound entity type, register its parent for bplib extract/positio
 add it to that module's type registry. The module also caches the source direction from
 `bplib-positions` so recipe replacement during blueprinted builds cannot reset a parent's
 facing direction.
+
+Each compound type also keeps `storage.<type>` keyed by the parent unit number and a
+`storage.<type>_children` reverse index from the child unit number to the parent, so a
+destroyed subentity finds its parent in O(1) instead of scanning every pair. When adding or
+changing one: initialize both tables in the build handler, verify the index entry still owns
+the child (`entry.<child_key> == child`) before trusting it, store the child unit number on
+the entry so cleanup works after the child is invalid, clear both on either half's destroy,
+and keep the linear scan as a fallback for saves created before the index existed.
 
 ## Exploration science pack discovery
 
@@ -609,6 +625,13 @@ The `tools/ci/` helpers are development tools and are not shipped:
 - `funit-mutation-check.sh` — inject a bad icon and a missing recipe ingredient,
   require the matching fixtures to fail, and restore `data.lua` on exit.
 - `lua-check.sh` — syntax-check changed Lua files with `luac` and run `git diff --check`.
+- `tick-handler-check.sh` — verify every `on_tick`/`on_nth_tick` handler body is a single
+  loop over a storage table. `--self-test` validates the parser and `--require-finding` is
+  the negative self-test.
+- `storage-keys-report.sh` — report read/write/initialization/clear sites for control-stage
+  `storage` keys and flag keys read without an initialization-like write. `--key` filters
+  to one key, `--strict` makes that a failure, and `--require-missing` is the negative
+  self-test.
 - `pr-body.sh` — generate the review-oriented bugfix PR body with commit-pinned diff and
   test links.
 - `pr-worktree.sh` — fetch a pull request head into a temporary worktree and print a
