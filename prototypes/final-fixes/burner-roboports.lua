@@ -83,7 +83,7 @@ for _,roboport in pairs(data.raw["roboport"]) do
                 crafting_categories = {"muluna-burner-roboport"},
                 selection_priority=48,
                 use_mirroring=true,
-                flags = {"player-creation","placeable-player","no-automated-item-insertion"},
+                flags = {"player-creation","placeable-player","no-automated-item-insertion","no-automated-item-removal"},
                 icon = data.raw["item"]["muluna-burner-roboport"].icon,
                 allowed_effects = {},
                 placeable_by = roboport.placeable_by,
