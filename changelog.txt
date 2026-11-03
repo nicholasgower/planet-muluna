@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.12
+Date: 2026-11-03
+  Bugfixes:
+    - Prevent a crash from an empty muluna-nanofoamed-polymers trigger icon list. https://github.com/nicholasgower/planet-muluna/issues/524
+---------------------------------------------------------------------------------------------------
 Version: 2.9.11
 Date: 2026-11-03
   Bugfixes:
