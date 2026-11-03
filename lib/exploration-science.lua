@@ -1098,16 +1098,19 @@ function Public.update_gated_technology(conditions)
     local icons, main_icon, main_icon_size = build_trigger_icons(conditions)
 
     if scripted_triggers and main_icon then
-        tech.research_trigger = {
+        local trigger = {
             type = "scripted",
             trigger_description = {
                 "research-trigger.muluna-nanofoamed-polymers",
                 tostring(conditions.required_science_packs or 0),
             },
-            icons = icons,
             icon = main_icon,
             icon_size = main_icon_size,
         }
+        if #icons > 0 then
+            trigger.icons = icons
+        end
+        tech.research_trigger = trigger
         tech.enabled = true
         tech.visible_when_disabled = false
     else

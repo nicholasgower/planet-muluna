@@ -267,3 +267,46 @@ results.check(SUITE, "science-discovery-required-count", function()
     )
   end
 end)
+
+results.check(SUITE, "science-discovery-trigger-icons-not-empty", function()
+  local technology_name = "muluna-nanofoamed-polymers"
+  local technology = data.raw["technology"][technology_name]
+  assert(technology and technology.research_trigger, "gated technology has no research trigger")
+
+  local snapshot = {
+    research_trigger = technology.research_trigger,
+    unit = technology.unit,
+    enabled = technology.enabled,
+    visible_when_disabled = technology.visible_when_disabled,
+    localised_description = technology.localised_description,
+  }
+
+  local ok, err = pcall(function()
+    -- A mod can force every dynamic pack group out with the per-technology
+    -- opt-out field, leaving only progress groups without an item icon. The
+    -- generated trigger must remain a valid prototype: Factorio rejects an
+    -- empty icons table.
+    Muluna.exploration_science.update_gated_technology({
+      gated_technology = technology_name,
+      packs = {},
+      science_packs = {},
+      required_science_packs = 0,
+    })
+
+    local trigger = technology.research_trigger
+    assert(trigger and trigger.type == "scripted", "gated technology does not use the scripted trigger")
+    assert(trigger.icon, "gated technology trigger has no main icon")
+    assert(
+      trigger.icons == nil or #trigger.icons > 0,
+      "gated technology trigger has an empty icons table"
+    )
+  end)
+
+  technology.research_trigger = snapshot.research_trigger
+  technology.unit = snapshot.unit
+  technology.enabled = snapshot.enabled
+  technology.visible_when_disabled = snapshot.visible_when_disabled
+  technology.localised_description = snapshot.localised_description
+
+  if not ok then error(err, 0) end
+end)
