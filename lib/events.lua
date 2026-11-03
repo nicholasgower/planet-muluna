@@ -94,6 +94,8 @@ Public.finalize_events = function()
 		elseif event == Public.events.on_init() then
 			script.on_init(f)
 			script.on_configuration_changed(f)
+		elseif event == Public.events.on_load() then
+			script.on_load(f)
 		elseif event == tonumber(defines.events.on_biter_base_built) then
 			script.on_event(tonumber(event) or event, f)
 		else
@@ -240,6 +242,11 @@ Public.events = {
 	--- Called for on_init and on_configuration_changed
 	on_init = function()
 		return "ON INIT EVENT"
+	end,
+	--- Called when a save is loaded, including when a client joins a server.
+	--- Handlers must not modify `storage`.
+	on_load = function()
+		return "ON LOAD EVENT"
 	end,
 	--- Custom event for when a player clicks on an entity
 	on_entity_clicked = function()

@@ -436,6 +436,15 @@ local function sync_wire_retries()
     set_wire_retries_enabled(next(get_pending_wires()) ~= nil)
 end
 
+-- Loading re-runs the top-level registration, which turns the timer back on even
+-- when the save was stored with it off. Re-apply the saved state so a joining
+-- client and the server register the same nth-tick handlers. on_load must not
+-- modify storage, so read the pending table without initializing it.
+local function sync_wire_retries_after_load()
+    local pending = storage.compound_pending_wires
+    set_wire_retries_enabled(pending ~= nil and next(pending) ~= nil)
+end
+
 local function queue_wire(parent, child, source_connector_id, target)
     local pending = get_pending_wires()
     local id = (storage.compound_pending_wire_sequence or 0) + 1
@@ -619,10 +628,10 @@ Muluna.events.on_event(Muluna.events.events.on_init(), function()
     storage.compound_pending_wires = storage.compound_pending_wires or {}
     storage.compound_placement_orientations = storage.compound_placement_orientations or {}
     storage.compound_blueprint_directions = storage.compound_blueprint_directions or {}
-    -- Resume the retry timer only when a save has wires still waiting. This
-    -- runs on configuration change as well as load, after finalize_events.
     sync_wire_retries()
 end)
+
+Muluna.events.on_event(Muluna.events.events.on_load(), sync_wire_retries_after_load)
 
 if script.active_mods["funit"] then
     ---Queue a wire that can never resolve, so the retry timer has work for one
@@ -645,6 +654,13 @@ if script.active_mods["funit"] then
         local pending = 0
         for _ in pairs(get_pending_wires()) do pending = pending + 1 end
         return { enabled = retry_enabled, pending = pending }
+    end
+
+    ---Re-apply the state that on_load applies from a fresh control stage.
+    ---The headless FUnit scenario cannot save and reload a map.
+    Muluna.funit.apply_compound_load_state = function()
+        retry_enabled = nil
+        sync_wire_retries_after_load()
     end
 
     ---@param unit_number uint32

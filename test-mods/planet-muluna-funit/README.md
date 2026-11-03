@@ -116,7 +116,7 @@ when the `funit` mod is active**:
 - `get_burner_roboport_data`, `short_update_roboport`
 - `get_heat_assembling_machine_data`
 - `get_compound_blueprint_tags`, `transform_compound_offset`, `get_compound_retry_state`,
-  `set_compound_child_index`, `queue_test_pending_wire`
+  `apply_compound_load_state`, `set_compound_child_index`, `queue_test_pending_wire`
 - `get_nav_scan_area`, `set_nav_beacon_enabled`, `build_nav_beacon`,
   `handle_invalid_nav_surface`, `get_nav_energy_cost`, `get_nav_energy_cost_stats`,
   `reset_nav_energy_cost_cache`, `probe_nav_beacon_player`,
