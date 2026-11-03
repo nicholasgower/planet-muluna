@@ -253,6 +253,8 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends git python3
       - uses: actions/checkout@v4
+      - name: Verify the FUnit migration registry
+        run: bash tools/ci/migration-registry-check.sh
       - uses: actions/download-artifact@v4
         with:
           name: build-archive-job
