@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.10
+Date: 2026-11-03
+  Bugfixes:
+    - Re-apply the compound wire retry timer state after loading a save. https://github.com/nicholasgower/planet-muluna/issues/520
+---------------------------------------------------------------------------------------------------
 Version: 2.9.9
 Date: 2026-11-02
   Optimizations:
