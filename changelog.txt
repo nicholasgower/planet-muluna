@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.13
+Date: 2026-11-03
+  Bugfixes:
+    - Prevent a crash when a migration removes a player before nav beacon storage is initialized. https://github.com/nicholasgower/planet-muluna/issues/526
+---------------------------------------------------------------------------------------------------
 Version: 2.9.12
 Date: 2026-11-03
   Bugfixes:
