@@ -137,6 +137,23 @@ remote.add_interface("muluna_funit", {
     }
   end,
 
+  -- A save migration can remove players before on_configuration_changed has
+  -- initialized storage.nav_beacon_players. Clear the real table, invoke the
+  -- registered on_player_removed handler, and restore the table so the test
+  -- covers the exact event path without leaving storage behind.
+  probe_nav_beacon_player_removal = function(player_index)
+    local saved = storage.nav_beacon_players
+    storage.nav_beacon_players = nil
+    local handler = script.get_event_handler(defines.events.on_player_removed)
+    local ok, err = pcall(handler, {
+      name = defines.events.on_player_removed,
+      tick = game.tick,
+      player_index = player_index,
+    })
+    storage.nav_beacon_players = saved
+    return { ok = ok, error = err }
+  end,
+
   probe_nav_beacon_player = function(surface_name, options)
     local surface
     for _, candidate in pairs(game.surfaces) do
