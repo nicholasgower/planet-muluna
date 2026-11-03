@@ -551,12 +551,19 @@ if settings.startup["enable-nav-beacon"].value == true then
         end
     end)
 
+    -- Migrations run before on_configuration_changed initializes the storage
+    -- tables, so these events can fire while storage.nav_beacon_players is
+    -- still nil. There is nothing to clear in that case.
     Muluna.events.on_event(defines.events.on_player_left_game, function(event)
-        storage.nav_beacon_players[event.player_index] = nil
+        if storage.nav_beacon_players then
+            storage.nav_beacon_players[event.player_index] = nil
+        end
     end)
 
     Muluna.events.on_event(defines.events.on_player_removed, function(event)
-        storage.nav_beacon_players[event.player_index] = nil
+        if storage.nav_beacon_players then
+            storage.nav_beacon_players[event.player_index] = nil
+        end
     end)
 end
 

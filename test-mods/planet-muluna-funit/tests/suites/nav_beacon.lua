@@ -1043,3 +1043,16 @@ runner.test("nav beacon update only visits players in remote view", function()
     "the probe player is still tracked after leaving remote view"
   )
 end)
+
+runner.test("player removal before nav beacon storage initialization does not crash", function()
+  -- A save migration can remove players before on_configuration_changed has
+  -- initialized storage.nav_beacon_players. Regression: on_player_removed
+  -- indexed that table unconditionally and crashed the save load (#526). The
+  -- remote probe clears the real storage table, invokes the registered event
+  -- handler, and restores the table afterwards.
+  local result = helpers.funit_call("probe_nav_beacon_player_removal", 9999)
+  runner.assert(
+    result.ok,
+    "on_player_removed crashed without initialized nav beacon player storage: " .. tostring(result.error)
+  )
+end)
