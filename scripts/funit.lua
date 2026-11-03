@@ -210,6 +210,12 @@ remote.add_interface("muluna_funit", {
     return stage().get_compound_retry_state()
   end,
 
+  -- The headless scenario cannot save and reload a map, so a test can apply the
+  -- same state sync that on_load performs after a fresh control-stage load.
+  apply_compound_load_state = function()
+    return stage().apply_compound_load_state()
+  end,
+
   -- Overturn one entry of a child index, or remove it when parent is nil, so a
   -- test can reproduce an older save (no index) or a stale index.
   set_compound_child_index = function(table_name, child_unit_number, parent_unit_number)
