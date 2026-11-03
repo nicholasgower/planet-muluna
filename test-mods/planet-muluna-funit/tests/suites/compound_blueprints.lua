@@ -520,6 +520,56 @@ runner.test("compound blueprint: wire offsets follow blueprint rotation and flip
   runner.assert(x == 2 and y == -1, "south rotation with a horizontal flip should give (2,-1), got (" .. x .. "," .. y .. ")")
 end)
 
+
+runner.test("compound: loading a save re-applies the wire retry timer state", function()
+  -- The retry timer is disabled at runtime while no wire is pending, and that
+  -- disabled state is saved. A joining client runs control.lua again and the
+  -- top-level registration re-enables the timer; loading must apply the saved
+  -- state again or the client and server event handlers differ.
+  local storage = helpers.storage()
+  local previous_pending = storage.compound_pending_wires
+  local ok, err = xpcall(function()
+    with_clean_areas(function()
+      storage.compound_pending_wires = {}
+      helpers.funit_call("apply_compound_load_state")
+      local idle = helpers.funit_call("get_compound_retry_state")
+      runner.assert(idle.pending == 0, "idle retry state should have no pending wires")
+      runner.assert(
+        idle.enabled == false,
+        "loading an idle save left the wire retry timer registered (enabled="
+          .. tostring(idle.enabled) .. ")"
+      )
+
+      -- A wire waiting for its other endpoint is part of the save, so loading
+      -- must re-enable the retry timer for it.
+      local surface = helpers.get_muluna()
+      local machine = first_entry(get_constants().heat_assembling_machines)
+      local center = helpers.center(helpers.muluna_area())
+      local parent = helpers.entity_at(surface, machine["assembling-machine"], center)
+      runner.assert(parent and parent.valid, "could not create the heat machine")
+      runner.assert(
+        helpers.funit_call("queue_test_pending_wire", parent.unit_number),
+        "could not queue a pending wire"
+      )
+
+      helpers.funit_call("apply_compound_load_state")
+      local waiting = helpers.funit_call("get_compound_retry_state")
+      runner.assert(waiting.pending > 0, "pending wire disappeared while simulating a load")
+      runner.assert(
+        waiting.enabled == true,
+        "loading a save with a pending wire left the wire retry timer disabled"
+      )
+    end)
+  end, debug.traceback)
+
+  storage.compound_pending_wires = previous_pending
+  local cleanup_ok, cleanup_err = pcall(function()
+    helpers.funit_call("apply_compound_load_state")
+  end)
+  if not ok then error(err, 0) end
+  if not cleanup_ok then error(cleanup_err, 0) end
+end)
+
 runner.test("compound: wire retry timer only runs while a wire is pending", function()
   -- The 30-tick retry handler used to be registered for the whole session even
   -- though storage.compound_pending_wires is empty almost all the time. It is
