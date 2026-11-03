@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.11
+Date: 2026-11-03
+  Bugfixes:
+    - Allow inserters to remove robots from burner roboports. https://github.com/nicholasgower/planet-muluna/issues/522
+---------------------------------------------------------------------------------------------------
 Version: 2.9.10
 Date: 2026-11-03
   Bugfixes:
