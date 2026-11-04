@@ -92,6 +92,10 @@ Public.finalize_events = function()
 			nth_tick_handlers[event] = f
 			script.on_nth_tick(event, f)
 		elseif event == Public.events.on_init() then
+			-- The FUnit suite re-runs this combined handler to emulate a mod
+			-- that is added to an existing save. Keep the reference so the
+			-- test does not have to duplicate the module init order.
+			Public.on_init_handler = f
 			script.on_init(f)
 			script.on_configuration_changed(f)
 		elseif event == Public.events.on_load() then

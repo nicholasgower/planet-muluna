@@ -1,3 +1,6 @@
+-- Registered so the FUnit re-add test can replay this migration with an empty
+-- storage table, the way Factorio does when a mod is added back to a save.
+local function migrate()
 for _,force in pairs(game.forces) do 
     if force.technologies["planet-discovery-muluna"].researched == true then
         if force.technologies["wood-gas-processing"].researched == true then
@@ -25,3 +28,9 @@ for _,force in pairs(game.forces) do
         
     end
 end
+
+end
+
+Muluna.migrations = Muluna.migrations or {}
+Muluna.migrations["aa_new_tech_tree"] = migrate
+if game then migrate() end

@@ -107,7 +107,7 @@ paths are only reachable by a player (or are otherwise awkward in a headless
 scenario), so `scripts/funit.lua` exposes a `muluna_funit` remote interface **only
 when the `funit` mod is active**:
 
-- `get_storage`, `get_constants`
+- `get_storage`, `get_constants`, `simulate_re_add_migrations`
 - `get_telescope_data`, `update_telescope`, `get_telescope_signals`
 - `get_telescope_combinator_stats`, `set_telescope_asteroid_signals`
 - `get_telescope_probability`, `get_telescope_min_pollution`,
@@ -120,7 +120,7 @@ when the `funit` mod is active**:
 - `get_nav_scan_area`, `set_nav_beacon_enabled`, `build_nav_beacon`,
   `handle_invalid_nav_surface`, `get_nav_energy_cost`, `get_nav_energy_cost_stats`,
   `reset_nav_energy_cost_cache`, `probe_nav_beacon_player`,
-  `probe_nav_beacon_controller_change`
+  `probe_nav_beacon_player_removal`, `probe_nav_beacon_controller_change`
 - `set_cheat_mode`
 - `get_walking_controller_branch`, `get_walking_step_movement`
 - `build_entity_gui`, `handle_gui_click`
@@ -158,6 +158,9 @@ conditions instead of copying a deadline loop. It supports `timeout`, `interval`
 The suite covers:
 
 - Muluna surface creation, wind, cargo pods, lunar rocks, and storage.
+- Removing and re-adding the mod (empty storage, every migration replayed):
+  migration crashes, destructive map regeneration, old-save research grants,
+  and rebuilding telescope indexes from the map.
 - Lunar rock mining yields for big and huge rocks.
 - The PlanetsLib entity removal floor rule configured for both lunar rock
   prototypes, including its gravel tile, crushed stone item, and Muluna waiting

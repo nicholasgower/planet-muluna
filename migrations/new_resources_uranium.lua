@@ -1,3 +1,6 @@
+-- Registered so the FUnit re-add test can replay this migration with an empty
+-- storage table, the way Factorio does when a mod is added back to a save.
+local function migrate()
 -- local function regenerate_resource(resource) 
 --     local map_gen_settings = game.planets.muluna.surface.map_gen_settings
 --     map_gen_settings.autoplace_controls[resource] = {}
@@ -25,3 +28,9 @@
 --         game.planets.muluna.surface.map_gen_settings = map_gen_settings
 --         game.planets.muluna.surface.regenerate_entity("helium")
 --       --end
+
+end
+
+Muluna.migrations = Muluna.migrations or {}
+Muluna.migrations["new_resources_uranium"] = migrate
+if game then migrate() end
