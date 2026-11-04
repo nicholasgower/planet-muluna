@@ -611,3 +611,21 @@ results.check(SUITE, "quality-prototypes-match-modset", function()
     end
   end
 end)
+
+results.check(SUITE, "rocket-buggy-brakes", function()
+  -- Factorio 2.1 ignores braking_power and friction, so a buggy that writes them
+  -- keeps the numbers of the vanilla car it copies. Independent of the buggy's
+  -- source: 750 kW is 12500 J per tick.
+  local buggy = data.raw.car["muluna-rocket-buggy"]
+  assert(buggy, "muluna-rocket-buggy does not exist")
+  assert(buggy.braking_power == nil, "muluna-rocket-buggy still sets the removed braking_power")
+  assert(buggy.friction == nil, "muluna-rocket-buggy still sets the removed friction")
+  assert(
+    math.abs(buggy.braking_force - 12500) < 0.001,
+    "muluna-rocket-buggy braking_force is " .. tostring(buggy.braking_force) .. ", expected 12500"
+  )
+  assert(
+    buggy.friction_force == 2.5e-3,
+    "muluna-rocket-buggy friction_force is " .. tostring(buggy.friction_force) .. ", expected 0.0025"
+  )
+end)
