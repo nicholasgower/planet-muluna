@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.15
+Date: 2026-11-08
+  Bugfixes:
+    - Remove invalid mipmap counts from lunar regolith pictures. https://github.com/nicholasgower/planet-muluna/issues/530
+---------------------------------------------------------------------------------------------------
 Version: 2.9.14
 Date: 2026-11-04
   Bugfixes:
