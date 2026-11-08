@@ -27,6 +27,7 @@ return {
     "api_helpers",
     "muluna_tiles",
     "prototype_integrity",
+    "sprite_assets",
     "content_references",
     "any_planet_start",
     "aai",

@@ -24,10 +24,10 @@ Muluna:extend{{
     name = "muluna-lunar-regolith",
     icon="__muluna-graphics__/graphics/icons/lunar-regolith.png",
     pictures = {
-      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith.png", scale=0.5, mipmap_count=4},
-      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith-2.png", scale=0.5, mipmap_count=4},
-      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith-3.png", scale=0.5, mipmap_count=4},
-      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith-4.png", scale=0.5, mipmap_count=4}
+      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith.png", scale=0.5},
+      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith-2.png", scale=0.5},
+      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith-3.png", scale=0.5},
+      {size=64, filename="__muluna-graphics__/graphics/icons/lunar-regolith-4.png", scale=0.5}
     },
     icon_size = 64,
     subgroup = "space-material",
