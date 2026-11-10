@@ -1,3 +1,10 @@
+-- Registered so the FUnit re-add test can replay this migration with an empty
+-- storage table, the way Factorio does when a mod is added back to a save.
+local function migrate()
+-- This migration grants technologies that did not exist before Muluna was
+-- added. Adding the mod back to a save is not the same as adding it for the
+-- first time: the save already has the tech tree, so do not grant anything.
+if not Muluna.should_run_migrations() then return end
 for _,force in pairs(game.forces) do 
     if force.technologies["planet-discovery-muluna"].researched == false then
         if force.technologies["space-science-pack"].researched == true then
@@ -49,3 +56,9 @@ for _,force in pairs(game.forces) do
         
     end
 end
+
+end
+
+Muluna.migrations = Muluna.migrations or {}
+Muluna.migrations["existing_save"] = migrate
+if game then migrate() end

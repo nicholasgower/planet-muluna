@@ -1,3 +1,6 @@
+-- Registered so the FUnit re-add test can replay this migration with an empty
+-- storage table, the way Factorio does when a mod is added back to a save.
+local function migrate()
 local function regenerate_resource(resource) 
     local map_gen_settings = game.planets.muluna.surface.map_gen_settings
     --map_gen_settings.autoplace_controls[resource] = {}
@@ -6,6 +9,9 @@ local function regenerate_resource(resource)
     game.planets.muluna.surface.regenerate_entity(resource)
 end
 if game.planets.muluna.surface then
+    -- Converting cliffs again on a re-add can destroy map entities that the
+    -- save already migrated.
+    if not Muluna.should_run_migrations() then return end
     --regenerate_resource("cliff-muluna")
     --regenerate_resource("helium")
     local cliffs = game.planets.muluna.surface.find_entities_filtered{name="cliff"}
@@ -40,3 +46,9 @@ end
 --         game.planets.muluna.surface.map_gen_settings = map_gen_settings
 --         game.planets.muluna.surface.regenerate_entity("helium")
 --       --end
+
+end
+
+Muluna.migrations = Muluna.migrations or {}
+Muluna.migrations["new_cliffs"] = migrate
+if game then migrate() end

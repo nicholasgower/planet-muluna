@@ -1,3 +1,6 @@
+-- Registered so the FUnit re-add test can replay this migration with an empty
+-- storage table, the way Factorio does when a mod is added back to a save.
+local function migrate()
 local should_notify = false
 local rro = Muluna.rro
 for _,force in pairs(game.forces) do
@@ -11,7 +14,7 @@ for _,force in pairs(game.forces) do
         force.technologies["crusher"].researched = true
     end
 end
-if should_notify then
+if should_notify and Muluna.should_run_migrations() then
     game.print({"console.muluna-2-message"})
 end
 
@@ -100,3 +103,9 @@ correct_surface_space_science_packs(game.surfaces.muluna,"space-science-pack-mul
 --         correct_surface_space_science_packs(platform.surface,"space-science-pack")
 --     end
 -- end
+
+end
+
+Muluna.migrations = Muluna.migrations or {}
+Muluna.migrations["muluna-2"] = migrate
+if game then migrate() end
