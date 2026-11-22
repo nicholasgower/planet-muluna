@@ -94,6 +94,7 @@ for spec, expected in [
     ("? Muria", ("?", "Muria", "")),
     ("(?) space_age_galore", ("(?)", "space_age_galore", "")),
     ("base >= 2.1.22", ("", "base", ">= 2.1.22")),
+    ("foo>=1.0", ("", "foo", ">=1.0")),
 ]:
     parsed = parse_dependency(spec)
     check(
