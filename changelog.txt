@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.16
+Date: 2026-11-22
+  Bugfixes:
+    - Detach shared fluid-box arrays before adding data ports. https://github.com/nicholasgower/planet-muluna/issues/535
+---------------------------------------------------------------------------------------------------
 Version: 2.9.15
 Date: 2026-11-08
   Bugfixes:
