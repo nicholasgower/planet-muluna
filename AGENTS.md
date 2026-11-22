@@ -667,6 +667,9 @@ The `tools/ci/` helpers are development tools and are not shipped:
 - `funit-modsets-check.sh` — verify the `MODSETS` table, the runner's accepted
   mod sets and link blocks, and both workflow matrices agree. `--require-missing` is
   the negative self-test.
+- `funit-download-deps-check.sh` — exercise the FUnit downloader's transitive
+  required-dependency resolution and mod names that contain spaces with a
+  synthetic graph; needs no token or network.
 - `funit-matrix.sh` — run several mod sets sequentially and summarize the results
   as a table or JSON.
 - `science-discovery-report.sh` — run data-only discovery per mod set with isolated

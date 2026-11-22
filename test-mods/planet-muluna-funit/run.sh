@@ -141,6 +141,8 @@ if [[ "$FUNIT_MODSET" == "planets" ]]; then
   link_mod_or_zip "corrundum" 'corrundum_*.zip'
   link_mod_or_zip "secretas" 'secretas_*.zip'
   link_mod_or_zip "Paracelsin" 'Paracelsin_*.zip'
+  link_mod_or_zip "Crystalline-Library" 'Crystalline-Library_*.zip'
+  link_zip "Return-Inserter" 'Return-Inserter_*.zip'
   link_mod_or_zip "rubia" 'rubia_*.zip'
   link_zip "SpidertronPatrols" 'SpidertronPatrols_*.zip'
   link_zip "SpidertronEnhancements" 'SpidertronEnhancements_*.zip'
@@ -209,6 +211,8 @@ if [[ "$FUNIT_MODSET" == "planets" ]]; then
     corrundum
     secretas
     Paracelsin
+    Crystalline-Library
+    Return-Inserter
     rubia
     SpidertronPatrols
     SpidertronEnhancements
