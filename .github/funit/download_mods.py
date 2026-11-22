@@ -154,7 +154,7 @@ def parse_dependency(spec: str):
         prefix = spec[0]
         spec = spec[1:].strip()
 
-    match = re.match(r"([A-Za-z0-9_. -]+?)(?:\s+([<>=].*))?$", spec)
+    match = re.match(r"([A-Za-z0-9_. -]+?)(?:\s*([<>=].*))?$", spec)
     if not match:
         return None
     name = match.group(1).strip()
