@@ -16,22 +16,34 @@
 #   FACTORIO_VERSION       Factorio release to install: "latest" (newest
 #                          experimental), "stable" (newest stable) or a concrete
 #                          version (default: latest)
+#   FUNIT_MODSET           Mod set whose dependencies to download (default:
+#                          vanilla). See .github/funit/download_mods.py.
+#   FUNIT_LOCK_FILE        Optional lock file: download the exact releases the
+#                          recorded run used instead of the newest ones.
+#   FUNIT_MODS_DIR         Optional mod directory to populate instead of the
+#                          shared one. Use one directory per mod set when
+#                          reproducing several legs, since two legs can pin
+#                          different versions of the same mod.
 #   FUNIT_COMMIT           Pinned FUnit revision (matches .github/workflows/funit.yml)
 #   RUNNER_TEMP            Scratch root (default: /tmp/opencode)
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FACTORIO_VERSION="${FACTORIO_VERSION:-latest}"
+FUNIT_MODSET="${FUNIT_MODSET:-vanilla}"
+FUNIT_LOCK_FILE="${FUNIT_LOCK_FILE:-}"
 FUNIT_COMMIT="${FUNIT_COMMIT:-b69c2f277a467726e3a8c555d48df5b647ec5a64}"
 WORK_ROOT="${RUNNER_TEMP:-/tmp/opencode}/muluna-opencode"
-FACTORIO_DIR="$WORK_ROOT/factorio"
-MODS_DIR="$WORK_ROOT/mods"
+SHARED_MODS_DIR="$WORK_ROOT/mods"
+MODS_DIR="${FUNIT_MODS_DIR:-$SHARED_MODS_DIR}"
 FUNIT_SRC="$WORK_ROOT/funit-src"
 
 # Local development shortcut: use an install and mod directory that are
-# already present instead of downloading them again.
+# already present instead of downloading them again. A requested FUNIT_MODS_DIR
+# still needs to be populated, so only take the shortcut for the shared one.
 if [[ -n "${FACTORIO_BIN:-}" && -n "${FACTORIO_MODS:-}" \
-      && -x "$FACTORIO_BIN" && -d "$FACTORIO_MODS" ]]; then
+      && -x "$FACTORIO_BIN" && -d "$FACTORIO_MODS" \
+      && -z "${FUNIT_MODS_DIR:-}" ]]; then
   echo "Using existing Factorio install: $FACTORIO_BIN"
   echo "Using existing mod directory:  $FACTORIO_MODS"
   exit 0
@@ -43,7 +55,7 @@ if [[ -z "${FACTORIO_PLAYER_TOKEN:-}" ]]; then
   exit 1
 fi
 
-mkdir -p "$WORK_ROOT" "$MODS_DIR"
+mkdir -p "$WORK_ROOT" "$SHARED_MODS_DIR" "$MODS_DIR"
 
 # ---------------------------------------------------------------------------
 # Factorio
@@ -53,13 +65,21 @@ mkdir -p "$WORK_ROOT" "$MODS_DIR"
 # stable build, the same aliases the FUnit workflow passes to the
 # factoriotools/factorio image tags. The tarball includes the Space Age
 # expansion data, so no DLC download is needed.
+#
+# Each release keeps its own install directory: a triage run can reproduce a
+# stable leg and an experimental leg in the same job, and the two must not share
+# a game binary.
+FACTORIO_TAG="${FACTORIO_VERSION//[^A-Za-z0-9._-]/_}"
+FACTORIO_DIR="$WORK_ROOT/factorio-$FACTORIO_TAG"
 if [[ ! -x "$FACTORIO_DIR/bin/x64/factorio" ]]; then
   echo "Downloading Factorio $FACTORIO_VERSION (headless)..."
-  archive="$WORK_ROOT/factorio-headless.tar.xz"
+  archive="$WORK_ROOT/factorio-headless-$FACTORIO_TAG.tar.xz"
   curl -fsSL "https://factorio.com/get-download/${FACTORIO_VERSION}/headless/linux64" -o "$archive"
-  rm -rf "$FACTORIO_DIR"
+  rm -rf "$FACTORIO_DIR" "$WORK_ROOT/factorio"
   tar -xJf "$archive" -C "$WORK_ROOT"
   rm -f "$archive"
+  # The tarball always extracts to <root>/factorio.
+  mv "$WORK_ROOT/factorio" "$FACTORIO_DIR"
 fi
 
 FACTORIO_BIN="$FACTORIO_DIR/bin/x64/factorio"
@@ -77,6 +97,11 @@ echo "Factorio: $FACTORIO_REAL_VERSION"
 # and the test companion mod. Extra downloaded mods are harmless: the FUnit
 # runner links only the mods it needs into its own scratch mod directory.
 echo "Resolving required and recommended dependencies..."
+lock_args=()
+if [[ -n "$FUNIT_LOCK_FILE" ]]; then
+  echo "  pinned by lock file: $FUNIT_LOCK_FILE"
+  lock_args=(--lock-in "$FUNIT_LOCK_FILE")
+fi
 USERNAME="${FACTORIO_USERNAME:-MeteorSwarm}" \
 TOKEN="$FACTORIO_PLAYER_TOKEN" \
 FACTORIO_BIN="$FACTORIO_BIN" \
@@ -84,8 +109,10 @@ python3 "$REPO_DIR/.github/funit/download_mods.py" \
   --info "$REPO_DIR/info.json" \
   --test-info "$REPO_DIR/test-mods/planet-muluna-funit/info.json" \
   --output-dir "$MODS_DIR" \
-  --mod-list "$WORK_ROOT/funit-mod-list.json" \
+  --mod-list "$WORK_ROOT/funit-mod-list-${FUNIT_MODSET}.json" \
   --factorio-version "$FACTORIO_VERSION" \
+  --modset "$FUNIT_MODSET" \
+  ${lock_args[@]+"${lock_args[@]}"} \
   --skip-local-check
 
 # The FUnit runner expects PlanetsLib and muluna-graphics as directories (it
@@ -118,8 +145,9 @@ extract_dir_mod PlanetsLib
 extract_dir_mod muluna-graphics
 
 # FUnit is not distributed through the mod portal. Package the same pinned
-# revision the FUnit CI workflow uses.
-if ! compgen -G "$MODS_DIR/funit_*.zip" >/dev/null; then
+# revision the FUnit CI workflow uses, once in the shared directory, then copy
+# it into a per-leg directory when one was requested.
+if ! compgen -G "$SHARED_MODS_DIR/funit_*.zip" >/dev/null; then
   echo "Packaging FUnit at $FUNIT_COMMIT..."
   rm -rf "$FUNIT_SRC"
   git clone --depth 1 https://gitlab.com/jfletcher94/funit.git "$FUNIT_SRC"
@@ -129,7 +157,11 @@ if ! compgen -G "$MODS_DIR/funit_*.zip" >/dev/null; then
     'import json, sys; print(json.load(open(sys.argv[1]))["version"])' \
     "$FUNIT_SRC/funit/info.json")"
   test -n "$funit_version"
-  (cd "$FUNIT_SRC" && zip -qr "$MODS_DIR/funit_${funit_version}.zip" funit)
+  (cd "$FUNIT_SRC" && zip -qr "$SHARED_MODS_DIR/funit_${funit_version}.zip" funit)
+fi
+
+if [[ "$MODS_DIR" != "$SHARED_MODS_DIR" ]] && ! compgen -G "$MODS_DIR/funit_*.zip" >/dev/null; then
+  cp "$SHARED_MODS_DIR"/funit_*.zip "$MODS_DIR"/
 fi
 
 # ---------------------------------------------------------------------------

@@ -54,6 +54,52 @@
         }
       }
     },
+    "ci-triage": {
+      "description": "Automated regression triage for failures on main; reproduces the failing FUnit leg and opens one fix PR.",
+      "mode": "primary",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "temperature": 0.2,
+      "prompt": "{file:./.github/opencode/ci-triage-prompt.md}",
+      "permission": {
+        "*": "allow",
+        "edit": {
+          "*": "allow",
+          ".github/workflows/*": "deny",
+          ".github/workflows/**": "deny"
+        },
+        "read": {
+          "*": "allow",
+          "*.env": "deny",
+          "*.env.*": "deny",
+          "*.env.example": "allow"
+        },
+        "webfetch": "deny",
+        "websearch": "deny",
+        "question": "deny",
+        "task": "deny",
+        "doom_loop": "allow",
+        "external_directory": {
+          "*": "allow",
+          "/tmp/opencode/**": "allow",
+          "$HOME/work/_temp/**": "allow"
+        },
+        "bash": {
+          "*": "allow",
+          "git push *main*": "deny",
+          "git push --force*": "deny",
+          "git push -f*": "deny",
+          "git reset --hard*": "deny",
+          "git checkout main*": "deny",
+          "git switch main*": "deny",
+          "gh pr merge *": "deny",
+          "gh issue close *": "deny",
+          "gh workflow *": "deny",
+          "gh run cancel *": "deny",
+          "gh run delete *": "deny",
+          "sudo *": "deny"
+        }
+      }
+    },
   "factorio-docs-agent": {
       "description": "Subagent that gets information from the Factorio documentation.",
       "mode": "subagent",

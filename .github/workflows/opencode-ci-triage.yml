@@ -1,0 +1,276 @@
+# Triage a failed FUnit run on main and, when it is fixable, submit a fix.
+#
+# FUnit resolves every dependency and the Factorio image on each run, so `main`
+# can go red with no commit: a dependency publishes a new release, or the
+# experimental image moves. `funit.yml` runs weekly for that reason, records the
+# resolved versions in each leg's artifact, and this workflow reacts to a
+# failure from either a push or the schedule.
+#
+# The deterministic part (`ci-context.py`) decides what happened and whether it
+# is worth an agent run:
+#
+#   * transient portal/network errors are retried once;
+#   * a failure that a newer green run already covers is dropped;
+#   * an open pull request or issue with the same signature gets a comment;
+#   * a merged fix that did not hold, or a human-closed fix, is not re-submitted;
+#   * a full backlog of automated pull requests stops new ones.
+#
+# Only a new, reproducible failure reaches the `ci-triage` OpenCode agent, which
+# follows `.github/opencode/ci-triage-prompt.md`: reproduce against the failing
+# leg's lock file, add regression coverage, fix the cause, and open one
+# reviewable pull request.
+#
+# The triage state is uploaded as the `ci-triage` artifact, and the short summary
+# is written to the job summary. No pull request code is ever checked out: the
+# workflow runs from the default branch and checks out `main` only.
+
+name: Opencode CI Triage
+
+on:
+  workflow_run:
+    workflows: [FUnit]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: FUnit run id to triage
+        required: true
+        type: number
+      mode:
+        description: "diagnose: classify and summarize only; fix: allow a pull request"
+        required: false
+        type: choice
+        default: diagnose
+        options:
+          - diagnose
+          - fix
+
+concurrency:
+  # One triage at a time: two failed runs on main must not open competing
+  # pull requests.
+  group: opencode-ci-triage
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+  pull-requests: write
+
+env:
+  RUN_ID: ${{ github.event.workflow_run.id || inputs.run_id }}
+  MODE: ${{ (github.event_name == 'workflow_dispatch' && inputs.mode) || 'fix' }}
+  TRIAGE_DIR: ${{ runner.temp }}/ci-triage
+  # "latest" tracks the newest experimental build, matching the FUnit workflow.
+  FACTORIO_VERSION: ${{ vars.FACTORIO_VERSION || 'latest' }}
+
+jobs:
+  triage:
+    name: Classify the failure and fix it when possible
+    # Automatic runs only for a failed FUnit run on this repository's main
+    # branch. Pull request runs share the workflow name but have a different
+    # head branch, so they are excluded.
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' ||
+        (github.event.workflow_run.conclusion == 'failure' &&
+         github.event.workflow_run.head_branch == 'main' &&
+         github.event.workflow_run.event != 'pull_request' &&
+         github.event.workflow_run.head_repository.full_name == github.repository)
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Classify the failure
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          python3 .github/opencode/ci-context.py collect \
+            --repo "$GITHUB_REPOSITORY" \
+            --run-id "$RUN_ID" \
+            --work-dir "$TRIAGE_DIR" \
+            --mode "$MODE"
+
+      - name: Write the triage summary
+        if: ${{ always() }}
+        run: |
+          if [[ -f "$TRIAGE_DIR/summary.md" ]]; then
+            cat "$TRIAGE_DIR/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Triage did not produce a summary." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload the triage context
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-triage
+          path: ${{ runner.temp }}/ci-triage
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Load the triage result
+        run: |
+          set -euo pipefail
+          cat "$TRIAGE_DIR/triage.env" >> "$GITHUB_ENV"
+
+      - name: Ensure the triage label exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create automated-regression --repo "$GITHUB_REPOSITORY" \
+            --color "0e8a16" \
+            --description "Automated CI regression triage" \
+            --force
+
+      # Retry a transient failure, comment on the thread that already tracks
+      # this signature, or record a regression that needs a human decision.
+      - name: Apply the short-circuit action
+        if: ${{ env.TRIAGE_ACTION != 'investigate' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          python3 .github/opencode/ci-context.py report \
+            --repo "$GITHUB_REPOSITORY" \
+            --work-dir "$TRIAGE_DIR"
+
+      - name: Install archive tools
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xz-utils zip unzip
+
+      - name: Install OpenCode CLI
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        run: |
+          curl -fsSL https://opencode.ai/install | bash
+          echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
+          "$HOME/.opencode/bin/opencode" --version
+
+      - name: Verify the OpenCode agent
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        run: |
+          set -euo pipefail
+          opencode agent list | grep -q '^ci-triage (primary)'
+
+      - name: Configure git identity
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        run: |
+          git config --global user.name "opencode-agent"
+          git config --global user.email "opencode-agent@users.noreply.github.com"
+
+      # Install Factorio once per release channel that a failing leg used, and
+      # resolve each prepared leg's dependencies from the lock file the failing
+      # run recorded. Two legs can pin different versions of the same mod, so
+      # every leg gets its own mod directory.
+      - name: Prepare headless Factorio and the failing legs
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        env:
+          FACTORIO_PLAYER_TOKEN: ${{ secrets.FACTORIO_PLAYER_TOKEN }}
+          FACTORIO_USERNAME: ${{ vars.FACTORIO_USERNAME || 'MeteorSwarm' }}
+        run: |
+          set -euo pipefail
+          python3 - "$TRIAGE_DIR/context.json" > "$RUNNER_TEMP/legs.txt" <<'PY'
+          import json
+          import sys
+
+          context = json.load(open(sys.argv[1]))
+          for leg in context["legs"].values():
+              label = f"{leg['channel']}/{leg['modset']}"
+              print(label, leg["version_label"], leg["modset"], leg.get("lock") or "-")
+          PY
+
+          # Prepare at most two legs up front; the context document has the
+          # command for the rest, and the agent can prepare them on demand.
+          head -n 2 "$RUNNER_TEMP/legs.txt" | while read -r label version modset lock; do
+            echo "::group::Preparing $label"
+            arguments=(
+              "FUNIT_MODS_DIR=$TRIAGE_DIR/mods-${label/\//-}"
+              "FUNIT_MODSET=$modset"
+              "FACTORIO_VERSION=$version"
+            )
+            if [[ "$lock" != "-" ]]; then
+              arguments+=("FUNIT_LOCK_FILE=$lock")
+            fi
+            env "${arguments[@]}" ./.github/opencode/setup-factorio.sh
+            echo "::endgroup::"
+          done
+
+      - name: Create work branch
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        run: |
+          set -euo pipefail
+          branch="ci/regression-${TRIAGE_SIGNATURE}-$(date -u +%Y%m%d%H%M%S)"
+          git checkout -b "$branch"
+          echo "Created work branch: $branch"
+
+      - name: Run OpenCode
+        if: ${{ env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        timeout-minutes: 50
+        env:
+          MODEL: ${{ vars.OPENCODE_MODEL || 'opencode-go/deepseek-v4.1-flash' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          OPENCODE_ZEN_API_KEY: ${{ secrets.OPENCODE_ZEN_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PROMPT: |
+            The FUnit run https://github.com/${{ github.repository }}/actions/runs/${{ env.RUN_ID }}
+            failed on main. Its triage is in "$TRIAGE_DIR/context.md"
+            (signature ${{ env.TRIAGE_SIGNATURE }}, class ${{ env.TRIAGE_CLASS }},
+            legs: ${{ env.TRIAGE_LEGS }}).
+
+            Follow the CI regression workflow in your agent instructions exactly.
+            Read AGENTS.md, .github/opencode/README.md and
+            test-mods/planet-muluna-funit/README.md before changing anything.
+            Reproduce the first failing leg against its lock file, add regression
+            coverage that fails without the fix, fix the cause, and open one pull
+            request in the required format. If the failure cannot be reproduced or
+            is not fixable by a small supported change, do not open a pull request;
+            leave the worktree clean and report what you found instead.
+        run: |
+          set -euo pipefail
+          opencode run --agent ci-triage --model "$MODEL" --auto "$PROMPT"
+
+      # Safety net: if the agent committed a fix but did not push it or open a
+      # pull request, preserve the work instead of losing it with the runner.
+      - name: Ensure a committed fix has a pull request
+        if: ${{ always() && env.TRIAGE_ACTION == 'investigate' && env.TRIAGE_MODE == 'fix' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          branch="$(git branch --show-current)"
+          if [[ -z "$branch" || "$branch" == "main" || "$branch" == "master" ]]; then
+            exit 0
+          fi
+          if [[ "$(git rev-list --count origin/main..HEAD)" -eq 0 ]]; then
+            echo "No commits on $branch; not opening a pull request."
+            exit 0
+          fi
+          git config --local credential.helper \
+            '!f() { echo username=x-access-token; echo password="${GITHUB_TOKEN}"; }; f'
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git push -u origin HEAD
+          if [[ -n "$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" \
+              --state open --json number --jq '.[0].number // empty')" ]]; then
+            echo "A pull request already exists for $branch."
+            exit 0
+          fi
+          gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
+            --label automated-regression \
+            --title "(AI-generated) Fix CI regression ${TRIAGE_SIGNATURE}" \
+            --body "$(printf 'CI-Regression: %s\n_Posted by DeepSeek V4.1 Flash._\n\nThe agent committed a fix for the failing FUnit run %s but did not open a pull request, so this fallback was created from its branch. See the commit messages and the uploaded `ci-triage` artifact for the reproduction and test results.\n' "$TRIAGE_SIGNATURE" "https://github.com/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}")"
