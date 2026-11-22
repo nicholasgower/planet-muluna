@@ -154,10 +154,12 @@ def parse_dependency(spec: str):
         prefix = spec[0]
         spec = spec[1:].strip()
 
-    match = re.match(r"([A-Za-z0-9_.-]+)", spec)
+    match = re.match(r"([A-Za-z0-9_. -]+?)(?:\s+([<>=].*))?$", spec)
     if not match:
         return None
-    return prefix, match.group(1), spec[match.end() :].strip()
+    name = match.group(1).strip()
+    requirement = (match.group(2) or "").strip()
+    return prefix, name, requirement
 
 
 def version_tuple(value: str):
@@ -416,6 +418,47 @@ def collect_dependencies(info_paths: list[Path], extra: list[str] | None = None)
     return names
 
 
+def required_dependency_names(release: dict) -> list[str]:
+    """Return the required dependencies declared by a release's info_json."""
+    names: list[str] = []
+    info = release.get("info_json") or {}
+    for spec in info.get("dependencies", []):
+        parsed = parse_dependency(spec)
+        if not parsed:
+            continue
+        prefix, name, _ = parsed
+        if prefix in ("!", "?", "(?)", "+"):
+            continue
+        if name in BUILTIN_MODS or name in LOCAL_MODS:
+            continue
+        names.append(name)
+    return names
+
+
+def expand_required_dependencies(seed_names: list[str], release_for) -> list[str]:
+    """Append the required dependencies of every seed mod, transitively.
+
+    ``release_for(name)`` returns the release metadata for a mod (with its
+    ``info_json``). Optional and recommended dependencies of newly discovered
+    mods are not followed: only a dependency that Factorio must load can make
+    the mod set unloadable. Names are compared case-insensitively, and a cycle
+    in the dependency graph is harmless.
+    """
+    names = list(seed_names)
+    seen = {name.lower() for name in names}
+    index = 0
+    while index < len(names):
+        name = names[index]
+        index += 1
+        for dependency in required_dependency_names(release_for(name)):
+            key = dependency.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            names.append(dependency)
+    return names
+
+
 def download_release(
     name: str,
     release: dict,
@@ -637,6 +680,32 @@ def main() -> int:
             )
         check_credentials(username, token)
 
+    release_cache: dict[str, dict] = {}
+
+    def release_for(name: str) -> dict:
+        key = name.lower()
+        if key not in release_cache:
+            locked = locked_entries.get(key)
+            if locked:
+                release_cache[key] = select_release_pinned(
+                    name, locked["version"], factorio_version
+                )
+            else:
+                release_cache[key] = select_release(name, factorio_version)
+        return release_cache[key]
+
+    if args.lock_in:
+        # A lock file records the complete dependency set. Replaying it must not
+        # silently add dependencies the recorded run did not download, so an old
+        # lock file still reproduces the set that failed rather than today's.
+        known = {name.lower() for name in dependencies}
+        for key, entry in locked_entries.items():
+            if key not in known:
+                dependencies.append(entry.get("name") or key)
+                known.add(key)
+    else:
+        dependencies = expand_required_dependencies(dependencies, release_for)
+
     print(f"Required/recommended dependencies for Factorio {factorio_version}:")
     print(f"  modset: {args.modset}")
     print("  " + ", ".join(dependencies))
@@ -646,13 +715,9 @@ def main() -> int:
 
     releases: list[tuple[str, dict, str | None]] = []
     for name in dependencies:
+        release = release_for(name)
         locked = locked_entries.get(name.lower())
-        if locked:
-            release = select_release_pinned(name, locked["version"], factorio_version)
-            releases.append((name, release, locked.get("sha256")))
-        else:
-            release = select_release(name, factorio_version)
-            releases.append((name, release, None))
+        releases.append((name, release, locked.get("sha256") if locked else None))
         print(f"  {name}: {release.get('version', '?')} ({release.get('file_name', '?')})")
 
     if args.dry_run:

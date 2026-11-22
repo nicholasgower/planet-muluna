@@ -27,13 +27,16 @@ Sources (FUnit commit `b69c2f277a467726e3a8c555d48df5b647ec5a64`):
   present in `/mods_cache`, the entrypoint skips the portal update entirely.
 - `.github/funit/download_mods.py` reads `info.json` and the companion test
   mod's `info.json` and downloads every required dependency plus every
-  recommended (`+`) dependency for the target Factorio version. Optional (`?`
-  / `(?)`) and incompatible (`!`) entries are skipped. It writes the scenario's
-  `mod-list.json` from the downloaded set, so the list cannot drift from the
-  mod's declared dependencies. Labels are resolved to the version installed in
-  the image (falling back to factorio.com's matching release channel), so they
-  stay in sync with the docker tag: `FACTORIO_VERSION=latest` tracks the
-  experimental channel and `FACTORIO_VERSION=stable` tracks the stable channel.
+  recommended (`+`) dependency for the target Factorio version. It also follows
+  the required dependencies of each selected mod-set release transitively, so a
+  planet mod that adds a required dependency is downloaded without editing the
+  seed list. Optional (`?` / `(?)`) and incompatible (`!`) entries are skipped.
+  It writes the scenario's `mod-list.json` from the downloaded set, so the list
+  cannot drift from the mod's declared dependencies. Labels are resolved to the
+  version installed in the image (falling back to factorio.com's matching
+  release channel), so they stay in sync with the docker tag:
+  `FACTORIO_VERSION=latest` tracks the experimental channel and
+  `FACTORIO_VERSION=stable` tracks the stable channel.
 - `funit.yml` runs the scenario once per release channel and mod set via a
   matrix over `factoriotools/factorio:stable` / `factoriotools/factorio:latest`
   and `vanilla` / `aai` / `bz` / `no-quality` / `planets` / `k2so` /
