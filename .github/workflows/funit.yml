@@ -29,6 +29,14 @@
 # dependency that is only published for the experimental release is still
 # picked up by the experimental leg.
 #
+# Dependencies are resolved to their newest compatible release on every run, so
+# `main` can start failing without a commit: an updated dependency or a new
+# Factorio build can break a mod set on its own. To detect that, the workflow
+# also runs weekly on a schedule, and every leg records the releases it
+# resolved as `funit-lock-<channel>-<modset>.json` inside its test artifact.
+# The lock file is what lets `opencode-ci-triage.yml` tell a regression from
+# dependency drift, and replay the exact versions a failing run used.
+#
 # See .github/funit/README.md for the local adaptations to PlanetsLib's action.
 
 name: FUnit
@@ -37,10 +45,16 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Weekly drift check: external mods and the Factorio channel move on their
+  # own, so a green `main` is only as recent as the last run.
+  schedule:
+    - cron: "17 4 * * 1"
   workflow_dispatch:
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  # Separate the scheduled run from push runs so the weekly check cannot cancel
+  # a real push result; pull requests still supersede each other.
+  group: "${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}"
   cancel-in-progress: true
 
 permissions:
@@ -258,7 +272,40 @@ jobs:
           name: build-archive-job
           path: artifacts
       - name: Download required and recommended dependencies
-        run: python3 .github/funit/download_mods.py --modset "$FUNIT_MODSET"
+        run: |
+          set -euo pipefail
+          # The lock file ships inside the leg's test artifact. It records the
+          # exact releases this run used so a later run can diff them and the
+          # regression agent can replay them with --lock-in.
+          mkdir -p "test_artifacts/${MOD_NAME}"
+          python3 .github/funit/download_mods.py \
+            --modset "$FUNIT_MODSET" \
+            --lock-out "test_artifacts/${MOD_NAME}/funit-lock-${{ matrix.channel }}-${{ matrix.modset }}.json"
+      - name: Record resolved versions
+        if: ${{ always() }}
+        run: |
+          lock="test_artifacts/${MOD_NAME}/funit-lock-${{ matrix.channel }}-${{ matrix.modset }}.json"
+          if [[ ! -f "$lock" ]]; then
+            echo "::warning::No dependency lock file was recorded for this leg."
+            exit 0
+          fi
+          python3 - "$lock" >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json
+          import sys
+
+          document = json.load(open(sys.argv[1]))
+          factorio = document.get("factorio") or {}
+          print(f"### FUnit dependencies: {document.get('modset')}\n")
+          print(
+              f"Factorio `{factorio.get('resolved')}` "
+              f"(requested `{factorio.get('requested')}`), "
+              f"{len(document.get('mods') or [])} downloaded mods.\n"
+          )
+          print("| Mod | Version |")
+          print("| --- | --- |")
+          for mod in document.get("mods") or []:
+              print(f"| `{mod.get('name')}` | `{mod.get('version')}` |")
+          PY
       - name: Prepare test environment
         run: bash .github/funit/prepare_test_environment.sh
       - name: Run FUnit scenario

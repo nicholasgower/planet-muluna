@@ -27,11 +27,29 @@ release-channel labels:
 
 Labels are resolved from the game installed in this environment when possible
 and from factorio.com's matching release channel otherwise.
+
+Every download can also be recorded as a *lock file* (`--lock-out`), and a lock
+file can be replayed later (`--lock-in`) to download the exact same releases.
+CI uploads the lock with each FUnit leg so a later run can tell a genuine
+regression apart from a dependency that changed underneath the build, and the
+regression agent can reproduce a failure against the dependency set that
+produced it. A lock file records:
+
+    {
+      "schema": 1,
+      "modset": "planets",
+      "factorio": {"requested": "stable", "resolved": "2.1.22"},
+      "mods": [
+        {"name": "PlanetsLib", "version": "2.0.9",
+         "file_name": "PlanetsLib_2.0.9.zip", "sha256": "..."}
+      ]
+    }
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -283,6 +301,72 @@ def select_release(name: str, target: str) -> dict:
     raise SystemExit(f"error: no release of {name} is compatible with Factorio {target}")
 
 
+def select_release_pinned(name: str, version: str, target: str) -> dict:
+    """Return the release a lock file pins, even if it is no longer the newest."""
+    data = fetch_json(f"{PORTAL}/api/mods/{urllib.parse.quote(name)}/full")
+    for release in data.get("releases") or []:
+        if str(release.get("version")) == version:
+            if not release_compatible(release, target):
+                print(
+                    f"warning: {name} {version} from the lock file is not marked "
+                    f"compatible with Factorio {target}; replaying it anyway",
+                    file=sys.stderr,
+                )
+            return release
+    raise SystemExit(
+        f"error: the lock file pins {name} {version}, but the mod portal does not "
+        "list that release any more.\n"
+        "Re-record the lock file with --lock-out, or use a lock file from a newer run."
+    )
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def write_lock(
+    path: Path,
+    modset: str,
+    requested_version: str,
+    resolved_version: str,
+    entries: list[dict],
+) -> None:
+    document = {
+        "schema": 1,
+        "modset": modset,
+        "factorio": {
+            "requested": requested_version,
+            "resolved": resolved_version,
+        },
+        "mods": sorted(entries, key=lambda entry: entry["name"].lower()),
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(document, indent=2) + "\n")
+    print(f"Wrote lock file to {path}")
+
+
+def load_lock(path: Path) -> tuple[dict, dict]:
+    """Read a lock file, returning it and its entries keyed by lower-case name."""
+    try:
+        document = json.loads(path.read_text())
+    except (OSError, ValueError) as error:
+        raise SystemExit(f"error: cannot read lock file {path}: {error}") from error
+    if not isinstance(document, dict) or document.get("schema") != 1:
+        raise SystemExit(f"error: {path} is not a schema 1 FUnit lock file")
+    entries: dict[str, dict] = {}
+    for entry in document.get("mods") or []:
+        name = entry.get("name")
+        version = entry.get("version")
+        if not isinstance(name, str) or not name or not isinstance(version, str) or not version:
+            raise SystemExit(f"error: {path} has a mod entry without a name and version")
+        entries[name.lower()] = entry
+    return document, entries
+
+
 def check_credentials(username: str, token: str) -> None:
     """Fail early with an actionable message if the token cannot download mods."""
     query = urllib.parse.urlencode({"username": username, "token": token})
@@ -332,8 +416,19 @@ def collect_dependencies(info_paths: list[Path], extra: list[str] | None = None)
     return names
 
 
-def download_release(name: str, release: dict, username: str, token: str, output_dir: Path) -> str:
+def download_release(
+    name: str,
+    release: dict,
+    username: str,
+    token: str,
+    output_dir: Path,
+    expected_sha256: str | None = None,
+) -> dict:
     file_name = release.get("file_name") or f"{name}_{release.get('version', 'unknown')}.zip"
+    if file_name != Path(file_name).name:
+        # A lock file is data downloaded from the portal; never let it escape
+        # the output directory.
+        raise SystemExit(f"error: refusing unsafe file name for {name}: {file_name!r}")
     download_url = release.get("download_url")
     if not download_url:
         raise SystemExit(f"error: release metadata for {name} has no download_url")
@@ -368,11 +463,26 @@ def download_release(name: str, release: dict, username: str, token: str, output
             f"error: {file_name} is not a mod zip (got an HTML/error page?)"
         ) from error
 
+    digest = sha256_file(destination)
+    if expected_sha256 and digest != expected_sha256:
+        destination.unlink(missing_ok=True)
+        raise SystemExit(
+            f"error: {file_name} does not match the lock file "
+            f"(sha256 {digest}, expected {expected_sha256}).\n"
+            "The portal may have re-published the same version; re-record the "
+            "lock file with --lock-out."
+        )
+
     print(
         f"  {name} {release.get('version', '?')} -> {file_name} "
         f"({destination.stat().st_size // 1024} KiB)"
     )
-    return name
+    return {
+        "name": name,
+        "version": str(release.get("version") or ""),
+        "file_name": file_name,
+        "sha256": digest,
+    }
 
 
 def write_mod_list(
@@ -447,6 +557,21 @@ def main() -> int:
             "dependency mods are wanted)"
         ),
     )
+    parser.add_argument(
+        "--lock-out",
+        default=None,
+        type=Path,
+        help="record the resolved releases (and the Factorio version) as a lock file",
+    )
+    parser.add_argument(
+        "--lock-in",
+        default=None,
+        type=Path,
+        help=(
+            "download the exact releases recorded in a lock file instead of the "
+            "newest compatible release; reuse it with the same --modset"
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -468,6 +593,42 @@ def main() -> int:
     )
     factorio_version = resolve_version(args.factorio_version)
 
+    locked_entries: dict[str, dict] = {}
+    if args.lock_in:
+        lock_document, locked_entries = load_lock(args.lock_in)
+        locked_factorio = lock_document.get("factorio") or {}
+        requested = str(locked_factorio.get("requested") or "").strip().lower()
+        current = args.factorio_version.strip().lower()
+        if requested in VERSION_LABELS and current in VERSION_LABELS and requested != current:
+            raise SystemExit(
+                f"error: the lock file was recorded on the '{requested}' Factorio "
+                f"channel, but this run requests '{args.factorio_version}'.\n"
+                "Pass --factorio-version "
+                f"{requested} to reproduce the locked run."
+            )
+        locked_resolved = locked_factorio.get("resolved")
+        if locked_resolved and locked_resolved != factorio_version:
+            print(
+                f"warning: the lock file was recorded on Factorio {locked_resolved}, "
+                f"but this environment resolves to {factorio_version} "
+                "(the game binary cannot be pinned by the lock file)",
+                file=sys.stderr,
+            )
+        if lock_document.get("modset") not in (None, args.modset):
+            print(
+                f"warning: the lock file was recorded for mod set "
+                f"{lock_document.get('modset')!r}, not {args.modset!r}",
+                file=sys.stderr,
+            )
+        missing = [name for name in dependencies if name.lower() not in locked_entries]
+        if missing:
+            print(
+                "warning: the lock file has no entry for "
+                + ", ".join(sorted(missing))
+                + "; resolving the newest compatible release for those",
+                file=sys.stderr,
+            )
+
     if not args.dry_run:
         if not token:
             raise SystemExit(
@@ -479,11 +640,19 @@ def main() -> int:
     print(f"Required/recommended dependencies for Factorio {factorio_version}:")
     print(f"  modset: {args.modset}")
     print("  " + ", ".join(dependencies))
+    if args.lock_in:
+        print(f"  lock:   {args.lock_in}")
+        print("  (pinned to the recorded releases; not the newest)")
 
-    releases = []
+    releases: list[tuple[str, dict, str | None]] = []
     for name in dependencies:
-        release = select_release(name, factorio_version)
-        releases.append((name, release))
+        locked = locked_entries.get(name.lower())
+        if locked:
+            release = select_release_pinned(name, locked["version"], factorio_version)
+            releases.append((name, release, locked.get("sha256")))
+        else:
+            release = select_release(name, factorio_version)
+            releases.append((name, release, None))
         print(f"  {name}: {release.get('version', '?')} ({release.get('file_name', '?')})")
 
     if args.dry_run:
@@ -491,11 +660,21 @@ def main() -> int:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    downloaded: list[str] = []
-    for name, release in releases:
+    entries: list[dict] = []
+    for name, release, expected_sha256 in releases:
         for stale in args.output_dir.glob(f"{name}_*.zip"):
             stale.unlink()
-        downloaded.append(download_release(name, release, username, token, args.output_dir))
+        entries.append(
+            download_release(
+                name,
+                release,
+                username,
+                token,
+                args.output_dir,
+                expected_sha256=expected_sha256,
+            )
+        )
+    downloaded = [entry["name"] for entry in entries]
 
     # The three locally packaged mods come from the build job.
     if not args.skip_local_check:
@@ -513,6 +692,15 @@ def main() -> int:
     print("Downloaded mods:")
     for name in sorted(downloaded, key=str.lower):
         print(f"  {name}")
+
+    if args.lock_out:
+        write_lock(
+            args.lock_out,
+            args.modset,
+            args.factorio_version,
+            factorio_version,
+            entries,
+        )
     return 0
 
 
