@@ -60,7 +60,6 @@ permissions:
 env:
   RUN_ID: ${{ github.event.workflow_run.id || inputs.run_id }}
   MODE: ${{ (github.event_name == 'workflow_dispatch' && inputs.mode) || 'fix' }}
-  TRIAGE_DIR: ${{ runner.temp }}/ci-triage
   # "latest" tracks the newest experimental build, matching the FUnit workflow.
   FACTORIO_VERSION: ${{ vars.FACTORIO_VERSION || 'latest' }}
 
@@ -96,10 +95,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          # `runner` is not available in job-level env, so export the triage
+          # directory to the later steps from here.
+          echo "TRIAGE_DIR=$RUNNER_TEMP/ci-triage" >> "$GITHUB_ENV"
           python3 .github/opencode/ci-context.py collect \
             --repo "$GITHUB_REPOSITORY" \
             --run-id "$RUN_ID" \
-            --work-dir "$TRIAGE_DIR" \
+            --work-dir "$RUNNER_TEMP/ci-triage" \
             --mode "$MODE"
 
       - name: Write the triage summary
