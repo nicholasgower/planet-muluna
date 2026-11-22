@@ -77,6 +77,32 @@ def check(name, condition, detail):
         print(f"FAIL: {name}: {detail}", file=sys.stderr)
 
 
+parse_dependency = getattr(module, "parse_dependency", None)
+if parse_dependency is None:
+    print(
+        "FAIL: download_mods.py has no parse_dependency",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
+
+# Mod names may contain spaces ("Flare Stack" is a real portal mod), so the
+# parser must keep the whole name and separate the version requirement.
+for spec, expected in [
+    ("Flare Stack >= 4.0.0", ("", "Flare Stack", ">= 4.0.0")),
+    ("Flare Stack", ("", "Flare Stack", "")),
+    ("+ elevated-pipes", ("+", "elevated-pipes", "")),
+    ("? Muria", ("?", "Muria", "")),
+    ("(?) space_age_galore", ("(?)", "space_age_galore", "")),
+    ("base >= 2.1.22", ("", "base", ">= 2.1.22")),
+]:
+    parsed = parse_dependency(spec)
+    check(
+        f"parse dependency {spec!r}",
+        parsed == expected,
+        f"expected {expected}, got {parsed}",
+    )
+
+
 def release(*dependencies):
     return {"info_json": {"dependencies": list(dependencies)}}
 
