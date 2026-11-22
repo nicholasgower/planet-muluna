@@ -14,11 +14,29 @@ local function rotate_position(position)
 end
 
 
+-- Count how many assembling machines reference each fluid_boxes array before
+-- this pass mutates any of them.
+local fluid_box_owners = {}
+for _,machine in pairs(data.raw["assembling-machine"]) do
+    if machine.fluid_boxes then
+        fluid_box_owners[machine.fluid_boxes] = (fluid_box_owners[machine.fluid_boxes] or 0) + 1
+    end
+end
+
 -- -- Add a new fluidbox port to assembling-machine-3 for the 'data' category
 for _,am3 in pairs(data.raw["assembling-machine"]) do
     if rro.contains({"assembling-machine-3","mini-assembler-3","micro-assembler-3","aop-advanced-assembling-machine"},am3.name) or 
     rro.contains_all(am3.crafting_categories,{"crafting", "advanced-crafting", "crafting-with-fluid"}) and am3.energy_source.type == "electric" and am3.crafting_speed >= 1.25 and am3.module_slots >= 4 and (am3.fluid_boxes and #am3.fluid_boxes == 2) then
         local linked_connection_id=100
+        -- Some mods assign one fluid_boxes array to several machines (Bob's
+        -- assembling machines 4, 5 and 6 do this). Give this machine its own
+        -- copy before mutating it: otherwise the first machine processed grows
+        -- the shared array, the others fail the "#fluid_boxes == 2" check
+        -- above, and a second pass over the same array would repeat the linked
+        -- connection IDs inside one entity.
+        if (fluid_box_owners[am3.fluid_boxes] or 0) > 1 then
+            am3.fluid_boxes = table.deepcopy(am3.fluid_boxes)
+        end
         if am3.fluid_boxes then
             local input=table.deepcopy(am3.fluid_boxes[1])
             local output = table.deepcopy(am3.fluid_boxes[2])

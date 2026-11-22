@@ -243,3 +243,58 @@ results.check(SUITE, "no-regular-fluid-can-reach-a-data-port", function()
 
   assert(#violations == 0, table.concat(violations, "; "))
 end)
+
+-- Bob's assembling machines 4, 5 and 6 share one fluid_boxes array. Muluna
+-- must give each machine a private array before adding a data port, so every
+-- machine qualifies and a linked connection ID is never duplicated within one
+-- entity.
+local shared_fluid_box_names = {
+  "planet-muluna-funit-shared-fluid-boxes-1",
+  "planet-muluna-funit-shared-fluid-boxes-2",
+  "planet-muluna-funit-shared-fluid-boxes-3",
+}
+
+results.check(SUITE, "shared-fluid-boxes-get-private-data-ports", function()
+  local previous
+  for _, name in ipairs(shared_fluid_box_names) do
+    local machine = data.raw["assembling-machine"][name]
+    assert(machine, name .. " was not created by the fixture setup")
+
+    local has_data_category = false
+    for _, category in pairs(machine.crafting_categories or {}) do
+      if category == "crafting-with-fluid-and-data" then
+        has_data_category = true
+        break
+      end
+    end
+    assert(has_data_category, name .. " did not receive the data crafting category")
+
+    local ports = data_ports(machine)
+    assert(#ports.input == 1,
+      string.format("%s has %d input data ports; expected 1", name, #ports.input))
+    assert(#ports.output == 1,
+      string.format("%s has %d output data ports; expected 1", name, #ports.output))
+
+    if previous then
+      assert(machine.fluid_boxes ~= previous.fluid_boxes,
+        string.format("%s and %s still share one fluid_boxes array", previous.name, name))
+    end
+    previous = machine
+  end
+
+  -- linked_connection_id only has to be unique within an entity. A shared
+  -- array mutated once per machine would repeat the IDs inside that entity.
+  for _, name in ipairs(shared_fluid_box_names) do
+    local seen = {}
+    for _, box in pairs(data.raw["assembling-machine"][name].fluid_boxes or {}) do
+      for _, connection in pairs(box.pipe_connections or {}) do
+        local id = connection.linked_connection_id
+        if id then
+          assert(not seen[id],
+            string.format("%s reuses linked_connection_id %s", name, tostring(id)))
+          seen[id] = true
+        end
+      end
+    end
+  end
+end)
