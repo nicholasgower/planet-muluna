@@ -1,4 +1,14 @@
-# Automated issue triage
+# Automated triage
+
+Two OpenCode workflows act on failures without a human in the loop, and both
+only ever propose a pull request that a human still reviews:
+
+| Workflow | Trigger | Agent | Reacts to |
+| --- | --- | --- | --- |
+| `opencode-bugfix.yml` | New or reopened issue, `/opencode fix`, manual dispatch | `issue-bugfix` | A reported, reproducible crash or minor gameplay bug |
+| `opencode-ci-triage.yml` | A failed `FUnit` run on `main` (push or weekly schedule), manual dispatch | `ci-triage` | A red test suite, including failures caused by an external mod or a new Factorio build |
+
+## Automated issue triage
 
 `opencode-bugfix.yml` runs the OpenCode `issue-bugfix` agent on every newly
 opened or reopened GitHub issue, and on demand for existing issues. The agent
@@ -50,7 +60,9 @@ You can also run **Opencode Bugfix** from the Actions tab
 
 The workflow uses `GITHUB_TOKEN` (with `contents: write`, `issues: write`, and
 `pull-requests: write`) instead of the OpenCode GitHub App OIDC exchange, so no
-app installation is required.
+app installation is required. `opencode-ci-triage.yml` reuses the same secrets,
+plus `actions: write` so it can retry a transient failure, and creates the
+`automated-regression` label on first use.
 
 The run executes the OpenCode CLI directly
 (`opencode run --agent issue-bugfix --auto`) rather than the
@@ -68,11 +80,18 @@ explicit deny rules still apply.
 1. downloads the public headless Factorio tarball for `latest` (the newest
    experimental build, matching the experimental leg of the `FUnit` workflow's
    `factoriotools/factorio` matrix) and extracts it under
-   `$RUNNER_TEMP/muluna-opencode/factorio`. Set `FACTORIO_VERSION=stable` to
-   use the newest stable build instead;
+   `$RUNNER_TEMP/muluna-opencode/factorio-<release>`. Set `FACTORIO_VERSION=stable`
+   to use the newest stable build instead; each release keeps its own install so
+   a single job can reproduce a stable leg and an experimental leg;
 2. downloads every required and recommended dependency from the mod portal using
-   `.github/funit/download_mods.py`, so versions stay in sync with `info.json`;
+   `.github/funit/download_mods.py`, so versions stay in sync with `info.json`.
+   `FUNIT_MODSET` selects the mod set and `FUNIT_LOCK_FILE` pins the exact
+   releases a recorded run used;
 3. packages the pinned `funit` revision that `.github/workflows/funit.yml` uses.
+
+`FUNIT_MODS_DIR` points the download at a dedicated directory. A regression run
+uses one directory per failing leg, because two legs can pin different versions
+of the same mod.
 
 It exports `FACTORIO_BIN` and `FACTORIO_MODS`, which
 `test-mods/planet-muluna-funit/run.sh` already understands. The workflow runs the
@@ -103,6 +122,73 @@ through POSIX `sh`.
 To exercise the agent itself, run OpenCode locally with the same agent and point
 it at an issue, or re-run the GitHub Actions workflow for a past `issues` event.
 
+## Automated regression triage
+
+`opencode-ci-triage.yml` reacts to a failed `FUnit` run on `main`, from a push or
+the weekly schedule. It is a separate workflow from the issue bot because the
+evidence is different: there is no reporter, and the failure may be caused by a
+dependency that published a new release rather than by a commit.
+
+`.github/opencode/ci-context.py` does the deterministic triage before any model
+runs. It downloads the failing legs' JUnit reports, logs and dependency locks,
+compares the locks with the last green `main` run, and decides:
+
+| Evidence | Class | Action |
+| --- | --- | --- |
+| Portal 5xx / network / download timeout on the download or setup step | `transient` | Rerun the failed jobs once |
+| `Build test artifacts` or an infrastructure step failed | `harness` | Investigate the harness |
+| Same mod versions and Factorio build as the last green run | `regression` | Investigate |
+| Mod versions differ | `drift` | Investigate |
+| Only the Factorio build differs | `upstream` | Investigate |
+| A newer green `main` run exists | — | Drop silently |
+| An open PR/issue carries the same `CI-Regression:` signature | — | Comment on it |
+| A merged fix for the signature is newer than 14 days | — | Open/comment on an issue instead |
+| A human closed the automated fix less than 30 days ago | — | Do not retry |
+| Two automated regression PRs are already open | — | Comment on the tracking issue |
+
+A real, new failure goes to the `ci-triage` agent, whose prompt is
+`.github/opencode/ci-triage-prompt.md`. It reproduces the failing leg against the
+lock file the run recorded, adds coverage that fails without the fix, fixes the
+cause, and opens one pull request labeled `automated-regression` with a
+`CI-Regression: <signature>` line at the top of the body. Every pull request is a
+proposal and still needs a human review.
+
+The triage context (classification, failing tests, dependency diff, logs,
+reproduction commands) is uploaded as the `ci-triage` artifact and summarized in
+the job summary. Workflow changes are denied to the agent by `opencode.json`: a
+failure that needs a different matrix or workflow must be reported by a human.
+
+### Manual runs
+
+Run **Opencode CI Triage** from the Actions tab with `run_id` set to a past
+`FUnit` run and `mode=diagnose` (the default) to classify without touching
+GitHub or running the agent. Use `mode=fix` to allow a pull request. The same
+`collect` and `report` subcommands work locally:
+
+```sh
+GH_TOKEN=... python3 .github/opencode/ci-context.py collect \
+  --repo nicholasgower/planet-muluna --run-id <id> \
+  --work-dir /tmp/opencode/ci-triage --mode diagnose
+python3 .github/opencode/ci-context.py --self-test
+```
+
+### Dependency locks
+
+Every FUnit leg uploads `funit-lock-<channel>-<modset>.json` inside its test
+artifact. It records the Factorio build and every resolved mod release with its
+`sha256`, which is what lets the triage tell a regression from drift and lets the
+agent reproduce a failure exactly:
+
+```sh
+FUNIT_MODS_DIR=/tmp/opencode/ci-triage/mods-stable-planets \
+FUNIT_MODSET=planets FACTORIO_VERSION=stable \
+FUNIT_LOCK_FILE=/path/to/funit-lock-stable-planets.json \
+  ./.github/opencode/setup-factorio.sh
+```
+
+The locks are not yet used to pin pull request runs; that policy decision is
+open, and the recorded files are what make it cheap to adopt.
+
 ## Security notes
 
 - Issue titles, bodies, comments, logs and attachments are **untrusted**. The
@@ -117,6 +203,11 @@ it at an issue, or re-run the GitHub Actions workflow for a past `issues` event.
   explicit `/opencode fix` comment from a repository
   owner/member/collaborator, or a manual `workflow_dispatch`. Bot-authored
   issues and comments are skipped.
+- `opencode-ci-triage.yml` never checks out or executes pull request code: it
+  runs from the default branch and checks out `main`, so the failure's logs are
+  data rather than code. The `ci-triage` agent additionally cannot edit
+  `.github/workflows/**`, run `gh workflow`, merge pull requests, or close
+  issues.
 
 ## Troubleshooting
 

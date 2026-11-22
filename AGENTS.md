@@ -328,9 +328,11 @@ runs both locally and in GitHub Actions. What you can do:
    much faster. See that mod's `README.md` for prerequisites and the test-only
    `muluna_funit` remote interface. The `FUnit` workflow
    (`.github/workflows/funit.yml`) runs the same suite in CI once per release channel and
-   mod set (stable/experimental × vanilla/AAI/BZ/no-quality/planets/K2SO/muluna-start), and
-   `.github/opencode/setup-factorio.sh` prepares a headless install plus the dependency
-   mods for the issue-bugfix workflow.
+   mod set (stable/experimental × vanilla/AAI/BZ/no-quality/planets/K2SO/muluna-start),
+   weekly on a schedule as well as on push, and records the resolved dependency versions
+   of every leg as a lock artifact. `.github/opencode/setup-factorio.sh` prepares a
+   headless install plus the dependency mods (optionally pinned by a lock file) for the
+   automated agents.
 4. **`funit` scenario**: `scenarios/__funit__can_generate_surface/` is a Factorio
    `__funit__` test that generates the Muluna surface and checks the Entity Replacement
    System. It needs the `funit` mod and a matching `mod-list.json`; it is a reference smoke
@@ -553,6 +555,59 @@ by the `issue-bugfix` agent in `opencode.json`.
 
 Automated pull requests are proposals: a human still reviews and merges them. Do not treat
 a bot-authored pull request as pre-approved.
+
+## Automated CI regression triage
+
+`.github/workflows/opencode-ci-triage.yml` reacts to a failed `FUnit` run on
+`main`, from a push or the weekly schedule in `funit.yml`. It exists because
+`main` can go red without a commit: `.github/funit/download_mods.py` resolves every
+dependency to its newest compatible release on each run, and the
+`factoriotools/factorio:latest` image moves to a new experimental build on its own.
+
+How it decides what happened (`.github/opencode/ci-context.py`, before any model
+runs):
+
+| Evidence | Class | Action |
+| --- | --- | --- |
+| Portal/network error on the download or setup step | `transient` | Rerun the failed jobs once |
+| `Build test artifacts` or an infrastructure step failed | `harness` | Investigate |
+| Same mod versions and Factorio build as the last green run | `regression` | Investigate |
+| Mod versions differ from the last green run | `drift` | Investigate |
+| Only the Factorio build differs | `upstream` | Investigate |
+| A newer green `main` run exists | — | Drop |
+| An open PR or issue has the same `CI-Regression:` signature | — | Comment |
+| The same signature was fixed and merged within 14 days | — | Issue, not another PR |
+| A human closed the automated fix within 30 days | — | Do not retry |
+| Two automated regression PRs are already open | — | Comment on the tracking issue |
+
+The `ci-triage` agent (`.github/opencode/ci-triage-prompt.md`) runs only for a new
+`investigate` result. It reproduces the failing leg against the lock file the run
+recorded, adds coverage that fails without the fix, fixes the cause, and opens one
+pull request labeled `automated-regression` whose body starts with
+`CI-Regression: <signature>`. Its edit permission denies `.github/workflows/**`
+(the prompt forbids working around that), and it cannot merge, close issues, or
+push to `main` (`opencode.json`). A failure that needs a matrix or workflow
+change, or a dependency that is broken upstream, is reported instead.
+
+Every FUnit leg records the releases it resolved as
+`funit-lock-<channel>-<modset>.json` inside its test artifact. The locks are what
+make `regression` distinguishable from `drift`, and they let the agent replay the
+exact dependency set with `FUNIT_LOCK_FILE` (see `.github/opencode/README.md`).
+They are not yet used to pin pull request runs; adopt that only as a deliberate
+maintainer decision.
+
+Maintenance notes:
+
+- Renaming a matrix job, changing its `(<channel>, <modset>)` name, or renaming
+  the `parse-results-job-*` / `unit-test-job-*` artifacts requires updating
+  `LEG_JOB`, `PARSE_JOB` and the artifact names in `ci-context.py`.
+- Run the classifier before trusting it: `python3 .github/opencode/ci-context.py
+  --self-test`, then a real dispatch with `mode=diagnose` (the default). Diagnose
+  mode writes the summary and artifact but never comments, reruns, or opens a PR.
+- The action is deduplicated by signature, so two unrelated failures in one run
+  are one investigation, not two.
+- No new secret is needed: the workflow reuses `FACTORIO_PLAYER_TOKEN` and the
+  model API key from the issue workflow.
 
 ## Operating the automated issue workflow
 
