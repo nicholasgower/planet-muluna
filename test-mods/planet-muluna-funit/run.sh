@@ -25,6 +25,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
+# The re-add suite replays migrations through the registry in lib/migrations.lua.
+# Fail before launching Factorio if a migration file is missing from it.
+"$REPO_DIR/tools/ci/migration-registry-check.sh"
+
 # Local development defaults. In GitHub Actions, setup-factorio.sh exports the
 # downloaded install paths through $GITHUB_ENV before this runner is called.
 FACTORIO_BIN="${FACTORIO_BIN:-/opt/factorio_space_age_21/bin/x64/factorio}"

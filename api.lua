@@ -58,6 +58,20 @@ elseif Muluna.stage == "control" then
     Muluna.constants = prototypes.mod_data["muluna-constants"].data
     Muluna.events = require("lib.events")
     Muluna.complete_research = require("lib.notifications").research_technology
+
+    ---Whether historical migrations should run for the current save.
+    ---
+    ---The engine normally runs a mod's migrations only when the mod version
+    ---increases. Removing a mod from a save discards that bookkeeping, so
+    ---adding it back makes Factorio treat the mod as new and run every
+    ---migration again, even though the save is already up to date. `on_init`
+    ---tells those two cases apart by recording the version the save was first
+    ---loaded with; a migration that changes existing gameplay state can use
+    ---this guard to avoid running a second time.
+    ---@return boolean
+    function Muluna.should_run_migrations()
+        return storage.muluna_first_loaded_version ~= script.active_mods["planet-muluna"]
+    end
 end 
 
 require("lib.table")

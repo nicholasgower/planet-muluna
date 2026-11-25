@@ -294,6 +294,18 @@ not be added to a workflow.
   technologies, resources, or entities). New content does not need a migration.
 - Renaming or deleting a technology requires updating all prerequisites that reference it —
   see the `delete_tech` helper in `data-final-fixes.lua` for the intended pattern.
+- Lua migrations wrap their body in `local function migrate() ... end` and register it in
+  `Muluna.migrations` so the FUnit re-add suite can replay it with an empty storage table.
+  The file must end with `if game then migrate() end` and be listed in `lib/migrations.lua`;
+  `tools/ci/migration-registry-check.sh` verifies both.
+- A migration that regenerates map entities or grants research must guard with
+  `if not Muluna.should_run_migrations() then return end`. Removing the mod and adding it
+  back replays every migration against a save that is already up to date, and the engine
+  cannot tell that case apart from a version upgrade on its own.
+- JSON migrations cannot be guarded that way. Their source names must not be live
+  prototype names (for example a technology that was later renamed back), or a re-add
+  will rename the current prototype's save data. Delete such a migration or convert the
+  part that matters to a guarded Lua migration.
 
 ## Bilingual/embedded content
 

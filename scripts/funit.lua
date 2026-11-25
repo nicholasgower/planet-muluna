@@ -5,6 +5,20 @@
 -- regular game events in a headless test.
 local Public = {}
 
+-- Migration files register their body in `Muluna.migrations` when they are
+-- loaded, so the re-add seam can replay the same functions without needing file
+-- access at runtime.
+local function migration_names()
+  local names = {}
+  for _, name in ipairs(Muluna.migration_order or {}) do
+    if not (Muluna.migrations and Muluna.migrations[name]) then
+      error("Migration did not register its body: " .. name)
+    end
+    names[#names + 1] = name
+  end
+  return names
+end
+
 local function stage()
   return Muluna.funit
 end
@@ -16,6 +30,66 @@ remote.add_interface("muluna_funit", {
 
   get_constants = function()
     return prototypes.mod_data["muluna-constants"].data
+  end,
+
+  -- The headless scenario cannot restart with a different mod list, so emulate
+  -- the part of a save load that matters here: Factorio restores the mod's
+  -- storage as an empty table, runs on_init, then replays every migration, then
+  -- runs on_configuration_changed. The live storage is restored afterwards so
+  -- the test leaves the session untouched.
+  simulate_re_add_migrations = function()
+    local live_storage = storage
+    local errors = {}
+
+    local function run(step, fn)
+      local ok, err = pcall(fn)
+      if not ok then
+        errors[#errors + 1] = { step = step, message = tostring(err) }
+      end
+    end
+
+    storage = {}
+    local on_init = Muluna.events.on_init_handler
+    run("on_init", function()
+      if on_init then on_init() end
+    end)
+    for _, name in ipairs(migration_names()) do
+      run("migrations/" .. name, Muluna.migrations[name])
+    end
+    run("on_configuration_changed", function()
+      if on_init then on_init({ name = "on_configuration_changed" }) end
+    end)
+
+    -- Summarize the simulated storage before restoring the live one. The test
+    -- must observe what the re-add built, not what survived in live storage.
+    local telescopes = {}
+    for unit_number, data in pairs(storage.telescopes or {}) do
+      telescopes[unit_number] = {
+        has_entity = data["assembling-machine"] ~= nil,
+        has_combinator = data["constant-combinator"] ~= nil,
+      }
+    end
+    local telescopes_on_surface = {}
+    for surface_name, entries in pairs(storage.telescopes_on_surface or {}) do
+      telescopes_on_surface[surface_name] = {}
+      for unit_number in pairs(entries) do
+        telescopes_on_surface[surface_name][unit_number] = true
+      end
+    end
+    local initialized = {
+      telescopes = type(storage.telescopes) == "table",
+      telescopes_on_surface = type(storage.telescopes_on_surface) == "table",
+      nav_beacons = type(storage.nav_beacons) == "table",
+    }
+
+    storage = live_storage
+
+    return {
+      errors = errors,
+      telescopes = telescopes,
+      telescopes_on_surface = telescopes_on_surface,
+      initialized = initialized,
+    }
   end,
 
   get_telescope_data = function(unit_number)

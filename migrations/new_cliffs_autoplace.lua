@@ -1,3 +1,6 @@
+-- Registered so the FUnit re-add test can replay this migration with an empty
+-- storage table, the way Factorio does when a mod is added back to a save.
+local function migrate()
 local function regenerate_resource(resource,old_resource) 
     local map_gen_settings = game.planets.muluna.surface.map_gen_settings
     map_gen_settings.autoplace_controls[resource] = table.deepcopy(map_gen_settings.autoplace_controls[old_resource])
@@ -15,6 +18,9 @@ local function degenerate_resource(resource)
 end
 
 if game.planets.muluna.surface then
+    -- `regenerate_entity()` below regenerates every autoplaced entity on the
+    -- surface, which duplicates resources when the mod is added back.
+    if not Muluna.should_run_migrations() then return end
     regenerate_resource("muluna_cliff","nauvis_cliff")
     degenerate_resource("nauvis_cliff")
     local map_gen_settings = game.planets.muluna.surface.map_gen_settings
@@ -65,3 +71,9 @@ end
 --         game.planets.muluna.surface.map_gen_settings = map_gen_settings
 --         game.planets.muluna.surface.regenerate_entity("helium")
 --       --end
+
+end
+
+Muluna.migrations = Muluna.migrations or {}
+Muluna.migrations["new_cliffs_autoplace"] = migrate
+if game then migrate() end
